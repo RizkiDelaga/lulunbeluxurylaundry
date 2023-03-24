@@ -1,0 +1,13 @@
+
+.justify-navbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+/* Side Bar Start */
+.sidebar-menu {
+    z-index: 10000;
+}
+
+/* Side Bar End */
