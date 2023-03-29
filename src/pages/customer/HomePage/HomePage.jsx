@@ -1,11 +1,83 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Card, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { getExample, editExample } from '../../../redux/actions/exampleAction';
+
 function HomePage() {
   const navigate = useNavigate();
+  const [exampleData, setExampleData] = useState({
+    id: 0,
+    title: '',
+    price: 0,
+    image: '',
+    deskripsi: '',
+  });
+
+  const dispatch = useDispatch();
+  const { isLoading: loadingGetExample, data: dataGetExample } = useSelector((state) => state.getExample);
+  const { isLoading: loadingEditExample, data: dataEditExample } = useSelector((state) => state.editExample);
+
+  React.useEffect(() => {
+    document.title = 'Beranda | Lulu n Be Luxury Laundry';
+    dispatchGetExample();
+    if (!loadingGetExample) {
+      saveData();
+    }
+  }, [loadingGetExample]);
+
+  const dispatchGetExample = async () => {
+    return await dispatch(getExample());
+  };
+
+  const submitHandler = () => {
+    const formData = new FormData();
+
+    // formData.append(...exampleData);
+    formData.append('id', exampleData.id);
+    formData.append('title', exampleData.title);
+    formData.append('price', exampleData.price);
+    formData.append('image', exampleData.image);
+    formData.append('deskripsi', exampleData.deskripsi);
+
+    dispatch(editExample(exampleData.id, exampleData));
+  };
+
+  const saveData = () => {
+    setExampleData({
+      ...exampleData,
+      id: dataGetExample[0].id,
+      title: dataGetExample[0].title,
+      price: dataGetExample[0].price,
+      image: dataGetExample[0].image,
+      deskripsi: dataGetExample[0].deskripsi,
+    });
+  };
 
   return (
     <>
+      {loadingGetExample ? null : (
+        <Card variant="outline">
+          <h1>{dataGetExample[0].title}</h1>
+          <p>{dataGetExample[0].deskripsi}</p>
+          <input
+            type="text"
+            value={exampleData.title}
+            onChange={(e) => {
+              setExampleData({ ...exampleData, title: e.target.value });
+            }}
+          />
+          <h4>{exampleData.title}</h4>
+          <button
+            onClick={() => {
+              submitHandler();
+            }}
+          >
+            edit
+          </button>
+        </Card>
+      )}
+
       <button onClick={() => navigate('/dashboard')}>Navbar & Sidebar Admin</button>
       <h1>sadasd</h1>
       <Typography paragraph>
