@@ -3,6 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Card, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getExample, editExample } from '../../../redux/actions/exampleAction';
+import PageStructure from '../../../components/PageStructure/PageStructure';
+import AreaChart from '../../../components/Graph/AreaChart';
+import LineChart from '../../../components/Graph/LineChart';
+import HorizontalBarChart from '../../../components/Graph/HorizontalBarChart';
+import VerticalBarChart from '../../../components/Graph/VerticalBarChart';
+import StackedBarChart from '../../../components/Graph/StackedBarChart';
+import PieChart from '../../../components/Graph/PieChart';
+import DoughnutChart from '../../../components/Graph/DoughnutChart';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -77,6 +85,17 @@ function HomePage() {
           </button>
         </Card>
       )}
+      <PageStructure
+        defaultMenu="dashboard"
+        previousPage={{
+          title: 'Title Name',
+          link: '/link',
+        }}
+        currentPage={{
+          title: 'Title Name',
+          link: '/link',
+        }}
+      />
 
       <button onClick={() => navigate('/dashboard')}>Navbar & Sidebar Admin</button>
       <h1>sadasd</h1>
@@ -90,16 +109,62 @@ function HomePage() {
         lobortis feugiat vivamus at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
         ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
       </Typography>
-      <Typography paragraph>
-        Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim
-        diam. Pulvinar elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-        tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-        risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-        gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant morbi tristique
-        senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-        eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices
-        sagittis orci a.
-      </Typography>
+
+      <div style={{ margin: '40px' }}>
+        <div style={{ height: '300px' }}>
+          <LineChart />
+        </div>
+        <br />
+
+        <div style={{ height: '300px' }}>
+          <VerticalBarChart />
+        </div>
+        <br />
+
+        <div style={{ height: '300px' }}>
+          <HorizontalBarChart />
+        </div>
+        <br />
+
+        <div style={{ height: '300px' }}>
+          <StackedBarChart />
+        </div>
+        <br />
+
+        <div style={{ height: '300px' }}>
+          <AreaChart
+            data={{
+              labels: ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'],
+              datasets: [
+                {
+                  fill: true,
+                  label: 'Income',
+                  data: [598884, 819838, 674452, 454919, 925132],
+                  borderColor: 'rgb(31, 48, 92)',
+                  backgroundColor: 'rgb(31, 48, 92, 0.5)',
+                },
+                {
+                  fill: false,
+                  label: 'Expenses',
+                  data: [218828, 53563, 221413, 54946, 91714],
+                  borderColor: 'rgb(211, 47, 47)',
+                  backgroundColor: 'rgb(211, 47, 47, 0.5)',
+                },
+              ],
+            }}
+          />
+        </div>
+        <br />
+
+        <div style={{ height: '300px' }}>
+          <PieChart />
+        </div>
+        <br />
+
+        <div style={{ height: '300px' }}>
+          <DoughnutChart />
+        </div>
+      </div>
     </>
   );
 }
