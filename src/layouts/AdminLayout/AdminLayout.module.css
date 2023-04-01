@@ -1,14 +1,28 @@
 /* Navbar Start */
+/* .custom-navbar {
+    position: fixed !important;
+    width: 100%;
+    height: 64px;
+} */
+
 .justify-navbar {
     display: flex;
     justify-content: space-between;
+}
+
+@media only screen and (max-width: 400px) {
+    .center-notif {
+        left: 50% !important;
+        width: 100vw;
+        transform: translate(-54.2%, 0) !important;
+    }
 }
 /* Navbar End */
 
 
 /* Sidebar Start */
 .sidebar-menu {
-    z-index: 10000 !important;
+    z-index: 10000;
 }
 
 /* Sidebar End */
