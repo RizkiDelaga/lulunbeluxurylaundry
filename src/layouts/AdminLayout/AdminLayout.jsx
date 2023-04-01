@@ -128,7 +128,7 @@ function DashboardAdminLayout() {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <>
       <CssBaseline />
       <AppBar position="fixed" open={openSidebar} sx={{ backgroundColor: '#ffffff' }}>
         <Toolbar className={`${style['justify-navbar']}`}>
@@ -167,8 +167,9 @@ function DashboardAdminLayout() {
               onClose={handleCloseNotificationMenu}
               // onClick={handleCloseNotificationMenu}
               PaperProps={{
-                elevation: 0,
+                // elevation: 0,
                 sx: {
+                  width: '100vw',
                   minWidth: '360px',
                   maxWidth: '400px',
                   height: '100%',
@@ -177,6 +178,7 @@ function DashboardAdminLayout() {
                   filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                 },
               }}
+              className={`${style['center-notif']}`}
               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
@@ -293,7 +295,7 @@ function DashboardAdminLayout() {
         </Toolbar>
       </AppBar>
 
-      <Drawer variant="permanent" open={openSidebar} className={`${style['sidebar-menu']}`}>
+      <Drawer variant="permanent" open={openSidebar} style={{ zIndex: '10000' }}>
         <DrawerHeader sx={{ border: 'none', display: 'flex', justifyContent: 'center' }}>
           {openSidebar ? (
             <img src={LogoWebsite} alt="Logo" style={{ height: '48px', alignSelf: 'left' }} />
@@ -338,11 +340,11 @@ function DashboardAdminLayout() {
         </List>
       </Drawer>
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, marginLeft: '64.2px' }}>
         <DrawerHeader />
         <Outlet />
       </Box>
-    </Box>
+    </>
   );
 }
 
