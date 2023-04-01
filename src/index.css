@@ -1,12 +1,21 @@
 @font-face {
-    font-family: "Helvetica";
-    src: url('./assets/fonts/Helvetica.ttf');
-  }
-  
-  * {
-    font-family: Helvetica !important;
-  }
-  
-  .color-primary {
-    color: #1F305C !important;
+  font-family: "Helvetica";
+  src: url('./assets/fonts/Helvetica.ttf');
+}
+
+* {
+  font-family: Helvetica !important;
+}
+
+body {
+  background-color: #eeeeee !important;
+}
+
+.color-primary {
+  color: #1F305C !important;
+}
+
+.disable-link-style {
+  color: #000000 !important;
+  text-decoration: none !important;
 }

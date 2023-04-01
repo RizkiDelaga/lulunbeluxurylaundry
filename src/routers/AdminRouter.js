@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router';
 import { Outlet } from 'react-router-dom';
 import AdminLayout from '../layouts/AdminLayout/AdminLayout';
 import HomePage from '../pages/customer/HomePage/HomePage';
+import PageStructure from '../components/PageStructure/PageStructure';
 
 function AdminRouter() {
 
@@ -13,7 +14,7 @@ function AdminRouter() {
   }
 
   const ProtectedAdminRoute = () => {
-    if (!localStorage.getItem("access_token_admin")) {
+    if (localStorage.getItem("access_token_admin")) {
       return <Navigate to="/admin" replace />
     }
     return <AdminLayout />;
@@ -30,7 +31,15 @@ function AdminRouter() {
           </Route>
           <Route element={<ProtectedAdminRoute />}>
             {/* Dashboard Menu Route */}
-            <Route path="Dashboard" element={<HomePage />} />
+            <Route path="Dashboard" element={<PageStructure defaultMenu="dashboard"
+        previousPage={{
+          title: 'Title Name',
+          link: '/link',
+        }}
+        currentPage={{
+          title: 'Title Name',
+          link: '/link',
+        }} />} />
             <Route path="Dashboard/EditProfil" element={<HomePage />} />
             <Route path="Dashboard/UbahPassword" element={<HomePage />} />
             <Route path="Dashboard/RegistrasiAdministratorBaru" element={<HomePage />} />
