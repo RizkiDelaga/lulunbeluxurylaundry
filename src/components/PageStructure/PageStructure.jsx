@@ -81,6 +81,7 @@ import LoyaltyIcon from '@mui/icons-material/Loyalty';
 
 import LogoutIcon from '@mui/icons-material/Logout';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import ResponsiveTable from '../Table/ResponsiveTable';
 
 function PageStructure({ defaultMenu, previousPage, currentPage }) {
   const navigate = useNavigate();
@@ -224,6 +225,8 @@ function PageStructure({ defaultMenu, previousPage, currentPage }) {
 
       <LogoutIcon />
       <ExitToAppIcon />
+
+      <ResponsiveTable />
     </Fragment>
   );
 }

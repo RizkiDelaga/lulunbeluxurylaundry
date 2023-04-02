@@ -20,6 +20,25 @@ body {
   text-decoration: none !important;
 }
 
-.css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
-  z-index: 10000 !important;
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #eeeeee;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1F305C;
+  border-radius: 24px !important;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #1F305C;
 }
