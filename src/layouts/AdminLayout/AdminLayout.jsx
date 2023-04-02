@@ -230,7 +230,7 @@ function DashboardAdminLayout() {
               anchorEl={accountMenu}
               open={accountMenu}
               onClose={handleCloseAccountMenu}
-              onClick={handleCloseAccountMenu}
+              // onClick={handleCloseAccountMenu}
               PaperProps={{
                 elevation: 0,
                 sx: {
@@ -340,7 +340,7 @@ function DashboardAdminLayout() {
         </List>
       </Drawer>
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3, marginLeft: '64.2px' }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, marginLeft: openSidebar ? '300px' : '64.2px' }}>
         <DrawerHeader />
         <Outlet />
       </Box>
