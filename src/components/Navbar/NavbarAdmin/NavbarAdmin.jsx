@@ -1,5 +1,18 @@
-import { Avatar, Badge, Divider, IconButton, Menu, MenuItem, Toolbar } from '@mui/material';
-import React from 'react';
+import {
+  Avatar,
+  Badge,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  useMediaQuery,
+} from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 
@@ -20,6 +33,7 @@ import { getExample } from '../../../redux/actions/exampleAction';
 
 const drawerWidth = 300;
 
+// Navbar configuration
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -39,6 +53,117 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+// Notification Popup for mobile version
+const MobileNotificationDialog = (props) => {
+  const theme = useTheme();
+  const fullScreenDialog = useMediaQuery(theme.breakpoints.up('xs'));
+
+  const [isVisible, setIsVisible] = useState(true);
+  const topDialog = useRef(null);
+  const executeScroll = () => topDialog.current.scrollIntoView();
+
+  // useEffect(() => {
+  //   window.addEventListener('scroll', () => {
+  //     console.log('hi', 200);
+  //     setIsVisible(document.scrollY >= 200);
+  //   });
+  // }, []);
+
+  return (
+    <Dialog
+      fullScreen={fullScreenDialog}
+      onClose={props.handleClose}
+      open={props.openNotifDialog}
+      sx={{
+        zIndex: '10000',
+        [theme.breakpoints.up('md')]: {
+          display: 'none',
+        },
+      }}
+    >
+      <div ref={topDialog} id="asd">
+        <DialogTitle style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
+          Notifikasi
+          <IconButton onClick={props.handleClose}>
+            <MenuIcon color="primary" />
+          </IconButton>
+        </DialogTitle>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <NotificationList
+          loadingGetExample={props.loadingGetExample}
+          dataGetExample={props.dataGetExample}
+          handleCloseNotificationMenu={props.handleCloseNotificationMenu}
+        />
+      </div>
+
+      {/* Button Up */}
+      <Button
+        color="primary"
+        variant="contained"
+        id="myBtn"
+        style={{
+          display: isVisible ? 'block' : 'none',
+          position: 'fixed',
+          bottom: '50px',
+          left: '50%',
+          transform: 'translate(-50%, 0)',
+          zIndex: '1',
+          borderRadius: '24px',
+        }}
+        onClick={() => {
+          executeScroll();
+        }}
+      >
+        Lihat Notifikasi Teratas
+      </Button>
+    </Dialog>
+  );
+};
+
+const NotificationList = (props) => {
+  const navigate = useNavigate();
+
+  return (
+    <div style={{ height: '100%' }}>
+      {props.loadingGetExample
+        ? null
+        : props.dataGetExample.map((data, index) => (
+            <span key={data.id}>
+              <MenuItem
+                onClick={() => {
+                  navigate(`Pesanan/${data.id}`);
+                  // props.setOpenMyAccount(null);
+                }}
+                className={`${style['list-notification']}`}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                  }}
+                >
+                  <div style={{ fontWeight: 'bold' }}>Pesanan #281931290 menunggu persetujuan</div>
+                  <div style={{ fontSize: '14px' }}>
+                    <span style={{ fontWeight: 'bold' }}>Nama Pengguna </span>
+                    melakukan pemesanan dengan nomer pesanan #32672161276.
+                  </div>
+                  <div style={{ fontSize: '12px', textAlign: 'right' }}>23/04/2023 15:52</div>
+                </div>
+                <div>
+                  {data.status ? (
+                    <Badge style={{ width: '20px' }} color="primary" overlap="circular" badgeContent="" />
+                  ) : null}
+                </div>
+              </MenuItem>
+              <Divider />
+            </span>
+          ))}
+    </div>
+  );
+};
+
 function Navbar(props) {
   const navigate = useNavigate();
   const theme = useTheme();
@@ -54,23 +179,19 @@ function Navbar(props) {
     return await dispatch(getExample());
   };
 
-  const [notificationMenu, setNotificationMenu] = React.useState(false);
-  const handleClickNotificationMenu = (event) => {
-    setNotificationMenu(event.currentTarget);
-  };
+  // Open Notification Menu
+  const [openNotification, setOpenNotification] = React.useState(false);
   const handleCloseNotificationMenu = () => {
-    setNotificationMenu(null);
+    setOpenNotification(null);
   };
 
-  const [accountMenu, setAccountMenu] = React.useState(false);
-  const handleClickAccountMenu = (event) => {
-    setAccountMenu(event.currentTarget);
-  };
+  // Open Account Menu
+  const [openMyAccount, setOpenMyAccount] = React.useState(false);
   const handleCloseAccountMenu = (linkDirection) => {
     if (linkDirection) {
       navigate(linkDirection);
     }
-    setAccountMenu(null);
+    setOpenMyAccount(null);
   };
 
   return (
@@ -101,8 +222,7 @@ function Navbar(props) {
               color="inherit"
               sx={{ marginRight: 2, marginLeft: 2 }}
               onClick={(event) => {
-                dispatchGetExample();
-                handleClickNotificationMenu(event);
+                setOpenNotification(event.currentTarget);
               }}
               className="color-primary"
             >
@@ -114,26 +234,40 @@ function Navbar(props) {
                 <NotificationsNoneOutlinedIcon />
               </Badge>
             </IconButton>
+
+            {/* Notification display for mobile size */}
+            {loadingGetExample ? null : (
+              <MobileNotificationDialog
+                handleClose={() => {
+                  setOpenNotification(!openNotification);
+                }}
+                openNotifDialog={openNotification}
+                loadingGetExample={loadingGetExample}
+                dataGetExample={dataGetExample}
+                handleCloseNotificationMenu={handleCloseNotificationMenu}
+              />
+            )}
+
             <Menu
-              anchorEl={notificationMenu}
-              open={notificationMenu}
+              anchorEl={openNotification}
+              open={openNotification}
               onClose={handleCloseNotificationMenu}
-              // onClick={handleCloseNotificationMenu}
               PaperProps={{
-                // elevation: 0,
                 sx: {
                   width: '100vw',
                   minWidth: '360px',
                   maxWidth: '400px',
-                  height: 'fit-content',
+                  height: '90vh',
+                  overflowY: 'scroll',
                   borderRadius: '16px',
                   paddingBottom: '5px',
                   mt: 4.2,
-                  overflow: 'visible',
                   filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  [theme.breakpoints.down('md')]: {
+                    display: 'none',
+                  },
                 },
               }}
-              className={`${style['center-notif']}`}
               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
               anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
             >
@@ -147,11 +281,17 @@ function Navbar(props) {
                 }}
               >
                 <h3 style={{ margin: 0 }}>Notifikasi</h3>
-                <IconButton sx={{ justifyContent: 'right' }} onClick={handleClickAccountMenu}>
+                <IconButton
+                  sx={{ justifyContent: 'right' }}
+                  onClick={(event) => {
+                    setOpenMyAccount(event.currentTarget);
+                  }}
+                >
                   <MoreVertOutlinedIcon className="color-primary" />
                 </IconButton>
               </div>
 
+              {/* Toggle Button */}
               <div
                 style={{
                   display: 'flex',
@@ -162,46 +302,31 @@ function Navbar(props) {
                 }}
               >
                 <h3 style={{ margin: 0 }}>Notifikasi</h3>
-                <IconButton sx={{ justifyContent: 'right' }} onClick={handleClickAccountMenu}>
+                <IconButton
+                  sx={{ justifyContent: 'right' }}
+                  onClick={(event) => {
+                    setOpenMyAccount(event.currentTarget);
+                  }}
+                >
                   <MoreVertOutlinedIcon className="color-primary" />
                 </IconButton>
               </div>
 
-              <div style={{ height: '70vh', overflowY: 'scroll' }}>
-                {loadingGetExample
-                  ? null
-                  : dataGetExample.map((data, index) => (
-                      <span key={data.id}>
-                        <MenuItem onClick={handleCloseNotificationMenu} className={`${style['list-notification']}`}>
-                          <div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              justifyContent: 'space-between',
-                              // paddingRight: 5,
-                            }}
-                          >
-                            <div style={{ fontWeight: 'bold' }}>Pesanan #281931290 menunggu persetujuan</div>
-                            <div style={{ fontSize: '14px' }}>
-                              <span style={{ fontWeight: 'bold' }}>Nama Pengguna </span>
-                              melakukan pemesanan dengan nomer pesanan #32672161276.
-                            </div>
-                            <div style={{ fontSize: '12px', textAlign: 'right' }}>23/04/2023 15:52</div>
-                          </div>
-                          <div>
-                            {data.status ? (
-                              <Badge style={{ width: '20px' }} color="primary" overlap="circular" badgeContent="" />
-                            ) : null}
-                          </div>
-                        </MenuItem>
-                        <Divider />
-                      </span>
-                    ))}
-              </div>
+              <NotificationList
+                loadingGetExample={loadingGetExample}
+                dataGetExample={dataGetExample}
+                handleCloseNotificationMenu={handleCloseNotificationMenu}
+              />
             </Menu>
 
             {/* Account Menu */}
-            <IconButton color="inherit" onClick={handleClickAccountMenu} sx={{ padding: 0 }}>
+            <IconButton
+              color="inherit"
+              onClick={(event) => {
+                setOpenMyAccount(event.currentTarget);
+              }}
+              sx={{ padding: 0 }}
+            >
               <Avatar
                 alt="Remy Sharp"
                 src="https://www.parenting.co.id/img/images/LELA28_shutterstock_800x400.jpg"
@@ -210,10 +335,9 @@ function Navbar(props) {
             </IconButton>
 
             <Menu
-              anchorEl={accountMenu}
-              open={accountMenu}
+              anchorEl={openMyAccount}
+              open={openMyAccount}
               onClose={() => handleCloseAccountMenu()}
-              // onClick={handleCloseAccountMenu}
               PaperProps={{
                 elevation: 0,
                 sx: {
