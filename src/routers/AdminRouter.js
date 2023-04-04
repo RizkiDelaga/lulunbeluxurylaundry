@@ -49,7 +49,7 @@ function AdminRouter() {
             <Route path="Pesanan" element={<HomePage />} />
             <Route path="Pesanan/BuatPesananBaru" element={<HomePage />} />
             <Route path="Pesanan/EditPesanan" element={<HomePage />} />
-            <Route path="Pesanan/DetailPesanan" element={<HomePage />} />
+            <Route path="Pesanan/:id" element={<HomePage />} />
             <Route path="Pesanan/RatingDanReviewPelanggan" element={<HomePage />} />
             <Route path="Pesanan/DaftarPesanan" element={<HomePage />} />
 

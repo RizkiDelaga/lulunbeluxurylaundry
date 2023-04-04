@@ -30,6 +30,7 @@ body {
 /* Track */
 ::-webkit-scrollbar-track {
   background: #eeeeee;
+  border-radius: 24px !important;
 }
 
 /* Handle */

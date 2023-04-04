@@ -11,6 +11,7 @@ import VerticalBarChart from '../../../components/Graph/VerticalBarChart';
 import StackedBarChart from '../../../components/Graph/StackedBarChart';
 import PieChart from '../../../components/Graph/PieChart';
 import DoughnutChart from '../../../components/Graph/DoughnutChart';
+import PopupDialog from '../../../components/PopupDialog/PopupDialog';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -85,6 +86,7 @@ function HomePage() {
           </button>
         </Card>
       )}
+      <PopupDialog />
       <PageStructure
         defaultMenu="dashboard"
         previousPage={{
