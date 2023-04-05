@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import AdminLayout from '../layouts/AdminLayout/AdminLayout';
 import HomePage from '../pages/customer/HomePage/HomePage';
 import PageStructure from '../components/PageStructure/PageStructure';
+import CreateNewOrder from '../pages/administrator/orderMenu/CreateNewOrder/CreateNewOrder';
 
 function AdminRouter() {
 
@@ -47,7 +48,7 @@ function AdminRouter() {
 
             {/* Order Menu Route */}
             <Route path="Pesanan" element={<HomePage />} />
-            <Route path="Pesanan/BuatPesananBaru" element={<HomePage />} />
+            <Route path="Pesanan/BuatPesananBaru" element={<CreateNewOrder />} />
             <Route path="Pesanan/EditPesanan" element={<HomePage />} />
             <Route path="Pesanan/:id" element={<HomePage />} />
             <Route path="Pesanan/RatingDanReviewPelanggan" element={<HomePage />} />
