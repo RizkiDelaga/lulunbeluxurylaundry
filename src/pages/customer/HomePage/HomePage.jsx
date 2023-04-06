@@ -12,6 +12,7 @@ import StackedBarChart from '../../../components/Graph/StackedBarChart';
 import PieChart from '../../../components/Graph/PieChart';
 import DoughnutChart from '../../../components/Graph/DoughnutChart';
 import PopupDialog from '../../../components/PopupDialog/PopupDialog';
+import Input from '../../../components/Input';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -98,20 +99,10 @@ function HomePage() {
           link: '/link',
         }}
       />
+      <Input />
 
       <button onClick={() => navigate('/dashboard')}>Navbar & Sidebar Admin</button>
       <h1>sadasd</h1>
-      <Typography paragraph>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-        imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-        velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-        adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate eu
-        scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt
-        lobortis feugiat vivamus at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-        ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-      </Typography>
-
       <div style={{ margin: '40px' }}>
         <div style={{ height: '300px' }}>
           <LineChart />
