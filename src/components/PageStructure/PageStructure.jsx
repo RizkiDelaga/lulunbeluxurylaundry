@@ -114,11 +114,11 @@ function PageStructure({ defaultMenu, previousPage, currentPage }) {
         </Breadcrumbs>
       </div>
 
-      {loadingGetExample ? null : dataTable.length > 1 ? console.log(dataTable) : null}
-      {loadingGetExample ? null : dataTable.length > 1 ? <EnhancedTable dataTable={dataTable} /> : null}
+      {/* {loadingGetExample ? null : dataTable.length > 1 ? console.log(dataTable) : null}
+      {loadingGetExample ? null : dataTable.length > 1 ? <EnhancedTable dataTable={dataTable} /> : null} */}
       {/* <EnhancedTable /> */}
 
-      <ResponsiveTable />
+      {/* <ResponsiveTable /> */}
     </Fragment>
   );
 }

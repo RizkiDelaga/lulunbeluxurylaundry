@@ -17,14 +17,11 @@ import {
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './CreateNewOrder.module.css';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import dayjs from 'dayjs';
 import { LocalizationProvider, MobileDatePicker, MobileTimePicker, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-
-const options = ['Option 1', 'Option 2'];
+import PageStructure from '../../../../components/PageStructure/PageStructure';
 
 const OrderInformationForm = (props) => {
   const theme = useTheme();
@@ -199,6 +196,20 @@ const InputItem = (props) => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm md lg>
               <TextField required label="Nama Barang" sx={{ width: '100%' }} />
+              {/* <InputText
+                stateValue={props.stateValue.items[0].itemName}
+                handleState={(e) => {
+                  props.handleState({ ...props.stateValue, items: [...props.stateValue.items ,{itemName: 'asd' }]});
+                  console.log(props.stateValue)
+                }}
+                options={{
+                  label: 'asd',
+                  placeholder: '',
+                  helperText: '',
+                  multiline: false,
+                  required: false,
+                }}
+              /> */}
             </Grid>
             <Grid item xs={5} sm={3} md={2} lg={1.2}>
               <TextField required label="Kuantitas" type="number" sx={{ width: '100%' }} />
@@ -357,25 +368,58 @@ const LaundryShuttle = (props) => {
 
 function CreateNewOrder() {
   const navigate = useNavigate();
+  const [formOrder, setFormOrder] = React.useState({
+    dateOrder: '',
+    serviceType: '',
+    discount: '',
+    paymentMethod: '',
+    customerInformation: {},
+    address: {
+      pickupAddress: '',
+      deliveryAddress: '',
+    },
+    items: [
+      {
+        itemName: '',
+        quantity: 0,
+        pricePerUnit: 0,
+        laundryType: '',
+        notation: '',
+        photo: {},
+      },
+    ],
+  });
+
   return (
     <>
-      <Paper elevation={3}>
-        <Box
-          className="gap-16"
-          sx={{ padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px', marginBottom: '24px' }}
-        >
-          <div style={{ width: '100%', textAlign: 'center' }}>
-            <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Formulir Pemesanan Laundry</h2>
-          </div>
-          <OrderInformationForm />
-          <LaundryShuttle />
-          <InputItem />
+      <div className="gap-24" style={{ marginBottom: '24px' }}>
+        <PageStructure
+          defaultMenu="dashboard"
+          previousPage={{
+            title: 'Title Name',
+            link: '/link',
+          }}
+          currentPage={{
+            title: 'Title Name',
+            link: '/link',
+          }}
+        />
+        <Paper elevation={3}>
+          <Box className="gap-16" sx={{ padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
+            <div style={{ width: '100%', textAlign: 'center' }}>
+              <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Formulir Pemesanan Laundry</h2>
+            </div>
 
-          <Button variant="contained" size="large" style={{ width: '100%' }}>
-            Buat pesanan
-          </Button>
-        </Box>
-      </Paper>
+            <OrderInformationForm />
+            <LaundryShuttle />
+            <InputItem stateValue={formOrder} handleState={setFormOrder} />
+
+            <Button variant="contained" size="large" style={{ width: '100%' }}>
+              Buat pesanan
+            </Button>
+          </Box>
+        </Paper>
+      </div>
     </>
   );
 }
