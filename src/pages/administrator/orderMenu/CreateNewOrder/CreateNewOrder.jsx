@@ -21,7 +21,7 @@ import dayjs from 'dayjs';
 import { LocalizationProvider, MobileDatePicker, MobileTimePicker, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import PageStructure from '../../../../components/PageStructure/PageStructure';
+import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 
 const OrderInformationForm = (props) => {
   const theme = useTheme();
@@ -393,19 +393,16 @@ function CreateNewOrder() {
   return (
     <>
       <div className="gap-24" style={{ marginBottom: '24px' }}>
-        <PageStructure
-          defaultMenu="dashboard"
-          previousPage={{
-            title: 'Title Name',
-            link: '/link',
-          }}
+        <PageStructureAndDirectButton
+          defaultMenu="Pesanan"
           currentPage={{
-            title: 'Title Name',
-            link: '/link',
+            title: 'Buat Pesanan Baru',
           }}
         />
-        <Paper elevation={3}>
-          <Box className="gap-16" sx={{ padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
+
+        {/* Main Content */}
+        <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
+          <Box className="gap-16">
             <div style={{ width: '100%', textAlign: 'center' }}>
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Formulir Pemesanan Laundry</h2>
             </div>
@@ -414,7 +411,7 @@ function CreateNewOrder() {
             <LaundryShuttle />
             <InputItem stateValue={formOrder} handleState={setFormOrder} />
 
-            <Button variant="contained" size="large" style={{ width: '100%' }}>
+            <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
               Buat pesanan
             </Button>
           </Box>

@@ -64,6 +64,8 @@ function Input() {
         // onChange={(e) => {setState(e.target.value)}}
         sx={{ width: '100%' }}
       />
+
+      {/* Input Search */}
       <TextField
         type="search"
         label=""
@@ -73,6 +75,8 @@ function Input() {
         // onChange={(e) => {setState(e.target.value)}}
         sx={{ width: '100%' }}
       />
+
+      {/* Input Number */}
       <TextField
         type="number"
         label=""
@@ -83,6 +87,7 @@ function Input() {
         sx={{ width: '100%' }}
       />
 
+      {/* Input Password */}
       <FormControl
         variant="outlined"
         // onChange={(e) => {
@@ -110,10 +115,9 @@ function Input() {
           label="Password"
         />
       </FormControl>
-      <br />
-      <br />
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
+        {/* Input Date */}
         <MobileDatePicker
           label="For mobile"
           value={value}
@@ -141,7 +145,7 @@ function Input() {
           }}
         />
 
-        <br />
+        {/* Input Time */}
         <MobileTimePicker
           label="For mobile"
           value={value}
@@ -164,7 +168,7 @@ function Input() {
       {/* <h1>{value}</h1> */}
       <h1>{loading ? null : value.toString()}</h1>
 
-      <br />
+      {/* Input Select */}
       <Autocomplete
         sx={{ width: '100%' }}
         options={countries}
@@ -183,6 +187,7 @@ function Input() {
       />
       {select}
 
+      {/* Input File (Image) */}
       <Grid container spacing={2}>
         <Grid item xs="auto">
           <Button
