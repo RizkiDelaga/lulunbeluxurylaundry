@@ -101,12 +101,21 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 16px 0px;
+  /* width: 100%; */
 }
 
 .gap-24 {
   display: flex;
   flex-wrap: wrap;
   gap: 24px 0px;
+  /* width: 100%; */
+}
+
+.centerXY {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 /* ========= CARD ======== */

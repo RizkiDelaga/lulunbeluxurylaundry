@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getExample, editExample } from '../../../redux/actions/exampleAction';
-import PageStructure from '../../../components/PageStructure/PageStructure';
+import PageStructureAndDirectButton from '../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import AreaChart from '../../../components/Graph/AreaChart';
 import LineChart from '../../../components/Graph/LineChart';
 import HorizontalBarChart from '../../../components/Graph/HorizontalBarChart';
@@ -88,12 +88,14 @@ function HomePage() {
         </Card>
       )}
       <PopupDialog />
-      <PageStructure
+      <PageStructureAndDirectButton
         defaultMenu="dashboard"
-        previousPage={{
-          title: 'Title Name',
-          link: '/link',
-        }}
+        previousPage={[
+          {
+            title: 'Title Name',
+            link: '/link',
+          },
+        ]}
         currentPage={{
           title: 'Title Name',
           link: '/link',

@@ -2,8 +2,26 @@ import { Navigate, Route, Routes } from 'react-router';
 import { Outlet } from 'react-router-dom';
 import AdminLayout from '../layouts/AdminLayout/AdminLayout';
 import HomePage from '../pages/customer/HomePage/HomePage';
-import PageStructure from '../components/PageStructure/PageStructure';
+import PageStructure from '../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import CreateNewOrder from '../pages/administrator/orderMenu/CreateNewOrder/CreateNewOrder';
+import RegisterNewAdministrator from '../pages/administrator/dashboardMenu/RegisterNewAdministrator/RegisterNewAdministrator';
+import EditProfile from '../pages/administrator/dashboardMenu/EditProfile/EditProfile';
+import ChangePassword from '../pages/administrator/dashboardMenu/ChangePassword/ChangePassword';
+import EditAdministrators from '../pages/administrator/dashboardMenu/EditAdministrators/EditAdministrators';
+import CreateNewEvents from '../pages/administrator/eventMenu/CreateNewEvents/CreateNewEvents';
+import AddExpenses from '../pages/administrator/financeMenu/AddExpenses/AddExpenses';
+import AddIncome from '../pages/administrator/financeMenu/AddIncome/AddIncome';
+import RegisterNewCustomer from '../pages/administrator/customerMenu/NewCustomerRegistration/RegisterNewCustomer';
+import GeneralInformation from '../pages/administrator/businessInformationMenu/GeneralInformation/GeneralInformation';
+import ServiceType from '../pages/administrator/businessInformationMenu/ServiceType/ServiceType';
+import ReasonsWhyChooseUs from '../pages/administrator/businessInformationMenu/ReasonsWhyChooseUs/ReasonsWhyChooseUs';
+import Gallery from '../pages/administrator/businessInformationMenu/Gallery/Gallery';
+import FrequentlyAskedQuestions from '../pages/administrator/businessInformationMenu/FrequentlyAskedQuestions/FrequentlyAskedQuestions';
+import AboutUs from '../pages/administrator/businessInformationMenu/AboutUs/AboutUs';
+import HowToOrder from '../pages/administrator/businessInformationMenu/HowToOrder/HowToOrder';
+import PaymentMethod from '../pages/administrator/businessInformationMenu/PaymentMethod/PaymentMethod';
+import LaundryType from '../pages/administrator/businessInformationMenu/LaundryType/LaundryType';
+import LoginAdmin from '../pages/administrator/adminAuth/LoginAdmin/LoginAdmin';
 
 function AdminRouter() {
 
@@ -25,7 +43,7 @@ function AdminRouter() {
         <Routes>
           <Route element={<HandleLoginSuccessfully />}>
             {/* Admin Authentication Route */}
-            <Route path="Admin" element={<HomePage />} />
+            <Route path="Admin" element={<LoginAdmin />} />
             <Route path="LupaPassword" element={<HomePage />} />
             <Route path="ValidasiAkun" element={<HomePage />} />
             <Route path="UbahPassword" element={<HomePage />} />
@@ -33,18 +51,20 @@ function AdminRouter() {
           <Route element={<ProtectedAdminRoute />}>
             {/* Dashboard Menu Route */}
             <Route path="Dashboard" element={<PageStructure defaultMenu="dashboard"
-        previousPage={{
-          title: 'Title Name',
-          link: '/link',
-        }}
-        currentPage={{
-          title: 'Title Name',
-          link: '/link',
-        }} />} />
-            <Route path="Dashboard/EditProfil" element={<HomePage />} />
-            <Route path="Dashboard/UbahPassword" element={<HomePage />} />
-            <Route path="Dashboard/RegistrasiAdministratorBaru" element={<HomePage />} />
-            <Route path="Dashboard/EditAdministrator" element={<HomePage />} />
+                previousPage={[{
+                  title: 'Title Name',
+                  link: '/link',
+                }]}
+                currentPage={{
+                  title: 'Title Name',
+                  link: '/link',
+                }} 
+                directButton={{ value: 'Input', link: '/dashboard', secondaryColor: true }}
+              />} />
+            <Route path="Dashboard/EditProfil" element={<EditProfile />} />
+            <Route path="Dashboard/UbahPassword" element={<ChangePassword />} />
+            <Route path="Dashboard/RegistrasiAdministratorBaru" element={<RegisterNewAdministrator />} />
+            <Route path="Dashboard/EditAdministrator" element={<EditAdministrators />} />
 
             {/* Order Menu Route */}
             <Route path="Pesanan" element={<HomePage />} />
@@ -56,31 +76,31 @@ function AdminRouter() {
 
             {/* Business Information Menu Route */}
             <Route path="InformasiBisnis" element={<HomePage />} />
-            <Route path="InformasiBisnis/InformasiUmum" element={<HomePage />} />
-            <Route path="InformasiBisnis/JenisLaundry" element={<HomePage />} />
-            <Route path="InformasiBisnis/JenisLayanan" element={<HomePage />} />
-            <Route path="InformasiBisnis/TentangKami" element={<HomePage />} />
-            <Route path="InformasiBisnis/AlasanMengapaMemilihKami" element={<HomePage />} />
-            <Route path="InformasiBisnis/CaraPemesanan" element={<HomePage />} />
-            <Route path="InformasiBisnis/Galeri" element={<HomePage />} />
-            <Route path="InformasiBisnis/PertanyaanYangSerinDiAjukan" element={<HomePage />} />
-            <Route path="InformasiBisnis/MetodePembayaran" element={<HomePage />} />
+            <Route path="InformasiBisnis/InformasiUmum" element={<GeneralInformation />} />
+            <Route path="InformasiBisnis/JenisLaundry" element={<LaundryType />} />
+            <Route path="InformasiBisnis/JenisLayanan" element={<ServiceType />} />
+            <Route path="InformasiBisnis/TentangKami" element={<AboutUs />} />
+            <Route path="InformasiBisnis/AlasanMengapaMemilihKami" element={<ReasonsWhyChooseUs />} />
+            <Route path="InformasiBisnis/CaraPemesanan" element={<HowToOrder />} />
+            <Route path="InformasiBisnis/Galeri" element={<Gallery />} />
+            <Route path="InformasiBisnis/PertanyaanYangSerinDiAjukan" element={<FrequentlyAskedQuestions />} />
+            <Route path="InformasiBisnis/MetodePembayaran" element={<PaymentMethod />} />
             
             {/* Events Menu Route */}
             <Route path="Event" element={<HomePage />} />
-            <Route path="Event/BuatEventBaru" element={<HomePage />} />
+            <Route path="Event/BuatEventBaru" element={<CreateNewEvents />} />
             <Route path="Event/EditEvent" element={<HomePage />} />
             
             {/* Finance Menu Route */}
             <Route path="Keuangan" element={<HomePage />} />
-            <Route path="Keuangan/TambahPemasukan" element={<HomePage />} />
+            <Route path="Keuangan/InputPemasukan" element={<AddIncome />} />
             <Route path="Keuangan/EditPemasukan" element={<HomePage />} />
-            <Route path="Keuangan/InputPengeluaran" element={<HomePage />} />
+            <Route path="Keuangan/InputPengeluaran" element={<AddExpenses />} />
             <Route path="Keuangan/Edit Pengeluaran" element={<HomePage />} />
             
             {/* Customer Menu Route */}
             <Route path="Pelanggan" element={<HomePage />} />
-            <Route path="Pelanggan/RegistrasiPelangganBaru" element={<HomePage />} />
+            <Route path="Pelanggan/RegistrasiPelangganBaru" element={<RegisterNewCustomer />} />
             <Route path="Pelanggan/EditInformasiPelanggan" element={<HomePage />} />
           </Route>
         </Routes>
