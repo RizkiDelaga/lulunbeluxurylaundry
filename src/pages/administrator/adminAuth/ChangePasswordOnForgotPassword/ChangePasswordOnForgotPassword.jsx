@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -10,20 +10,19 @@ import {
   InputLabel,
   OutlinedInput,
   Paper,
-  TextField,
   useTheme,
 } from '@mui/material';
-import Logo from '../../../../assets/images/Logo.jpg';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import LockResetIcon from '@mui/icons-material/LockReset';
 
-function LoginAdmin() {
+function ChangePasswordOnForgotPassword() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [formLoginAdmin, setFormLoginAdmin] = useState({
-    administratorName: '',
-    password: '',
+  const [formChangePassword, setFormChangePassword] = useState({
+    newPassword: '',
+    confirmNewPassword: '',
   });
 
   return (
@@ -39,8 +38,6 @@ function LoginAdmin() {
             height: '100vh',
           }}
         >
-          <img src={Logo} alt="logo" height={80} />
-          <br />
           {/* Main Content */}
           <Paper
             elevation={3}
@@ -48,38 +45,27 @@ function LoginAdmin() {
           >
             <Box className="gap-16">
               <div style={{ width: '100%', textAlign: 'center', paddingTop: '8px', paddingBottom: '8px' }}>
-                <h2 style={{ margin: 0 }}>Login Administrator</h2>
-                <div>Masuk ke dalam akun anda</div>
+                <h2 style={{ margin: 0 }}>Buat Password Baru</h2>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  width: '100%',
+                  paddingBottom: '8px',
+                }}
+              >
+                <div
+                  className="centerXY"
+                  style={{ width: '180px', height: '180px', backgroundColor: '#eeeeee', borderRadius: '16px' }}
+                >
+                  <LockResetIcon color="primary" sx={{ fontSize: 80 }} />
+                </div>
               </div>
               <Grid container>
-                <Grid item xs={12} sm={12} md={2.3} lg={2.5} sx={{ display: 'flex', alignItems: 'center' }}>
-                  Nama Administrator
-                </Grid>
-                <Grid
-                  item
-                  xs
-                  lg
-                  sx={{
-                    display: 'flex',
-                    [theme.breakpoints.down('md')]: {
-                      paddingTop: '8px !important',
-                    },
-                  }}
-                >
-                  <TextField
-                    required
-                    label="Nama Administrator"
-                    value={formLoginAdmin.administratorName}
-                    onChange={(e) => {
-                      setFormLoginAdmin({ ...formLoginAdmin, administratorName: e.target.value });
-                    }}
-                    sx={{ width: '100%' }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container>
-                <Grid item xs={12} sm={12} md={2.3} lg={2.5} sx={{ display: 'flex', alignItems: 'center' }}>
-                  Password
+                <Grid item xs={12} sm={12} md={3} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
+                  Password Baru
                 </Grid>
                 <Grid
                   item
@@ -95,11 +81,11 @@ function LoginAdmin() {
                   <FormControl
                     variant="outlined"
                     onChange={(e) => {
-                      setFormLoginAdmin({ ...formLoginAdmin, password: e.target.value });
+                      setFormChangePassword({ ...formChangePassword, newPassword: e.target.value });
                     }}
                     sx={{ width: '100%' }}
                   >
-                    <InputLabel htmlFor="text-field-password">Password*</InputLabel>
+                    <InputLabel htmlFor="text-field-password">Password Baru*</InputLabel>
                     <OutlinedInput
                       id="text-field-password"
                       type={showPassword ? 'text' : 'password'}
@@ -119,23 +105,61 @@ function LoginAdmin() {
                   </FormControl>
                 </Grid>
               </Grid>
-              <div style={{ fontSize: '12px', opacity: '0.6', width: '100%', textAlign: 'right' }}>
-                <Link to={'/Admin/LupaPassword'} className="disable-link-style">
-                  Lupa Password?
-                </Link>
-              </div>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={3} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
+                  Konfirmasi Password Baru
+                </Grid>
+                <Grid
+                  item
+                  xs
+                  lg
+                  sx={{
+                    display: 'flex',
+                    [theme.breakpoints.down('md')]: {
+                      paddingTop: '8px !important',
+                    },
+                  }}
+                >
+                  <FormControl
+                    variant="outlined"
+                    onChange={(e) => {
+                      setFormChangePassword({ ...formChangePassword, confirmNewPassword: e.target.value });
+                    }}
+                    sx={{ width: '100%' }}
+                  >
+                    <InputLabel htmlFor="text-field-password">Konfirmasi Password Baru*</InputLabel>
+                    <OutlinedInput
+                      id="text-field-password"
+                      type={showPassword ? 'text' : 'password'}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            onMouseDown={() => setShowPassword(!showPassword)}
+                            edge="end"
+                            color="primary"
+                          >
+                            {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+
               <Button
                 variant="contained"
                 size="large"
                 onClick={() => {
-                  navigate('/Dashboard');
+                  navigate('/Admin');
                 }}
                 style={{ width: '100%', fontWeight: 'bold' }}
               >
-                Masuk
+                Ubah Password
               </Button>
-              {formLoginAdmin.administratorName}
-              {formLoginAdmin.password}
+              {formChangePassword.newPassword}
+              {formChangePassword.confirmNewPassword}
             </Box>
           </Paper>
         </div>
@@ -144,4 +168,4 @@ function LoginAdmin() {
   );
 }
 
-export default LoginAdmin;
+export default ChangePasswordOnForgotPassword;

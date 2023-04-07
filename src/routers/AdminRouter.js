@@ -22,6 +22,9 @@ import HowToOrder from '../pages/administrator/businessInformationMenu/HowToOrde
 import PaymentMethod from '../pages/administrator/businessInformationMenu/PaymentMethod/PaymentMethod';
 import LaundryType from '../pages/administrator/businessInformationMenu/LaundryType/LaundryType';
 import LoginAdmin from '../pages/administrator/adminAuth/LoginAdmin/LoginAdmin';
+import ForgotPasswordRequest from '../pages/administrator/adminAuth/ForgotPasswordRequest/ForgotPasswordRequest';
+import AccountValidation from '../pages/administrator/adminAuth/AccountValidation/AccountValidation';
+import ChangePasswordOnForgotPassword from '../pages/administrator/adminAuth/ChangePasswordOnForgotPassword/ChangePasswordOnForgotPassword';
 
 function AdminRouter() {
 
@@ -44,9 +47,9 @@ function AdminRouter() {
           <Route element={<HandleLoginSuccessfully />}>
             {/* Admin Authentication Route */}
             <Route path="Admin" element={<LoginAdmin />} />
-            <Route path="LupaPassword" element={<HomePage />} />
-            <Route path="ValidasiAkun" element={<HomePage />} />
-            <Route path="UbahPassword" element={<HomePage />} />
+            <Route path="Admin/LupaPassword" element={<ForgotPasswordRequest />} />
+            <Route path="Admin/ValidasiAkun" element={<AccountValidation />} />
+            <Route path="Admin/UbahPassword" element={<ChangePasswordOnForgotPassword />} />
           </Route>
           <Route element={<ProtectedAdminRoute />}>
             {/* Dashboard Menu Route */}
