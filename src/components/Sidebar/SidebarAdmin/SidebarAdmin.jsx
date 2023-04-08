@@ -42,7 +42,7 @@ const closedMixin = (theme) => ({
   overflowX: 'hidden',
   zIndex: 10000,
   width: `calc(${theme.spacing(8)} + 1px)`,
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     display: 'none',
   },
 });
@@ -111,7 +111,11 @@ function SidebarAdmin(props) {
             { title: 'Keuangan', icon: <LocalAtmOutlinedIcon />, link: '/Keuangan' },
             { title: 'Pelanggan', icon: <GroupsOutlinedIcon />, link: '/Pelanggan' },
           ].map((listNavbar, index) => (
-            <Link to={listNavbar.link} className="disable-link-style" onClick={props.handleSidebar}>
+            <Link
+              to={listNavbar.link}
+              className="disable-link-style"
+              onClick={window.innerWidth <= 900 ? props.handleSidebar : null}
+            >
               <ListItem key={listNavbar.title} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   sx={{
