@@ -111,7 +111,7 @@ function SidebarAdmin(props) {
             { title: 'Keuangan', icon: <LocalAtmOutlinedIcon />, link: '/Keuangan' },
             { title: 'Pelanggan', icon: <GroupsOutlinedIcon />, link: '/Pelanggan' },
           ].map((listNavbar, index) => (
-            <Link to={listNavbar.link} className="disable-link-style">
+            <Link to={listNavbar.link} className="disable-link-style" onClick={props.handleSidebar}>
               <ListItem key={listNavbar.title} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   sx={{
