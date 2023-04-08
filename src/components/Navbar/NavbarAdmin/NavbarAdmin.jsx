@@ -207,7 +207,7 @@ function Navbar(props) {
               sx={{
                 marginRight: 1,
                 marginLeft: props.openSidebar ? 'none' : 6,
-                [theme.breakpoints.down('sm')]: {
+                [theme.breakpoints.down('md')]: {
                   marginLeft: '0 !important',
                 },
               }}
