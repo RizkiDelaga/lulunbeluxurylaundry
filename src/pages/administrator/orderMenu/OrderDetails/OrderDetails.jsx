@@ -1,27 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
-function LaundryType() {
+function OrderDetails() {
   const navigate = useNavigate();
-  const [formLaundryType, setFormLaundryType] = useState({
-    laundryTypeName: '',
-    description: '',
-    photo: {},
-  });
 
   React.useEffect(() => {
-    document.title = 'Edit Jenis Laundry';
+    document.title = 'Detail Pesanan';
   }, []);
 
   return (
     <>
       <div className="gap-24" style={{ marginBottom: '24px' }}>
         <PageStructureAndDirectButton
-          defaultMenu="Informasi Bisnis"
+          defaultMenu="Pesanan"
           currentPage={{
-            title: 'Jenis Laundry',
+            title: 'Detail Pesanan',
           }}
         />
 
@@ -29,11 +24,11 @@ function LaundryType() {
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
           <Box className="gap-16">
             <div style={{ width: '100%', textAlign: 'center' }}>
-              <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Jenis Laundry</h2>
+              <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Informasi Pelanggan</h2>
             </div>
 
             <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
-              Simpan
+              Struk Digital
             </Button>
           </Box>
         </Paper>
@@ -42,4 +37,4 @@ function LaundryType() {
   );
 }
 
-export default LaundryType;
+export default OrderDetails;

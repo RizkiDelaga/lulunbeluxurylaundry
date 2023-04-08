@@ -25,6 +25,10 @@ function ChangePasswordOnForgotPassword() {
     confirmNewPassword: '',
   });
 
+  React.useEffect(() => {
+    document.title = 'Ubah Password';
+  }, []);
+
   return (
     <>
       <Box component="main" sx={{ marginX: 3 }}>

@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import PageStructureAndDirectButton from '../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Box, Paper } from '@mui/material';
+import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
+import { Box, Button, Paper } from '@mui/material';
 
-function OrderMenu() {
+function OrderList() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    document.title = 'Menu Pesanan';
+    document.title = 'Daftar Pesanan';
   }, []);
 
   return (
@@ -15,14 +15,9 @@ function OrderMenu() {
       <div className="gap-24" style={{ marginBottom: '24px' }}>
         <PageStructureAndDirectButton
           defaultMenu="Pesanan"
-          directButton={[
-            {
-              color: 'primary',
-              iconType: 'add',
-              value: 'Buat pesanan baru',
-              link: '/Pesanan/BuatPesananBaru',
-            },
-          ]}
+          currentPage={{
+            title: 'Daftar Pesanan',
+          }}
         />
 
         {/* Main Content */}
@@ -34,4 +29,4 @@ function OrderMenu() {
   );
 }
 
-export default OrderMenu;
+export default OrderList;

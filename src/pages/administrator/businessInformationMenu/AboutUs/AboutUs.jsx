@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
 function AboutUs() {
   const navigate = useNavigate();
+  const [formAboutUs, setFormAboutUs] = useState({
+    explanationParagraph: '',
+  });
+
+  React.useEffect(() => {
+    document.title = 'Edit Tentang Kami';
+  }, []);
 
   return (
     <>

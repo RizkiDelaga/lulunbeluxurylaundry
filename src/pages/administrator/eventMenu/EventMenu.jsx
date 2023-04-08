@@ -6,6 +6,10 @@ import { Box, Paper } from '@mui/material';
 function EventMenu() {
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    document.title = 'Menu Event';
+  }, []);
+
   return (
     <>
       <div className="gap-24" style={{ marginBottom: '24px' }}>

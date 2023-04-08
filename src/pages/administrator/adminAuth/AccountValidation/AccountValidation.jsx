@@ -8,6 +8,10 @@ function AccountValidation() {
   const navigate = useNavigate();
   const [verificationCode, setVerificationCode] = useState();
 
+  React.useEffect(() => {
+    document.title = 'Validasi Akun Admin';
+  }, []);
+
   return (
     <>
       <Box component="main" sx={{ marginX: 3 }}>

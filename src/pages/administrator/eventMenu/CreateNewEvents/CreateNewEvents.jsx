@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
 function CreateNewEvents() {
   const navigate = useNavigate();
+  const [formCreateNewEvents, setFormCreateNewEvents] = useState({
+    eventName: '',
+    dateStart: '',
+    dateEnd: '',
+    description: '',
+    reward: [],
+    criteria: [],
+    poster: {},
+  });
+
+  React.useEffect(() => {
+    document.title = 'Buat Event Baru';
+  }, []);
 
   return (
     <>
@@ -23,7 +36,12 @@ function CreateNewEvents() {
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Buat Event Baru</h2>
             </div>
 
-            <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
+            <Button
+              variant="contained"
+              size="large"
+              style={{ width: '100%', fontWeight: 'bold' }}
+              onClick={() => navigate('/Event')}
+            >
               Buat Event
             </Button>
           </Box>

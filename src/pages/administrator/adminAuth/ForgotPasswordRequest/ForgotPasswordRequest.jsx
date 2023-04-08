@@ -8,6 +8,10 @@ function ForgotPasswordRequest() {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState();
 
+  React.useEffect(() => {
+    document.title = 'Pengajuan Lupa Password Admin';
+  }, []);
+
   return (
     <>
       <Box component="main" sx={{ marginX: 3 }}>

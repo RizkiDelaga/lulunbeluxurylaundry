@@ -390,6 +390,10 @@ function CreateNewOrder() {
     ],
   });
 
+  React.useEffect(() => {
+    document.title = 'Buat Pesanan Baru';
+  }, []);
+
   return (
     <>
       <div className="gap-24" style={{ marginBottom: '24px' }}>
@@ -411,7 +415,12 @@ function CreateNewOrder() {
             <LaundryShuttle />
             <InputItem stateValue={formOrder} handleState={setFormOrder} />
 
-            <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
+            <Button
+              variant="contained"
+              size="large"
+              style={{ width: '100%', fontWeight: 'bold' }}
+              onClick={() => navigate('/Pesanan/2')}
+            >
               Buat pesanan
             </Button>
           </Box>

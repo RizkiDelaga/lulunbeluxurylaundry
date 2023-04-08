@@ -31,6 +31,9 @@ import BusinessInformationMenu from '../pages/administrator/businessInformationM
 import EventMenu from '../pages/administrator/eventMenu/EventMenu';
 import FinanceMenu from '../pages/administrator/financeMenu/FinanceMenu';
 import CustomerMenu from '../pages/administrator/customerMenu/CustomerMenu';
+import OrderDetails from '../pages/administrator/orderMenu/OrderDetails/OrderDetails';
+import CustomerRatingsAndReviews from '../pages/administrator/orderMenu/CustomerRatingsAndReviews/CustomerRatingsAndReviews';
+import OrderList from '../pages/administrator/orderMenu/OrderList/OrderList';
 
 function AdminRouter() {
 
@@ -69,9 +72,9 @@ function AdminRouter() {
             <Route path="Pesanan" element={<OrderMenu />} />
             <Route path="Pesanan/BuatPesananBaru" element={<CreateNewOrder />} />
             <Route path="Pesanan/EditPesanan" element={<HomePage />} />
-            <Route path="Pesanan/:id" element={<HomePage />} />
-            <Route path="Pesanan/RatingDanReviewPelanggan" element={<HomePage />} />
-            <Route path="Pesanan/DaftarPesanan" element={<HomePage />} />
+            <Route path="Pesanan/:id" element={<OrderDetails />} />
+            <Route path="Pesanan/RatingDanReviewPelanggan" element={<CustomerRatingsAndReviews />} />
+            <Route path="Pesanan/DaftarPesanan" element={<OrderList />} />
 
             {/* Business Information Menu Route */}
             <Route path="InformasiBisnis" element={<BusinessInformationMenu />} />

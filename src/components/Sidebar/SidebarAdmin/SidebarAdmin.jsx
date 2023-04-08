@@ -104,7 +104,7 @@ function SidebarAdmin(props) {
 
         <List>
           {[
-            { title: 'Dashboard', icon: <DashboardOutlinedIcon />, link: '/dashboard' },
+            { title: 'Dashboard', icon: <DashboardOutlinedIcon />, link: '/Dashboard' },
             { title: 'Pesanan', icon: <AddToPhotosOutlinedIcon />, link: '/Pesanan' },
             { title: 'Informasi Bisnis', icon: <StoreMallDirectoryOutlinedIcon />, link: '/InformasiBisnis' },
             { title: 'Event', icon: <LocalActivityOutlinedIcon />, link: '/Event' },

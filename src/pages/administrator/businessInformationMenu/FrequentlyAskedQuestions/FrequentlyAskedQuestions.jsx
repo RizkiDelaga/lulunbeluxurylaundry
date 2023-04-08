@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
 function FrequentlyAskedQuestions() {
   const navigate = useNavigate();
+  const [formFrequentlyAskedQuestions, setFormFrequentlyAskedQuestions] = useState({
+    question: '',
+    answer: '',
+  });
+
+  React.useEffect(() => {
+    document.title = 'Edit FAQ';
+  }, []);
 
   return (
     <>

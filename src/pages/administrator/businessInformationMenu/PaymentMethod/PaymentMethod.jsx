@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
 function PaymentMethod() {
   const navigate = useNavigate();
+  const [formPaymentMethod, setFormPaymentMethod] = useState({
+    paymentName: '',
+    iD_Or_Number: '',
+    instructions: [],
+    paymentLogo: {},
+  });
+
+  React.useEffect(() => {
+    document.title = 'Edit Metode Pembayaran';
+  }, []);
 
   return (
     <>
