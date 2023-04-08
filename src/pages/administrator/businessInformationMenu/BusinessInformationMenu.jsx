@@ -63,6 +63,10 @@ const listBusinessInformationMenu = [
 function BusinessInformationMenu() {
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    document.title = 'Menu Informasi Bisnis';
+  }, []);
+
   return (
     <>
       <div className="gap-24" style={{ marginBottom: '24px' }}>

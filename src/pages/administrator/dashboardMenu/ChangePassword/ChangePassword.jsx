@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
 function ChangePassword() {
   const navigate = useNavigate();
+  const [formChangePassword, setFormChangePassword] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
+  });
+
+  React.useEffect(() => {
+    document.title = 'Ubah Password';
+  }, []);
 
   return (
     <>
@@ -23,7 +32,12 @@ function ChangePassword() {
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Ubah Password</h2>
             </div>
 
-            <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
+            <Button
+              variant="contained"
+              size="large"
+              style={{ width: '100%', fontWeight: 'bold' }}
+              onClick={() => navigate('/Dashboard')}
+            >
               Ubah Password
             </Button>
           </Box>

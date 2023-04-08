@@ -24,6 +24,7 @@ function DashboardMenu() {
   const { isLoading: loadingGetExample, data: dataGetExample } = useSelector((state) => state.getExample);
 
   React.useEffect(() => {
+    document.title = 'Menu Dashboard';
     dispatchGetExample();
     if (!loadingGetExample) {
       saveData(dataGetExample);
@@ -67,16 +68,14 @@ function DashboardMenu() {
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
           <Box className="gap-16">
-            {loadingGetExample ? null : dataTable.length > 1 ? console.log(dataTable) : null}
-            {loadingGetExample ? null : dataTable.length > 1 ? <EnhancedTable dataTable={dataTable} /> : null}
+            {/* {loadingGetExample ? null : dataTable.length > 1 ? console.log(dataTable) : null}
+            {loadingGetExample ? null : dataTable.length > 1 ? <EnhancedTable dataTable={dataTable} /> : null} */}
             {/* <EnhancedTable /> */}
           </Box>
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Box className="gap-16">
-            <ResponsiveTable />
-          </Box>
+          <Box className="gap-16">{/* <ResponsiveTable /> */}</Box>
         </Paper>
       </div>
     </>

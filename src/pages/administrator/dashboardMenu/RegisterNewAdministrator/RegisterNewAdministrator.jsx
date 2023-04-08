@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
 function RegisterNewAdministrator() {
   const navigate = useNavigate();
+  const [formRegisterNewAdministrator, setFormRegisterNewAdministrator] = useState({
+    administratorName: '',
+    contact: {
+      phoneNumber: '',
+      email: '',
+    },
+    role: '',
+    password: '',
+    confirmPassword: '',
+    profilePicture: {},
+  });
+
+  React.useEffect(() => {
+    document.title = 'Registrasi Administrator Baru';
+  }, []);
 
   return (
     <>
@@ -23,7 +38,12 @@ function RegisterNewAdministrator() {
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Registrasi Administrator Baru</h2>
             </div>
 
-            <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
+            <Button
+              variant="contained"
+              size="large"
+              style={{ width: '100%', fontWeight: 'bold' }}
+              onClick={() => navigate('/Dashboard')}
+            >
               Registrasi Administrator
             </Button>
           </Box>

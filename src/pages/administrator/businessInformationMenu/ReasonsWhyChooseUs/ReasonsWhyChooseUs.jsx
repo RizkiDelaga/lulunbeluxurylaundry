@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
 function ReasonsWhyChooseUs() {
   const navigate = useNavigate();
+  const [formReasonsWhyChooseUs, setFormReasonsWhyChooseUs] = useState({
+    reasonTitle: '',
+    description: '',
+    photo: {},
+  });
+
+  React.useEffect(() => {
+    document.title = 'Edit Alasan Mengapa Memilih Kita';
+  }, []);
 
   return (
     <>

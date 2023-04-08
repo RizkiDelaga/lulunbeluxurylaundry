@@ -6,6 +6,10 @@ import { Box, Paper } from '@mui/material';
 function FinanceMenu() {
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    document.title = 'Menu Keuangan';
+  }, []);
+
   return (
     <>
       <div className="gap-24" style={{ marginBottom: '24px' }}>

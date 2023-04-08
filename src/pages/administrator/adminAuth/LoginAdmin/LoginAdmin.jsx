@@ -26,6 +26,10 @@ function LoginAdmin() {
     password: '',
   });
 
+  React.useEffect(() => {
+    document.title = 'Login Administrator';
+  }, []);
+
   return (
     <>
       <Box component="main" sx={{ marginX: 3 }}>

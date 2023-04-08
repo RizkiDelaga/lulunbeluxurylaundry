@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
 function ServiceType() {
   const navigate = useNavigate();
+  const [formServiceType, setFormServiceType] = useState({
+    serviceTypeName: '',
+    serviceDuration: {
+      days: 0,
+      hours: 0,
+    },
+    description: '',
+    photo: {},
+  });
+
+  React.useEffect(() => {
+    document.title = 'Edit Jenis Layanan';
+  }, []);
 
   return (
     <>

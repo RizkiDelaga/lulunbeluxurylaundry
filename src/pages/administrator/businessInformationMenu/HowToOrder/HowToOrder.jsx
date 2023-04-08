@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
 function HowToOrder() {
   const navigate = useNavigate();
+  const [formHowToOrder, setFormHowToOrder] = useState({
+    viaOnline: {
+      stepTitle: '',
+      description: '',
+      photo: {},
+    },
+    viaOutlet: {
+      stepTitle: '',
+      description: '',
+      photo: {},
+    },
+  });
+
+  React.useEffect(() => {
+    document.title = 'Edit Cara Pemesanan';
+  }, []);
 
   return (
     <>

@@ -373,7 +373,7 @@ function Navbar(props) {
                   <div>Role admin : Master</div>
                 </div>
               </div>
-              <MenuItem onClick={() => handleCloseAccountMenu('/dashboard')}>
+              <MenuItem onClick={() => handleCloseAccountMenu('/Dashboard')}>
                 <ListItemIcon>
                   <DashboardOutlinedIcon className="color-primary" />
                 </ListItemIcon>
@@ -385,14 +385,14 @@ function Navbar(props) {
                 </ListItemIcon>
                 Edit Profil
               </MenuItem>
-              <MenuItem onClick={() => handleCloseAccountMenu('Dashboard/ubahpassword')}>
+              <MenuItem onClick={() => handleCloseAccountMenu('Dashboard/UbahPassword')}>
                 <ListItemIcon>
                   <PasswordIcon className="color-primary" />
                 </ListItemIcon>
                 Ubah Password
               </MenuItem>
               <Divider />
-              <MenuItem onClick={() => handleCloseAccountMenu('/login')}>
+              <MenuItem onClick={() => handleCloseAccountMenu('/Admin')}>
                 <ListItemIcon>
                   <ExitToAppIcon className="color-primary" />
                 </ListItemIcon>

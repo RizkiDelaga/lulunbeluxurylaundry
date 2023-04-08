@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Paper } from '@mui/material';
 
 function AddExpenses() {
   const navigate = useNavigate();
+  const [formAddExpenses, setFormAddExpenses] = useState({
+    title: '',
+    nominal: 0,
+    expenditureDate: '',
+    notes: '',
+    photoEvidence: {},
+  });
+
+  React.useEffect(() => {
+    document.title = 'Tambah Pengeluaran';
+  }, []);
 
   return (
     <>
@@ -23,7 +34,12 @@ function AddExpenses() {
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Input Pengeluaran</h2>
             </div>
 
-            <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
+            <Button
+              variant="contained"
+              size="large"
+              style={{ width: '100%', fontWeight: 'bold' }}
+              onClick={() => navigate('/Keuangan')}
+            >
               Tambah Pengeluaran
             </Button>
           </Box>
