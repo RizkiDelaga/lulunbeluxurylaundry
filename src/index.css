@@ -79,6 +79,12 @@ body {
   font-weight: bold !important;
 }
 
+/* .button-outlined-tertiary {
+  border: 1px solid #D32F2F !important;
+  color: #D32F2F !important;
+  font-weight: bold !important;
+} */
+
 /* .button-outlined-danger:hover {
   background-color: #D32F2F !important;
   color: #ffffff !important;

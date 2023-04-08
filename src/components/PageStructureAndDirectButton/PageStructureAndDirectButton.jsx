@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React from 'react';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -8,15 +8,14 @@ import StoreMallDirectoryOutlinedIcon from '@mui/icons-material/StoreMallDirecto
 import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
 import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { useNavigate } from 'react-router';
-import ResponsiveTable from '../Table/ResponsiveTable';
-import EnhancedTable from '../Table/EnhancedTable';
-import { useDispatch, useSelector } from 'react-redux';
-import { getExample } from '../../redux/actions/exampleAction';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, useTheme } from '@mui/material';
 
 function PageStructureAndDirectButton(props) {
+  const theme = useTheme();
   const navigate = useNavigate();
 
   const listMenu = [
@@ -53,63 +52,19 @@ function PageStructureAndDirectButton(props) {
   ];
   const mainMenu = listMenu.find((item) => item.title.toLowerCase() === props.defaultMenu.toLowerCase());
 
-  // const [dataTable, setDataTable] = useState([
-  //   {
-  //     name: '',
-  //     code: 0,
-  //     population: 0,
-  //     size: 0,
-  //     description: '',
-  //     elementHTML: 0,
-  //   },
-  // ]);
-  // const dispatch = useDispatch();
-  // const { isLoading: loadingGetExample, data: dataGetExample } = useSelector((state) => state.getExample);
-
-  // React.useEffect(() => {
-  //   dispatchGetExample();
-  //   if (!loadingGetExample) {
-  //     saveData(dataGetExample);
-  //   }
-  // }, [loadingGetExample]);
-
-  // const dispatchGetExample = async () => {
-  //   return await dispatch(getExample());
-  // };
-
-  // const saveData = (data) => {
-  //   // data.map(() => {
-  //   setDataTable(
-  //     data.map((item) => ({
-  //       name: item.title,
-  //       code: parseInt(item.id),
-  //       population: parseInt(item.price),
-  //       size: parseInt(item.price * item.id),
-  //       description: item.deskripsi,
-  //       elementHTML: 9,
-  //     }))
-  //   );
-  //   // });
-  // };
-
   return (
     <>
       <Grid container>
-        <Grid item xs={12} sm sx={{ display: 'flex', alignItems: 'center' }}>
+        <Grid item xs={12} sm="6" md="auto" sx={{ display: 'flex', alignItems: 'center' }}>
+          {mainMenu.icon}
           <Breadcrumbs maxItems={3} aria-label="breadcrumb">
             {/* Main Menu */}
             <Link
               underline="none"
-              color="inherit"
-              onClick={() => {
-                console.log(
-                  listMenu.find((item, index) => item.title.toLowerCase() === props.defaultMenu.toLowerCase())
-                );
-                navigate(mainMenu.link);
-              }}
+              color={props.currentPage ? 'inherit' : '#000000DE'}
+              onClick={() => (props.currentPage ? navigate(mainMenu.link) : null)}
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
             >
-              {mainMenu.icon}
               {mainMenu.title}
             </Link>
 
@@ -132,29 +87,66 @@ function PageStructureAndDirectButton(props) {
               : null}
 
             {/* Current Page */}
-            <Typography color="text.primary">{props.currentPage.title}</Typography>
+            {props.currentPage ? <Typography color="text.primary">{props.currentPage.title}</Typography> : null}
           </Breadcrumbs>
         </Grid>
-        {props.directButton ? (
-          <Grid item xs={12} sm="auto" sx={{ display: 'flex', justifyContent: 'right' }}>
-            <Button
-              variant="outlined"
-              className={props.directButton.secondaryColor ? 'button-outlined-danger' : 'button-outlined-primary'}
-              onClick={() => navigate(props.directButton.link)}
-            >
-              {props.directButton.value}
-            </Button>
-          </Grid>
-        ) : null}
+
+        {/* Direct Button */}
+        <Grid item xs={12} sm={6} md style={{ display: 'flex', justifyContent: 'right' }}>
+          <div style={{ width: '100%', textAlign: 'right' }}>
+            {props.directButton
+              ? props.directButton.map((btnItem) => {
+                  return (
+                    <Button
+                      variant="outlined"
+                      startIcon={btnItem.iconType.toLowerCase() === 'edit' ? <EditIcon /> : <AddIcon />}
+                      className={
+                        btnItem.color.toLowerCase() === 'secondary'
+                          ? 'button-outlined-danger'
+                          : 'button-outlined-primary'
+                      }
+                      onClick={() => navigate(btnItem.link)}
+                      sx={{
+                        ml: 2,
+                        [theme.breakpoints.down('md')]: {
+                          width: '100% !important',
+                          mt: 1,
+                          ml: '0px !important',
+                        },
+                      }}
+                    >
+                      {btnItem.value}
+                    </Button>
+                  );
+                })
+              : null}
+          </div>
+        </Grid>
       </Grid>
-
-      {/* {loadingGetExample ? null : dataTable.length > 1 ? console.log(dataTable) : null}
-      {loadingGetExample ? null : dataTable.length > 1 ? <EnhancedTable dataTable={dataTable} /> : null} */}
-      {/* <EnhancedTable /> */}
-
-      {/* <ResponsiveTable /> */}
     </>
   );
 }
 
 export default PageStructureAndDirectButton;
+
+// ======== How To Call ========
+/* <PageStructureAndDirectButton
+  defaultMenu="Dashboard/Pesanan/Informasi Bisnis/Event/Keuangan/Pelanggan"
+  previousPage={[
+    {
+      title: 'Title Name',
+      link: '/link',
+    },
+  ]}
+  currentPage={{
+    title: 'Title Name',
+  }}
+  directButton={[
+    {
+      color: 'secondary (default=primary)',
+      iconType: 'edit (default=add)',
+      value: 'Button Label',
+      link: '/link',
+    },
+  ]}
+/>; */

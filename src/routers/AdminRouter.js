@@ -25,6 +25,12 @@ import LoginAdmin from '../pages/administrator/adminAuth/LoginAdmin/LoginAdmin';
 import ForgotPasswordRequest from '../pages/administrator/adminAuth/ForgotPasswordRequest/ForgotPasswordRequest';
 import AccountValidation from '../pages/administrator/adminAuth/AccountValidation/AccountValidation';
 import ChangePasswordOnForgotPassword from '../pages/administrator/adminAuth/ChangePasswordOnForgotPassword/ChangePasswordOnForgotPassword';
+import DashboardMenu from '../pages/administrator/dashboardMenu/DashboardMenu';
+import OrderMenu from '../pages/administrator/orderMenu/OrderMenu';
+import BusinessInformationMenu from '../pages/administrator/businessInformationMenu/BusinessInformationMenu';
+import EventMenu from '../pages/administrator/eventMenu/EventMenu';
+import FinanceMenu from '../pages/administrator/financeMenu/FinanceMenu';
+import CustomerMenu from '../pages/administrator/customerMenu/CustomerMenu';
 
 function AdminRouter() {
 
@@ -53,24 +59,14 @@ function AdminRouter() {
           </Route>
           <Route element={<ProtectedAdminRoute />}>
             {/* Dashboard Menu Route */}
-            <Route path="Dashboard" element={<PageStructure defaultMenu="dashboard"
-                previousPage={[{
-                  title: 'Title Name',
-                  link: '/link',
-                }]}
-                currentPage={{
-                  title: 'Title Name',
-                  link: '/link',
-                }} 
-                directButton={{ value: 'Input', link: '/dashboard', secondaryColor: true }}
-              />} />
+            <Route path="Dashboard" element={<DashboardMenu />} />
             <Route path="Dashboard/EditProfil" element={<EditProfile />} />
             <Route path="Dashboard/UbahPassword" element={<ChangePassword />} />
             <Route path="Dashboard/RegistrasiAdministratorBaru" element={<RegisterNewAdministrator />} />
             <Route path="Dashboard/EditAdministrator" element={<EditAdministrators />} />
 
             {/* Order Menu Route */}
-            <Route path="Pesanan" element={<HomePage />} />
+            <Route path="Pesanan" element={<OrderMenu />} />
             <Route path="Pesanan/BuatPesananBaru" element={<CreateNewOrder />} />
             <Route path="Pesanan/EditPesanan" element={<HomePage />} />
             <Route path="Pesanan/:id" element={<HomePage />} />
@@ -78,7 +74,7 @@ function AdminRouter() {
             <Route path="Pesanan/DaftarPesanan" element={<HomePage />} />
 
             {/* Business Information Menu Route */}
-            <Route path="InformasiBisnis" element={<HomePage />} />
+            <Route path="InformasiBisnis" element={<BusinessInformationMenu />} />
             <Route path="InformasiBisnis/InformasiUmum" element={<GeneralInformation />} />
             <Route path="InformasiBisnis/JenisLaundry" element={<LaundryType />} />
             <Route path="InformasiBisnis/JenisLayanan" element={<ServiceType />} />
@@ -90,19 +86,19 @@ function AdminRouter() {
             <Route path="InformasiBisnis/MetodePembayaran" element={<PaymentMethod />} />
             
             {/* Events Menu Route */}
-            <Route path="Event" element={<HomePage />} />
+            <Route path="Event" element={<EventMenu />} />
             <Route path="Event/BuatEventBaru" element={<CreateNewEvents />} />
             <Route path="Event/EditEvent" element={<HomePage />} />
             
             {/* Finance Menu Route */}
-            <Route path="Keuangan" element={<HomePage />} />
+            <Route path="Keuangan" element={<FinanceMenu />} />
             <Route path="Keuangan/InputPemasukan" element={<AddIncome />} />
             <Route path="Keuangan/EditPemasukan" element={<HomePage />} />
             <Route path="Keuangan/InputPengeluaran" element={<AddExpenses />} />
             <Route path="Keuangan/Edit Pengeluaran" element={<HomePage />} />
             
             {/* Customer Menu Route */}
-            <Route path="Pelanggan" element={<HomePage />} />
+            <Route path="Pelanggan" element={<CustomerMenu />} />
             <Route path="Pelanggan/RegistrasiPelangganBaru" element={<RegisterNewCustomer />} />
             <Route path="Pelanggan/EditInformasiPelanggan" element={<HomePage />} />
           </Route>
