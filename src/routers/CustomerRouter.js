@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router';
 import { Outlet } from 'react-router-dom';
 import CustomerLayout from '../layouts/CustomerLayout/CustomerLayout';
-import HomePage from '../pages/customer/HomePage/HomePage';
+import HomePage from '../pages/customerPages/HomePage/HomePage';
 
 function CustomerRouter() {
   const HandleLoginSuccessfully = () => {
