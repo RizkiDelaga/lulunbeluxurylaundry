@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Box, Button, Grid, Paper, TextField, useTheme } from '@mui/material';
+import { Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/material';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 
 function EditProfile() {
   const theme = useTheme();
@@ -53,7 +56,15 @@ function EditProfile() {
                   },
                 }}
               >
-                <TextField required label="Nama Administator" sx={{ width: '100%' }} />
+                <TextField
+                  required
+                  label="Nama"
+                  value={formEditProfile.administratorName}
+                  onChange={(e) => {
+                    setFormEditProfile({ ...formEditProfile, administratorName: e.target.value });
+                  }}
+                  sx={{ width: '100%' }}
+                />
               </Grid>
             </Grid>
 
@@ -74,10 +85,32 @@ function EditProfile() {
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm>
-                    <TextField required label="Nama Barang" sx={{ width: '100%' }} />
+                    <TextField
+                      type="number"
+                      label="Nomer Telepon"
+                      value={formEditProfile.contact.phoneNumber}
+                      onChange={(e) => {
+                        setFormEditProfile({
+                          ...formEditProfile,
+                          contact: { ...formEditProfile.contact, phoneNumber: e.target.value },
+                        });
+                      }}
+                      sx={{ width: '100%' }}
+                    />
                   </Grid>
                   <Grid item xs={12} sm>
-                    <TextField required label="Kuantitas" type="number" sx={{ width: '100%' }} />
+                    <TextField
+                      required
+                      label="Email"
+                      value={formEditProfile.contact.email}
+                      onChange={(e) => {
+                        setFormEditProfile({
+                          ...formEditProfile,
+                          contact: { ...formEditProfile.contact, email: e.target.value },
+                        });
+                      }}
+                      sx={{ width: '100%' }}
+                    />
                   </Grid>
                 </Grid>
               </Grid>
@@ -102,6 +135,78 @@ function EditProfile() {
                 <TextField required label="Nama Administator" sx={{ width: '100%' }} />
               </Grid>
             </Grid>
+
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12} md={2} lg={1.4}>
+                <span>Foto Profil</span>
+              </Grid>
+
+              <Grid
+                item
+                xs
+                lg
+                sx={{
+                  display: 'flex',
+                  [theme.breakpoints.down('md')]: {
+                    paddingTop: '8px !important',
+                  },
+                }}
+              >
+                <Grid container spacing={2}>
+                  <Grid item xs="auto">
+                    <Button
+                      variant="contained"
+                      size="small"
+                      component="label"
+                      startIcon={<InsertPhotoIcon />}
+                      sx={{ height: 'fit-content' }}
+                    >
+                      Pilih Foto
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          console.log(e.target.files);
+                          setFormEditProfile({
+                            ...formEditProfile,
+                            profilePicture: {
+                              img: e.target.files[0],
+                              fileName: !e.target.files[0] ? null : e.target.files[0].name,
+                            },
+                          });
+                          console.log(formEditProfile.profilePicture.img);
+                        }}
+                        hidden
+                      />
+                    </Button>
+                  </Grid>
+                  <Grid item xs="auto">
+                    {formEditProfile.profilePicture.img ? (
+                      <img
+                        id="output"
+                        src={
+                          formEditProfile.profilePicture.img
+                            ? URL.createObjectURL(formEditProfile.profilePicture.img)
+                            : ''
+                        }
+                        width={70}
+                        alt="Preview"
+                      />
+                    ) : null}
+                  </Grid>
+                  <Grid item xs>
+                    {formEditProfile.profilePicture.fileName ? (
+                      <Chip
+                        label={formEditProfile.profilePicture.fileName}
+                        onDelete={() => setFormEditProfile({ ...formEditProfile, profilePicture: {} })}
+                        sx={{ maxWidth: '250px' }}
+                      />
+                    ) : null}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+
             <Button
               variant="contained"
               size="large"
@@ -110,6 +215,14 @@ function EditProfile() {
             >
               Edit Profil
             </Button>
+
+            {formEditProfile.administratorName}
+            <br />
+            {formEditProfile.contact.phoneNumber}
+            <br />
+            {formEditProfile.contact.email}
+            <br />
+            {formEditProfile.role}
           </Box>
         </Paper>
       </div>

@@ -60,6 +60,7 @@ function AdminRouter() {
             <Route path="Admin/ValidasiAkun" element={<AccountValidation />} />
             <Route path="Admin/UbahPassword" element={<ChangePasswordOnForgotPassword />} />
           </Route>
+          
           <Route element={<ProtectedAdminRoute />}>
             {/* Dashboard Menu Route */}
             <Route path="Dashboard" element={<DashboardMenu />} />

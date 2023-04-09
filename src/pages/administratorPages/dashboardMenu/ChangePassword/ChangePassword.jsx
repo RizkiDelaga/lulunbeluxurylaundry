@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Box, Button, Grid, Paper, TextField, useTheme } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Paper,
+  TextField,
+  useTheme,
+} from '@mui/material';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 function ChangePassword() {
   const theme = useTheme();
@@ -10,6 +24,11 @@ function ChangePassword() {
     currentPassword: '',
     newPassword: '',
     confirmNewPassword: '',
+  });
+  const [showPassword, setShowPassword] = useState({
+    currentPassword: false,
+    newPassword: false,
+    confirmNewPassword: false,
   });
 
   React.useEffect(() => {
@@ -49,7 +68,34 @@ function ChangePassword() {
                   },
                 }}
               >
-                <TextField required label="Nama Administator" sx={{ width: '100%' }} />
+                <FormControl
+                  variant="outlined"
+                  onChange={(e) => {
+                    setFormChangePassword({ ...formChangePassword, currentPassword: e.target.value });
+                  }}
+                  sx={{ width: '100%' }}
+                >
+                  <InputLabel htmlFor="current-password">Password Saat Ini *</InputLabel>
+                  <OutlinedInput
+                    required
+                    label="Password Saat Ini"
+                    id="current-password"
+                    type={showPassword.currentPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() =>
+                            setShowPassword({ ...showPassword, currentPassword: !showPassword.currentPassword })
+                          }
+                          edge="end"
+                          color="primary"
+                        >
+                          {showPassword.currentPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
               </Grid>
             </Grid>
             <Grid container spacing={2}>
@@ -68,7 +114,32 @@ function ChangePassword() {
                   },
                 }}
               >
-                <TextField required label="Nama Administator" sx={{ width: '100%' }} />
+                <FormControl
+                  variant="outlined"
+                  onChange={(e) => {
+                    setFormChangePassword({ ...formChangePassword, newPassword: e.target.value });
+                  }}
+                  sx={{ width: '100%' }}
+                >
+                  <InputLabel htmlFor="new-password">Password Baru *</InputLabel>
+                  <OutlinedInput
+                    required
+                    label="Password Baru"
+                    id="new-password"
+                    type={showPassword.newPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword({ ...showPassword, newPassword: !showPassword.newPassword })}
+                          edge="end"
+                          color="primary"
+                        >
+                          {showPassword.newPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
               </Grid>
             </Grid>
             <Grid container spacing={2}>
@@ -87,7 +158,34 @@ function ChangePassword() {
                   },
                 }}
               >
-                <TextField required label="Nama Administator" sx={{ width: '100%' }} />
+                <FormControl
+                  variant="outlined"
+                  onChange={(e) => {
+                    setFormChangePassword({ ...formChangePassword, confirmNewPassword: e.target.value });
+                  }}
+                  sx={{ width: '100%' }}
+                >
+                  <InputLabel htmlFor="confirm-new-password">Confirm Password Baru *</InputLabel>
+                  <OutlinedInput
+                    required
+                    label="Confirm Password Baru"
+                    id="confirm-new-password"
+                    type={showPassword.confirmNewPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() =>
+                            setShowPassword({ ...showPassword, confirmNewPassword: !showPassword.confirmNewPassword })
+                          }
+                          edge="end"
+                          color="primary"
+                        >
+                          {showPassword.confirmNewPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
               </Grid>
             </Grid>
             <Button
@@ -98,6 +196,12 @@ function ChangePassword() {
             >
               Ubah Password
             </Button>
+
+            {formChangePassword.currentPassword}
+            <br />
+            {formChangePassword.newPassword}
+            <br />
+            {formChangePassword.confirmNewPassword}
           </Box>
         </Paper>
       </div>
