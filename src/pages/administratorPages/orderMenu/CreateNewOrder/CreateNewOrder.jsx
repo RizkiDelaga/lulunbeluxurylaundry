@@ -196,20 +196,6 @@ const InputItem = (props) => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm md lg>
               <TextField required label="Nama Barang" sx={{ width: '100%' }} />
-              {/* <InputText
-                stateValue={props.stateValue.items[0].itemName}
-                handleState={(e) => {
-                  props.handleState({ ...props.stateValue, items: [...props.stateValue.items ,{itemName: 'asd' }]});
-                  console.log(props.stateValue)
-                }}
-                options={{
-                  label: 'asd',
-                  placeholder: '',
-                  helperText: '',
-                  multiline: false,
-                  required: false,
-                }}
-              /> */}
             </Grid>
             <Grid item xs={5} sm={3} md={2} lg={1.2}>
               <TextField required label="Kuantitas" type="number" sx={{ width: '100%' }} />
