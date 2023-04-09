@@ -103,19 +103,20 @@ function LoginAdmin() {
                     }}
                     sx={{ width: '100%' }}
                   >
-                    <InputLabel htmlFor="text-field-password">Password*</InputLabel>
+                    <InputLabel htmlFor="input-password">Password *</InputLabel>
                     <OutlinedInput
-                      id="text-field-password"
+                      required
+                      label="Password"
+                      id="input-password"
                       type={showPassword ? 'text' : 'password'}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton
                             onClick={() => setShowPassword(!showPassword)}
-                            onMouseDown={() => setShowPassword(!showPassword)}
                             edge="end"
                             color="primary"
                           >
-                            {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                           </IconButton>
                         </InputAdornment>
                       }
@@ -139,6 +140,7 @@ function LoginAdmin() {
                 Masuk
               </Button>
               {formLoginAdmin.administratorName}
+              <br />
               {formLoginAdmin.password}
             </Box>
           </Paper>

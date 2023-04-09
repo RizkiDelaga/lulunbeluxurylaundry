@@ -19,7 +19,7 @@ import LockResetIcon from '@mui/icons-material/LockReset';
 function ChangePasswordOnForgotPassword() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState({ newPassword: false, confirmNewPassword: false });
   const [formChangePassword, setFormChangePassword] = useState({
     newPassword: '',
     confirmNewPassword: '',
@@ -89,19 +89,20 @@ function ChangePasswordOnForgotPassword() {
                     }}
                     sx={{ width: '100%' }}
                   >
-                    <InputLabel htmlFor="text-field-password">Password Baru*</InputLabel>
+                    <InputLabel htmlFor="new-password">Password Baru *</InputLabel>
                     <OutlinedInput
-                      id="text-field-password"
-                      type={showPassword ? 'text' : 'password'}
+                      required
+                      label="Password Baru"
+                      id="new-password"
+                      type={showPassword.newPassword ? 'text' : 'password'}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
-                            onMouseDown={() => setShowPassword(!showPassword)}
+                            onClick={() => setShowPassword({ ...showPassword, newPassword: !showPassword.newPassword })}
                             edge="end"
                             color="primary"
                           >
-                            {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            {showPassword.newPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                           </IconButton>
                         </InputAdornment>
                       }
@@ -131,19 +132,22 @@ function ChangePasswordOnForgotPassword() {
                     }}
                     sx={{ width: '100%' }}
                   >
-                    <InputLabel htmlFor="text-field-password">Konfirmasi Password Baru*</InputLabel>
+                    <InputLabel htmlFor="confirm-password">Konfirmasi Password Baru *</InputLabel>
                     <OutlinedInput
-                      id="text-field-password"
-                      type={showPassword ? 'text' : 'password'}
+                      required
+                      label="Konfirmasi Password Baru"
+                      id="confirm-password"
+                      type={showPassword.confirmNewPassword ? 'text' : 'password'}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
-                            onMouseDown={() => setShowPassword(!showPassword)}
+                            onClick={() =>
+                              setShowPassword({ ...showPassword, confirmNewPassword: !showPassword.confirmNewPassword })
+                            }
                             edge="end"
                             color="primary"
                           >
-                            {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            {showPassword.confirmNewPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                           </IconButton>
                         </InputAdornment>
                       }
@@ -162,7 +166,9 @@ function ChangePasswordOnForgotPassword() {
               >
                 Ubah Password
               </Button>
+
               {formChangePassword.newPassword}
+              <br />
               {formChangePassword.confirmNewPassword}
             </Box>
           </Paper>

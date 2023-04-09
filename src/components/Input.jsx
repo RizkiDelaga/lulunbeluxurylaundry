@@ -26,9 +26,11 @@ const options = ['Option 1', 'Option 2'];
 function Input() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
   const [orderForm, setOrderForm] = useState();
   const [image, setImage] = React.useState({});
+
+  const [showPassword, setShowPassword] = useState(false);
+  // const [showPassword, setShowPassword] = useState({ password: false, confirmPassword: false });
 
   // Datepicker
   // const [value, setValue] = React.useState(dayjs('2019-01-25 12:45:02').format('[YYYYescape] YYYY-MM-DDTHH:mm:ssZ[Z]'));
@@ -95,24 +97,24 @@ function Input() {
         // }}
         sx={{ width: '100%' }}
       >
-        <InputLabel htmlFor="text-field-password">Password</InputLabel>
+        <InputLabel htmlFor="input-password">Password *</InputLabel>
         <OutlinedInput
+          required
+          label="Password"
           helperText="Some important text"
-          id="text-field-password"
+          id="input-password"
           type={showPassword ? 'text' : 'password'}
           endAdornment={
             <InputAdornment position="end">
               <IconButton
                 onClick={() => setShowPassword(!showPassword)}
-                onMouseDown={() => setShowPassword(!showPassword)}
                 edge="end"
                 color="primary"
               >
-                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
               </IconButton>
             </InputAdornment>
           }
-          label="Password"
         />
       </FormControl>
 
@@ -203,7 +205,7 @@ function Input() {
               accept="image/*"
               onChange={(e) => {
                 console.log(e.target.files);
-                setImage({ img: e.target.files[0], fileName: e.target.files[0].name });
+                setImage({ img: e.target.files[0], fileName: !e.target.files[0] ? null : e.target.files[0].name });
                 console.log(image);
               }}
               hidden
@@ -221,6 +223,20 @@ function Input() {
           ) : null}
         </Grid>
       </Grid>
+
+      {/* 
+      {formRegisterNewAdministrator.administratorName}
+      <br />
+      {formRegisterNewAdministrator.contact.phoneNumber}
+      <br />
+      {formRegisterNewAdministrator.contact.email}
+      <br />
+      {formRegisterNewAdministrator.role}
+      <br />
+      {formRegisterNewAdministrator.password}
+      <br />
+      {formRegisterNewAdministrator.confirmPassword}
+       */}
     </>
   );
 }
