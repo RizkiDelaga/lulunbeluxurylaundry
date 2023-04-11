@@ -37,19 +37,34 @@ function Input() {
   const [value, setValue] = React.useState(dayjs());
   const [loading, setLoading] = React.useState(true);
 
-  const [select, setSelect] = React.useState(options[0]);
+  const [select, setSelect] = React.useState({});
   const countries = [
-    { code: 'AD', label: 'Andorra', phone: '376' },
     {
-      code: 'AE',
-      label: 'United Arab Emirates',
-      phone: '971',
+      address:
+        'Andorra Lorem ipsum dolor sit amet consectetur, adipisicing elit. Numquam laudantium repellat eligendi reprehenderit quia repellendus recusandae eveniet natus in molestias rem earum, neque maxime hic velit ipsa voluptates dicta vel.',
+      img: 'https://loremflickr.com/cache/resized/65535_52221868541_94ff5e1bc0_c_640_480_nofilter.jpg',
     },
-    { code: 'AF', label: 'Afghanistan', phone: '93' },
     {
-      code: 'AG',
-      label: 'Antigua and Barbuda',
-      phone: '1-268',
+      address: 'United Arab Emirates',
+      img: 'https://loremflickr.com/cache/resized/65535_52599625509_79556354a1_b_640_480_nofilter.jpg',
+    },
+    {
+      address: 'Afghanistan',
+      img: 'https://loremflickr.com/cache/resized/65535_52613049706_41c5129b3e_z_640_480_nofilter.jpg',
+    },
+    {
+      address: 'Antigua and Barbuda',
+      img: 'https://loremflickr.com/cache/resized/65535_52312472207_66bd987f9d_c_640_480_nofilter.jpg',
+    },
+    {
+      address:
+        'Andorra Lorem ipsum dolor sit amet consectetur, adipisicing elit. Numquam laudantium repellat eligendi reprehenderit quia repellendus recusandae eveniet natus in molestias rem earum, neque maxime hic velit ipsa voluptates dicta vel.',
+      img: 'https://loremflickr.com/cache/resized/65535_52438185688_e4eda3e577_c_640_480_nofilter.jpg',
+    },
+    {
+      address:
+        'Andorra Lorem ipsum dolor sit amet consectetur, adipisicing elit. Numquam laudantium repellat eligendi reprehenderit quia repellendus recusandae eveniet natus in molestias rem earum, neque maxime hic velit ipsa voluptates dicta vel.',
+      img: 'https://loremflickr.com/cache/resized/65535_52200388018_cee17c5025_z_640_480_nofilter.jpg',
     },
   ];
   return (
@@ -106,11 +121,7 @@ function Input() {
           type={showPassword ? 'text' : 'password'}
           endAdornment={
             <InputAdornment position="end">
-              <IconButton
-                onClick={() => setShowPassword(!showPassword)}
-                edge="end"
-                color="primary"
-              >
+              <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" color="primary">
                 {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
               </IconButton>
             </InputAdornment>
@@ -172,22 +183,65 @@ function Input() {
 
       {/* Input Select */}
       <Autocomplete
+        sx={{ width: '400px' }}
+        options={countries}
+        autoHighlight
+        onChange={(event, newValue) => {
+          console.log(newValue);
+          setSelect(newValue);
+        }}
+        getOptionLabel={(option) => option.address}
+        renderOption={(props, option) => (
+          <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
+            {option.address}
+          </div>
+        )}
+        renderInput={(params) => <TextField {...params} label="Choose a country" />}
+      />
+
+      {select.label}
+
+      <Autocomplete
         sx={{ width: '100%' }}
         options={countries}
         autoHighlight
         onChange={(event, newValue) => {
-          setSelect(newValue.label);
+          console.log(newValue);
+          setSelect(newValue);
         }}
-        getOptionLabel={(option) => option.label}
+        getOptionLabel={(option) => option.address}
         renderOption={(props, option) => (
           <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-            <img loading="lazy" width="200" src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`} alt="" />
-            {option.label} ({option.code}) +{option.phone}
+            <img loading="lazy" width="100px" src={option.img} alt="" />
+            {option.address}
           </Box>
         )}
-        renderInput={(params) => <TextField {...params} label="Choose a country" />}
+        ListboxProps={{
+          style: {
+            maxHeight: '400px',
+          },
+        }}
+        renderInput={(params) => (
+          <TextField
+            multiline
+            {...params}
+            label="Choose a country"
+            InputProps={{
+              ...params.InputProps,
+              startAdornment: (
+                <>
+                  <img
+                    loading="lazy"
+                    width="100"
+                    src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJmI2k0FuQjvPhpvG0CoBNbaq0MVlOgyfgvA&usqp=CAU`}
+                    alt=""
+                  />
+                </>
+              ),
+            }}
+          />
+        )}
       />
-      {select}
 
       {/* Input File (Image) */}
       <Grid container spacing={2}>

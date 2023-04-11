@@ -48,7 +48,15 @@ function FrequentlyAskedQuestions() {
                   },
                 }}
               >
-                <TextField required label="Nama Administator" sx={{ width: '100%' }} />
+                <TextField
+                  required
+                  label="Pertanyaan"
+                  value={formFrequentlyAskedQuestions.question}
+                  onChange={(e) => {
+                    setFormFrequentlyAskedQuestions({ ...formFrequentlyAskedQuestions, question: e.target.value });
+                  }}
+                  sx={{ width: '100%' }}
+                />
               </Grid>
             </Grid>
 
@@ -68,13 +76,28 @@ function FrequentlyAskedQuestions() {
                   },
                 }}
               >
-                <TextField required label="Nama Administator" sx={{ width: '100%' }} />
+                <TextField
+                  required
+                  label="Jawaban"
+                  multiline
+                  maxRows={4}
+                  value={formFrequentlyAskedQuestions.answer}
+                  onChange={(e) => {
+                    setFormFrequentlyAskedQuestions({ ...formFrequentlyAskedQuestions, answer: e.target.value });
+                  }}
+                  sx={{ width: '100%' }}
+                />
               </Grid>
             </Grid>
 
             <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
               Tambah
             </Button>
+
+            {formFrequentlyAskedQuestions.question}
+            <br />
+            {formFrequentlyAskedQuestions.answer}
+            <br />
           </Box>
         </Paper>
       </div>
