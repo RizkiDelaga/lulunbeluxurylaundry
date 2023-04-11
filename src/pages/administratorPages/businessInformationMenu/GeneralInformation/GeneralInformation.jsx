@@ -30,13 +30,36 @@ function GeneralInformation() {
       youtube: '',
       tikTok: '',
     },
-    operatingHours: [
-      {
-        day: '',
-        openingHours: '',
-        closingHours: '',
+    operatingHours: {
+      monday: {
+        openingHour: '',
+        closingHour: '',
       },
-    ],
+      tuesday: {
+        openingHour: '',
+        closingHour: '',
+      },
+      wednesday: {
+        openingHour: '',
+        closingHour: '',
+      },
+      thursday: {
+        openingHour: '',
+        closingHour: '',
+      },
+      friday: {
+        openingHour: '',
+        closingHour: '',
+      },
+      saturday: {
+        openingHour: '',
+        closingHour: '',
+      },
+      sunday: {
+        openingHour: '',
+        closingHour: '',
+      },
+    },
   });
 
   React.useEffect(() => {
@@ -159,8 +182,10 @@ function GeneralInformation() {
                 <TextField
                   required
                   label="Slogan"
-                  // value={state}
-                  // onChange={(e) => {setState(e.target.value)}}
+                  value={formGeneralInformation.slogan}
+                  onChange={(e) => {
+                    setFormGeneralInformation({ ...formGeneralInformation, slogan: e.target.value });
+                  }}
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -188,8 +213,13 @@ function GeneralInformation() {
                       label="Lokasi"
                       multiline
                       maxRows={4}
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.location.location}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          location: { ...formGeneralInformation.location, location: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -199,8 +229,13 @@ function GeneralInformation() {
                       label="Google Maps Embed"
                       multiline
                       maxRows={4}
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.location.googleMapsEmbed}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          location: { ...formGeneralInformation.location, googleMapsEmbed: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -229,8 +264,13 @@ function GeneralInformation() {
                       required
                       type="number"
                       label="Nomer Telepon"
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.contact.phoneNumber}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          contact: { ...formGeneralInformation.contact, phoneNumber: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -239,8 +279,13 @@ function GeneralInformation() {
                       required
                       type="number"
                       label="Fax"
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.contact.fax}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          contact: { ...formGeneralInformation.contact, fax: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -249,8 +294,13 @@ function GeneralInformation() {
                       required
                       type="number"
                       label="WhatsApp"
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.contact.whatsApp}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          contact: { ...formGeneralInformation.contact, whatsApp: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -259,8 +309,13 @@ function GeneralInformation() {
                       required
                       type="number"
                       label="Telegram"
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.contact.telegram}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          contact: { ...formGeneralInformation.contact, telegram: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -268,8 +323,13 @@ function GeneralInformation() {
                     <TextField
                       required
                       label="Email"
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.contact.email}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          contact: { ...formGeneralInformation.contact, email: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -297,8 +357,13 @@ function GeneralInformation() {
                     <TextField
                       required
                       label="Instagram"
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.socialMedia.instagram}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          socialMedia: { ...formGeneralInformation.socialMedia, instagram: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -306,8 +371,13 @@ function GeneralInformation() {
                     <TextField
                       required
                       label="Facebook"
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.socialMedia.facebook}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          socialMedia: { ...formGeneralInformation.socialMedia, facebook: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -315,8 +385,13 @@ function GeneralInformation() {
                     <TextField
                       required
                       label="Twitter"
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.socialMedia.twitter}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          socialMedia: { ...formGeneralInformation.socialMedia, twitter: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -324,8 +399,13 @@ function GeneralInformation() {
                     <TextField
                       required
                       label="Youtube"
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.socialMedia.youtube}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          socialMedia: { ...formGeneralInformation.socialMedia, youtube: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -333,8 +413,13 @@ function GeneralInformation() {
                     <TextField
                       required
                       label="TikTok"
-                      // value={state}
-                      // onChange={(e) => {setState(e.target.value)}}
+                      value={formGeneralInformation.socialMedia.tikTok}
+                      onChange={(e) => {
+                        setFormGeneralInformation({
+                          ...formGeneralInformation,
+                          socialMedia: { ...formGeneralInformation.socialMedia, tikTok: e.target.value },
+                        });
+                      }}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -382,6 +467,33 @@ function GeneralInformation() {
             >
               Simpan
             </Button>
+
+            {formGeneralInformation.slogan}
+            <br />
+            {formGeneralInformation.location.location + ' ' + formGeneralInformation.location.googleMapsEmbed}
+            <br />
+            {formGeneralInformation.contact.phoneNumber +
+              ' ' +
+              formGeneralInformation.contact.fax +
+              ' ' +
+              formGeneralInformation.contact.whatsApp +
+              ' ' +
+              formGeneralInformation.contact.telegram +
+              ' ' +
+              formGeneralInformation.contact.email}
+            <br />
+            {formGeneralInformation.socialMedia.instagram +
+              ' ' +
+              formGeneralInformation.socialMedia.facebook +
+              ' ' +
+              formGeneralInformation.socialMedia.twitter +
+              ' ' +
+              formGeneralInformation.socialMedia.youtube +
+              ' ' +
+              formGeneralInformation.socialMedia.tikTok}
+            <br />
+            {formGeneralInformation.slogan}
+            <br />
           </Box>
         </Paper>
       </div>

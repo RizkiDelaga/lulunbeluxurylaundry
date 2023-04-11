@@ -47,13 +47,25 @@ function AboutUs() {
                   },
                 }}
               >
-                <TextField required label="Nama Administator" sx={{ width: '100%' }} />
+                <TextField
+                  required
+                  label="Paragraf Penjelasan"
+                  multiline
+                  maxRows={4}
+                  value={formAboutUs.explanationParagraph}
+                  onChange={(e) => {
+                    setFormAboutUs({ ...formAboutUs, explanationParagraph: e.target.value });
+                  }}
+                  sx={{ width: '100%' }}
+                />
               </Grid>
             </Grid>
 
             <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
               Tambah
             </Button>
+            {formAboutUs.explanationParagraph}
+            <br />
           </Box>
         </Paper>
       </div>
