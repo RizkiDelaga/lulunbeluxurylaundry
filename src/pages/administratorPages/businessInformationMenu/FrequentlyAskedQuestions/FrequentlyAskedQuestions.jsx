@@ -16,37 +16,53 @@ import {
   useTheme,
 } from '@mui/material';
 import axios from 'axios';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditOffIcon from '@mui/icons-material/EditOff';
 
 function FrequentlyAskedQuestions() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [listFaq, setListFaq] = useState([]);
   const [formFrequentlyAskedQuestions, setFormFrequentlyAskedQuestions] = useState({
+    id: null,
     question: '',
     answer: '',
+  });
+  const [formValidation, setFormValidation] = useState({ question: '', answer: '' });
+
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
   });
 
   React.useEffect(() => {
     document.title = 'Edit FAQ';
-    getListFaqHandler();
+    getApiHandler();
   }, []);
 
-  const getListFaqHandler = async () => {
+  const getApiHandler = async () => {
     try {
       const res = await axios({
         method: 'GET',
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq',
       });
-      setListFaq(res.data.data);
+      console.log('Response GET');
       console.log(res);
-      // console.log(listFaq);
+      setListFaq(res.data.data);
     } catch (error) {
+      if (error.response.status === 404) {
+        setListFaq([]);
+      }
       console.log(error);
     }
   };
 
-  const submitHandler = async (data) => {
+  const postApiHandler = async (data) => {
     try {
+      setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq',
@@ -55,23 +71,80 @@ function FrequentlyAskedQuestions() {
           jawaban: data.answer,
         },
       });
+      console.log('Response POST');
       console.log(res);
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Berhasil di Tambah!',
+          statusType: 'success',
+        });
+      }
+      getApiHandler();
     } catch (error) {
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
+
       console.log(error);
     }
   };
 
-  const deleteFaqHandler = async (id) => {
+  const putApiHandler = async (data) => {
     try {
+      setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+      const res = await axios({
+        method: 'PUT',
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq/${data.id}`,
+        data: {
+          pertanyaan: data.question,
+          jawaban: data.answer,
+        },
+      });
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Berhasil di Edit!',
+          statusType: 'success',
+        });
+      }
+      console.log('Response DELETE');
+      console.log(res);
+      getApiHandler();
+    } catch (error) {
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
+      console.log(error);
+    }
+  };
+
+  const deleteApiHandler = async (id) => {
+    try {
+      setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'DELETE',
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq/${id}`,
       });
-      getListFaqHandler();
-      // setListFaq(res.data.data);
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Berhasil di Hapus!',
+          statusType: 'success',
+        });
+      }
+      getApiHandler();
       console.log(res);
-      // console.log(listFaq);
     } catch (error) {
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
       console.log(error);
     }
   };
@@ -84,6 +157,14 @@ function FrequentlyAskedQuestions() {
           currentPage={{
             title: 'Pertanyaan Yang Sering Diajukan (FAQ)',
           }}
+        />
+
+        {/* {openLoadDecision.isLoad ? (
+          ) : null} */}
+        <LoadDecisions
+          setOpenLoad={setOpenLoadDecision}
+          openLoad={openLoadDecision}
+          // redirect={'/InformasiBisnis'}
         />
 
         {/* Main Content */}
@@ -155,28 +236,39 @@ function FrequentlyAskedQuestions() {
               variant="contained"
               size="large"
               onClick={() => {
-                submitHandler(formFrequentlyAskedQuestions);
+                if (formFrequentlyAskedQuestions.id) {
+                  putApiHandler(formFrequentlyAskedQuestions);
+                } else {
+                  postApiHandler(formFrequentlyAskedQuestions);
+                }
+                setFormFrequentlyAskedQuestions({
+                  id: null,
+                  question: '',
+                  answer: '',
+                });
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >
-              Tambah
+              {formFrequentlyAskedQuestions.id ? 'Simpan' : 'Tambah'}
             </Button>
-            {listFaq.length ? listFaq[0].pertanyaan : 'belum ada'}
 
             {formFrequentlyAskedQuestions.question}
             <br />
             {formFrequentlyAskedQuestions.answer}
             <br />
-            <TableContainer sx={{ maxHeight: 'none', width: '100%' }}>
-              <Table stickyHeader>
+
+            <TableContainer sx={{ width: '100%', borderRadius: '4px', backgroundColor: '#eeeeee' }}>
+              <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center" style={{ fontWeight: 'bold' }}>
+                    <TableCell align="center" style={{ width: 0, fontWeight: 'bold', backgroundColor: '#eeeeee' }}>
                       No
                     </TableCell>
-                    <TableCell style={{ width: 'fit-content', fontWeight: 'bold' }}>No</TableCell>
-                    <TableCell style={{ fontWeight: 'bold' }}>column.label</TableCell>
-                    <TableCell style={{ width: 'fit-content', fontWeight: 'bold' }}></TableCell>
+                    <TableCell style={{ width: 'fit-content', fontWeight: 'bold', backgroundColor: '#eeeeee' }}>
+                      Pertanyaan
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 'bold', backgroundColor: '#eeeeee' }}>Jawaban</TableCell>
+                    <TableCell style={{ width: 0, fontWeight: 'bold', backgroundColor: '#eeeeee' }}></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -193,12 +285,56 @@ function FrequentlyAskedQuestions() {
                           <span>{item.jawaban}</span>
                         </TableCell>
                         <TableCell>
-                          <span align="right">
-                            <div>
-                              <Button>Edit</Button>
-                              <Button onClick={() => deleteFaqHandler(item.id)}>Delete</Button>
-                            </div>
-                          </span>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              gap: '10px',
+                              [theme.breakpoints.down('md')]: {
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '10px',
+                              },
+                            }}
+                          >
+                            <Grid container>
+                              <Grid item sm={12} md={6}></Grid>
+                              <Grid item sm={12} md={6}></Grid>
+                            </Grid>
+
+                            <Button
+                              variant="outlined"
+                              className={`button-outlined-primary`}
+                              onClick={() => {
+                                if (formFrequentlyAskedQuestions.id && formFrequentlyAskedQuestions.id === item.id) {
+                                  setFormFrequentlyAskedQuestions({
+                                    id: null,
+                                    question: '',
+                                    answer: '',
+                                  });
+                                } else {
+                                  setFormFrequentlyAskedQuestions({
+                                    id: item.id,
+                                    question: item.pertanyaan,
+                                    answer: item.jawaban,
+                                  });
+                                }
+                              }}
+                            >
+                              {formFrequentlyAskedQuestions.id && formFrequentlyAskedQuestions.id === item.id ? (
+                                <EditOffIcon />
+                              ) : (
+                                <EditIcon />
+                              )}
+                            </Button>
+                            <Button
+                              variant="outlined"
+                              className={`button-outlined-danger`}
+                              onClick={() => deleteApiHandler(item.id)}
+                              sx={{ width: '100%' }}
+                            >
+                              <DeleteForeverIcon />
+                            </Button>
+                          </Box>
                         </TableCell>
                       </TableRow>
                     );
