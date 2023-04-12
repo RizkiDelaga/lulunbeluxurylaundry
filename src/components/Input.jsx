@@ -12,7 +12,7 @@ import {
   TextField,
   useTheme,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -24,6 +24,7 @@ import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 const options = ['Option 1', 'Option 2'];
 
 function Input() {
+  let useDate = new Date();
   const theme = useTheme();
   const navigate = useNavigate();
   const [orderForm, setOrderForm] = useState();
@@ -34,8 +35,32 @@ function Input() {
 
   // Datepicker
   // const [value, setValue] = React.useState(dayjs('2019-01-25 12:45:02').format('[YYYYescape] YYYY-MM-DDTHH:mm:ssZ[Z]'));
-  const [value, setValue] = React.useState(dayjs());
-  const [loading, setLoading] = React.useState(true);
+  const [date, setDate] = React.useState({
+    year: 2012,
+    month: null,
+    date: null,
+  });
+  const [time, setTime] = React.useState();
+  const [dateTime, setDateTime] = React.useState();
+  // dayjs().set('year', 2022).set('month', 5).set('day', 20).set('hour', 5).set('minute', 55).set('second', 15);
+  const [value, setValue] = React.useState(
+    dayjs()
+      .set('year', 2022)
+      .set('month', 4)
+      .set('day', 20)
+      .set('hour', 5 + 7)
+      .set('minute', 55)
+      .set('second', 15)
+  );
+
+  const [valueX, setValueX] = React.useState(dayjs());
+  // const [value, setValue] = React.useState();
+
+  useEffect(() => {
+    // let date = new Date();
+    console.log('date');
+    // console.log(date.getHours() + ' ' + date.getMinutes() + ' ' + date.getSeconds());
+  }, []);
 
   const [select, setSelect] = React.useState({});
   const countries = [
@@ -135,19 +160,19 @@ function Input() {
           label="For mobile"
           value={value}
           onChange={(newValue) => {
-            setValue(newValue);
+            // setValue(newValue);
+            setValueX(dayjs(`${date.year}-01-25 12:45:02`));
+            setDate({ year: newValue.$y, month: newValue.$M, date: newValue.$D });
+
             console.log('Tanggal: ' + newValue.$D);
             console.log('Bulan: ' + newValue.$M);
             console.log('Tahun: ' + newValue.$y);
-            console.log('Jam: ' + newValue.$H);
-            console.log('Menit: ' + newValue.$m);
-            console.log('Detik: ' + newValue.$s);
-            setLoading(false);
+            // setLoading(false);
           }}
           renderInput={(params) => <TextField {...params} />}
           slotProps={{
             textField: {
-              helperText: 'MM / DD / YYYY',
+              // helperText: 'MM / DD / YYYY',
             },
           }}
           sx={{
@@ -164,14 +189,17 @@ function Input() {
           value={value}
           onChange={(newValue) => {
             setValue(newValue);
+            setTime({ hour: newValue.$H, minute: newValue.$m, second: newValue.$s });
+
             console.log(newValue);
             console.log('Jam: ' + newValue.$H);
-            setLoading(false);
+            console.log('Menit: ' + newValue.$m);
+            console.log('Detik: ' + newValue.$s);
           }}
           renderInput={(params) => <TextField {...params} />}
           slotProps={{
             textField: {
-              helperText: 'MM / DD / YYYY',
+              // helperText: 'MM / DD / YYYY',
             },
           }}
           sx={{ width: '100%' }}
@@ -179,7 +207,8 @@ function Input() {
       </LocalizationProvider>
 
       {/* <h1>{value}</h1> */}
-      <h1>{loading ? null : value.toString()}</h1>
+      <h1>{value ? value.toString() : null}</h1>
+      <h1>{valueX ? valueX.toString() : null}</h1>
 
       {/* Input Select */}
       <Autocomplete

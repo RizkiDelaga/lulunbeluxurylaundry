@@ -4,63 +4,59 @@ import { Alert, Backdrop, CircularProgress } from '@mui/material';
 
 function LoadDecisions(props) {
   const navigate = useNavigate();
-
-  const [alertStatus, setAlertStatus] = React.useState(false);
+  const [alertStatus, setAlertStatus] = React.useState(true);
 
   React.useEffect(() => {
-    if (props.open) {
-      setTimeout(alertSuccess, 1000);
-    }
-  }, [props.open]);
+    // if (props.openLoad.isLoad) {
+    //   props.setOpenLoad({ ...props.openLoad, message: '', statusType: '' });
+    //   props.setOpenLoad({ isLoad: false, message: '', statusType: '' });
+    // }
 
-  const alertSuccess = () => {
-    if (!props.redirect) {
-      props.setOpen(false);
+    if (props.openLoad.message) {
+      setAlertStatus(true);
+      setTimeout(
+        () => {
+          setAlertStatus(false);
+          props.setOpenLoad({ isLoad: false, message: '', statusType: '' });
+          if (props.redirect) {
+            navigate(props.redirect);
+          }
+        },
+        props.redirect ? 2000 : 3000
+      );
     }
-    setAlertStatus(true);
-    setTimeout(
-      () => {
-        setAlertStatus(false);
-        if (props.redirect) {
-          navigate(props.redirect);
-        }
-      },
-      props.redirect ? 2000 : 5000
-    );
-  };
-  const handleToggle = () => {
-    props.setOpen(!props.open);
-    setTimeout(alertSuccess, 1000);
-  };
+  }, [props.openLoad.isLoad, props.openLoad.message]);
 
   return (
     <>
-      {alertStatus ? (
-        <Alert
-          variant="filled"
-          severity={
-            props.alertProps.statusType.toLowerCase() === 'success'
-              ? 'success'
-              : props.alertProps.statusType.toLowerCase() === 'error'
-              ? 'error'
-              : props.alertProps.statusType.toLowerCase() === 'warning'
-              ? 'warning'
-              : props.alertProps.statusType.toLowerCase() === 'info'
-              ? 'info'
-              : 'error'
-          }
-          sx={{
-            position: 'fixed',
-            left: '50%',
-            transform: 'translate(-50%, 0)',
-            zIndex: props.redirect ? 100000 : null,
-          }}
-        >
-          {props.alertProps.title}
-        </Alert>
+      {props.openLoad.message ? (
+        alertStatus ? (
+          <Alert
+            variant="filled"
+            severity={
+              props.openLoad.statusType.toLowerCase() === 'success'
+                ? 'success'
+                : props.openLoad.statusType.toLowerCase() === 'error'
+                ? 'error'
+                : props.openLoad.statusType.toLowerCase() === 'warning'
+                ? 'warning'
+                : props.openLoad.statusType.toLowerCase() === 'info'
+                ? 'info'
+                : 'error'
+            }
+            sx={{
+              position: 'fixed',
+              left: '50%',
+              transform: 'translate(-50%, 0)',
+              zIndex: props.redirect ? 100000 : 1000,
+            }}
+          >
+            {props.openLoad.message}
+          </Alert>
+        ) : null
       ) : null}
 
-      <Backdrop sx={{ color: '#1F305C', zIndex: (theme) => theme.zIndex.drawer + 10000 }} open={props.open}>
+      <Backdrop sx={{ color: '#1F305C', zIndex: (theme) => theme.zIndex.drawer + 10000 }} open={props.openLoad.isLoad}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </>
