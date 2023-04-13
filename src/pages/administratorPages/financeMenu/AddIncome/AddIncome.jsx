@@ -3,21 +3,64 @@ import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/material';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
+import axios from 'axios';
 
 function AddIncome() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [formAddIncome, setFormAddIncome] = useState({
     title: '',
-    nominal: 0,
+    nominal: null,
     entryDate: '',
     notes: '',
-    photoEvidence: {},
+    photoEvidence: { img: null, fileName: '' },
+  });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
   });
 
   React.useEffect(() => {
     document.title = 'Tambah Pemasukan';
   }, []);
+
+  const postApiHandler = async (data) => {
+    try {
+      setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+      const res = await axios({
+        method: 'POST',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan',
+        data: {
+          adminId: 1,
+          tipe: 'Income',
+          nominal: data.nominal,
+          judul: data.title,
+          catatan: data.notes,
+          tanggal: '2023-02-17',
+          gambar: data.photoEvidence.fileName,
+        },
+      });
+      console.log('Response POST');
+      console.log(res);
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Berhasil di Tambah!',
+          statusType: 'success',
+        });
+      }
+    } catch (error) {
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
+
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -28,6 +71,8 @@ function AddIncome() {
             title: 'Input Pemasukan',
           }}
         />
+
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} redirect={'/Keuangan'} />
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
@@ -218,7 +263,9 @@ function AddIncome() {
                     {formAddIncome.photoEvidence.fileName ? (
                       <Chip
                         label={formAddIncome.photoEvidence.fileName}
-                        onDelete={() => setFormAddIncome({ ...formAddIncome, photoEvidence: {} })}
+                        onDelete={() =>
+                          setFormAddIncome({ ...formAddIncome, photoEvidence: { img: null, fileName: '' } })
+                        }
                         sx={{ maxWidth: '250px' }}
                       />
                     ) : null}
@@ -230,10 +277,19 @@ function AddIncome() {
             <Button
               variant="contained"
               size="large"
+              onClick={() => {
+                postApiHandler(formAddIncome);
+                setFormAddIncome({
+                  title: '',
+                  nominal: null,
+                  entryDate: '',
+                  notes: '',
+                  photoEvidence: { img: null, fileName: '' },
+                });
+              }}
               style={{ width: '100%', fontWeight: 'bold' }}
-              onClick={() => navigate('/Keuangan')}
             >
-              Tambah Pemasukan
+              Input Pemasukan
             </Button>
 
             {formAddIncome.title}

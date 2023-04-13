@@ -329,7 +329,16 @@ function FrequentlyAskedQuestions() {
                             <Button
                               variant="outlined"
                               className={`button-outlined-danger`}
-                              onClick={() => deleteApiHandler(item.id)}
+                              onClick={() => {
+                                if (item.id === formFrequentlyAskedQuestions.id) {
+                                  setFormFrequentlyAskedQuestions({
+                                    id: null,
+                                    question: '',
+                                    answer: '',
+                                  });
+                                }
+                                deleteApiHandler(item.id);
+                              }}
                               sx={{ width: '100%' }}
                             >
                               <DeleteForeverIcon />

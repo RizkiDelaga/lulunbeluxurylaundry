@@ -43,16 +43,13 @@ function Input() {
   const [time, setTime] = React.useState();
   const [dateTime, setDateTime] = React.useState();
   // dayjs().set('year', 2022).set('month', 5).set('day', 20).set('hour', 5).set('minute', 55).set('second', 15);
-  const [value, setValue] = React.useState(
-    dayjs()
-      .set('year', 2022)
-      .set('month', 4)
-      .set('day', 20)
-      .set('hour', 5 + 7)
-      .set('minute', 55)
-      .set('second', 15)
-  );
-
+  const [value, setValue] = React.useState(dayjs());
+  // .set('year', 2022)
+  // .set('month', 4)
+  // .set('day', 20)
+  // .set('hour', 5 + 7)
+  // .set('minute', 55)
+  // .set('second', 15)
   const [valueX, setValueX] = React.useState(dayjs());
   // const [value, setValue] = React.useState();
 
@@ -157,10 +154,10 @@ function Input() {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         {/* Input Date */}
         <MobileDatePicker
-          label="For mobile"
+          label="Pilih Tanggal"
           value={value}
           onChange={(newValue) => {
-            // setValue(newValue);
+            setValue(newValue);
             setValueX(dayjs(`${date.year}-01-25 12:45:02`));
             setDate({ year: newValue.$y, month: newValue.$M, date: newValue.$D });
 
@@ -185,7 +182,7 @@ function Input() {
 
         {/* Input Time */}
         <MobileTimePicker
-          label="For mobile"
+          label="Pilih Jam"
           value={value}
           onChange={(newValue) => {
             setValue(newValue);
