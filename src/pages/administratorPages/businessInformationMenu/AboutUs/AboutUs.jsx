@@ -64,7 +64,7 @@ function AboutUs() {
         method: 'POST',
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/about',
         data: {
-          deskripsi: [data.explanationParagraph],
+          deskripsi: data.explanationParagraph,
         },
       });
       console.log('Response POST');
@@ -95,7 +95,7 @@ function AboutUs() {
         method: 'PUT',
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/about/${data.id}`,
         data: {
-          deskripsi: [data.explanationParagraph],
+          deskripsi: data.explanationParagraph,
         },
       });
       if (res.status === 200) {
@@ -220,7 +220,7 @@ function AboutUs() {
                       No
                     </TableCell>
                     <TableCell style={{ width: 'fit-content', fontWeight: 'bold', backgroundColor: '#eeeeee' }}>
-                      Pertanyaan
+                      Paragraf Penjelasan
                     </TableCell>
                     <TableCell style={{ width: 0, fontWeight: 'bold', backgroundColor: '#eeeeee' }}></TableCell>
                   </TableRow>
@@ -274,7 +274,15 @@ function AboutUs() {
                             <Button
                               variant="outlined"
                               className={`button-outlined-danger`}
-                              onClick={() => deleteApiHandler(item.id)}
+                              onClick={() => {
+                                if (item.id === formAboutUs.id) {
+                                  setFormAboutUs({
+                                    id: null,
+                                    explanationParagraph: '',
+                                  });
+                                }
+                                deleteApiHandler(item.id);
+                              }}
                               sx={{ width: '100%' }}
                             >
                               <DeleteForeverIcon />

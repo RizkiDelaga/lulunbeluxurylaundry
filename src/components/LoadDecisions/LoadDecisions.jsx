@@ -11,6 +11,9 @@ function LoadDecisions(props) {
     //   props.setOpenLoad({ ...props.openLoad, message: '', statusType: '' });
     //   props.setOpenLoad({ isLoad: false, message: '', statusType: '' });
     // }
+    // if (props.openLoad.redirect) {
+    //   props.setOpenLoad({ ...props.openLoad, isLoad: true });
+    // }
 
     if (props.openLoad.message) {
       setAlertStatus(true);
@@ -18,7 +21,7 @@ function LoadDecisions(props) {
         () => {
           setAlertStatus(false);
           props.setOpenLoad({ isLoad: false, message: '', statusType: '' });
-          if (props.redirect) {
+          if (props.redirect && props.openLoad.statusType !== 'error') {
             navigate(props.redirect);
           }
         },

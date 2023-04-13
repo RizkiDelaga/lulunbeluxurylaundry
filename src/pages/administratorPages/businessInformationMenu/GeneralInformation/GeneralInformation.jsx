@@ -4,13 +4,13 @@ import PageStructureAndDirectButton from '../../../../components/PageStructureAn
 import { Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/material';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import axios from 'axios';
 
 function GeneralInformation() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [openLoadDecision, setoOpenLoadDecision] = React.useState(false);
   const [formGeneralInformation, setFormGeneralInformation] = useState({
-    logo: {},
+    logo: { img: null, fileName: '' },
     slogan: '',
     location: {
       location: '',
@@ -30,41 +30,115 @@ function GeneralInformation() {
       youtube: '',
       tikTok: '',
     },
-    operatingHours: {
-      monday: {
-        openingHour: '',
-        closingHour: '',
-      },
-      tuesday: {
-        openingHour: '',
-        closingHour: '',
-      },
-      wednesday: {
-        openingHour: '',
-        closingHour: '',
-      },
-      thursday: {
-        openingHour: '',
-        closingHour: '',
-      },
-      friday: {
-        openingHour: '',
-        closingHour: '',
-      },
-      saturday: {
-        openingHour: '',
-        closingHour: '',
-      },
-      sunday: {
-        openingHour: '',
-        closingHour: '',
-      },
+  });
+  const [operatingHours, setOperatingHours] = useState({
+    monday: {
+      openingHour: '',
+      closingHour: '',
     },
+    tuesday: {
+      openingHour: '',
+      closingHour: '',
+    },
+    wednesday: {
+      openingHour: '',
+      closingHour: '',
+    },
+    thursday: {
+      openingHour: '',
+      closingHour: '',
+    },
+    friday: {
+      openingHour: '',
+      closingHour: '',
+    },
+    saturday: {
+      openingHour: '',
+      closingHour: '',
+    },
+    sunday: {
+      openingHour: '',
+      closingHour: '',
+    },
+  });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
   });
 
   React.useEffect(() => {
     document.title = 'Edit Informasi Umum';
+    getApiHandler();
   }, []);
+
+  const getApiHandler = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum',
+      });
+      console.log('Response GET');
+      console.log(res);
+      setFormGeneralInformation({
+        logo: { img: null, fileName: res.data.data[0].logo },
+        slogan: res.data.data[0].slogan,
+        location: {
+          location: res.data.data[0].lokasi,
+          googleMapsEmbed: res.data.data[0].koordinat,
+        },
+        contact: {
+          phoneNumber: res.data.data[0].noTelp,
+          fax: res.data.data[0].fax,
+          whatsApp: '',
+          telegram: '',
+          email: res.data.data[0].email,
+        },
+        socialMedia: {
+          instagram: res.data.data[0].instagram,
+          facebook: res.data.data[0].facebook,
+          twitter: res.data.data[0].twitter,
+          youtube: res.data.data[0].youtube,
+          tikTok: res.data.data[0].tiktok,
+        },
+      });
+    } catch (error) {
+      // if (error.response.status === 404) {
+      // }
+      console.log(error);
+    }
+  };
+
+  const putApiHandler = async (data) => {
+    try {
+      setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+      const res = await axios({
+        method: 'PUT',
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum/${data.id}`,
+        data: {
+          pertanyaan: data.question,
+          jawaban: data.answer,
+        },
+      });
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Berhasil di Edit!',
+          statusType: 'success',
+        });
+      }
+      console.log('Response DELETE');
+      console.log(res);
+      getApiHandler();
+    } catch (error) {
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -76,16 +150,7 @@ function GeneralInformation() {
           }}
         />
 
-        <LoadDecisions
-          setOpen={setoOpenLoadDecision}
-          open={openLoadDecision}
-          close={true}
-          alertProps={{
-            title: 'This is a success alert — check it out!',
-            statusType: 'success|error|warning|info',
-          }}
-          // redirect={'/InformasiBisnis'}
-        />
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
@@ -265,6 +330,7 @@ function GeneralInformation() {
                       type="number"
                       label="Nomer Telepon"
                       value={formGeneralInformation.contact.phoneNumber}
+                      autoComplete="off"
                       onChange={(e) => {
                         setFormGeneralInformation({
                           ...formGeneralInformation,
@@ -457,14 +523,7 @@ function GeneralInformation() {
               </Grid>
             </div>
 
-            <Button
-              variant="contained"
-              size="large"
-              style={{ width: '100%', fontWeight: 'bold' }}
-              onClick={() => {
-                setoOpenLoadDecision(true);
-              }}
-            >
+            <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }} onClick={() => {}}>
               Simpan
             </Button>
 

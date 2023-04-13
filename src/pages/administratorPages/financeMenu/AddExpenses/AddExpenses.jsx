@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/material';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
+import axios from 'axios';
 
 function AddExpenses() {
   const theme = useTheme();
@@ -12,12 +14,53 @@ function AddExpenses() {
     nominal: null,
     expenditureDate: '',
     notes: '',
-    photoEvidence: {},
+    photoEvidence: { img: null, fileName: '' },
+  });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
   });
 
   React.useEffect(() => {
     document.title = 'Tambah Pengeluaran';
   }, []);
+
+  const postApiHandler = async (data) => {
+    try {
+      setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+      const res = await axios({
+        method: 'POST',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan',
+        data: {
+          adminId: 1,
+          tipe: 'Expenses',
+          nominal: data.nominal,
+          judul: data.title,
+          catatan: data.notes,
+          tanggal: '2023-02-17',
+          gambar: data.photoEvidence.fileName,
+        },
+      });
+      console.log('Response POST');
+      console.log(res);
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Berhasil di Tambah!',
+          statusType: 'success',
+        });
+      }
+    } catch (error) {
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
+
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -28,6 +71,8 @@ function AddExpenses() {
             title: 'Input Pengeluaran',
           }}
         />
+
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} redirect={'/Keuangan'} />
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
@@ -232,10 +277,19 @@ function AddExpenses() {
             <Button
               variant="contained"
               size="large"
+              onClick={() => {
+                postApiHandler(formAddExpenses);
+                setFormAddExpenses({
+                  title: '',
+                  nominal: null,
+                  entryDate: '',
+                  notes: '',
+                  photoEvidence: { img: null, fileName: '' },
+                });
+              }}
               style={{ width: '100%', fontWeight: 'bold' }}
-              onClick={() => navigate('/Keuangan')}
             >
-              Tambah Pengeluaran
+              Input Pengeluaran
             </Button>
 
             {formAddExpenses.title}
