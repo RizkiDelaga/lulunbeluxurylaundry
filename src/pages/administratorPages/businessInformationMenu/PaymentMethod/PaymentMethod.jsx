@@ -64,6 +64,19 @@ function PaymentMethod() {
     }
   };
 
+  const listPaymentMethodHandle = async (data) => {
+    // for (let index = 0; index < item.instruksi.length; index++) {
+    //   setListInstructions([
+    //     ...listInstructions,
+    //     { id: index + 1, instructionText: item.instruksi[index] },
+    //   ]);
+    // }
+
+    data.instruksi.map(async (itemInstruksi, index) => {
+      console.log(itemInstruksi);
+      setListInstructions((list) => [...list, { id: index + 1, instructionText: itemInstruksi }]);
+    });
+  };
   const postApiHandler = async (data) => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
@@ -254,7 +267,12 @@ function PaymentMethod() {
                 }}
               >
                 <Grid container spacing={2}>
-                  <Grid item xs={12} lg>
+                  <Grid
+                    item
+                    xs={12}
+                    lg
+                    sx={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'end' }}
+                  >
                     <TextField
                       required
                       label="Instruksi"
@@ -302,6 +320,7 @@ function PaymentMethod() {
                         console.log(instruction.id === null);
                         console.log(listInstructions.length + 1);
                       }}
+                      sx={{ width: 'fit-content' }}
                     >
                       {instruction.id ? 'Simpan' : 'Tambah'}
                     </Button>
@@ -334,7 +353,7 @@ function PaymentMethod() {
                                 </TableCell>
                                 <TableCell>
                                   <span>
-                                    {item.instructionText} {item.id}
+                                    {item.instructionText || formPaymentMethod.instructions[index]} {item.id}
                                   </span>
                                 </TableCell>
                                 <TableCell>
@@ -486,6 +505,7 @@ function PaymentMethod() {
                 } else {
                   postApiHandler(formPaymentMethod, listInstructions);
                 }
+                setListInstructions([]);
                 setFormPaymentMethod({
                   id: null,
                   paymentName: '',
@@ -561,6 +581,7 @@ function PaymentMethod() {
                               variant="outlined"
                               className={`button-outlined-primary`}
                               onClick={async () => {
+                                setListInstructions([]);
                                 if (formPaymentMethod.id && formPaymentMethod.id === item.id) {
                                   setFormPaymentMethod({
                                     id: null,
@@ -569,19 +590,7 @@ function PaymentMethod() {
                                     paymentLogo: { img: null, fileName: '' },
                                   });
                                 } else {
-                                  for (let index = 0; index < item.instruksi.length; index++) {
-                                    setListInstructions([
-                                      ...listInstructions,
-                                      { id: index + 1, instructionText: item.instruksi[index] },
-                                    ]);
-                                  }
-                                  // await item.instruksi.map((itemInstruksi, index) => {
-                                  //   setListInstructions([
-                                  //     ...listInstructions,
-                                  //     { id: index + 1, instructionText: itemInstruksi },
-                                  //   ]);
-                                  // });
-
+                                  listPaymentMethodHandle(item);
                                   setFormPaymentMethod({
                                     id: item.id,
                                     paymentName: item.nama,
@@ -603,6 +612,7 @@ function PaymentMethod() {
                               onClick={() => {
                                 deleteApiHandler(item.id);
                                 if (item.id === formPaymentMethod.id) {
+                                  setListInstructions([]);
                                   setFormPaymentMethod({
                                     id: null,
                                     paymentName: '',
