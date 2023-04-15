@@ -27,13 +27,12 @@ function PaymentMethod() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [listPaymentMethod, setListPaymentMethod] = useState([]);
-  const [instruction, setInstruction] = useState({ id: null, instructionText: '' });
+  const [instruction, setInstruction] = useState({ id: null, instructionText: '', currentIndex: null });
   const [listInstructions, setListInstructions] = useState([]);
   const [formPaymentMethod, setFormPaymentMethod] = useState({
     id: null,
     paymentName: '',
     iD_Or_Number: '',
-
     paymentLogo: { img: null, fileName: '' },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
@@ -64,19 +63,12 @@ function PaymentMethod() {
     }
   };
 
-  const listPaymentMethodHandle = async (data) => {
-    // for (let index = 0; index < item.instruksi.length; index++) {
-    //   setListInstructions([
-    //     ...listInstructions,
-    //     { id: index + 1, instructionText: item.instruksi[index] },
-    //   ]);
-    // }
-
-    data.instruksi.map(async (itemInstruksi, index) => {
-      console.log(itemInstruksi);
-      setListInstructions((list) => [...list, { id: index + 1, instructionText: itemInstruksi }]);
-    });
-  };
+  // const listPaymentMethodHandle = async (data) => {
+  //   data.instruksi.map(async (itemInstruksi, index) => {
+  //     console.log(itemInstruksi);
+  //     setListInstructions((list) => [...list, { id: index + 1, instructionText: itemInstruksi }]);
+  //   });
+  // };
   const postApiHandler = async (data) => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
@@ -297,8 +289,8 @@ function PaymentMethod() {
                         console.log(listInstructions);
 
                         if (instruction.id) {
-                          listInstructions.splice(instruction.id - 1, 1);
-                          let leftArraySplice = listInstructions.splice(0, instruction.id - 1);
+                          listInstructions.splice(instruction.currentIndex, 1);
+                          let leftArraySplice = listInstructions.splice(0, instruction.currentIndex);
                           let rightArraySplice = listInstructions.splice(0, listInstructions.length + 1);
 
                           setListInstructions([...leftArraySplice, instruction, ...rightArraySplice]);
@@ -314,7 +306,7 @@ function PaymentMethod() {
                             },
                           ]);
                         }
-                        setInstruction({ id: null, instructionText: '' });
+                        setInstruction({ id: null, instructionText: '', currentIndex: null });
 
                         console.log('Is Null:');
                         console.log(instruction.id === null);
@@ -380,16 +372,18 @@ function PaymentMethod() {
                                           setInstruction({
                                             id: null,
                                             instructionText: '',
+                                            currentIndex: null,
                                           });
                                         } else {
                                           setInstruction({
                                             id: item.id,
                                             instructionText: item.instructionText,
+                                            currentIndex: index,
                                           });
                                         }
                                       }}
                                     >
-                                      {instruction.id && instruction.id === index + 1 ? <EditOffIcon /> : <EditIcon />}
+                                      {instruction.id === item.id ? <EditOffIcon /> : <EditIcon />}
                                     </Button>
                                     <Button
                                       variant="outlined"
@@ -402,6 +396,7 @@ function PaymentMethod() {
                                           setInstruction({
                                             id: null,
                                             instructionText: '',
+                                            currentIndex: null,
                                           });
                                         }
                                       }}
@@ -590,7 +585,13 @@ function PaymentMethod() {
                                     paymentLogo: { img: null, fileName: '' },
                                   });
                                 } else {
-                                  listPaymentMethodHandle(item);
+                                  item.instruksi.map((itemInstruksi, index) => {
+                                    console.log(itemInstruksi);
+                                    setListInstructions((list) => [
+                                      ...list,
+                                      { id: index + 1, instructionText: itemInstruksi },
+                                    ]);
+                                  });
                                   setFormPaymentMethod({
                                     id: item.id,
                                     paymentName: item.nama,
