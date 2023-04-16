@@ -188,6 +188,7 @@ function AboutUs() {
                   onChange={(e) => {
                     setFormAboutUs({ ...formAboutUs, explanationParagraph: e.target.value });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>

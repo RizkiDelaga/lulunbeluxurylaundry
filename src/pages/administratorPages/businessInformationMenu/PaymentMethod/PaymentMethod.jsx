@@ -206,6 +206,7 @@ function PaymentMethod() {
                       paymentName: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -238,6 +239,8 @@ function PaymentMethod() {
                       iD_Or_Number: e.target.value,
                     });
                   }}
+                  autoComplete="off"
+                  onWheel={(e) => e.target.blur()}
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -279,6 +282,7 @@ function PaymentMethod() {
                           instructionText: e.target.value,
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                     <Button

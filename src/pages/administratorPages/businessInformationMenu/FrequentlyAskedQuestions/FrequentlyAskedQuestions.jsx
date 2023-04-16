@@ -197,6 +197,7 @@ function FrequentlyAskedQuestions() {
                   onChange={(e) => {
                     setFormFrequentlyAskedQuestions({ ...formFrequentlyAskedQuestions, question: e.target.value });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -227,6 +228,7 @@ function FrequentlyAskedQuestions() {
                   onChange={(e) => {
                     setFormFrequentlyAskedQuestions({ ...formFrequentlyAskedQuestions, answer: e.target.value });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>

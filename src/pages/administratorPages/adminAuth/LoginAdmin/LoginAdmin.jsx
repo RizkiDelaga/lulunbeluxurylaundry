@@ -77,6 +77,7 @@ function LoginAdmin() {
                     onChange={(e) => {
                       setFormLoginAdmin({ ...formLoginAdmin, administratorName: e.target.value });
                     }}
+                    autoComplete="off"
                     sx={{ width: '100%' }}
                   />
                 </Grid>
@@ -111,11 +112,7 @@ function LoginAdmin() {
                       type={showPassword ? 'text' : 'password'}
                       endAdornment={
                         <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
-                            edge="end"
-                            color="primary"
-                          >
+                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" color="primary">
                             {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                           </IconButton>
                         </InputAdornment>

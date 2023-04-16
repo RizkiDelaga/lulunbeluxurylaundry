@@ -193,6 +193,7 @@ function Gallery() {
                   onChange={(e) => {
                     setFormGallery({ ...formGallery, title: e.target.value });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -222,6 +223,7 @@ function Gallery() {
                   onChange={(e) => {
                     setFormGallery({ ...formGallery, description: e.target.value });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>

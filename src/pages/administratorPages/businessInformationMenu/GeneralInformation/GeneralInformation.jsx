@@ -251,6 +251,7 @@ function GeneralInformation() {
                   onChange={(e) => {
                     setFormGeneralInformation({ ...formGeneralInformation, slogan: e.target.value });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -285,6 +286,7 @@ function GeneralInformation() {
                           location: { ...formGeneralInformation.location, location: e.target.value },
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -301,6 +303,7 @@ function GeneralInformation() {
                           location: { ...formGeneralInformation.location, googleMapsEmbed: e.target.value },
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -330,13 +333,14 @@ function GeneralInformation() {
                       type="number"
                       label="Nomer Telepon"
                       value={formGeneralInformation.contact.phoneNumber}
-                      autoComplete="off"
                       onChange={(e) => {
                         setFormGeneralInformation({
                           ...formGeneralInformation,
                           contact: { ...formGeneralInformation.contact, phoneNumber: e.target.value },
                         });
                       }}
+                      autoComplete="off"
+                      onWheel={(e) => e.target.blur()}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -352,6 +356,8 @@ function GeneralInformation() {
                           contact: { ...formGeneralInformation.contact, fax: e.target.value },
                         });
                       }}
+                      autoComplete="off"
+                      onWheel={(e) => e.target.blur()}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -367,6 +373,8 @@ function GeneralInformation() {
                           contact: { ...formGeneralInformation.contact, whatsApp: e.target.value },
                         });
                       }}
+                      autoComplete="off"
+                      onWheel={(e) => e.target.blur()}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -382,6 +390,8 @@ function GeneralInformation() {
                           contact: { ...formGeneralInformation.contact, telegram: e.target.value },
                         });
                       }}
+                      autoComplete="off"
+                      onWheel={(e) => e.target.blur()}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -396,6 +406,7 @@ function GeneralInformation() {
                           contact: { ...formGeneralInformation.contact, email: e.target.value },
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -430,6 +441,7 @@ function GeneralInformation() {
                           socialMedia: { ...formGeneralInformation.socialMedia, instagram: e.target.value },
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -444,6 +456,7 @@ function GeneralInformation() {
                           socialMedia: { ...formGeneralInformation.socialMedia, facebook: e.target.value },
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -458,6 +471,7 @@ function GeneralInformation() {
                           socialMedia: { ...formGeneralInformation.socialMedia, twitter: e.target.value },
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -472,6 +486,7 @@ function GeneralInformation() {
                           socialMedia: { ...formGeneralInformation.socialMedia, youtube: e.target.value },
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -486,6 +501,7 @@ function GeneralInformation() {
                           socialMedia: { ...formGeneralInformation.socialMedia, tikTok: e.target.value },
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                   </Grid>

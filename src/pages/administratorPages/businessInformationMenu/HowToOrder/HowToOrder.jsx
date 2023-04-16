@@ -207,6 +207,7 @@ function HowToOrder() {
                       stepTitle: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -240,6 +241,7 @@ function HowToOrder() {
                       description: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -389,6 +391,7 @@ function HowToOrder() {
                       stepTitle: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -422,6 +425,7 @@ function HowToOrder() {
                       description: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
