@@ -5,10 +5,28 @@ import { Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/materi
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import axios from 'axios';
+import { LocalizationProvider, MobileTimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 function GeneralInformation() {
   const theme = useTheme();
   const navigate = useNavigate();
+  // const [pickOpeningHourMonday, setPickOpeningHourMonday] = useState(dayjs('0000-00-00 00:00:00'));
+  // const [pickOpeningHourTuesday, setPickOpeningHourTuesday] = useState(dayjs('0000-00-00 00:00:00'));
+  // const [pickOpeningHourWednesday, setPickOpeningHourWednesday] = useState(dayjs('0000-00-00 00:00:00'));
+  // const [pickOpeningHourThursday, setPickOpeningHourThursday] = useState(dayjs('0000-00-00 00:00:00'));
+  // const [pickOpeningHourFriday, setPickOpeningHourFriday] = useState(dayjs('0000-00-00 00:00:00'));
+  // const [pickOpeningHourSaturday, setPickOpeningHourSaturday] = useState(dayjs('0000-00-00 00:00:00'));
+  // const [pickOpeningHourSunday, setPickOpeningHourSunday] = useState(dayjs('0000-00-00 00:00:00'));
+
+  const [pickClosingHourMonday, setPickClosingHourMonday] = useState(dayjs());
+  const [pickClosingHourTuesday, setPickClosingHourTuesday] = useState(dayjs());
+  const [pickClosingHourWednesday, setPickClosingHourWednesday] = useState(dayjs());
+  const [pickClosingHourThursday, setPickClosingHourThursday] = useState(dayjs());
+  const [pickClosingHourFriday, setPickClosingHourFriday] = useState(dayjs());
+  const [pickClosingHourSaturday, setPickClosingHourSaturday] = useState(dayjs());
+  const [pickClosingHourSunday, setPickClosingHourSunday] = useState(dayjs());
   const [formGeneralInformation, setFormGeneralInformation] = useState({
     logo: { img: null, fileName: '' },
     slogan: '',
@@ -33,32 +51,67 @@ function GeneralInformation() {
   });
   const [operatingHours, setOperatingHours] = useState({
     monday: {
+      dayNameInIndonesia: 'Senin',
       openingHour: '',
       closingHour: '',
+      openTime: dayjs,
+      setOpenTime: dayjs,
+      closeTime: pickClosingHourMonday,
+      setCloseTime: setPickClosingHourMonday,
     },
     tuesday: {
+      dayNameInIndonesia: 'Selasa',
       openingHour: '',
       closingHour: '',
+      openTime: dayjs,
+      setOpenTime: dayjs,
+      closeTime: pickClosingHourTuesday,
+      setCloseTime: setPickClosingHourTuesday,
     },
     wednesday: {
+      dayNameInIndonesia: 'Rabu',
       openingHour: '',
       closingHour: '',
+      openTime: dayjs,
+      setOpenTime: dayjs,
+      closeTime: pickClosingHourWednesday,
+      setCloseTime: setPickClosingHourWednesday,
     },
     thursday: {
+      dayNameInIndonesia: 'Kamis',
       openingHour: '',
       closingHour: '',
+      openTime: dayjs,
+      setOpenTime: dayjs,
+      closeTime: pickClosingHourThursday,
+      setCloseTime: setPickClosingHourThursday,
     },
     friday: {
+      dayNameInIndonesia: 'Jumat',
       openingHour: '',
       closingHour: '',
+      openTime: dayjs,
+      setOpenTime: dayjs,
+      closeTime: pickClosingHourFriday,
+      setCloseTime: setPickClosingHourFriday,
     },
     saturday: {
+      dayNameInIndonesia: 'Sabtu',
       openingHour: '',
       closingHour: '',
+      openTime: dayjs,
+      setOpenTime: dayjs,
+      closeTime: pickClosingHourSaturday,
+      setCloseTime: setPickClosingHourSaturday,
     },
     sunday: {
+      dayNameInIndonesia: 'Minggu',
       openingHour: '',
       closingHour: '',
+      openTime: dayjs,
+      setOpenTime: dayjs,
+      closeTime: pickClosingHourSunday,
+      setCloseTime: setPickClosingHourSunday,
     },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
@@ -101,6 +154,19 @@ function GeneralInformation() {
           youtube: res.data.data[0].youtube,
           tikTok: res.data.data[0].tiktok,
         },
+      });
+
+      ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item, index) => {
+        // operatingHours[item].setOpenTime((timeItem) => dayjs('0000-00-00 ' + res.data.data[0].jamMulai[index] + ':00'));
+        setOperatingHours((prev) => ({
+          ...prev,
+          [item]: {
+            ...prev[item],
+            openingHour: res.data.data[0].jamMulai[index],
+            setOpenTime: dayjs('0000-00-00 ' + res.data.data[0].jamMulai[index] + ':00'),
+            setCloseTime: dayjs('0000-00-00 ' + res.data.data[0].jamSelesai[index] + ':00'),
+          },
+        }));
       });
     } catch (error) {
       // if (error.response.status === 404) {
@@ -158,7 +224,6 @@ function GeneralInformation() {
             <div style={{ width: '100%', textAlign: 'center' }}>
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Informasi Umum</h2>
             </div>
-
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12} md={2} lg={1.5}>
                 <span>Logo</span>
@@ -227,7 +292,6 @@ function GeneralInformation() {
                 </Grid>
               </Grid>
             </Grid>
-
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12} md={2} lg={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
                 <span>Slogan</span>
@@ -256,7 +320,6 @@ function GeneralInformation() {
                 />
               </Grid>
             </Grid>
-
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12} md={2} lg={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
                 <span>Lokasi</span>
@@ -310,7 +373,6 @@ function GeneralInformation() {
                 </Grid>
               </Grid>
             </Grid>
-
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12} md={2} lg={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
                 <span>Kontak</span>
@@ -413,7 +475,6 @@ function GeneralInformation() {
                 </Grid>
               </Grid>
             </Grid>
-
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12} md={2} lg={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
                 <span>Sosial Media</span>
@@ -512,37 +573,94 @@ function GeneralInformation() {
             <div className={`dash-card gap-16`}>
               <div style={{ fontWeight: 'bold' }}>Jam Operasional</div>
 
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={12} md={1.3} lg={1} sx={{ display: 'flex', alignItems: 'center' }}>
-                  <span>Senin</span>
-                </Grid>
-                <Grid
-                  item
-                  xs
-                  lg
-                  sx={{
-                    display: 'flex',
-                    [theme.breakpoints.down('md')]: {
-                      paddingTop: '8px !important',
-                    },
-                  }}
-                >
+              {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item) => {
+                return (
                   <Grid container spacing={2}>
-                    <Grid item xs={6} sm>
-                      <TextField required label="Nama Barang" sx={{ width: '100%' }} />
+                    <Grid item xs={12} sm={12} md={1.3} lg={1} sx={{ display: 'flex', alignItems: 'center' }}>
+                      <span>{operatingHours[item].dayNameInIndonesia}</span>
                     </Grid>
-                    <Grid item xs={6} sm>
-                      <TextField required label="Kuantitas" type="number" sx={{ width: '100%' }} />
+                    <Grid
+                      item
+                      xs
+                      lg
+                      sx={{
+                        display: 'flex',
+                        [theme.breakpoints.down('md')]: {
+                          paddingTop: '8px !important',
+                        },
+                      }}
+                    >
+                      <Grid container spacing={2}>
+                        <Grid item xs={6} sm>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            {/* Input Time */}
+                            <MobileTimePicker
+                              label="Jam Buka"
+                              value={operatingHours[item].setOpenTime}
+                              onChange={(value) => {
+                                setOperatingHours({
+                                  ...operatingHours,
+                                  [item]: {
+                                    ...operatingHours[item],
+                                    openingHour: value.$H + ':' + value.$m,
+                                    setOpenTime: value,
+                                  },
+                                });
+                                console.log(value);
+                                console.log('Jam: ' + value.$H);
+                                console.log('Menit: ' + value.$m);
+                                console.log('Detik: ' + value.$s);
+                              }}
+                              renderInput={(params) => <TextField {...params} />}
+                              slotProps={{
+                                textField: {
+                                  // helperText: 'MM / DD / YYYY',
+                                },
+                              }}
+                              sx={{ width: '100%' }}
+                            />
+                          </LocalizationProvider>
+                        </Grid>
+                        <Grid item xs={6} sm>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            {/* Input Time */}
+                            <MobileTimePicker
+                              label="Jam Buka"
+                              value={operatingHours[item].setCloseTime}
+                              onChange={(value) => {
+                                setOperatingHours({
+                                  ...operatingHours,
+                                  [item]: {
+                                    ...operatingHours[item],
+                                    openingHour: value.$H + ':' + value.$m,
+                                    setCloseTime: value,
+                                  },
+                                });
+                                console.log(value);
+                                console.log('Jam: ' + value.$H);
+                                console.log('Menit: ' + value.$m);
+                                console.log('Detik: ' + value.$s);
+                              }}
+                              renderInput={(params) => <TextField {...params} />}
+                              slotProps={{
+                                textField: {
+                                  // helperText: 'MM / DD / YYYY',
+                                },
+                              }}
+                              sx={{ width: '100%' }}
+                            />
+                          </LocalizationProvider>
+                        </Grid>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </Grid>
+                );
+              })}
             </div>
 
             <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }} onClick={() => {}}>
               Simpan
             </Button>
-
             {formGeneralInformation.slogan}
             <br />
             {formGeneralInformation.location.location + ' ' + formGeneralInformation.location.googleMapsEmbed}
@@ -567,7 +685,8 @@ function GeneralInformation() {
               ' ' +
               formGeneralInformation.socialMedia.tikTok}
             <br />
-            {formGeneralInformation.slogan}
+            {/* {operatingHours.monday.openingHour} */}
+            {console.log({ operatingHours })}
             <br />
           </Box>
         </Paper>
@@ -577,3 +696,102 @@ function GeneralInformation() {
 }
 
 export default GeneralInformation;
+
+const OperationalHour = (props) => {
+  return (
+    <div className={`dash-card gap-16`}>
+      <div style={{ fontWeight: 'bold' }}>Jam Operasional</div>
+
+      {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item) => {
+        return (
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={1.3} lg={1} sx={{ display: 'flex', alignItems: 'center' }}>
+              <span>{operatingHours[item].dayNameInIndonesia}</span>
+            </Grid>
+            <Grid
+              item
+              xs
+              lg
+              sx={{
+                display: 'flex',
+                [theme.breakpoints.down('md')]: {
+                  paddingTop: '8px !important',
+                },
+              }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={6} sm>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    {/* Input Time */}
+                    <MobileTimePicker
+                      label="Pilih Jam Buka"
+                      value={pickOpeningHourMonday}
+                      // value={
+                      // `pickOpeningHour${dayName}`
+                      // '0000-00-00 ' + operatingHours[item].openingHour + ':00'
+                      // item.setTimeOpen
+                      // dayjs('0000-00-00 ' + operatingHours[item].openingHour + ':00')
+                      // operatingHours.monday.openingHour !== null
+                      //   ? `0000-00-00 ` + operatingHours.monday.openingHour + `:00`
+                      //   : '0000-00-00 00:00:00'
+                      // }
+                      onChange={(value) => {
+                        // console.log(
+                        //   `pickOpeningHour${
+                        //     dayName.charAt(0).toUpperCase() + dayName.substr(1, dayName.length)
+                        //   }`
+                        // );
+                        // let joinVariable = () => {
+                        //   let asd ='setPickOpeningHour' +
+                        //   dayName.charAt(0).toUpperCase() +
+                        //   dayName.substr(1, dayName.length)
+                        //   return asd
+                        // };
+                        setOperatingHours({
+                          ...operatingHours,
+                          item: {
+                            ...operatingHours[item],
+                            openingHour: value.$H + ':' + value.$m,
+                          },
+                        });
+                        operatingHours[item].setOpenTime(value);
+                        console.log(operatingHours[item].setOpenTime);
+                        operatingHours[item].setOpenTime(value);
+                        // pickOpeningHour${
+                        //   dayName.charAt(0).toUpperCase() + dayName.substr(1, dayName.length)
+                        // }
+
+                        // setOperatingHours({
+                        //   dayName: {
+                        //     ...operatingHours[dayName],
+                        //     openingHour: dayjs('0000-00-00 ' + value.$H + ':' + value.$m + ':00'),
+                        //   },
+                        // });
+
+                        // console.log(joinVariable);
+                        console.log(value);
+                        console.log('Jam: ' + value.$H);
+                        console.log('Menit: ' + value.$m);
+                        console.log('Detik: ' + value.$s);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                      slotProps={{
+                        textField: {
+                          // helperText: 'MM / DD / YYYY',
+                        },
+                      }}
+                      sx={{ width: '100%' }}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+                <Grid item xs={6} sm>
+                  <TextField required label="Kuantitas" type="number" sx={{ width: '100%' }} />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        );
+      })}
+    </div>
+  );
+};
