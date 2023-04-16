@@ -5,6 +5,9 @@ import { Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/materi
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import axios from 'axios';
+import dayjs from 'dayjs';
+import { LocalizationProvider, MobileDatePicker, MobileTimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 function AddIncome() {
   const theme = useTheme();
@@ -12,7 +15,7 @@ function AddIncome() {
   const [formAddIncome, setFormAddIncome] = useState({
     title: '',
     nominal: null,
-    entryDate: '',
+    entryDate: dayjs(),
     notes: '',
     photoEvidence: { img: null, fileName: '' },
   });
@@ -38,10 +41,15 @@ function AddIncome() {
           nominal: data.nominal,
           judul: data.title,
           catatan: data.notes,
-          tanggal: '2023-02-17',
+          tanggal: dayjs(
+            `${formAddIncome.entryDate.$y}-${('0' + (formAddIncome.entryDate.$M + 1)).slice(-2)}-${
+              formAddIncome.entryDate.$D
+            } ${formAddIncome.entryDate.$H}:${formAddIncome.entryDate.$m}:00`
+          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
           gambar: data.photoEvidence.fileName,
         },
       });
+
       console.log('Response POST');
       console.log(res);
       if (res.status === 201) {
@@ -133,7 +141,7 @@ function AddIncome() {
                   required
                   type="number"
                   label="Nominal Pendapatan"
-                  value={formAddIncome.nominal}
+                  value={formAddIncome.nominal !== null ? formAddIncome.nominal : ''}
                   onChange={(e) => {
                     setFormAddIncome({
                       ...formAddIncome,
@@ -164,10 +172,64 @@ function AddIncome() {
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm>
-                    <TextField required label="Nama Barang" sx={{ width: '100%' }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <MobileDatePicker
+                        label="Pilih Tanggal"
+                        value={formAddIncome.entryDate}
+                        onChange={(value) => {
+                          setFormAddIncome({
+                            ...formAddIncome,
+                            entryDate: value,
+                          });
+
+                          console.log('Tanggal: ' + value.$D);
+                          console.log('Bulan: ' + value.$M);
+                          console.log('Tahun: ' + value.$y);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            // helperText: 'MM / DD / YYYY',
+                          },
+                        }}
+                        sx={{
+                          width: '100%',
+                          '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
+                            zIndex: 100000,
+                          },
+                        }}
+                      />
+                    </LocalizationProvider>
                   </Grid>
                   <Grid item xs={12} sm>
-                    <TextField required label="Kuantitas" type="number" sx={{ width: '100%' }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <MobileTimePicker
+                        label="Pilih Jam"
+                        value={formAddIncome.entryDate}
+                        onChange={(value) => {
+                          setFormAddIncome({
+                            ...formAddIncome,
+                            entryDate: value,
+                          });
+
+                          console.log('Jam: ' + value.$H);
+                          console.log('Menit: ' + value.$m);
+                          console.log('Detik: ' + value.$s);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            helperText:
+                              ('0' + formAddIncome.entryDate.$H).slice(-2) +
+                              ':' +
+                              ('0' + formAddIncome.entryDate.$m).slice(-2),
+                          },
+                        }}
+                        sx={{ width: '100%' }}
+                      />
+                    </LocalizationProvider>
                   </Grid>
                 </Grid>
               </Grid>
@@ -286,7 +348,7 @@ function AddIncome() {
                 setFormAddIncome({
                   title: '',
                   nominal: null,
-                  entryDate: '',
+                  entryDate: dayjs(),
                   notes: '',
                   photoEvidence: { img: null, fileName: '' },
                 });
@@ -301,6 +363,9 @@ function AddIncome() {
             {formAddIncome.nominal}
             <br />
             {formAddIncome.notes}
+            {`${formAddIncome.entryDate.$D} ${formAddIncome.entryDate.$M} ${formAddIncome.entryDate.$y}`}
+            <br />
+            {`${formAddIncome.entryDate.$H} ${formAddIncome.entryDate.$m}`}
             <br />
           </Box>
         </Paper>

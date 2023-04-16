@@ -438,3 +438,8 @@ export const banyumasAreaList = [{
         ]
     },
 ]
+// let daerah = 'Wangon'
+// let dataFilter = banyumasAreaList.filter((item) => {
+//     return item.subDistrict === daerah;
+// })
+// console.log(dataFilter)

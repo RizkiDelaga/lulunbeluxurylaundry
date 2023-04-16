@@ -10,13 +10,9 @@ import PageStructureAndDirectButton from '../../../../components/PageStructureAn
 
 const OrderInformationForm = (props) => {
   const theme = useTheme();
-  // Datepicker
-  // const [value, setValue] = React.useState(dayjs('2019-01-25 12:45:02').format('[YYYYescape] YYYY-MM-DDTHH:mm:ssZ[Z]'));
-  const [value, setValue] = React.useState(dayjs());
-  const [loading, setLoading] = React.useState(true);
 
   const [formOrder, setFormOrder] = React.useState({
-    dateOrder: '',
+    dateOrder: dayjs(),
     serviceType: '',
     discount: '',
     paymentMethod: '',
@@ -71,46 +67,66 @@ const OrderInformationForm = (props) => {
                 },
               }}
             >
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Grid container>
-                  <Grid xs={6} sx={{ paddingRight: '8px' }}>
+              <Grid container>
+                <Grid xs={6} sx={{ paddingRight: '8px' }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
-                      required
-                      label="Pilih Tanggal *"
-                      value={value}
-                      onChange={(newValue) => {
-                        setValue(newValue);
-                        console.log('Tanggal: ' + newValue.$D);
-                        console.log('Bulan: ' + newValue.$M);
-                        console.log('Tahun: ' + newValue.$y);
-                        console.log('Jam: ' + newValue.$H);
-                        console.log('Menit: ' + newValue.$m);
-                        console.log('Detik: ' + newValue.$s);
-                        setLoading(false);
+                      label="Pilih Tanggal"
+                      value={formOrder.dateOrder}
+                      onChange={(value) => {
+                        setFormOrder({
+                          ...formOrder,
+                          dateOrder: value,
+                        });
+
+                        console.log('Tanggal: ' + value.$D);
+                        console.log('Bulan: ' + value.$M);
+                        console.log('Tahun: ' + value.$y);
                       }}
                       renderInput={(params) => <TextField {...params} />}
+                      slotProps={{
+                        textField: {
+                          error: false,
+                          // helperText: 'MM / DD / YYYY',
+                        },
+                      }}
                       sx={{
                         width: '100%',
+                        '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
+                          zIndex: 100000,
+                        },
                       }}
                     />
-                  </Grid>
-                  <Grid xs={6} sx={{ paddingLeft: '8px' }}>
+                  </LocalizationProvider>
+                </Grid>
+                <Grid xs={6} sx={{ paddingLeft: '8px' }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileTimePicker
-                      required
-                      label="Pilih Jam *"
-                      value={value}
-                      onChange={(newValue) => {
-                        setValue(newValue);
-                        console.log(newValue);
-                        console.log('Jam: ' + newValue.$H);
-                        setLoading(false);
+                      label="Pilih Jam"
+                      value={formOrder.dateOrder}
+                      onChange={(value) => {
+                        setFormOrder({
+                          ...formOrder,
+                          dateOrder: value,
+                        });
+
+                        console.log('Jam: ' + value.$H);
+                        console.log('Menit: ' + value.$m);
+                        console.log('Detik: ' + value.$s);
                       }}
                       renderInput={(params) => <TextField {...params} />}
+                      slotProps={{
+                        textField: {
+                          error: false,
+                          helperText:
+                            ('0' + formOrder.dateOrder.$H).slice(-2) + ':' + ('0' + formOrder.dateOrder.$m).slice(-2),
+                        },
+                      }}
                       sx={{ width: '100%' }}
                     />
-                  </Grid>
+                  </LocalizationProvider>
                 </Grid>
-              </LocalizationProvider>
+              </Grid>
             </Grid>
           </Grid>
           <Grid container spacing={2}>
@@ -464,7 +480,7 @@ const InputItem = (props) => {
 function CreateNewOrder() {
   const navigate = useNavigate();
   const [formOrder, setFormOrder] = React.useState({
-    dateOrder: '',
+    dateOrder: dayjs(),
     serviceType: '',
     discount: '',
     paymentMethod: '',
