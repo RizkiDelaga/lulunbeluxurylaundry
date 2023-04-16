@@ -99,6 +99,7 @@ function Input() {
         helperText=""
         multiline
         maxRows={4}
+        autoComplete="off"
         // value={state}
         // onChange={(e) => {setState(e.target.value)}}
         sx={{ width: '100%' }}
@@ -110,6 +111,7 @@ function Input() {
         label=""
         placeholder=""
         helperText=""
+        autoComplete="off"
         // value={state}
         // onChange={(e) => {setState(e.target.value)}}
         sx={{ width: '100%' }}
@@ -121,8 +123,11 @@ function Input() {
         label=""
         placeholder=""
         helperText=""
-        // value={state}
+        // value={state !== null ? state : ''}
         // onChange={(e) => {setState(e.target.value)}}
+        autoComplete="off"
+        onWheel={(e) => e.target.blur()}
+        // focused={formServiceType.serviceDuration.hours !== null}
         sx={{ width: '100%' }}
       />
 

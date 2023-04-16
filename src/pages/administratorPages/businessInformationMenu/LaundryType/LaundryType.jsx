@@ -197,6 +197,7 @@ function LaundryType() {
                       laundryTypeName: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -230,6 +231,7 @@ function LaundryType() {
                       description: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -237,7 +239,7 @@ function LaundryType() {
 
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12} md={2.6} lg={1.9}>
-                <span>Deskripsi</span>
+                <span>Foto</span>
               </Grid>
 
               <Grid

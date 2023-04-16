@@ -63,6 +63,7 @@ function EditProfile() {
                   onChange={(e) => {
                     setFormEditProfile({ ...formEditProfile, administratorName: e.target.value });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -95,6 +96,8 @@ function EditProfile() {
                           contact: { ...formEditProfile.contact, phoneNumber: e.target.value },
                         });
                       }}
+                      autoComplete="off"
+                      onWheel={(e) => e.target.blur()}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -109,6 +112,7 @@ function EditProfile() {
                           contact: { ...formEditProfile.contact, email: e.target.value },
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                   </Grid>

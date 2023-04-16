@@ -199,6 +199,7 @@ function ReasonsWhyChooseUs() {
                   onChange={(e) => {
                     setFormReasonsWhyChooseUs({ ...formReasonsWhyChooseUs, reasonTitle: e.target.value });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -229,6 +230,7 @@ function ReasonsWhyChooseUs() {
                   onChange={(e) => {
                     setFormReasonsWhyChooseUs({ ...formReasonsWhyChooseUs, description: e.target.value });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>

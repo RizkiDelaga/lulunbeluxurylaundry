@@ -204,6 +204,7 @@ function ServiceType() {
                   onChange={(e) => {
                     setFormServiceType({ ...formServiceType, serviceTypeName: e.target.value });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -229,13 +230,14 @@ function ServiceType() {
                       type="number"
                       label="Hari"
                       value={formServiceType.serviceDuration.days !== null ? formServiceType.serviceDuration.days : ''}
-                      focused={formServiceType.serviceDuration.days !== null}
                       onChange={(e) => {
                         setFormServiceType({
                           ...formServiceType,
                           serviceDuration: { ...formServiceType.serviceDuration, days: e.target.value },
                         });
                       }}
+                      autoComplete="off"
+                      onWheel={(e) => e.target.blur()}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -246,13 +248,14 @@ function ServiceType() {
                       value={
                         formServiceType.serviceDuration.hours !== null ? formServiceType.serviceDuration.hours : ''
                       }
-                      focused={formServiceType.serviceDuration.hours !== null}
                       onChange={(e) => {
                         setFormServiceType({
                           ...formServiceType,
                           serviceDuration: { ...formServiceType.serviceDuration, hours: e.target.value },
                         });
                       }}
+                      autoComplete="off"
+                      onWheel={(e) => e.target.blur()}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -270,6 +273,8 @@ function ServiceType() {
                           serviceDuration: { ...formServiceType.serviceDuration, minutes: e.target.value },
                         });
                       }}
+                      autoComplete="off"
+                      onWheel={(e) => e.target.blur()}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -303,6 +308,7 @@ function ServiceType() {
                       description: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>

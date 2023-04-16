@@ -81,6 +81,7 @@ function RegisterNewAdministrator() {
                       administratorName: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -114,6 +115,8 @@ function RegisterNewAdministrator() {
                           contact: { ...formRegisterNewAdministrator.contact, phoneNumber: e.target.value },
                         });
                       }}
+                      autoComplete="off"
+                      onWheel={(e) => e.target.blur()}
                       sx={{ width: '100%' }}
                     />
                   </Grid>
@@ -128,6 +131,7 @@ function RegisterNewAdministrator() {
                           contact: { ...formRegisterNewAdministrator.contact, email: e.target.value },
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                   </Grid>

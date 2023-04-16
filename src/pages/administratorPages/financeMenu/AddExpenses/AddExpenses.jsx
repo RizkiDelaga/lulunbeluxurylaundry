@@ -107,6 +107,7 @@ function AddExpenses() {
                       title: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -139,6 +140,8 @@ function AddExpenses() {
                       nominal: e.target.value,
                     });
                   }}
+                  autoComplete="off"
+                  onWheel={(e) => e.target.blur()}
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -198,6 +201,7 @@ function AddExpenses() {
                       notes: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>

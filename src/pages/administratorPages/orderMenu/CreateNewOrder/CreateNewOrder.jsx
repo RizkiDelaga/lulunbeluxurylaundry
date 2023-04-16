@@ -155,6 +155,8 @@ const OrderInformationForm = (props) => {
                 onChange={(e) => {
                   setFormOrder({ ...formOrder, discount: e.target.value });
                 }}
+                autoComplete="off"
+                onWheel={(e) => e.target.blur()}
                 sx={{ width: '100%' }}
               />
             </Grid>
@@ -294,6 +296,7 @@ const InputItem = (props) => {
                 onChange={(e) => {
                   setItem({ ...item, itemName: e.target.value });
                 }}
+                autoComplete="off"
                 sx={{ width: '100%' }}
               />
             </Grid>
@@ -306,6 +309,8 @@ const InputItem = (props) => {
                 onChange={(e) => {
                   setItem({ ...item, quantity: e.target.value });
                 }}
+                autoComplete="off"
+                onWheel={(e) => e.target.blur()}
                 sx={{ width: '100%' }}
               />
             </Grid>
@@ -318,6 +323,8 @@ const InputItem = (props) => {
                 onChange={(e) => {
                   setItem({ ...item, pricePerUnit: e.target.value });
                 }}
+                autoComplete="off"
+                onWheel={(e) => e.target.blur()}
                 sx={{ width: '100%' }}
               />
             </Grid>
@@ -367,6 +374,7 @@ const InputItem = (props) => {
             onChange={(e) => {
               setItem({ ...item, notation: e.target.value });
             }}
+            autoComplete="off"
             sx={{ width: '100%' }}
           />
         </Grid>

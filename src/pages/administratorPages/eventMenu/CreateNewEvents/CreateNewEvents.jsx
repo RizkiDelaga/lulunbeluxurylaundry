@@ -136,6 +136,7 @@ function CreateNewEvents() {
                       eventName: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -220,6 +221,7 @@ function CreateNewEvents() {
                       description: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -258,6 +260,7 @@ function CreateNewEvents() {
                           rewardText: e.target.value,
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                     <Button
@@ -425,7 +428,7 @@ function CreateNewEvents() {
                     sx={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'end' }}
                   >
                     <TextField
-                      label="Reward / Benefit"
+                      label="Kriteria"
                       multiline
                       maxRows={4}
                       value={criteria.criteriaText}
@@ -435,6 +438,7 @@ function CreateNewEvents() {
                           criteriaText: e.target.value,
                         });
                       }}
+                      autoComplete="off"
                       sx={{ width: '100%' }}
                     />
                     <Button

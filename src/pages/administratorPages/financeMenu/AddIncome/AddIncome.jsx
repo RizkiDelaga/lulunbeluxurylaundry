@@ -107,6 +107,7 @@ function AddIncome() {
                       title: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -139,6 +140,8 @@ function AddIncome() {
                       nominal: e.target.value,
                     });
                   }}
+                  autoComplete="off"
+                  onWheel={(e) => e.target.blur()}
                   sx={{ width: '100%' }}
                 />
               </Grid>
@@ -198,6 +201,7 @@ function AddIncome() {
                       notes: e.target.value,
                     });
                   }}
+                  autoComplete="off"
                   sx={{ width: '100%' }}
                 />
               </Grid>

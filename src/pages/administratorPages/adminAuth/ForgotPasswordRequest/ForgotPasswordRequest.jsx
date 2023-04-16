@@ -70,6 +70,8 @@ function ForgotPasswordRequest() {
                     onChange={(e) => {
                       setPhoneNumber(e.target.value);
                     }}
+                    autoComplete="off"
+                    onWheel={(e) => e.target.blur()}
                     sx={{ width: '100%' }}
                   />
                 </Grid>
