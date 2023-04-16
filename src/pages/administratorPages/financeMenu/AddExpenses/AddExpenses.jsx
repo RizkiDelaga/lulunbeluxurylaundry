@@ -5,6 +5,9 @@ import { Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/materi
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import axios from 'axios';
+import dayjs from 'dayjs';
+import { LocalizationProvider, MobileDatePicker, MobileTimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 function AddExpenses() {
   const theme = useTheme();
@@ -12,7 +15,7 @@ function AddExpenses() {
   const [formAddExpenses, setFormAddExpenses] = useState({
     title: '',
     nominal: null,
-    expenditureDate: '',
+    expenditureDate: dayjs(),
     notes: '',
     photoEvidence: { img: null, fileName: '' },
   });
@@ -38,7 +41,11 @@ function AddExpenses() {
           nominal: data.nominal,
           judul: data.title,
           catatan: data.notes,
-          tanggal: '2023-02-17',
+          tanggal: dayjs(
+            `${formAddExpenses.expenditureDate.$y}-${('0' + (formAddExpenses.expenditureDate.$M + 1)).slice(-2)}-${
+              formAddExpenses.expenditureDate.$D
+            } ${formAddExpenses.expenditureDate.$H}:${formAddExpenses.expenditureDate.$m}:00`
+          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
           gambar: data.photoEvidence.fileName,
         },
       });
@@ -133,7 +140,7 @@ function AddExpenses() {
                   required
                   type="number"
                   label="Nominal Pengeluaran"
-                  value={formAddExpenses.nominal}
+                  value={formAddExpenses.nominal !== null ? formAddExpenses.nominal : ''}
                   onChange={(e) => {
                     setFormAddExpenses({
                       ...formAddExpenses,
@@ -164,10 +171,64 @@ function AddExpenses() {
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm>
-                    <TextField required label="Nama Barang" sx={{ width: '100%' }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <MobileDatePicker
+                        label="Pilih Tanggal"
+                        value={formAddExpenses.expenditureDate}
+                        onChange={(value) => {
+                          setFormAddExpenses({
+                            ...formAddExpenses,
+                            expenditureDate: value,
+                          });
+
+                          console.log('Tanggal: ' + value.$D);
+                          console.log('Bulan: ' + value.$M);
+                          console.log('Tahun: ' + value.$y);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            // helperText: 'MM / DD / YYYY',
+                          },
+                        }}
+                        sx={{
+                          width: '100%',
+                          '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
+                            zIndex: 100000,
+                          },
+                        }}
+                      />
+                    </LocalizationProvider>
                   </Grid>
                   <Grid item xs={12} sm>
-                    <TextField required label="Kuantitas" type="number" sx={{ width: '100%' }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <MobileTimePicker
+                        label="Pilih Jam"
+                        value={formAddExpenses.expenditureDate}
+                        onChange={(value) => {
+                          setFormAddExpenses({
+                            ...formAddExpenses,
+                            expenditureDate: value,
+                          });
+
+                          console.log('Jam: ' + value.$H);
+                          console.log('Menit: ' + value.$m);
+                          console.log('Detik: ' + value.$s);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            helperText:
+                              ('0' + formAddExpenses.expenditureDate.$H).slice(-2) +
+                              ':' +
+                              ('0' + formAddExpenses.expenditureDate.$m).slice(-2),
+                          },
+                        }}
+                        sx={{ width: '100%' }}
+                      />
+                    </LocalizationProvider>
                   </Grid>
                 </Grid>
               </Grid>
@@ -286,7 +347,7 @@ function AddExpenses() {
                 setFormAddExpenses({
                   title: '',
                   nominal: null,
-                  entryDate: '',
+                  expenditureDate: dayjs(),
                   notes: '',
                   photoEvidence: { img: null, fileName: '' },
                 });
@@ -302,6 +363,9 @@ function AddExpenses() {
             <br />
             {formAddExpenses.notes}
             <br />
+            {`${formAddExpenses.expenditureDate.$D} ${formAddExpenses.expenditureDate.$M} ${formAddExpenses.expenditureDate.$y}`}
+            <br />
+            {`${formAddExpenses.expenditureDate.$H} ${formAddExpenses.expenditureDate.$m}`}
           </Box>
         </Paper>
       </div>

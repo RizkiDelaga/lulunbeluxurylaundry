@@ -12,21 +12,7 @@ import dayjs from 'dayjs';
 function GeneralInformation() {
   const theme = useTheme();
   const navigate = useNavigate();
-  // const [pickOpeningHourMonday, setPickOpeningHourMonday] = useState(dayjs('0000-00-00 00:00:00'));
-  // const [pickOpeningHourTuesday, setPickOpeningHourTuesday] = useState(dayjs('0000-00-00 00:00:00'));
-  // const [pickOpeningHourWednesday, setPickOpeningHourWednesday] = useState(dayjs('0000-00-00 00:00:00'));
-  // const [pickOpeningHourThursday, setPickOpeningHourThursday] = useState(dayjs('0000-00-00 00:00:00'));
-  // const [pickOpeningHourFriday, setPickOpeningHourFriday] = useState(dayjs('0000-00-00 00:00:00'));
-  // const [pickOpeningHourSaturday, setPickOpeningHourSaturday] = useState(dayjs('0000-00-00 00:00:00'));
-  // const [pickOpeningHourSunday, setPickOpeningHourSunday] = useState(dayjs('0000-00-00 00:00:00'));
 
-  const [pickClosingHourMonday, setPickClosingHourMonday] = useState(dayjs());
-  const [pickClosingHourTuesday, setPickClosingHourTuesday] = useState(dayjs());
-  const [pickClosingHourWednesday, setPickClosingHourWednesday] = useState(dayjs());
-  const [pickClosingHourThursday, setPickClosingHourThursday] = useState(dayjs());
-  const [pickClosingHourFriday, setPickClosingHourFriday] = useState(dayjs());
-  const [pickClosingHourSaturday, setPickClosingHourSaturday] = useState(dayjs());
-  const [pickClosingHourSunday, setPickClosingHourSunday] = useState(dayjs());
   const [formGeneralInformation, setFormGeneralInformation] = useState({
     logo: { img: null, fileName: '' },
     slogan: '',
@@ -52,66 +38,38 @@ function GeneralInformation() {
   const [operatingHours, setOperatingHours] = useState({
     monday: {
       dayNameInIndonesia: 'Senin',
-      openingHour: '',
-      closingHour: '',
-      openTime: dayjs,
       setOpenTime: dayjs,
-      closeTime: pickClosingHourMonday,
-      setCloseTime: setPickClosingHourMonday,
+      setCloseTime: dayjs,
     },
     tuesday: {
       dayNameInIndonesia: 'Selasa',
-      openingHour: '',
-      closingHour: '',
-      openTime: dayjs,
       setOpenTime: dayjs,
-      closeTime: pickClosingHourTuesday,
-      setCloseTime: setPickClosingHourTuesday,
+      setCloseTime: dayjs,
     },
     wednesday: {
       dayNameInIndonesia: 'Rabu',
-      openingHour: '',
-      closingHour: '',
-      openTime: dayjs,
       setOpenTime: dayjs,
-      closeTime: pickClosingHourWednesday,
-      setCloseTime: setPickClosingHourWednesday,
+      setCloseTime: dayjs,
     },
     thursday: {
       dayNameInIndonesia: 'Kamis',
-      openingHour: '',
-      closingHour: '',
-      openTime: dayjs,
       setOpenTime: dayjs,
-      closeTime: pickClosingHourThursday,
-      setCloseTime: setPickClosingHourThursday,
+      setCloseTime: dayjs,
     },
     friday: {
       dayNameInIndonesia: 'Jumat',
-      openingHour: '',
-      closingHour: '',
-      openTime: dayjs,
       setOpenTime: dayjs,
-      closeTime: pickClosingHourFriday,
-      setCloseTime: setPickClosingHourFriday,
+      setCloseTime: dayjs,
     },
     saturday: {
       dayNameInIndonesia: 'Sabtu',
-      openingHour: '',
-      closingHour: '',
-      openTime: dayjs,
       setOpenTime: dayjs,
-      closeTime: pickClosingHourSaturday,
-      setCloseTime: setPickClosingHourSaturday,
+      setCloseTime: dayjs,
     },
     sunday: {
       dayNameInIndonesia: 'Minggu',
-      openingHour: '',
-      closingHour: '',
-      openTime: dayjs,
       setOpenTime: dayjs,
-      closeTime: pickClosingHourSunday,
-      setCloseTime: setPickClosingHourSunday,
+      setCloseTime: dayjs,
     },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
@@ -162,7 +120,8 @@ function GeneralInformation() {
           ...prev,
           [item]: {
             ...prev[item],
-            openingHour: res.data.data[0].jamMulai[index],
+            // openingHour: res.data.data[0].jamMulai[index],
+            // closingHour: res.data.data[0].jamSelesai[index],
             setOpenTime: dayjs('0000-00-00 ' + res.data.data[0].jamMulai[index] + ':00'),
             setCloseTime: dayjs('0000-00-00 ' + res.data.data[0].jamSelesai[index] + ':00'),
           },
@@ -593,7 +552,6 @@ function GeneralInformation() {
                       <Grid container spacing={2}>
                         <Grid item xs={6} sm>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            {/* Input Time */}
                             <MobileTimePicker
                               label="Jam Buka"
                               value={operatingHours[item].setOpenTime}
@@ -602,7 +560,6 @@ function GeneralInformation() {
                                   ...operatingHours,
                                   [item]: {
                                     ...operatingHours[item],
-                                    openingHour: value.$H + ':' + value.$m,
                                     setOpenTime: value,
                                   },
                                 });
@@ -614,7 +571,11 @@ function GeneralInformation() {
                               renderInput={(params) => <TextField {...params} />}
                               slotProps={{
                                 textField: {
-                                  // helperText: 'MM / DD / YYYY',
+                                  error: false,
+                                  helperText:
+                                    ('0' + operatingHours[item].setOpenTime.$H).slice(-2) +
+                                    ':' +
+                                    ('0' + operatingHours[item].setOpenTime.$m).slice(-2),
                                 },
                               }}
                               sx={{ width: '100%' }}
@@ -623,16 +584,14 @@ function GeneralInformation() {
                         </Grid>
                         <Grid item xs={6} sm>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            {/* Input Time */}
                             <MobileTimePicker
-                              label="Jam Buka"
+                              label="Jam Tutup"
                               value={operatingHours[item].setCloseTime}
                               onChange={(value) => {
                                 setOperatingHours({
                                   ...operatingHours,
                                   [item]: {
                                     ...operatingHours[item],
-                                    openingHour: value.$H + ':' + value.$m,
                                     setCloseTime: value,
                                   },
                                 });
@@ -644,7 +603,11 @@ function GeneralInformation() {
                               renderInput={(params) => <TextField {...params} />}
                               slotProps={{
                                 textField: {
-                                  // helperText: 'MM / DD / YYYY',
+                                  error: false,
+                                  helperText:
+                                    ('0' + operatingHours[item].setCloseTime.$H).slice(-2) +
+                                    ':' +
+                                    ('0' + operatingHours[item].setCloseTime.$m).slice(-2),
                                 },
                               }}
                               sx={{ width: '100%' }}

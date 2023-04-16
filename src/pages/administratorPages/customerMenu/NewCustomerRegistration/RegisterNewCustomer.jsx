@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/material';
+import { Autocomplete, Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/material';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import { banyumasAreaList } from '../../../../utils/banyumasAreaList';
 
 function RegisterNewCustomer() {
   const theme = useTheme();
@@ -13,7 +17,7 @@ function RegisterNewCustomer() {
       phoneNumber: '',
       email: '',
     },
-    birthDate: '',
+    birthDate: dayjs,
     profilePicture: {},
     mainAddress: {
       region: {
@@ -30,6 +34,21 @@ function RegisterNewCustomer() {
       buildingPhoto: {},
       makeItMainAddress: false,
     },
+  });
+  const [mainAddress, setMainAddress] = useState({
+    region: {
+      subDistrict: '',
+      urbanVillage: '',
+      hamlet: '',
+      neighbourhood: '',
+    },
+    buildingDetails: {
+      buildingType: '',
+      buildingName_Or_Number: '',
+    },
+    addressDetails: '',
+    buildingPhoto: {},
+    makeItMainAddress: false,
   });
 
   React.useEffect(() => {
@@ -152,7 +171,33 @@ function RegisterNewCustomer() {
                   },
                 }}
               >
-                <TextField required label="Nama Administator" sx={{ width: '100%' }} />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <MobileDatePicker
+                    label="Pilih Tanggal"
+                    value={formRegisterNewCustomer.birthDate}
+                    onChange={(value) => {
+                      setFormRegisterNewCustomer({ ...formRegisterNewCustomer, birthDate: value });
+
+                      console.log(formRegisterNewCustomer.birthDate);
+                      console.log('Tanggal: ' + value.$D);
+                      console.log('Bulan: ' + value.$M);
+                      console.log('Tahun: ' + value.$y);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                    slotProps={{
+                      textField: {
+                        error: false,
+                        // helperText: 'MM / DD / YYYY',
+                      },
+                    }}
+                    sx={{
+                      width: '100%',
+                      '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
+                        zIndex: 100000,
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
               </Grid>
             </Grid>
 
@@ -246,37 +291,51 @@ function RegisterNewCustomer() {
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md>
-                    <TextField
-                      required
-                      label="Kecamatan"
-                      value={formRegisterNewCustomer.mainAddress.region.subDistrict}
-                      onChange={(e) => {
-                        setFormRegisterNewCustomer({
-                          ...formRegisterNewCustomer,
-                          mainAddress: {
-                            ...formRegisterNewCustomer.mainAddress,
-                            region: { ...formRegisterNewCustomer.mainAddress.region, subDistrict: e.target.value },
-                          },
-                        });
+                    <Autocomplete
+                      label="Kecamatan *"
+                      sx={{ width: '400px' }}
+                      options={banyumasAreaList}
+                      autoHighlight
+                      onChange={(event, value) => {
+                        console.log(value);
+                        setMainAddress({ ...mainAddress, region: { ...mainAddress.region, subDistrict: value } });
                       }}
-                      sx={{ width: '100%' }}
+                      getOptionLabel={(option) => option.subDistrict}
+                      renderOption={(props, option) => (
+                        <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
+                          {option.subDistrict}
+                        </div>
+                      )}
+                      renderInput={(params) => <TextField {...params} label="Pilih Kacamatan" />}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md>
-                    <TextField
+                    <Autocomplete
                       required
-                      label="Kelurahan"
-                      value={formRegisterNewCustomer.mainAddress.region.urbanVillage}
-                      onChange={(e) => {
-                        setFormRegisterNewCustomer({
-                          ...formRegisterNewCustomer,
-                          mainAddress: {
-                            ...formRegisterNewCustomer.mainAddress,
-                            region: { ...formRegisterNewCustomer.mainAddress.region, urbanVillage: e.target.value },
-                          },
-                        });
+                      label="Kelurahan *"
+                      sx={{ width: '400px' }}
+                      options={banyumasAreaList}
+                      autoHighlight
+                      onChange={(event, value) => {
+                        console.log(
+                          banyumasAreaList[
+                            banyumasAreaList.findIndex((i) => i.subDistrict === mainAddress.region.subDistrict)
+                          ]
+                        );
+                        setMainAddress({ ...mainAddress, region: { ...mainAddress.region, urbanVillage: value } });
                       }}
-                      sx={{ width: '100%' }}
+                      getOptionLabel={
+                        (option) => option
+                        // option.filter((item) => {
+                        //   return item.subDistrict === mainAddress.region.subDistrict;
+                        // }).urbanVillage
+                      }
+                      renderOption={(props, option) => (
+                        <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
+                          {option[0]}
+                        </div>
+                      )}
+                      renderInput={(params) => <TextField {...params} label="Pilih Kelurahan" />}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md>
@@ -509,6 +568,10 @@ function RegisterNewCustomer() {
             <br />
             {formRegisterNewCustomer.mainAddress.addressDetails}
             {formRegisterNewCustomer.mainAddress.makeItMainAddress}
+            {`${formRegisterNewCustomer.birthDate.$D}
+              ${formRegisterNewCustomer.birthDate.$M}
+              ${formRegisterNewCustomer.birthDate.$y}`}
+
             <br />
           </Box>
         </Paper>

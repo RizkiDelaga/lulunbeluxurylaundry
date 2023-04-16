@@ -22,6 +22,9 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditOffIcon from '@mui/icons-material/EditOff';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import axios from 'axios';
+import dayjs from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider, MobileDatePicker, MobileTimePicker } from '@mui/x-date-pickers';
 
 function CreateNewEvents() {
   const theme = useTheme();
@@ -35,11 +38,9 @@ function CreateNewEvents() {
   const [formCreateNewEvents, setFormCreateNewEvents] = useState({
     id: null,
     eventName: '',
-    dateStart: '',
-    dateEnd: '',
+    dateStart: dayjs(),
+    dateEnd: dayjs().add(1, 'day'),
     description: '',
-    reward: [],
-    criteria: [],
     poster: { img: null, fileName: '' },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
@@ -67,8 +68,16 @@ function CreateNewEvents() {
           reward: listReward.map((itemReward) => itemReward.rewardText),
           status: 'akan datang',
           jumlah: 200,
-          tglMulai: '2023-03-15T07:00:00Z',
-          tglSelesai: '2023-04-17T23:59:59Z',
+          tglMulai: dayjs(
+            `${formCreateNewEvents.dateStart.$y}-${('0' + (formCreateNewEvents.dateStart.$M + 1)).slice(-2)}-${
+              formCreateNewEvents.dateStart.$D
+            } ${formCreateNewEvents.dateStart.$H}:${formCreateNewEvents.dateStart.$m}:00`
+          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+          tglSelesai: dayjs(
+            `${formCreateNewEvents.dateEnd.$y}-${('0' + (formCreateNewEvents.dateEnd.$M + 1)).slice(-2)}-${
+              formCreateNewEvents.dateEnd.$D
+            } ${formCreateNewEvents.dateEnd.$H}:${formCreateNewEvents.dateEnd.$m}:00`
+          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
         },
       });
       console.log('Response POST');
@@ -159,10 +168,64 @@ function CreateNewEvents() {
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm>
-                    <TextField required label="Nama Barang" sx={{ width: '100%' }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <MobileDatePicker
+                        label="Pilih Tanggal"
+                        value={formCreateNewEvents.dateStart}
+                        onChange={(value) => {
+                          setFormCreateNewEvents({
+                            ...formCreateNewEvents,
+                            dateStart: value,
+                          });
+
+                          console.log('Tanggal: ' + value.$D);
+                          console.log('Bulan: ' + value.$M);
+                          console.log('Tahun: ' + value.$y);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            // helperText: 'MM / DD / YYYY',
+                          },
+                        }}
+                        sx={{
+                          width: '100%',
+                          '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
+                            zIndex: 100000,
+                          },
+                        }}
+                      />
+                    </LocalizationProvider>
                   </Grid>
                   <Grid item xs={12} sm>
-                    <TextField required label="Kuantitas" type="number" sx={{ width: '100%' }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <MobileTimePicker
+                        label="Pilih Jam"
+                        value={formCreateNewEvents.dateStart}
+                        onChange={(value) => {
+                          setFormCreateNewEvents({
+                            ...formCreateNewEvents,
+                            dateStart: value,
+                          });
+
+                          console.log('Jam: ' + value.$H);
+                          console.log('Menit: ' + value.$m);
+                          console.log('Detik: ' + value.$s);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            helperText:
+                              ('0' + formCreateNewEvents.dateStart.$H).slice(-2) +
+                              ':' +
+                              ('0' + formCreateNewEvents.dateStart.$m).slice(-2),
+                          },
+                        }}
+                        sx={{ width: '100%' }}
+                      />
+                    </LocalizationProvider>
                   </Grid>
                 </Grid>
               </Grid>
@@ -185,10 +248,64 @@ function CreateNewEvents() {
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm>
-                    <TextField required label="Nama Barang" sx={{ width: '100%' }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <MobileDatePicker
+                        label="Pilih Tanggal"
+                        value={formCreateNewEvents.dateEnd}
+                        onChange={(value) => {
+                          setFormCreateNewEvents({
+                            ...formCreateNewEvents,
+                            dateEnd: value,
+                          });
+
+                          console.log('Tanggal: ' + value.$D);
+                          console.log('Bulan: ' + value.$M);
+                          console.log('Tahun: ' + value.$y);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            // helperText: 'MM / DD / YYYY',
+                          },
+                        }}
+                        sx={{
+                          width: '100%',
+                          '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
+                            zIndex: 100000,
+                          },
+                        }}
+                      />
+                    </LocalizationProvider>
                   </Grid>
                   <Grid item xs={12} sm>
-                    <TextField required label="Kuantitas" type="number" sx={{ width: '100%' }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <MobileTimePicker
+                        label="Pilih Jam"
+                        value={formCreateNewEvents.dateEnd}
+                        onChange={(value) => {
+                          setFormCreateNewEvents({
+                            ...formCreateNewEvents,
+                            dateEnd: value,
+                          });
+
+                          console.log('Jam: ' + value.$H);
+                          console.log('Menit: ' + value.$m);
+                          console.log('Detik: ' + value.$s);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            helperText:
+                              ('0' + formCreateNewEvents.dateEnd.$H).slice(-2) +
+                              ':' +
+                              ('0' + formCreateNewEvents.dateEnd.$m).slice(-2),
+                          },
+                        }}
+                        sx={{ width: '100%' }}
+                      />
+                    </LocalizationProvider>
                   </Grid>
                 </Grid>
               </Grid>
@@ -659,8 +776,8 @@ function CreateNewEvents() {
                 setFormCreateNewEvents({
                   id: null,
                   eventName: '',
-                  dateStart: '',
-                  dateEnd: '',
+                  dateStart: dayjs(),
+                  dateEnd: dayjs(),
                   description: '',
                   reward: [],
                   criteria: [],
@@ -676,10 +793,14 @@ function CreateNewEvents() {
             <br />
             {formCreateNewEvents.description}
             <br />
-            {formCreateNewEvents.reward}
             <br />
-            {formCreateNewEvents.criteria}
+            {`${formCreateNewEvents.dateStart.$D} ${formCreateNewEvents.dateStart.$M} ${formCreateNewEvents.dateStart.$y}`}
             <br />
+            {`${formCreateNewEvents.dateStart.$H} ${formCreateNewEvents.dateStart.$m}`}
+            <br />
+            {`${formCreateNewEvents.dateEnd.$D} ${formCreateNewEvents.dateEnd.$M} ${formCreateNewEvents.dateEnd.$y}`}
+            <br />
+            {`${formCreateNewEvents.dateEnd.$H} ${formCreateNewEvents.dateEnd.$m}`}
           </Box>
         </Paper>
       </div>
