@@ -51,8 +51,8 @@ function RegisterNewCustomer() {
   });
   const [mainAddress, setMainAddress] = useState({
     region: {
-      subDistrict: null,
-      urbanVillage: null,
+      subDistrict: '',
+      urbanVillage: '',
       hamlet: '',
       neighbourhood: '',
     },
@@ -311,51 +311,71 @@ function RegisterNewCustomer() {
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md>
-                    <Autocomplete
-                      sx={{ width: '100%' }}
-                      options={banyumasAreaList}
-                      autoHighlight
-                      value={mainAddress.region.subDistrict || null}
-                      onChange={(event, value) => {
-                        setUrbanVillage(value ? value.urbanVillage : null);
-                        setMainAddress({
-                          ...mainAddress,
-                          region: {
-                            ...mainAddress.region,
-                            subDistrict: value ? value.subDistrict : null,
-                            urbanVillage: null,
-                          },
-                        });
-                      }}
-                      getOptionLabel={(option) => option}
-                      renderOption={(props, option) => (
-                        <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
-                          {option.subDistrict}
-                        </div>
-                      )}
-                      renderInput={(params) => <TextField {...params} label="Pilih Kacamatan *" />}
-                    />
+                    <FormControl fullWidth>
+                      <InputLabel id="select-sub-district-label">Pilih Kecamatan *</InputLabel>
+                      <Select
+                        required
+                        labelId="select-sub-district-label"
+                        id="select-sub-district"
+                        value={mainAddress.region.subDistrict || ''}
+                        label="Pilih Kecamatan"
+                        onChange={(e) => {
+                          setUrbanVillage(
+                            banyumasAreaList[banyumasAreaList.findIndex((i) => i.subDistrict === e.target.value)]
+                              .urbanVillage
+                          );
+                          setMainAddress({
+                            ...mainAddress,
+                            region: {
+                              ...mainAddress.region,
+                              subDistrict: e.target.value,
+                              urbanVillage: '',
+                            },
+                          });
+                        }}
+                      >
+                        {banyumasAreaList
+                          ? banyumasAreaList.map((item) => {
+                              return (
+                                <MenuItem value={item.subDistrict} sx={{ py: '16px' }}>
+                                  {item.subDistrict}
+                                </MenuItem>
+                              );
+                            })
+                          : null}
+                      </Select>
+                    </FormControl>
+
                     {mainAddress.region.subDistrict || null}
                   </Grid>
                   <Grid item xs={12} sm={6} md>
-                    <Autocomplete
-                      required
-                      disabled={urbanVillage ? false : true}
-                      sx={{ width: '100%' }}
-                      value={mainAddress.region.urbanVillage || null}
-                      options={urbanVillage ? urbanVillage : null}
-                      autoHighlight
-                      onChange={(event, value) => {
-                        setMainAddress({ ...mainAddress, region: { ...mainAddress.region, urbanVillage: value } });
-                      }}
-                      getOptionLabel={(option) => option}
-                      renderOption={(props, option, index) => (
-                        <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
-                          {option}
-                        </div>
-                      )}
-                      renderInput={(params) => <TextField {...params} label="Pilih Kelurahan *" />}
-                    />
+                    <FormControl disabled={urbanVillage ? false : true} fullWidth>
+                      <InputLabel id="select-urban-village-label">Pilih Kelurahan *</InputLabel>
+                      <Select
+                        required
+                        labelId="select-urban-village-label"
+                        id="select-urban-village"
+                        value={mainAddress.region.urbanVillage || ''}
+                        label="Pilih Kelurahan"
+                        onChange={(e) => {
+                          setMainAddress({
+                            ...mainAddress,
+                            region: { ...mainAddress.region, urbanVillage: e.target.value },
+                          });
+                        }}
+                      >
+                        {urbanVillage
+                          ? urbanVillage.map((item) => {
+                              return (
+                                <MenuItem value={item} sx={{ py: '16px' }}>
+                                  {item}
+                                </MenuItem>
+                              );
+                            })
+                          : null}
+                      </Select>
+                    </FormControl>
+
                     {mainAddress.region.urbanVillage || null}
                   </Grid>
                   <Grid item xs={12} sm={6} md>
@@ -420,12 +440,13 @@ function RegisterNewCustomer() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm>
                     <FormControl fullWidth>
-                      <InputLabel id="select-building-type-label">Age</InputLabel>
+                      <InputLabel id="select-building-type-label">Tipe Bangunan *</InputLabel>
                       <Select
+                        required
                         labelId="select-building-type-label"
                         id="select-building-type"
                         value={mainAddress.buildingDetails.buildingType}
-                        label="Age"
+                        label="Tipe Bangunan"
                         onChange={(e) => {
                           setMainAddress({
                             ...mainAddress,
