@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Autocomplete, Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/material';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Chip,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+  useTheme,
+} from '@mui/material';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -406,7 +419,31 @@ function RegisterNewCustomer() {
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm>
-                    <Autocomplete
+                    <FormControl fullWidth>
+                      <InputLabel id="select-building-type-label">Age</InputLabel>
+                      <Select
+                        labelId="select-building-type-label"
+                        id="select-building-type"
+                        value={mainAddress.buildingDetails.buildingType}
+                        label="Age"
+                        onChange={(e) => {
+                          setMainAddress({
+                            ...mainAddress,
+                            buildingDetails: { ...mainAddress.buildingDetails, buildingType: e.target.value },
+                          });
+                        }}
+                      >
+                        {['Rumah', 'Apartemen', 'Gedung', 'Hotel', 'Kost'].map((item) => {
+                          return (
+                            <MenuItem value={item} sx={{ py: '16px' }}>
+                              {item}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+
+                    {/* <Autocomplete
                       required
                       sx={{ width: '100%' }}
                       value={mainAddress.buildingDetails.buildingType}
@@ -425,7 +462,7 @@ function RegisterNewCustomer() {
                         </div>
                       )}
                       renderInput={(params) => <TextField {...params} label="Tipe Bangunan *" />}
-                    />
+                    /> */}
                     {mainAddress.buildingDetails.buildingType}
                   </Grid>
                   <Grid item xs={12} sm>
