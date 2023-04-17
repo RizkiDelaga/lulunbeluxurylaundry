@@ -274,6 +274,69 @@ function Input() {
         )}
       />
 
+      <Autocomplete
+        required
+        sx={{ width: '100%' }}
+        // value={formOrder.serviceType || null}
+        options={[
+          {
+            id: 12,
+            layanan: 'Express',
+            hari: null,
+            jam: 2,
+            gambar: 'IMG_20220730_140826.jpg',
+            deskripsi:
+              'Waktu pencucian dilakukan dengan singkat mulai dari 2-5 jam untuk kategori barang seperti pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.',
+            createdAt: '2023-04-13T06:24:07.039Z',
+            updatedAt: '2023-04-13T06:25:43.930Z',
+          },
+          {
+            id: 15,
+            layanan: 'Standard',
+            hari: 2,
+            jam: 5,
+            gambar: 'IMG_20220730_140826.jpg',
+            deskripsi:
+              'Waktu pencucian biasa dilakukan selama 1-2 hari untuk beberapa kategori barang seperti pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.',
+            createdAt: '2023-04-13T06:29:47.875Z',
+            updatedAt: '2023-04-13T06:33:59.303Z',
+          },
+          {
+            id: 16,
+            layanan: 'Khusus',
+            hari: 7,
+            jam: null,
+            gambar: 'IMG_20220730_140826.jpg',
+            deskripsi:
+              'Waktu pencucian dilakukan lebih lama dari biasanya, antara 4-7 hari untuk kategori barang besar seperti karpet dan gordyn.',
+            createdAt: '2023-04-13T06:30:38.369Z',
+            updatedAt: '2023-04-13T06:35:36.549Z',
+          },
+        ]}
+        autoHighlight
+        onChange={(event, value) => {
+          // setFormOrder({
+          //   ...formOrder,
+          //   serviceType: value ? value.layanan : null,
+          // });
+        }}
+        getOptionLabel={(option) => option}
+        renderOption={(props, option, index) => (
+          <div style={{ paddingTop: '16px', paddingBottom: '16px', display: 'block' }} {...props}>
+            <div style={{ fontWeight: 'bold' }}>
+              {option.layanan} (
+              {(option.hari ? option.hari + ' Hari' : '') +
+                (option.hari && option.jam ? ' ' : '') +
+                (option.jam ? option.jam + ' Jam' : '')}
+              )
+            </div>
+            <div>{option.deskripsi}</div>
+          </div>
+        )}
+        renderInput={(params) => <TextField {...params} label="Jenis Laundry *" />}
+      />
+      {/* {formOrder.serviceType} */}
+
       {/* Input File (Image) */}
       <Grid container spacing={2}>
         <Grid item xs="auto">
