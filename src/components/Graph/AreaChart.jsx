@@ -56,7 +56,7 @@ function AreaChart(props) {
 
   return (
     <Fragment>
-      <Line options={options} data={props.data} />
+      <Line options={options} data={props.data}  />
     </Fragment>
   );
 }
