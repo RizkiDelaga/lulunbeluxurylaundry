@@ -464,26 +464,6 @@ function RegisterNewCustomer() {
                       </Select>
                     </FormControl>
 
-                    {/* <Autocomplete
-                      required
-                      sx={{ width: '100%' }}
-                      value={mainAddress.buildingDetails.buildingType}
-                      options={['Rumah', 'Apartemen', 'Gedung', 'Hotel', 'Kost']}
-                      autoHighlight
-                      onChange={(event, value) => {
-                        setMainAddress({
-                          ...mainAddress,
-                          buildingDetails: { ...mainAddress.buildingDetails, buildingType: value },
-                        });
-                      }}
-                      getOptionLabel={(option) => option}
-                      renderOption={(props, option, index) => (
-                        <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
-                          {option}
-                        </div>
-                      )}
-                      renderInput={(params) => <TextField {...params} label="Tipe Bangunan *" />}
-                    /> */}
                     {mainAddress.buildingDetails.buildingType}
                   </Grid>
                   <Grid item xs={12} sm>

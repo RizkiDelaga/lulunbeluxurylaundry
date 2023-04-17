@@ -1,4 +1,19 @@
-import { Autocomplete, Box, Button, Chip, Divider, Grid, Paper, Switch, TextField, useTheme } from '@mui/material';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Chip,
+  Divider,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Switch,
+  TextField,
+  useTheme,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './CreateNewOrder.module.css';
@@ -32,6 +47,83 @@ const OrderInformationForm = (props) => {
       },
     ],
   });
+
+  const dataServiceType = [
+    {
+      id: 12,
+      layanan: 'Express',
+      hari: null,
+      jam: 2,
+      gambar: 'IMG_20220730_140826.jpg',
+      deskripsi:
+        'Waktu pencucian dilakukan dengan singkat mulai dari 2-5 jam untuk kategori barang seperti pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.',
+      createdAt: '2023-04-13T06:24:07.039Z',
+      updatedAt: '2023-04-13T06:25:43.930Z',
+    },
+    {
+      id: 15,
+      layanan: 'Standard',
+      hari: 2,
+      jam: 5,
+      gambar: 'IMG_20220730_140826.jpg',
+      deskripsi:
+        'Waktu pencucian biasa dilakukan selama 1-2 hari untuk beberapa kategori barang seperti pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.',
+      createdAt: '2023-04-13T06:29:47.875Z',
+      updatedAt: '2023-04-13T06:33:59.303Z',
+    },
+    {
+      id: 16,
+      layanan: 'Khusus',
+      hari: 7,
+      jam: null,
+      gambar: 'IMG_20220730_140826.jpg',
+      deskripsi:
+        'Waktu pencucian dilakukan lebih lama dari biasanya, antara 4-7 hari untuk kategori barang besar seperti karpet dan gordyn.',
+      createdAt: '2023-04-13T06:30:38.369Z',
+      updatedAt: '2023-04-13T06:35:36.549Z',
+    },
+  ];
+
+  const dataPaymentMethod = [
+    {
+      id: 23,
+      logo: 'logo-uang.png',
+      nama: 'Cash',
+      nomor: null,
+      instruksi: ['Lakukan Pembayaran Secara Langsung Melalui Petugas Outlet'],
+      createdAt: '2023-04-14T07:46:11.853Z',
+      updatedAt: '2023-04-14T10:14:02.762Z',
+    },
+    {
+      id: 20,
+      logo: 'logo-uang.png',
+      nama: 'Ovo',
+      nomor: '08123456789',
+      instruksi: [
+        'Buka Aplikasi Ovo',
+        "Masuk ke menu 'Pay'",
+        'Pilih metode Input Nomor HP',
+        'Pilih metode pembayaran (OVO Cash atau OVO Point)',
+        'Masukkan Security Code',
+        'Pembayaran berhasil! Lakukan konfirmasi dengan menghubungi admin',
+      ],
+      createdAt: '2023-04-14T07:36:16.294Z',
+      updatedAt: '2023-04-15T03:05:18.877Z',
+    },
+    {
+      id: 24,
+      logo: 'logo-uang.png',
+      nama: 'Transfer Bank',
+      nomor: '091312923121398',
+      instruksi: [
+        'Lakukan pembayaran dengan cara melakukan transfer ke nomer bank 091312923121398 sesuai dengan nominal struk tagihan yang ada',
+        'Transfer dapat dilakukan dengan cara transfer via mesin ATM, Internet Banking, dan Mobile banking ',
+        'Pembayaran berhasil! Lakukan konfirmasi dengan menghubungi admin',
+      ],
+      createdAt: '2023-04-15T03:06:07.080Z',
+      updatedAt: '2023-04-15T03:06:07.080Z',
+    },
+  ];
 
   return (
     <Grid container spacing={2}>
@@ -145,67 +237,44 @@ const OrderInformationForm = (props) => {
                 },
               }}
             >
-              <Autocomplete
-                required
-                sx={{ width: '100%' }}
-                value={formOrder.serviceType || null}
-                options={[
-                  {
-                    id: 12,
-                    layanan: 'Express',
-                    hari: null,
-                    jam: 2,
-                    gambar: 'IMG_20220730_140826.jpg',
-                    deskripsi:
-                      'Waktu pencucian dilakukan dengan singkat mulai dari 2-5 jam untuk kategori barang seperti pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.',
-                    createdAt: '2023-04-13T06:24:07.039Z',
-                    updatedAt: '2023-04-13T06:25:43.930Z',
-                  },
-                  {
-                    id: 15,
-                    layanan: 'Standard',
-                    hari: 2,
-                    jam: 5,
-                    gambar: 'IMG_20220730_140826.jpg',
-                    deskripsi:
-                      'Waktu pencucian biasa dilakukan selama 1-2 hari untuk beberapa kategori barang seperti pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.',
-                    createdAt: '2023-04-13T06:29:47.875Z',
-                    updatedAt: '2023-04-13T06:33:59.303Z',
-                  },
-                  {
-                    id: 16,
-                    layanan: 'Khusus',
-                    hari: 7,
-                    jam: null,
-                    gambar: 'IMG_20220730_140826.jpg',
-                    deskripsi:
-                      'Waktu pencucian dilakukan lebih lama dari biasanya, antara 4-7 hari untuk kategori barang besar seperti karpet dan gordyn.',
-                    createdAt: '2023-04-13T06:30:38.369Z',
-                    updatedAt: '2023-04-13T06:35:36.549Z',
-                  },
-                ]}
-                autoHighlight
-                onChange={(event, value) => {
-                  setFormOrder({
-                    ...formOrder,
-                    serviceType: value ? value.layanan : null,
-                  });
-                }}
-                getOptionLabel={(option) => option}
-                renderOption={(props, option, index) => (
-                  <div style={{ paddingTop: '16px', paddingBottom: '16px', display: 'block' }} {...props}>
-                    <div style={{ fontWeight: 'bold' }}>
-                      {option.layanan} (
-                      {(option.hari ? option.hari + ' Hari' : '') +
-                        (option.hari && option.jam ? ' ' : '') +
-                        (option.jam ? option.jam + ' Jam' : '')}
-                      )
-                    </div>
-                    <div>{option.deskripsi}</div>
-                  </div>
-                )}
-                renderInput={(params) => <TextField {...params} label="Jenis Laundry *" />}
-              />
+              <FormControl fullWidth>
+                <InputLabel id="select-service-type-label">Jenis Layanan *</InputLabel>
+                <Select
+                  required
+                  labelId="select-service-type-label"
+                  id="select-service-type"
+                  value={formOrder.serviceType}
+                  label="Jenis Layanan"
+                  onChange={(e) => {
+                    setFormOrder({
+                      ...formOrder,
+                      serviceType: e.target.value,
+                    });
+                  }}
+                >
+                  {dataServiceType.map((item) => {
+                    return (
+                      <MenuItem value={item.layanan} sx={{ py: '16px', whiteSpace: 'normal' }}>
+                        {formOrder.serviceType === item.layanan ? (
+                          item.layanan
+                        ) : (
+                          <div style={{ display: 'block' }}>
+                            <div style={{ fontWeight: 'bold' }}>
+                              {item.layanan} (
+                              {(item.hari ? item.hari + ' Hari' : '') +
+                                (item.hari && item.jam ? ' ' : '') +
+                                (item.jam ? item.jam + ' Jam' : '')}
+                              )
+                            </div>
+                            <div>{item.deskripsi}</div>
+                          </div>
+                        )}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+
               {formOrder.serviceType}
             </Grid>
           </Grid>
@@ -254,76 +323,48 @@ const OrderInformationForm = (props) => {
                 },
               }}
             >
-              <Autocomplete
-                required
-                sx={{ width: '100%' }}
-                value={formOrder.paymentMethod || null}
-                options={[
-                  {
-                    id: 23,
-                    logo: 'logo-uang.png',
-                    nama: 'Cash',
-                    nomor: null,
-                    instruksi: ['Lakukan Pembayaran Secara Langsung Melalui Petugas Outlet'],
-                    createdAt: '2023-04-14T07:46:11.853Z',
-                    updatedAt: '2023-04-14T10:14:02.762Z',
-                  },
-                  {
-                    id: 20,
-                    logo: 'logo-uang.png',
-                    nama: 'Ovo',
-                    nomor: '08123456789',
-                    instruksi: [
-                      'Buka Aplikasi Ovo',
-                      "Masuk ke menu 'Pay'",
-                      'Pilih metode Input Nomor HP',
-                      'Pilih metode pembayaran (OVO Cash atau OVO Point)',
-                      'Masukkan Security Code',
-                      'Pembayaran berhasil! Lakukan konfirmasi dengan menghubungi admin',
-                    ],
-                    createdAt: '2023-04-14T07:36:16.294Z',
-                    updatedAt: '2023-04-15T03:05:18.877Z',
-                  },
-                  {
-                    id: 24,
-                    logo: 'logo-uang.png',
-                    nama: 'Transfer Bank',
-                    nomor: '091312923121398',
-                    instruksi: [
-                      'Lakukan pembayaran dengan cara melakukan transfer ke nomer bank 091312923121398 sesuai dengan nominal struk tagihan yang ada',
-                      'Transfer dapat dilakukan dengan cara transfer via mesin ATM, Internet Banking, dan Mobile banking ',
-                      'Pembayaran berhasil! Lakukan konfirmasi dengan menghubungi admin',
-                    ],
-                    createdAt: '2023-04-15T03:06:07.080Z',
-                    updatedAt: '2023-04-15T03:06:07.080Z',
-                  },
-                ]}
-                autoHighlight
-                onChange={(event, value) => {
-                  setFormOrder({
-                    ...formOrder,
-                    paymentMethod: value ? value.nama : null,
-                  });
-                }}
-                getOptionLabel={(option) => option}
-                renderOption={(props, option, index) => (
-                  <div style={{ paddingTop: '16px', paddingBottom: '16px', display: 'block' }} {...props}>
-                    <div style={{ fontWeight: 'bold' }}>{option.nama}</div>
-                    <div style={{ fontWeight: 'bold' }}>Instruksi:</div>
-                    {option.instruksi.map((itemInstruction, index) => {
-                      return (
-                        <table>
-                          <tr>
-                            <td style={{ display: 'block' }}>{index + 1}.</td>
-                            <td>{itemInstruction}</td>
-                          </tr>
-                        </table>
-                      );
-                    })}
-                  </div>
-                )}
-                renderInput={(params) => <TextField {...params} label="Jenis Laundry *" />}
-              />
+              <FormControl fullWidth>
+                <InputLabel id="select-payment-method-label">Metode Pembayaran *</InputLabel>
+                <Select
+                  required
+                  labelId="select-payment-method-label"
+                  id="select-payment-method"
+                  value={formOrder.paymentMethod}
+                  label="Metode Pembayaran"
+                  onChange={(e) => {
+                    setFormOrder({
+                      ...formOrder,
+                      paymentMethod: e.target.value,
+                    });
+                  }}
+                >
+                  {dataPaymentMethod.map((item) => {
+                    return (
+                      <MenuItem value={item.nama} sx={{ py: '16px', whiteSpace: 'normal' }}>
+                        {formOrder.paymentMethod === item.nama ? (
+                          item.nama
+                        ) : (
+                          <div style={{ display: 'block' }} {...props}>
+                            <div style={{ fontWeight: 'bold' }}>{item.nama}</div>
+                            <div style={{ fontWeight: 'bold' }}>Instruksi:</div>
+                            {item.instruksi.map((itemInstruction, index) => {
+                              return (
+                                <table>
+                                  <tr>
+                                    <td style={{ display: 'block' }}>{index + 1}.</td>
+                                    <td>{itemInstruction}</td>
+                                  </tr>
+                                </table>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+
               {formOrder.paymentMethod}
             </Grid>
           </Grid>
@@ -336,6 +377,54 @@ const OrderInformationForm = (props) => {
 const LaundryShuttle = (props) => {
   const theme = useTheme();
   const [isUseProgram, setIsUseProgram] = React.useState(false);
+
+  const [formOrder, setFormOrder] = React.useState({
+    dateOrder: '',
+    serviceType: '',
+    discount: '',
+    paymentMethod: '',
+    customerInformation: {},
+    address: {
+      pickupAddress: '',
+      deliveryAddress: '',
+    },
+  });
+
+  const dataAddress = [
+    {
+      id: 1,
+      kategori: 'Rumah',
+      detail: 'No.15C',
+      kecamatan: 'Purwokerto Utara',
+      kelurahan: 'Purwokerto Lor',
+      rt: '05',
+      rw: '03',
+      deskripsi: 'rumah warna hijau sebelah warung',
+      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
+    },
+    {
+      id: 2,
+      kategori: 'Kost',
+      detail: 'Yellow',
+      kecamatan: 'Purwokerto Utara',
+      kelurahan: 'Purwokerto Lor',
+      rt: '07',
+      rw: '13',
+      deskripsi: 'Kost warna kuning depan fotokopi',
+      gambar: 'https://pix10.agoda.net/hotelImages/135/1353767/1353767_16081917290045634234.jpg?ca=6&ce=1&s=1024x768',
+    },
+    {
+      id: 3,
+      kategori: 'Hotel',
+      detail: 'Aston',
+      kecamatan: 'Purwokerto Utara',
+      kelurahan: 'Purwokerto Lor',
+      rt: null,
+      rw: null,
+      deskripsi: 'Lobi hotel',
+      gambar: 'https://nubanyumas.com/wp-content/uploads/2022/04/images-16.jpeg',
+    },
+  ];
 
   return (
     <div className={`dash-card gap-16`} style={{ width: '100%' }}>
@@ -353,26 +442,80 @@ const LaundryShuttle = (props) => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <div>Alamat Penjemputan</div>
-            <TextField
-              required
-              label="Alamat Penjemputan"
-              sx={{
-                width: '100%',
-                marginTop: '8px !important',
-              }}
-            />
+            <FormControl fullWidth sx={{ mt: '8px' }}>
+              <InputLabel id="select-pickup-address-label">Alamat Penjemputan *</InputLabel>
+              <Select
+                required
+                labelId="select-pickup-address-label"
+                id="select-pickup-address"
+                value={formOrder.address.pickupAddress}
+                label="Alamat Pengantaran"
+                onChange={(e) => {
+                  setFormOrder({
+                    ...formOrder,
+                    address: { ...formOrder.address, pickupAddress: e.target.value },
+                  });
+                }}
+                MenuProps={{
+                  style: { zIndex: 10000 },
+                }}
+              >
+                {dataAddress.map((itemAddress) => {
+                  return (
+                    <MenuItem value={itemAddress.id} sx={{ py: '16px' }}>
+                      <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
+                        <img src={itemAddress.gambar} height={70} style={{ objectFit: 'cover' }} alt="" />
+                        <div>
+                          <div>
+                            Kecamatan {itemAddress.kecamatan}, Kelurahan {itemAddress.kelurahan}, RW/{itemAddress.rw},
+                            RT/{itemAddress.rt}, {itemAddress.kategori}, {itemAddress.deskripsi}
+                          </div>
+                        </div>
+                      </Box>
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Grid>
 
           <Grid item xs={12} md={6}>
             <div>Alamat Pengantaran</div>
-            <TextField
-              required
-              label="Alamat Pengantaran"
-              sx={{
-                width: '100%',
-                marginTop: '8px !important',
-              }}
-            />
+            <FormControl fullWidth sx={{ mt: '8px' }}>
+              <InputLabel id="select-delivery-address-label">Alamat Pengantaran *</InputLabel>
+              <Select
+                required
+                labelId="select-delivery-address-label"
+                id="select-delivery-address"
+                value={formOrder.address.deliveryAddress}
+                label="Alamat Pengantaran"
+                onChange={(e) => {
+                  setFormOrder({
+                    ...formOrder,
+                    address: { ...formOrder.address, deliveryAddress: e.target.value },
+                  });
+                }}
+                MenuProps={{
+                  style: { zIndex: 10000 },
+                }}
+              >
+                {dataAddress.map((itemAddress) => {
+                  return (
+                    <MenuItem value={itemAddress.id} sx={{ py: '16px' }}>
+                      <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
+                        <img src={itemAddress.gambar} height={70} style={{ objectFit: 'cover' }} alt="" />
+                        <div>
+                          <div>
+                            Kecamatan {itemAddress.kecamatan}, Kelurahan {itemAddress.kelurahan}, RW/{itemAddress.rw},
+                            RT/{itemAddress.rt}, {itemAddress.kategori}, {itemAddress.deskripsi}
+                          </div>
+                        </div>
+                      </Box>
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Grid>
         </Grid>
       ) : null}
@@ -413,6 +556,25 @@ const InputItem = (props) => {
     notation: '',
     photo: {},
   });
+
+  const dataLaundryType = [
+    {
+      id: 9,
+      nama: 'Wet Cleaning',
+      deskripsi: 'Proses pencucian dilakukan dengan air dan deterjen menggunakan mesin cuci seperti pada umumnya.',
+      gambar: 'hackit.png',
+      createdAt: '2023-04-17T04:41:56.626Z',
+      updatedAt: '2023-04-17T04:41:56.626Z',
+    },
+    {
+      id: 10,
+      nama: 'Dry Cleaning',
+      deskripsi: 'Proses pencucian menggunakan bahan kimia (solvent) tanpa melibatkan air dan deterjen biasa.',
+      gambar: 'Localla_Logo.png',
+      createdAt: '2023-04-17T04:42:19.915Z',
+      updatedAt: '2023-04-17T04:42:19.915Z',
+    },
+  ];
 
   return (
     <div className={`dash-card gap-16`}>
@@ -494,46 +656,38 @@ const InputItem = (props) => {
             },
           }}
         >
-          <Autocomplete
-            required
-            sx={{ width: '100%' }}
-            value={item.laundryType || null}
-            options={[
-              {
-                id: 9,
-                nama: 'Wet Cleaning',
-                deskripsi:
-                  'Proses pencucian dilakukan dengan air dan deterjen menggunakan mesin cuci seperti pada umumnya.',
-                gambar: 'hackit.png',
-                createdAt: '2023-04-17T04:41:56.626Z',
-                updatedAt: '2023-04-17T04:41:56.626Z',
-              },
-              {
-                id: 10,
-                nama: 'Dry Cleaning',
-                deskripsi:
-                  'Proses pencucian menggunakan bahan kimia (solvent) tanpa melibatkan air dan deterjen biasa.',
-                gambar: 'Localla_Logo.png',
-                createdAt: '2023-04-17T04:42:19.915Z',
-                updatedAt: '2023-04-17T04:42:19.915Z',
-              },
-            ]}
-            autoHighlight
-            onChange={(event, value) => {
-              setItem({
-                ...item,
-                laundryType: value ? value.nama : null,
-              });
-            }}
-            getOptionLabel={(option) => option}
-            renderOption={(props, option, index) => (
-              <div style={{ paddingTop: '16px', paddingBottom: '16px', display: 'block' }} {...props}>
-                <div style={{ fontWeight: 'bold' }}>{option.nama}</div>
-                <div>({option.deskripsi})</div>
-              </div>
-            )}
-            renderInput={(params) => <TextField {...params} label="Jenis Laundry *" />}
-          />
+          <FormControl fullWidth>
+            <InputLabel id="select-laundry-type-label">Jenis Laundry *</InputLabel>
+            <Select
+              required
+              labelId="select-laundry-type-label"
+              id="select-laundry-type"
+              value={item.laundryType}
+              label="Jenis Laundry"
+              onChange={(e) => {
+                setItem({
+                  ...item,
+                  laundryType: e.target.value,
+                });
+              }}
+            >
+              {dataLaundryType.map((itemLaundryType) => {
+                return (
+                  <MenuItem value={itemLaundryType.nama} sx={{ py: '16px', whiteSpace: 'normal' }}>
+                    {item.laundryType === itemLaundryType.nama ? (
+                      itemLaundryType.nama
+                    ) : (
+                      <div style={{ display: 'block' }} {...props}>
+                        <div style={{ fontWeight: 'bold' }}>{itemLaundryType.nama}</div>
+                        <div>{itemLaundryType.deskripsi}</div>
+                      </div>
+                    )}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+
           {item.laundryType}
         </Grid>
       </Grid>
