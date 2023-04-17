@@ -8,7 +8,9 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  MenuItem,
   OutlinedInput,
+  Select,
   TextField,
   useTheme,
 } from '@mui/material';
@@ -273,6 +275,32 @@ function Input() {
           />
         )}
       />
+
+      <FormControl fullWidth>
+        <InputLabel id="select-building-type-label">Age *</InputLabel>
+        <Select
+          required
+          labelId="select-building-type-label"
+          id="select-building-type"
+          // value={mainAddress.buildingDetails.buildingType}
+          label="Age"
+          // onChange={(e) => {
+          //   setMainAddress({
+          //     ...mainAddress,
+          //     buildingDetails: { ...mainAddress.buildingDetails, buildingType: e.target.value },
+          //   });
+          // }}
+          MenuProps={{ PaperProps: { sx: { maxHeight: 400 } } }}
+        >
+          {['Rumah', 'Apartemen', 'Gedung', 'Hotel', 'Kost'].map((item) => {
+            return (
+              <MenuItem value={item} sx={{ py: '16px' }}>
+                {item}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
 
       <Autocomplete
         required
