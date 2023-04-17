@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/material';
+import { Autocomplete, Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/material';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
@@ -136,7 +136,27 @@ function EditProfile() {
                   },
                 }}
               >
-                <TextField required label="Nama Administator" sx={{ width: '100%' }} />
+                <Autocomplete
+                  required
+                  sx={{ width: '100%' }}
+                  value={formEditProfile.role}
+                  options={['Basic', 'Master']}
+                  autoHighlight
+                  onChange={(event, value) => {
+                    setFormEditProfile({
+                      ...formEditProfile,
+                      role: value,
+                    });
+                  }}
+                  getOptionLabel={(option) => option}
+                  renderOption={(props, option, index) => (
+                    <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
+                      {option}
+                    </div>
+                  )}
+                  renderInput={(params) => <TextField {...params} label="Role *" />}
+                />
+                {formEditProfile.role}
               </Grid>
             </Grid>
 

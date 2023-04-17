@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Grid, Paper, Switch, TextField, useTheme } from '@mui/material';
+import { Autocomplete, Box, Button, Chip, Divider, Grid, Paper, Switch, TextField, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './CreateNewOrder.module.css';
@@ -145,7 +145,68 @@ const OrderInformationForm = (props) => {
                 },
               }}
             >
-              <TextField required label="Jenis Layanan" sx={{ width: '100%' }} />
+              <Autocomplete
+                required
+                sx={{ width: '100%' }}
+                value={formOrder.serviceType || null}
+                options={[
+                  {
+                    id: 12,
+                    layanan: 'Express',
+                    hari: null,
+                    jam: 2,
+                    gambar: 'IMG_20220730_140826.jpg',
+                    deskripsi:
+                      'Waktu pencucian dilakukan dengan singkat mulai dari 2-5 jam untuk kategori barang seperti pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.',
+                    createdAt: '2023-04-13T06:24:07.039Z',
+                    updatedAt: '2023-04-13T06:25:43.930Z',
+                  },
+                  {
+                    id: 15,
+                    layanan: 'Standard',
+                    hari: 2,
+                    jam: 5,
+                    gambar: 'IMG_20220730_140826.jpg',
+                    deskripsi:
+                      'Waktu pencucian biasa dilakukan selama 1-2 hari untuk beberapa kategori barang seperti pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.',
+                    createdAt: '2023-04-13T06:29:47.875Z',
+                    updatedAt: '2023-04-13T06:33:59.303Z',
+                  },
+                  {
+                    id: 16,
+                    layanan: 'Khusus',
+                    hari: 7,
+                    jam: null,
+                    gambar: 'IMG_20220730_140826.jpg',
+                    deskripsi:
+                      'Waktu pencucian dilakukan lebih lama dari biasanya, antara 4-7 hari untuk kategori barang besar seperti karpet dan gordyn.',
+                    createdAt: '2023-04-13T06:30:38.369Z',
+                    updatedAt: '2023-04-13T06:35:36.549Z',
+                  },
+                ]}
+                autoHighlight
+                onChange={(event, value) => {
+                  setFormOrder({
+                    ...formOrder,
+                    serviceType: value ? value.layanan : null,
+                  });
+                }}
+                getOptionLabel={(option) => option}
+                renderOption={(props, option, index) => (
+                  <div style={{ paddingTop: '16px', paddingBottom: '16px', display: 'block' }} {...props}>
+                    <div style={{ fontWeight: 'bold' }}>
+                      {option.layanan} (
+                      {(option.hari ? option.hari + ' Hari' : '') +
+                        (option.hari && option.jam ? ' ' : '') +
+                        (option.jam ? option.jam + ' Jam' : '')}
+                      )
+                    </div>
+                    <div>{option.deskripsi}</div>
+                  </div>
+                )}
+                renderInput={(params) => <TextField {...params} label="Jenis Laundry *" />}
+              />
+              {formOrder.serviceType}
             </Grid>
           </Grid>
           <Grid container spacing={2}>
@@ -193,7 +254,77 @@ const OrderInformationForm = (props) => {
                 },
               }}
             >
-              <TextField required label="Metode Pembayaran" sx={{ width: '100%' }} />
+              <Autocomplete
+                required
+                sx={{ width: '100%' }}
+                value={formOrder.paymentMethod || null}
+                options={[
+                  {
+                    id: 23,
+                    logo: 'logo-uang.png',
+                    nama: 'Cash',
+                    nomor: null,
+                    instruksi: ['Lakukan Pembayaran Secara Langsung Melalui Petugas Outlet'],
+                    createdAt: '2023-04-14T07:46:11.853Z',
+                    updatedAt: '2023-04-14T10:14:02.762Z',
+                  },
+                  {
+                    id: 20,
+                    logo: 'logo-uang.png',
+                    nama: 'Ovo',
+                    nomor: '08123456789',
+                    instruksi: [
+                      'Buka Aplikasi Ovo',
+                      "Masuk ke menu 'Pay'",
+                      'Pilih metode Input Nomor HP',
+                      'Pilih metode pembayaran (OVO Cash atau OVO Point)',
+                      'Masukkan Security Code',
+                      'Pembayaran berhasil! Lakukan konfirmasi dengan menghubungi admin',
+                    ],
+                    createdAt: '2023-04-14T07:36:16.294Z',
+                    updatedAt: '2023-04-15T03:05:18.877Z',
+                  },
+                  {
+                    id: 24,
+                    logo: 'logo-uang.png',
+                    nama: 'Transfer Bank',
+                    nomor: '091312923121398',
+                    instruksi: [
+                      'Lakukan pembayaran dengan cara melakukan transfer ke nomer bank 091312923121398 sesuai dengan nominal struk tagihan yang ada',
+                      'Transfer dapat dilakukan dengan cara transfer via mesin ATM, Internet Banking, dan Mobile banking ',
+                      'Pembayaran berhasil! Lakukan konfirmasi dengan menghubungi admin',
+                    ],
+                    createdAt: '2023-04-15T03:06:07.080Z',
+                    updatedAt: '2023-04-15T03:06:07.080Z',
+                  },
+                ]}
+                autoHighlight
+                onChange={(event, value) => {
+                  setFormOrder({
+                    ...formOrder,
+                    paymentMethod: value ? value.nama : null,
+                  });
+                }}
+                getOptionLabel={(option) => option}
+                renderOption={(props, option, index) => (
+                  <div style={{ paddingTop: '16px', paddingBottom: '16px', display: 'block' }} {...props}>
+                    <div style={{ fontWeight: 'bold' }}>{option.nama}</div>
+                    <div style={{ fontWeight: 'bold' }}>Instruksi:</div>
+                    {option.instruksi.map((itemInstruction, index) => {
+                      return (
+                        <table>
+                          <tr>
+                            <td style={{ display: 'block' }}>{index + 1}.</td>
+                            <td>{itemInstruction}</td>
+                          </tr>
+                        </table>
+                      );
+                    })}
+                  </div>
+                )}
+                renderInput={(params) => <TextField {...params} label="Jenis Laundry *" />}
+              />
+              {formOrder.paymentMethod}
             </Grid>
           </Grid>
         </div>
@@ -278,7 +409,7 @@ const InputItem = (props) => {
     itemName: '',
     quantity: null,
     pricePerUnit: null,
-    laundryType: '',
+    laundryType: null,
     notation: '',
     photo: {},
   });
@@ -363,7 +494,47 @@ const InputItem = (props) => {
             },
           }}
         >
-          <TextField required label="Jenis Laundry" sx={{ width: '100%' }} />
+          <Autocomplete
+            required
+            sx={{ width: '100%' }}
+            value={item.laundryType || null}
+            options={[
+              {
+                id: 9,
+                nama: 'Wet Cleaning',
+                deskripsi:
+                  'Proses pencucian dilakukan dengan air dan deterjen menggunakan mesin cuci seperti pada umumnya.',
+                gambar: 'hackit.png',
+                createdAt: '2023-04-17T04:41:56.626Z',
+                updatedAt: '2023-04-17T04:41:56.626Z',
+              },
+              {
+                id: 10,
+                nama: 'Dry Cleaning',
+                deskripsi:
+                  'Proses pencucian menggunakan bahan kimia (solvent) tanpa melibatkan air dan deterjen biasa.',
+                gambar: 'Localla_Logo.png',
+                createdAt: '2023-04-17T04:42:19.915Z',
+                updatedAt: '2023-04-17T04:42:19.915Z',
+              },
+            ]}
+            autoHighlight
+            onChange={(event, value) => {
+              setItem({
+                ...item,
+                laundryType: value ? value.nama : null,
+              });
+            }}
+            getOptionLabel={(option) => option}
+            renderOption={(props, option, index) => (
+              <div style={{ paddingTop: '16px', paddingBottom: '16px', display: 'block' }} {...props}>
+                <div style={{ fontWeight: 'bold' }}>{option.nama}</div>
+                <div>({option.deskripsi})</div>
+              </div>
+            )}
+            renderInput={(params) => <TextField {...params} label="Jenis Laundry *" />}
+          />
+          {item.laundryType}
         </Grid>
       </Grid>
       <Grid container spacing={2}>
