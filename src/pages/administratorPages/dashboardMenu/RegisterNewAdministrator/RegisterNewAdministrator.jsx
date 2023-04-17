@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import {
+  Autocomplete,
   Box,
   Button,
   Chip,
@@ -28,7 +29,7 @@ function RegisterNewAdministrator() {
       phoneNumber: '',
       email: '',
     },
-    role: '',
+    role: null,
     password: '',
     confirmPassword: '',
     profilePicture: {},
@@ -155,7 +156,27 @@ function RegisterNewAdministrator() {
                   },
                 }}
               >
-                <TextField required label="Nama Administator" sx={{ width: '100%' }} />
+                <Autocomplete
+                  required
+                  sx={{ width: '100%' }}
+                  value={formRegisterNewAdministrator.role}
+                  options={['Basic', 'Master']}
+                  autoHighlight
+                  onChange={(event, value) => {
+                    setFormRegisterNewAdministrator({
+                      ...formRegisterNewAdministrator,
+                      role: value,
+                    });
+                  }}
+                  getOptionLabel={(option) => option}
+                  renderOption={(props, option, index) => (
+                    <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
+                      {option}
+                    </div>
+                  )}
+                  renderInput={(params) => <TextField {...params} label="Role *" />}
+                />
+                {formRegisterNewAdministrator.role}
               </Grid>
             </Grid>
             <Grid container spacing={2}>

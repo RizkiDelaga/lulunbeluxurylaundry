@@ -11,6 +11,7 @@ import { banyumasAreaList } from '../../../../utils/banyumasAreaList';
 function RegisterNewCustomer() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [urbanVillage, setUrbanVillage] = useState();
   const [formRegisterNewCustomer, setFormRegisterNewCustomer] = useState({
     customerName: '',
     contact: {
@@ -37,13 +38,13 @@ function RegisterNewCustomer() {
   });
   const [mainAddress, setMainAddress] = useState({
     region: {
-      subDistrict: '',
-      urbanVillage: '',
+      subDistrict: null,
+      urbanVillage: null,
       hamlet: '',
       neighbourhood: '',
     },
     buildingDetails: {
-      buildingType: '',
+      buildingType: null,
       buildingName_Or_Number: '',
     },
     addressDetails: '',
@@ -54,6 +55,12 @@ function RegisterNewCustomer() {
   React.useEffect(() => {
     document.title = 'Registrasi Pelanggan Baru';
   }, []);
+
+  const getUrbanVillage = () => {
+    return banyumasAreaList.filter((item) => {
+      return item.subDistrict === mainAddress.region.subDistrict;
+    });
+  };
 
   return (
     <>
@@ -292,51 +299,51 @@ function RegisterNewCustomer() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md>
                     <Autocomplete
-                      label="Kecamatan *"
-                      sx={{ width: '400px' }}
+                      sx={{ width: '100%' }}
                       options={banyumasAreaList}
                       autoHighlight
+                      value={mainAddress.region.subDistrict || null}
                       onChange={(event, value) => {
-                        console.log(value);
-                        setMainAddress({ ...mainAddress, region: { ...mainAddress.region, subDistrict: value } });
+                        setUrbanVillage(value ? value.urbanVillage : null);
+                        setMainAddress({
+                          ...mainAddress,
+                          region: {
+                            ...mainAddress.region,
+                            subDistrict: value ? value.subDistrict : null,
+                            urbanVillage: null,
+                          },
+                        });
                       }}
-                      getOptionLabel={(option) => option.subDistrict}
+                      getOptionLabel={(option) => option}
                       renderOption={(props, option) => (
                         <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
                           {option.subDistrict}
                         </div>
                       )}
-                      renderInput={(params) => <TextField {...params} label="Pilih Kacamatan" />}
+                      renderInput={(params) => <TextField {...params} label="Pilih Kacamatan *" />}
                     />
+                    {mainAddress.region.subDistrict || null}
                   </Grid>
                   <Grid item xs={12} sm={6} md>
                     <Autocomplete
                       required
-                      label="Kelurahan *"
-                      sx={{ width: '400px' }}
-                      options={banyumasAreaList}
+                      disabled={urbanVillage ? false : true}
+                      sx={{ width: '100%' }}
+                      value={mainAddress.region.urbanVillage || null}
+                      options={urbanVillage ? urbanVillage : null}
                       autoHighlight
                       onChange={(event, value) => {
-                        console.log(
-                          banyumasAreaList[
-                            banyumasAreaList.findIndex((i) => i.subDistrict === mainAddress.region.subDistrict)
-                          ]
-                        );
                         setMainAddress({ ...mainAddress, region: { ...mainAddress.region, urbanVillage: value } });
                       }}
-                      getOptionLabel={
-                        (option) => option
-                        // option.filter((item) => {
-                        //   return item.subDistrict === mainAddress.region.subDistrict;
-                        // }).urbanVillage
-                      }
-                      renderOption={(props, option) => (
+                      getOptionLabel={(option) => option}
+                      renderOption={(props, option, index) => (
                         <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
-                          {option[0]}
+                          {option}
                         </div>
                       )}
-                      renderInput={(params) => <TextField {...params} label="Pilih Kelurahan" />}
+                      renderInput={(params) => <TextField {...params} label="Pilih Kelurahan *" />}
                     />
+                    {mainAddress.region.urbanVillage || null}
                   </Grid>
                   <Grid item xs={12} sm={6} md>
                     <TextField
@@ -399,7 +406,27 @@ function RegisterNewCustomer() {
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm>
-                    <TextField required label="Nama Barang" sx={{ width: '100%' }} />
+                    <Autocomplete
+                      required
+                      sx={{ width: '100%' }}
+                      value={mainAddress.buildingDetails.buildingType}
+                      options={['Rumah', 'Apartemen', 'Gedung', 'Hotel', 'Kost']}
+                      autoHighlight
+                      onChange={(event, value) => {
+                        setMainAddress({
+                          ...mainAddress,
+                          buildingDetails: { ...mainAddress.buildingDetails, buildingType: value },
+                        });
+                      }}
+                      getOptionLabel={(option) => option}
+                      renderOption={(props, option, index) => (
+                        <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
+                          {option}
+                        </div>
+                      )}
+                      renderInput={(params) => <TextField {...params} label="Tipe Bangunan *" />}
+                    />
+                    {mainAddress.buildingDetails.buildingType}
                   </Grid>
                   <Grid item xs={12} sm>
                     <TextField
