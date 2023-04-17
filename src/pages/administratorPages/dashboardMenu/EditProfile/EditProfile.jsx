@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Autocomplete, Box, Button, Chip, Grid, Paper, TextField, useTheme } from '@mui/material';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Chip,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+  useTheme,
+} from '@mui/material';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
@@ -136,26 +149,31 @@ function EditProfile() {
                   },
                 }}
               >
-                <Autocomplete
-                  required
-                  sx={{ width: '100%' }}
-                  value={formEditProfile.role}
-                  options={['Basic', 'Master']}
-                  autoHighlight
-                  onChange={(event, value) => {
-                    setFormEditProfile({
-                      ...formEditProfile,
-                      role: value,
-                    });
-                  }}
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option, index) => (
-                    <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
-                      {option}
-                    </div>
-                  )}
-                  renderInput={(params) => <TextField {...params} label="Role *" />}
-                />
+                <FormControl fullWidth>
+                  <InputLabel id="select-role-label">Role *</InputLabel>
+                  <Select
+                    required
+                    labelId="select-role-label"
+                    id="select-role"
+                    value={formEditProfile.role}
+                    label="Role"
+                    onChange={(e) => {
+                      setFormEditProfile({
+                        ...formEditProfile,
+                        role: e.target.value,
+                      });
+                    }}
+                  >
+                    {['Basic', 'Master'].map((item) => {
+                      return (
+                        <MenuItem value={item} sx={{ py: '16px' }}>
+                          {item}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+
                 {formEditProfile.role}
               </Grid>
             </Grid>

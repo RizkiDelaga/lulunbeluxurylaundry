@@ -11,8 +11,10 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  MenuItem,
   OutlinedInput,
   Paper,
+  Select,
   TextField,
   useTheme,
 } from '@mui/material';
@@ -156,26 +158,31 @@ function RegisterNewAdministrator() {
                   },
                 }}
               >
-                <Autocomplete
-                  required
-                  sx={{ width: '100%' }}
-                  value={formRegisterNewAdministrator.role}
-                  options={['Basic', 'Master']}
-                  autoHighlight
-                  onChange={(event, value) => {
-                    setFormRegisterNewAdministrator({
-                      ...formRegisterNewAdministrator,
-                      role: value,
-                    });
-                  }}
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option, index) => (
-                    <div style={{ paddingTop: '16px', paddingBottom: '16px' }} {...props}>
-                      {option}
-                    </div>
-                  )}
-                  renderInput={(params) => <TextField {...params} label="Role *" />}
-                />
+                <FormControl fullWidth>
+                  <InputLabel id="select-role-label">Role *</InputLabel>
+                  <Select
+                    required
+                    labelId="select-role-label"
+                    id="select-role"
+                    value={formRegisterNewAdministrator.role}
+                    label="Role"
+                    onChange={(e) => {
+                      setFormRegisterNewAdministrator({
+                        ...formRegisterNewAdministrator,
+                        role: e.target.value,
+                      });
+                    }}
+                  >
+                    {['Basic', 'Master'].map((item) => {
+                      return (
+                        <MenuItem value={item} sx={{ py: '16px' }}>
+                          {item}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+
                 {formRegisterNewAdministrator.role}
               </Grid>
             </Grid>
