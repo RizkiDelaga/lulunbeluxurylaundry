@@ -9,6 +9,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  ToggleButtonGroup,
   Toolbar,
   useMediaQuery,
 } from '@mui/material';
@@ -30,6 +31,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { getExample } from '../../../redux/actions/exampleAction';
+import MuiToggleButton from '@mui/material/ToggleButton';
 
 const drawerWidth = 300;
 
@@ -167,6 +169,7 @@ const NotificationList = (props) => {
 function Navbar(props) {
   const navigate = useNavigate();
   const theme = useTheme();
+  const [notificationStatus, setNotificationStatus] = React.useState('All');
 
   const dispatch = useDispatch();
   const { isLoading: loadingGetExample, data: dataGetExample } = useSelector((state) => state.getExample);
@@ -193,6 +196,12 @@ function Navbar(props) {
     }
     setOpenMyAccount(null);
   };
+
+  const ToggleButton = styled(MuiToggleButton)({
+    '&.Mui-selected, &.Mui-selected:hover': {
+      backgroundColor: '#1F305C',
+    },
+  });
 
   return (
     <>
@@ -291,25 +300,55 @@ function Navbar(props) {
                 </IconButton>
               </div>
 
-              {/* Toggle Button */}
               <div
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   marginLeft: '16px',
-                  marginRight: '6px',
+                  marginRight: '16px',
                 }}
               >
-                <h3 style={{ margin: 0 }}>Notifikasi</h3>
-                <IconButton
-                  sx={{ justifyContent: 'right' }}
-                  onClick={(event) => {
-                    setOpenMyAccount(event.currentTarget);
+                <ToggleButtonGroup
+                  value={notificationStatus}
+                  color="primary"
+                  exclusive
+                  onChange={(event, value) => {
+                    if (value) {
+                      setNotificationStatus(value);
+                    }
+                  }}
+                  sx={{
+                    width: '100% !important',
+                    [theme.breakpoints.down('sm')]: {
+                      height: '35px !important',
+                    },
                   }}
                 >
-                  <MoreVertOutlinedIcon className="color-primary" />
-                </IconButton>
+                  <ToggleButton
+                    value="All"
+                    sx={{
+                      width: '100%',
+                      border: '1px solid #1F305C',
+                      fontWeight: 'bold',
+                      color: notificationStatus === 'All' ? '#ffffff !important' : '#1F305C',
+                    }}
+                  >
+                    Semua
+                  </ToggleButton>
+                  <ToggleButton
+                    value="Unread"
+                    sx={{
+                      width: '100%',
+
+                      border: '1px solid #1F305C',
+                      fontWeight: 'bold',
+                      color: notificationStatus === 'Unread' ? '#ffffff !important' : '#1F305C',
+                    }}
+                  >
+                    Belum Dibaca
+                  </ToggleButton>
+                </ToggleButtonGroup>
               </div>
 
               <NotificationList

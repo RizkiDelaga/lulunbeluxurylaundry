@@ -392,7 +392,73 @@ const LaundryShuttle = (props) => {
 
   const dataAddress = [
     {
+      id: 12,
+      kategori: 'Rumah',
+      detail: 'No.15C',
+      kecamatan: 'Purwokerto Utara',
+      kelurahan: 'Purwokerto Lor',
+      rt: '05',
+      rw: '03',
+      deskripsi: 'rumah warna hijau sebelah warung',
+      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
+    },
+    {
+      id: 13,
+      kategori: 'Rumah',
+      detail: 'No.15C',
+      kecamatan: 'Purwokerto Utara',
+      kelurahan: 'Purwokerto Lor',
+      rt: '05',
+      rw: '03',
+      deskripsi: 'rumah warna hijau sebelah warung',
+      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
+    },
+    {
+      id: 14,
+      kategori: 'Rumah',
+      detail: 'No.15C',
+      kecamatan: 'Purwokerto Utara',
+      kelurahan: 'Purwokerto Lor',
+      rt: '05',
+      rw: '03',
+      deskripsi: 'rumah warna hijau sebelah warung',
+      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
+    },
+    {
       id: 1,
+      kategori: 'Rumah',
+      detail: 'No.15C',
+      kecamatan: 'Purwokerto Utara',
+      kelurahan: 'Purwokerto Lor',
+      rt: '05',
+      rw: '03',
+      deskripsi: 'rumah warna hijau sebelah warung',
+      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
+    },
+    {
+      id: 1342783289,
+      kategori: 'Rumah',
+      detail: 'No.15C',
+      kecamatan: 'Purwokerto Utara',
+      kelurahan: 'Purwokerto Lor',
+      rt: '05',
+      rw: '03',
+      deskripsi: 'rumah warna hijau sebelah warung',
+      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
+    },
+    {
+      id: 178321,
+      kategori: 'Rumah',
+      detail: 'No.15C',
+      kecamatan: 'Purwokerto Utara',
+      kelurahan: 'Purwokerto Lor',
+      rt: '05',
+      rw: '03',
+      deskripsi: 'rumah warna hijau sebelah warung',
+      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
+    },
+    {
+      id: 134,
       kategori: 'Rumah',
       detail: 'No.15C',
       kecamatan: 'Purwokerto Utara',
@@ -464,7 +530,7 @@ const LaundryShuttle = (props) => {
                   return (
                     <MenuItem value={itemAddress.id} sx={{ py: '16px' }}>
                       <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
-                        <img src={itemAddress.gambar} height={70} style={{ objectFit: 'cover' }} alt="" />
+                        <img src={itemAddress.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
                         <div>
                           <div>
                             Kecamatan {itemAddress.kecamatan}, Kelurahan {itemAddress.kelurahan}, RW/{itemAddress.rw},
@@ -503,7 +569,7 @@ const LaundryShuttle = (props) => {
                   return (
                     <MenuItem value={itemAddress.id} sx={{ py: '16px' }}>
                       <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
-                        <img src={itemAddress.gambar} height={70} style={{ objectFit: 'cover' }} alt="" />
+                        <img src={itemAddress.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
                         <div>
                           <div>
                             Kecamatan {itemAddress.kecamatan}, Kelurahan {itemAddress.kelurahan}, RW/{itemAddress.rw},
