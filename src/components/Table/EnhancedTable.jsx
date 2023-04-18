@@ -15,8 +15,21 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { Avatar, Collapse } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  Collapse,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  useTheme,
+} from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import Draggable from 'react-draggable';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 // function createData(name, calories, fat, carbs, protein) {
 //   return {
@@ -36,43 +49,36 @@ const headCells = [
   {
     id: 'collapse',
     numeric: false,
-    disablePadding: false,
     label: '',
   },
   {
     id: 'name',
     numeric: false,
-    disablePadding: false,
     label: 'Name',
   },
   {
     id: 'code',
     numeric: true,
-    disablePadding: false,
     label: 'Code',
   },
   {
     id: 'population',
     numeric: true,
-    disablePadding: false,
     label: 'Population',
   },
   {
     id: 'size',
     numeric: true,
-    disablePadding: false,
     label: 'Size',
   },
   {
     id: 'description',
     numeric: false,
-    disablePadding: false,
     label: 'Description',
   },
   {
     id: 'elementHTML',
     numeric: true,
-    disablePadding: false,
     label: 'Element HTML',
   },
 ];
@@ -85,15 +91,7 @@ const dataTable = [
     size: 3287263,
     description:
       '1 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: (
-      <div style={{ display: 'flex' }}>
-        <Avatar />
-        <div style={{ width: '180px' }}>
-          <h3>Element HtML</h3>
-          <h6>Element HtML</h6>
-        </div>
-      </div>
-    ),
+    elementHTML: 1,
   },
   {
     name: 'China',
@@ -102,7 +100,7 @@ const dataTable = [
     size: 9596961,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 2,
   },
   {
     name: 'Italy',
@@ -111,7 +109,7 @@ const dataTable = [
     size: 301340,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 3,
   },
   {
     name: 'United States',
@@ -120,7 +118,7 @@ const dataTable = [
     size: 9833520,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 4,
   },
   {
     name: 'Canada',
@@ -129,7 +127,7 @@ const dataTable = [
     size: 9984670,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 5,
   },
   {
     name: 'Australia',
@@ -138,7 +136,7 @@ const dataTable = [
     size: 7692024,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 6,
   },
   {
     name: 'Germany',
@@ -147,7 +145,7 @@ const dataTable = [
     size: 357578,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 7,
   },
   {
     name: 'Ireland',
@@ -156,7 +154,7 @@ const dataTable = [
     size: 70273,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 8,
   },
   {
     name: 'Mexico',
@@ -165,7 +163,7 @@ const dataTable = [
     size: 1972550,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 9,
   },
   {
     name: 'Japan',
@@ -174,7 +172,7 @@ const dataTable = [
     size: 377973,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 10,
   },
   {
     name: 'France',
@@ -183,7 +181,7 @@ const dataTable = [
     size: 640679,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 11,
   },
   {
     name: 'United Kingdom',
@@ -192,7 +190,7 @@ const dataTable = [
     size: 242495,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 12,
   },
   {
     name: 'Russia',
@@ -201,7 +199,7 @@ const dataTable = [
     size: 17098246,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 13,
   },
   {
     name: 'Nigeria',
@@ -210,7 +208,7 @@ const dataTable = [
     size: 923768,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 14,
   },
   {
     name: 'Brazil',
@@ -219,7 +217,7 @@ const dataTable = [
     size: 8515767,
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: <h3>Element HtML</h3>,
+    elementHTML: 15,
   },
 ];
 
@@ -260,7 +258,7 @@ function RowItem(props) {
       <TableRow hover>
         <TableCell>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpenCell(!openCell)}>
-            {openCell ? <FilterListIcon /> : <RefreshIcon />}
+            {openCell ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </IconButton>
         </TableCell>
         <TableCell>{props.item.name}</TableCell>
@@ -271,17 +269,16 @@ function RowItem(props) {
         <TableCell align="right">{props.item.elementHTML}</TableCell>
       </TableRow>
 
+      {/* Collapse Table */}
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
           <Collapse in={openCell} timeout="auto" unmountOnExit>
-            {/* <Box sx={{ margin: 1 }}> */}
             <Typography variant="h6" gutterBottom component="div">
               History Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias id nobis, dignissimos neque
               reiciendis vitae fuga quisquam, dolorem inventore praesentium, corrupti nam! Esse ab consequuntur quo
               maiores sequi labore distinctio.
             </Typography>
             <h1>Lorem ipsum dolor sit amet</h1>
-            {/* </Box> */}
           </Collapse>
         </TableCell>
       </TableRow>
@@ -289,7 +286,48 @@ function RowItem(props) {
   );
 }
 
-export default function EnhancedTable(props) {
+function FilterPopUp({ openFilterPopUp, setOpenFilterPopUp }) {
+  const PaperComponent = (props) => {
+    return (
+      <Draggable handle="#filter-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
+        <Paper {...props} />
+      </Draggable>
+    );
+  };
+  return (
+    <Dialog
+      open={openFilterPopUp}
+      onClose={() => setOpenFilterPopUp(!openFilterPopUp)}
+      PaperComponent={PaperComponent}
+      aria-labelledby="filter-dialog"
+      sx={{ zIndex: 10000 }}
+    >
+      <DialogTitle
+        color="primary"
+        style={{ cursor: 'move', display: 'flex', alignItems: 'center', gap: '10px' }}
+        id="filter-dialog"
+      >
+        <FilterListIcon />
+        Filter
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          To subscribe to this website, please enter your email address here. We will send updates occasionally.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={() => setOpenFilterPopUp(!openFilterPopUp)}>
+          Batal
+        </Button>
+        <Button onClick={() => setOpenFilterPopUp(!openFilterPopUp)}>Terapkan</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+export default function EnhancedTable() {
+  const theme = useTheme();
+  const [openFilterPopUp, setOpenFilterPopUp] = React.useState(false);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('name');
 
@@ -312,79 +350,107 @@ export default function EnhancedTable(props) {
   };
 
   return (
-    <Paper elevation={3}>
-      <Box sx={{ padding: '20px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-        {/* Table Title */}
-        <Toolbar
-          sx={{
-            justifyContent: 'space-between',
-            pl: { sm: 2 },
-            pr: { xs: 1, sm: 1 },
-          }}
-        >
-          <span style={{ display: 'flex' }}>
-            <Typography sx={{ fontWeight: 'bold' }} color="primary" variant="h5" id="tableTitle" component="div">
-              Daftar Pesanan Sedang Berjalan
-            </Typography>
-            <IconButton>
-              <RefreshIcon color="primary" />
-            </IconButton>
-          </span>
-          <Tooltip title="Filter list">
-            <IconButton>
-              <FilterListIcon color="primary" />
-            </IconButton>
-          </Tooltip>
-        </Toolbar>
+    <>
+      {/* Table Title */}
+      <Toolbar
+        sx={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+        }}
+      >
+        <span style={{ display: 'flex' }}>
+          <Typography sx={{ fontWeight: 'bold' }} color="primary" variant="h5" id="tableTitle" component="div">
+            Daftar Pesanan Sedang Berjalan
+          </Typography>
+          <IconButton>
+            <RefreshIcon color="primary" />
+          </IconButton>
+        </span>
+        <Tooltip title="Filter list">
+          <IconButton onClick={() => setOpenFilterPopUp(!openFilterPopUp)}>
+            <FilterListIcon color="primary" />
+          </IconButton>
+        </Tooltip>
+      </Toolbar>
 
-        <TableContainer sx={{ maxHeight: rowsPerPage !== 10 ? 800 : 'none' }}>
-          <Table stickyHeader sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-            {/* Table Header */}
-            <TableHead>
-              <TableRow>
-                {headCells.map((headCell) => (
-                  <TableCell
-                    key={headCell.id}
-                    align={headCell.numeric ? 'right' : 'left'}
-                    sortDirection={orderBy === headCell.id ? order : false}
-                  >
-                    {headCell.id !== 'collapse' ? (
-                      <TableSortLabel
-                        active={orderBy === headCell.id}
-                        direction={orderBy === headCell.id ? order : 'asc'}
-                        onClick={(event) => {
-                          handleRequestSort(event, headCell.id);
-                        }}
-                        style={{ fontWeight: 'bold' }}
-                      >
-                        {headCell.label}
-                      </TableSortLabel>
-                    ) : null}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
+      <FilterPopUp openFilterPopUp={openFilterPopUp} setOpenFilterPopUp={setOpenFilterPopUp} />
 
-            <TableBody>
-              {stableSort(props.dataTable, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((rowItem, index) => {
-                  return <RowItem key={rowItem.code} item={rowItem} />;
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <TableContainer sx={{ maxHeight: rowsPerPage !== 10 ? 800 : 'none' }}>
+        <Table stickyHeader sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+          {/* Table Header */}
+          <TableHead>
+            <TableRow>
+              {headCells.map((headCell) => (
+                <TableCell
+                  key={headCell.id}
+                  align={headCell.numeric ? 'right' : 'left'}
+                  sortDirection={orderBy === headCell.id ? order : false}
+                >
+                  {headCell.id !== 'collapse' ? (
+                    <TableSortLabel
+                      active={orderBy === headCell.id}
+                      direction={orderBy === headCell.id ? order : 'asc'}
+                      onClick={(event) => {
+                        handleRequestSort(event, headCell.id);
+                      }}
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      {headCell.label}
+                    </TableSortLabel>
+                  ) : null}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
 
+          {/* Table Content */}
+          <TableBody>
+            {stableSort(dataTable, getComparator(order, orderBy))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((rowItem, index) => {
+                return <RowItem key={rowItem.code} item={rowItem} />;
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Table Pagination */}
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          [theme.breakpoints.down('sm')]: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        }}
+      >
+        <span>
+          <Button sx={{ width: 'max-content' }}>Pagination 1 (1-100)</Button>
+        </span>
         <TablePagination
-          // rowsPerPageOptions={[10, 25, 50, 100]}
+          rowsPerPageOptions={[10, 25, 50, 100]}
           component="div"
-          count={props.dataTable.length}
+          count={dataTable.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '100%',
+            [theme.breakpoints.up('sm')]: { justifyContent: 'right' },
+          }}
         />
       </Box>
-    </Paper>
+    </>
   );
 }
