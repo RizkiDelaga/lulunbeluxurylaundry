@@ -258,7 +258,7 @@ function RowItem(props) {
       <TableRow hover>
         <TableCell>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpenCell(!openCell)}>
-            {openCell ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            {openCell ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
           </IconButton>
         </TableCell>
         <TableCell>{props.item.name}</TableCell>

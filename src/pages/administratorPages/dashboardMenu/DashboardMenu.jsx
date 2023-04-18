@@ -75,9 +75,7 @@ function DashboardMenu() {
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Box className="gap-16">
-            <ResponsiveTable />
-          </Box>
+          <Box className="gap-16"></Box>
         </Paper>
       </div>
     </>
