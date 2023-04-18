@@ -50,9 +50,9 @@ const rows = [
     1324171354,
     3287263,
     'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    <div style={{display: 'flex'}}>
+    <div style={{ display: 'flex' }}>
       <Avatar />
-      <div style={{width: '180px'}}>
+      <div style={{ width: '180px' }}>
         <h3>Element HtML</h3>
         <h6>Element HtML</h6>
       </div>
@@ -186,56 +186,54 @@ function ResponsiveTable() {
   };
 
   return (
-    <Paper elevation={3}>
-      <Box sx={{ padding: '20px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-        <TableContainer sx={{ maxHeight: rowsPerPage === 25 ? 800 : 'none' }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth, fontWeight: 'bold' }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {/* <Tooltip title={column.format && typeof value === 'number' ? column.format(value) : value}> */}
-                          <span>{column.format && typeof value === 'number' ? column.format(value) : value}</span>
-                          {/* </Tooltip> */}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+    <>
+      <TableContainer sx={{ maxHeight: rowsPerPage === 25 ? 800 : 'none' }}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth, fontWeight: 'bold' }}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+              return (
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  {columns.map((column) => {
+                    const value = row[column.id];
+                    return (
+                      <TableCell key={column.id} align={column.align}>
+                        {/* <Tooltip title={column.format && typeof value === 'number' ? column.format(value) : value}> */}
+                        <span>{column.format && typeof value === 'number' ? column.format(value) : value}</span>
+                        {/* </Tooltip> */}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          sx={{ overflowWrap: 'break-word' }}
-        />
-      </Box>
-    </Paper>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50, 100]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{ overflowWrap: 'break-word' }}
+      />
+    </>
   );
 }
 
