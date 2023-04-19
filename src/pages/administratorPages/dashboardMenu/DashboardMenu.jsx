@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Box, Button, Paper } from '@mui/material';
+import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getExample } from '../../../redux/actions/exampleAction';
 import EnhancedTable from '../../../components/Table/EnhancedTable';
 import ResponsiveTable from '../../../components/Table/ResponsiveTable';
+import InformationCard from '../../../components/Card/InformationCard/InformationCard';
 
 function DashboardMenu() {
   const navigate = useNavigate();
@@ -66,12 +67,61 @@ function DashboardMenu() {
         />
 
         {/* Main Content */}
+        <Grid container spacing={2}>
+          <Grid item lg={6} sx={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Grid container spacing={2} sx={{ height: '100%' }}>
+              <Grid item lg={6} sx={{ height: '100%' }}>
+                <InformationCard
+                  title="Pesanan sedang Berjalan"
+                  content={{ normalText: '19', smallText: '(Small Text)', embedHTML: '' }}
+                  navigate={{ text: 'Lihat daftar pesanan', url: '/pesanan' }}
+                />
+              </Grid>
+              <Grid item lg={6} sx={{ height: '100%' }}>
+                <InformationCard
+                  title="adsasd sadasdsaas asdsa as"
+                  content={{ normalText: 'Normal Text', smallText: 'Small Text', embedHTML: '' }}
+                  navigate={{ text: 'Lihat daftar pesanan', url: '/pesanan' }}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ height: '100%' }}>
+              <Grid item lg={6} sx={{ height: '100%' }}>
+                <InformationCard
+                  title="Pesanan sedang Berjalan"
+                  content={{ normalText: '19', smallText: '(Small Text)', embedHTML: '' }}
+                  navigate={{ text: 'Lihat daftar pesanan', url: '/pesanan' }}
+                />
+              </Grid>
+              <Grid item lg={6} sx={{ height: '100%' }}>
+                <InformationCard
+                  title="adsasd sadasdsaas asdsa as"
+                  content={{ normalText: 'Normal Text', smallText: 'Small Text', embedHTML: '' }}
+                  navigate={{ text: 'Lihat daftar pesanan', url: '/pesanan' }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item lg={6}>
+            <InformationCard
+              title="adsasd sadasdsaas asdsa as"
+              content={{
+                embedHTML: (
+                  <>
+                    <h1>Lorem, ipsum dolor.</h1>
+                    <h1>Lorem, ipsum dolor.</h1>
+                    <h1>Lorem, ipsum dolor.</h1>
+                    <h1>Lorem, ipsum dolor.</h1>
+                  </>
+                ),
+              }}
+              navigate={{ text: 'Lihat daftar pesanan', url: '/pesanan' }}
+            />
+          </Grid>
+        </Grid>
+
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Box className="gap-16">
-            {/* {loadingGetExample ? null : dataTable.length > 1 ? console.log(dataTable) : null}
-            {loadingGetExample ? null : dataTable.length > 1 ? <EnhancedTable dataTable={dataTable} /> : null} */}
-            <EnhancedTable />
-          </Box>
+          <EnhancedTable />
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
