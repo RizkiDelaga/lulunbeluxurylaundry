@@ -26,27 +26,24 @@ function InformationCard(props) {
         }}
       >
         <Typography sx={{ textAlign: 'left', fontWeight: 'bold' }}>{props.title}</Typography>
-
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'end',
-          }}
-        >
-          <Typography sx={{ fontSize: '32px', color: '#1F305C', fontWeight: 'bold' }}>
-            {props.content.normalText}
-          </Typography>
-          <Typography sx={{ fontSize: '14px', color: '#1F305C', fontWeight: 'bold', mb: 1 }}>
-            {props.content.smallText}
-          </Typography>
-          <span>{props.content.embedHTML}</span>
-        </div>
+        <span>
+          <div className="centerXY" style={{ alignItems: 'end' }}>
+            <Typography sx={{ fontSize: '32px', color: '#1F305C', fontWeight: 'bold' }}>
+              {props.content.normalText}
+            </Typography>
+            <Typography sx={{ fontSize: '14px', color: '#1F305C', fontWeight: 'bold', mb: 1 }}>
+              {props.content.smallText}
+            </Typography>
+          </div>
+          <div className="centerXY">{props.content.embedHTML}</div>
+        </span>
 
         <span style={{ height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
           <Typography
             onClick={() => navigate(props.navigate.url)}
             sx={{
+              display: 'flex',
+              alignItems: 'center',
               fontSize: '12px',
               cursor: 'pointer',
             }}

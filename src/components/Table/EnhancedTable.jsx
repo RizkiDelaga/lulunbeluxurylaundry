@@ -388,6 +388,7 @@ export default function EnhancedTable() {
                   key={headCell.id}
                   align={headCell.numeric ? 'right' : 'left'}
                   sortDirection={orderBy === headCell.id ? order : false}
+                  sx={{ paddingY: 1 }}
                 >
                   {headCell.id !== 'collapse' ? (
                     <TableSortLabel
