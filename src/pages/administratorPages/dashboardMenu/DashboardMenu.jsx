@@ -7,6 +7,7 @@ import { getExample } from '../../../redux/actions/exampleAction';
 import EnhancedTable from '../../../components/Table/EnhancedTable';
 import ResponsiveTable from '../../../components/Table/ResponsiveTable';
 import InformationCard from '../../../components/Card/InformationCard/InformationCard';
+import AreaChart from '../../../components/Graph/AreaChart';
 
 function DashboardMenu() {
   const navigate = useNavigate();
@@ -68,54 +69,76 @@ function DashboardMenu() {
 
         {/* Main Content */}
         <Grid container spacing={2}>
-          <Grid item lg={6} sx={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Grid container spacing={2} sx={{ height: '100%' }}>
-              <Grid item lg={6} sx={{ height: '100%' }}>
+          <Grid item md={12} lg={6} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={6} sm={6} md={4} lg={6}>
                 <InformationCard
                   title="Pesanan sedang Berjalan"
-                  content={{ normalText: '19', smallText: '(Small Text)', embedHTML: '' }}
-                  navigate={{ text: 'Lihat daftar pesanan', url: '/pesanan' }}
+                  content={{ normalText: '19' }}
+                  navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
               </Grid>
-              <Grid item lg={6} sx={{ height: '100%' }}>
+              <Grid item xs={6} sm={6} md={4} lg={6}>
                 <InformationCard
-                  title="adsasd sadasdsaas asdsa as"
-                  content={{ normalText: 'Normal Text', smallText: 'Small Text', embedHTML: '' }}
-                  navigate={{ text: 'Lihat daftar pesanan', url: '/pesanan' }}
+                  title="Event Sedang berlangsung"
+                  content={{ normalText: '3' }}
+                  navigate={{ text: 'Lihat daftar cara', url: '/Event' }}
                 />
               </Grid>
-            </Grid>
-            <Grid container spacing={2} sx={{ height: '100%' }}>
-              <Grid item lg={6} sx={{ height: '100%' }}>
+              <Grid item xs={6} sm={6} md={4} lg={6}>
                 <InformationCard
-                  title="Pesanan sedang Berjalan"
-                  content={{ normalText: '19', smallText: '(Small Text)', embedHTML: '' }}
-                  navigate={{ text: 'Lihat daftar pesanan', url: '/pesanan' }}
+                  title="Pesanan selesai"
+                  content={{ normalText: '81.235' }}
+                  navigate={{ text: 'Lihat daftar pesanan selesai', url: '/Pesanan' }}
                 />
               </Grid>
-              <Grid item lg={6} sx={{ height: '100%' }}>
+              <Grid item xs={6} sm={6} md={6} lg={6}>
                 <InformationCard
-                  title="adsasd sadasdsaas asdsa as"
-                  content={{ normalText: 'Normal Text', smallText: 'Small Text', embedHTML: '' }}
-                  navigate={{ text: 'Lihat daftar pesanan', url: '/pesanan' }}
+                  title="Total pelanggan"
+                  content={{ normalText: '1019' }}
+                  navigate={{ text: 'Lihat daftar pelanggan', url: '/Pelanggan' }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={12}>
+                <InformationCard
+                  title="Rating dan Review Pelanggan"
+                  content={{ normalText: '5', smallText: '(23.112)', embedHTML: '' }}
+                  navigate={{ text: 'Lihat rating dan review pelanggan', url: '/Pesanan/RatingDanReviewPelanggan' }}
                 />
               </Grid>
             </Grid>
           </Grid>
-          <Grid item lg={6}>
+          <Grid item xs={12} lg={6}>
             <InformationCard
-              title="adsasd sadasdsaas asdsa as"
+              title="Laporan keuangan mingguan terbaru"
               content={{
                 embedHTML: (
                   <>
-                    <h1>Lorem, ipsum dolor.</h1>
-                    <h1>Lorem, ipsum dolor.</h1>
-                    <h1>Lorem, ipsum dolor.</h1>
-                    <h1>Lorem, ipsum dolor.</h1>
+                    <AreaChart
+                      data={{
+                        labels: ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'],
+                        datasets: [
+                          {
+                            fill: true,
+                            label: 'Pendapatan',
+                            data: [598884, 819838, 674452, 454919, 925132, 791527, 672380],
+                            borderColor: 'rgb(31, 48, 92)',
+                            backgroundColor: 'rgb(31, 48, 92, 0.5)',
+                          },
+                          {
+                            fill: false,
+                            label: 'Pengeluaran',
+                            data: [218828, 53563, 221413, 54946, 91714, 891632, 872923],
+                            borderColor: 'rgb(211, 47, 47)',
+                            backgroundColor: 'rgb(211, 47, 47, 0.5)',
+                          },
+                        ],
+                      }}
+                    />
                   </>
                 ),
               }}
-              navigate={{ text: 'Lihat daftar pesanan', url: '/pesanan' }}
+              navigate={{ text: 'Lihat laporan keuangan', url: '/Keuangan' }}
             />
           </Grid>
         </Grid>
