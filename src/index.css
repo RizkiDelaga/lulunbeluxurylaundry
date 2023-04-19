@@ -26,6 +26,7 @@ body {
 .disable-link-style {
   color: #000000 !important;
   text-decoration: none !important;
+  cursor: pointer !important;
 }
 
 /* ========= LINK ======== */

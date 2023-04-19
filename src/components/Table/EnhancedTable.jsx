@@ -361,7 +361,7 @@ export default function EnhancedTable() {
           pr: { xs: 1, sm: 1 },
         }}
       >
-        <span style={{ display: 'flex' }}>
+        <span style={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={{ fontWeight: 'bold' }} color="primary" variant="h5" id="tableTitle" component="div">
             Daftar Pesanan Sedang Berjalan
           </Typography>
