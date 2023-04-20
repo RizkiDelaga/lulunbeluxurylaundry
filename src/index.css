@@ -14,41 +14,41 @@ body {
 }
 
 /* ========= HEADING ======== */
-h1{
+h1 {
   font-size: 40px !important;
   font-weight: bold !important;
   margin: 0px !important;
 }
 
-h2{
-  font-size:32px !important;
+h2 {
+  font-size: 32px !important;
   font-weight: bold !important;
   margin: 0px !important;
 
 }
 
-h3{
+h3 {
   font-size: 28px !important;
   font-weight: bold !important;
   margin: 0px !important;
 
 }
 
-h4{
+h4 {
   font-size: 24px !important;
   font-weight: bold !important;
   margin: 0px !important;
 
 }
 
-h5{
+h5 {
   font-size: 20px !important;
   font-weight: bold !important;
   margin: 0px !important;
 
 }
 
-h6{
+h6 {
   font-size: 16px !important;
   font-weight: bold !important;
   margin: 0px !important;
