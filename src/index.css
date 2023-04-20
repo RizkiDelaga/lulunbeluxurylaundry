@@ -13,23 +13,49 @@ body {
   padding: 0;
 }
 
-/* ========= COLOR ======== */
-
-.color-primary {
-  color: #1F305C !important;
+/* ========= HEADING ======== */
+h1{
+  font-size: 40px !important;
+  font-weight: bold !important;
+  margin: 0px !important;
 }
 
-/* ========= COLOR ======== */
+h2{
+  font-size:32px !important;
+  font-weight: bold !important;
+  margin: 0px !important;
 
-/* ========= LINK ======== */
-
-.disable-link-style {
-  color: #000000 !important;
-  text-decoration: none !important;
-  cursor: pointer !important;
 }
 
-/* ========= LINK ======== */
+h3{
+  font-size: 28px !important;
+  font-weight: bold !important;
+  margin: 0px !important;
+
+}
+
+h4{
+  font-size: 24px !important;
+  font-weight: bold !important;
+  margin: 0px !important;
+
+}
+
+h5{
+  font-size: 20px !important;
+  font-weight: bold !important;
+  margin: 0px !important;
+
+}
+
+h6{
+  font-size: 16px !important;
+  font-weight: bold !important;
+  margin: 0px !important;
+
+}
+
+/* ========= SCROLLBAR ======== */
 
 /* Custom Scrollbar */
 /* width */
@@ -73,6 +99,22 @@ input[type=number] {
 /* ==================== */
 /* GLOBAL CSS COMPONENT */
 /* ==================== */
+
+/* ========= COLOR ======== */
+
+.color-primary {
+  color: #1F305C !important;
+}
+
+/* ========= COLOR ======== */
+
+/* ========= LINK ======== */
+
+.disable-link-style {
+  color: #000000 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
 
 /* ========= BUTTON ======== */
 
