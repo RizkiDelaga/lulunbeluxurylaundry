@@ -195,3 +195,13 @@ input[type=number] {
 .css-3dah0e-MuiModal-root-MuiDialog-root {
   z-index: 10000 !important;
 }
+
+
+/* =================== */
+/* OVERWRITE SWIPER JS STYLE */
+/* =================== */
+
+.swiper-wrapper {
+  padding-top: 25px;
+  padding-bottom: 40px;
+}
