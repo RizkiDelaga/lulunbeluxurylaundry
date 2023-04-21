@@ -19,6 +19,15 @@ import SquareWave from '../../../assets/images/SquareWave.png';
 import style from './HomePage.module.css';
 import { display } from '@mui/system';
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+
+// import required modules
+import { Pagination } from 'swiper';
+
 function HeroSection() {
   return (
     <span>
@@ -273,6 +282,54 @@ function OperatingHoursAndHowToOrderSection() {
   );
 }
 
+function EventSection() {
+  return (
+    <>
+      <Container>
+        <div style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', marginTop: '26px' }}>Event</div>
+
+        <Swiper
+          grabCursor={true}
+          pagination={{
+            dynamicBullets: true,
+            clickable: true,
+          }}
+          breakpoints={{
+            600: {
+              slidesPerView: 2,
+              spaceBetween: 10,
+            },
+            900: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1200: {
+              slidesPerView: 4,
+              spaceBetween: 30,
+            },
+          }}
+          modules={[Pagination]}
+          // className="mySwiper"
+        >
+          {[1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => {
+            return (
+              <SwiperSlide>
+                <Box className={`${style['shadow-card']}`}>
+                  <img
+                    src="https://loremflickr.com/cache/resized/65535_52104205072_e260b47a8e_c_640_480_nofilter.jpg"
+                    width="100%"
+                    alt=""
+                  />
+                </Box>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </Container>
+    </>
+  );
+}
+
 function TestimonySection() {
   return (
     <>
@@ -376,6 +433,8 @@ function HomePage() {
       <ServiceTypeSection />
 
       <OperatingHoursAndHowToOrderSection />
+
+      <EventSection />
 
       <TestimonySection />
 
