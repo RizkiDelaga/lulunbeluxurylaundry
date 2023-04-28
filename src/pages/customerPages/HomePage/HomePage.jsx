@@ -1,4 +1,7 @@
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Container,
@@ -12,12 +15,19 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SingleWave from '../../../assets/images/SingleWave.png';
 import DoubleWave from '../../../assets/images/DoubleWave.png';
 import SquareWave from '../../../assets/images/SquareWave.png';
 import style from './HomePage.module.css';
 import { display } from '@mui/system';
+import parse from 'html-react-parser';
+import InstagramIcon from '../../../assets/icons/icons8-instagram.svg';
+import FacebookIcon from '../../../assets/icons/icons8-facebook.svg';
+import TwitterIcon from '../../../assets/icons/icons8-twitter.svg';
+import YoutubeIcon from '../../../assets/icons/icons8-youtube.svg';
+import TiktokIcon from '../../../assets/icons/icons8-tiktok.svg';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -338,10 +348,64 @@ function TestimonySection() {
 
         <Grid container spacing={4}>
           <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam!
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. At sunt amet totam officiis voluptate placeat
+            excepturi molestiae, corrupti quos sint nobis, aspernatur maxime doloribus enim! Repudiandae vel molestiae
+            culpa est.
           </Grid>
           <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam!
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. At sunt amet totam officiis voluptate placeat
+            excepturi molestiae, corrupti quos sint nobis, aspernatur maxime doloribus enim! Repudiandae vel molestiae
+            culpa est.
+          </Grid>
+        </Grid>
+      </Container>
+    </>
+  );
+}
+
+function FAQSection() {
+  return (
+    <>
+      <Container>
+        <h4 className={`${style['section-title']}`}>Pertanyaan Yang Sering Diajukan</h4>
+
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={6}>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ color: '#000000' }}>
+                <Typography>Accordion 1</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet
+                  blandit leo lobortis eget.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ color: '#000000' }}>
+                <Typography>Accordion 1</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet
+                  blandit leo lobortis eget.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ color: '#000000' }}>
+                <Typography>Accordion 1</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet
+                  blandit leo lobortis eget.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         </Grid>
       </Container>
@@ -350,6 +414,14 @@ function TestimonySection() {
 }
 
 function ContactAndLocationSection() {
+  let mapsEmbed =
+    '<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15825.291613002777!2d109.2421518!3d-7.429474!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e655e8428463883%3A0x8def4a2d764422a!2sLULU%20N&#39;BE%20LUXURY%20LAUNDRY%20PURWOKERTO!5e0!3m2!1sid!2sid!4v1682649257806!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+
+  let mapsTag = mapsEmbed
+    .replace('width="600"', 'width="100%"')
+    .replace(' height="450"', ' height="400"')
+    .replace('style="border:0;"', 'style="border: 2px solid #1F305C; border-radius: 4px"');
+
   return (
     <>
       <span>
@@ -366,12 +438,50 @@ function ContactAndLocationSection() {
 
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6} md={5} lg={5}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus possimus velit inventore repudiandae
-                obcaecati corrupti officiis laboriosam saepe cum, quod cupiditate vel, soluta doloribus rerum aperiam
-                illo? Corrupti, debitis minus.
+                {parse(mapsTag)}
               </Grid>
-              <Grid item xs={12} sm={6} md={7} lg={7}>
-                <h3>Lorem ipsum dolor sit.</h3>
+              <Grid item xs={12} sm={6} md={7} lg={7} className="gap-16" sx={{ flexDirection: 'column' }}>
+                <span className="gap-10" style={{ flexDirection: 'column' }}>
+                  <h6>Kontak</h6>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <ExpandMoreIcon />
+                    <h6>(No Telepon)</h6>
+                    <span>0851 0290 9999</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <ExpandMoreIcon />
+                    <h6>(No Telepon)</h6>
+                    <span>0851 0290 9999</span>
+                  </div>
+                </span>
+                <span className="gap-10" style={{ flexDirection: 'column' }}>
+                  <h6>Sosial Media</h6>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <Link to={''}>
+                      <img src={InstagramIcon} height="40" alt="" />
+                    </Link>
+                    <Link to={''}>
+                      <img src={FacebookIcon} height="40" alt="" />
+                    </Link>
+                    <Link to={''}>
+                      <img src={TwitterIcon} height="40" alt="" />
+                    </Link>
+                    <Link to={''}>
+                      <img src={YoutubeIcon} height="40" alt="" />
+                    </Link>
+                    <Link to={''}>
+                      <img src={TiktokIcon} height="40" alt="" />
+                    </Link>
+                  </div>
+                </span>
+                <span className="gap-10" style={{ flexDirection: 'column' }}>
+                  <h6>Lokasi</h6>
+                  <span>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, maiores, commodi quasi distinctio
+                    ducimus natus voluptate ipsa soluta, porro maxime accusantium sint fugiat! Sapiente nostrum minus ut
+                    harum placeat totam.
+                  </span>
+                </span>
               </Grid>
             </Grid>
           </Container>
@@ -395,22 +505,53 @@ function FooterSection() {
           color: '#FFFFFF',
         }}
       >
-        <Grid container>
-          <Grid item xs>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam.
+        <Grid container spacing={4}>
+          <Grid item xs className="gap-10" style={{ flexDirection: 'column' }}>
+            <h4>Navigasi</h4>
+            <div>Beranda</div>
+            <div>Galeri</div>
+            <div>Pemesanan Laundry</div>
+            <div>Tentang Kami</div>
           </Grid>
           <Grid item xs={12} md="auto">
-            <Grid container>
-              <Grid item xs>
-                Lorem ipsum dolor sit amet.
+            <Grid container spacing={4}>
+              <Grid item xs className="gap-10" style={{ flexDirection: 'column' }}>
+                <h4>Kontak</h4>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <ExpandMoreIcon />
+                  <h6>(No Telepon)</h6>
+                  <span>0851 0290 9999</span>
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <ExpandMoreIcon />
+                  <h6>(Email)</h6>
+                  <span>lulunbeluxurylaundry@gmail.com</span>
+                </div>
               </Grid>
-              <Grid item xs={12} sm="auto">
-                Lorem ipsum dolor sit amet.
+              <Grid item xs={12} sm="auto" className="gap-10" style={{ flexDirection: 'column' }}>
+                <h4>Sosial Media</h4>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <Link to={''}>
+                    <img src={InstagramIcon} height="40" alt="" />
+                  </Link>
+                  <Link to={''}>
+                    <img src={FacebookIcon} height="40" alt="" />
+                  </Link>
+                  <Link to={''}>
+                    <img src={TwitterIcon} height="40" alt="" />
+                  </Link>
+                  <Link to={''}>
+                    <img src={YoutubeIcon} height="40" alt="" />
+                  </Link>
+                  <Link to={''}>
+                    <img src={TiktokIcon} height="40" alt="" />
+                  </Link>
+                </div>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <span>Copyright ©2023 Lulu 'N Be Luxury Laundry Purwokerto</span>
+        <span style={{ textAlign: 'center' }}>Copyright ©2023 Lulu 'N Be Luxury Laundry Purwokerto</span>
       </Box>
     </>
   );
@@ -437,6 +578,7 @@ function HomePage() {
       <EventSection />
 
       <TestimonySection />
+      <FAQSection />
 
       <span>
         <ContactAndLocationSection />
