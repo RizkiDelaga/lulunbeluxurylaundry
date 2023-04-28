@@ -164,6 +164,12 @@ input[type=number] {
   border-radius: 8px;
 }
 
+.gap-10 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 0px;
+}
+
 .gap-16 {
   display: flex;
   flex-wrap: wrap;
