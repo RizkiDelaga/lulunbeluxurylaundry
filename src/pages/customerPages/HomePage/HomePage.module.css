@@ -13,8 +13,15 @@
     border-radius: 16px !important;
 }
 
-.shadow-card:hover {
+.shadow-card:hover, .carousell-card:hover {
     box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 8px -4px, rgba(0, 0, 0, 0.14) 0px 12px 17px 2px, rgba(0, 0, 0, 0.12) 0px 5px 22px 4px;
     transform: scale(1.05) !important;
     transition: transform .2s;
 }
+
+
+/* .carousell-card:hover{
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 8px -4px, rgba(0, 0, 0, 0.14) 0px 12px 17px 2px, rgba(0, 0, 0, 0.12) 0px 5px 22px 4px;
+    transform: scale(1.05) !important;
+    transition: transform .2s;
+} */

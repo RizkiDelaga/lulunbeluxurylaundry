@@ -14,7 +14,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SingleWave from '../../../assets/images/SingleWave.png';
 import DoubleWave from '../../../assets/images/DoubleWave.png';
@@ -293,6 +293,134 @@ function OperatingHoursAndHowToOrderSection() {
 }
 
 function EventSection() {
+  const [openEventDetail, setOpenEventDetail] = React.useState([]);
+  // let openEventDetail = [];
+
+  useEffect(() => {
+    // [1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => setOpenEventDetail((stateA) => [...stateA, 'false']));
+    [1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => openEventDetail.push(false));
+    console.log(openEventDetail);
+  }, []);
+  return (
+    <>
+      <Container>
+        <div style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', marginTop: '26px' }}>Event</div>
+        <Swiper
+          grabCursor={true}
+          pagination={{
+            dynamicBullets: true,
+            clickable: true,
+          }}
+          breakpoints={{
+            600: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            900: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1200: {
+              slidesPerView: 4,
+              spaceBetween: 30,
+            },
+          }}
+          modules={[Pagination]}
+          // className="mySwiper"
+        >
+          {[1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => {
+            return (
+              <SwiperSlide style={{ height: 'auto' }}>
+                <Paper
+                  elevation={8}
+                  className={` gap-10 ${style['carousell-card']}`}
+                  sx={{ borderRadius: '4px', height: '100%', flexDirection: 'column', justifyContent: 'space-between' }}
+                >
+                  <div>
+                    <img
+                      src="https://loremflickr.com/cache/resized/65535_52104205072_e260b47a8e_c_640_480_nofilter.jpg"
+                      width="100%"
+                      height={320}
+                      alt=""
+                      style={{ borderRadius: '4px 4px 0px 0px', objectFit: 'cover' }}
+                    />
+                    <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                      <h5>Lorem ipsum dolor sit.</h5>
+                      <span>Lorem ipsum</span>
+
+                      <span>
+                        Lorem ipsum dolor sit amet.{' '}
+                        {eventItem === 2
+                          ? 'Lorem ipsum. Ea sunt impedit repellat cupiditate eveniet ut, enim odio doloremque labore voluptas quaerat?'
+                          : null}
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ padding: '16px' }}>
+                    <Button
+                      variant="contained"
+                      onClick={async () => {
+                        let newStatus = await [...openEventDetail];
+
+                        newStatus[index] = !newStatus[index];
+                        console.log(newStatus);
+                        setOpenEventDetail([...newStatus]);
+                      }}
+                      sx={{ width: '100%', zIndex: openEventDetail[index] ? 100 : 'none' }}
+                    >
+                      {openEventDetail[index] ? 'Tutup detail' : 'Lihat Detail'}
+                    </Button>
+                  </div>
+                  {/* Open Event Detail */}
+                  {openEventDetail[index] === true ? (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(31, 48, 92, 0.8)',
+                        borderRadius: '4px',
+                        overflowY: 'auto',
+                        color: '#ffffff',
+                      }}
+                    >
+                      <div style={{ padding: '16px' }}>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et voluptatem minus dolorem?
+                        Praesentium necessitatibus provident facilis ab dolorum libero blanditiis dicta eos vero,
+                        delectus quos dolorem molestiae, alias ducimus quibusdam? Lorem ipsum dolor sit, amet
+                        consectetur adipisicing elit. Et voluptatem minus dolorem? Praesentium necessitatibus provident
+                        facilis ab dolorum libero blanditiis dicta eos vero, delectus quos dolorem molestiae, alias
+                        ducimus quibusdam? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et voluptatem minus
+                        dolorem? Praesentium necessitatibus provident facilis ab dolorum libero blanditiis dicta eos
+                        vero, delectus quos dolorem molestiae, alias ducimus quibusdam? Lorem ipsum dolor sit, amet
+                        consectetur adipisicing elit. Et voluptatem minus dolorem? Praesentium necessitatibus provident
+                        facilis ab dolorum libero blanditiis dicta eos vero, delectus quos dolorem molestiae, alias
+                        ducimus quibusdam? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et voluptatem minus
+                        dolorem? Praesentium necessitatibus provident facilis ab dolorum libero blanditiis dicta eos
+                        vero, delectus quos dolorem molestiae, alias ducimus quibusdam? Lorem ipsum dolor sit, amet
+                        consectetur adipisicing elit. Et voluptatem minus dolorem? Praesentium necessitatibus provident
+                        facilis ab dolorum libero blanditiis dicta eos vero, delectus quos dolorem molestiae, alias
+                        ducimus quibusdam? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et voluptatem minus
+                        dolorem? Praesentium necessitatibus provident facilis ab dolorum libero blanditiis dicta eos
+                        vero, delectus quos dolorem molestiae, alias ducimus quibusdam? Lorem ipsum dolor sit, amet
+                        consectetur adipisicing elit. Et voluptatem minus dolorem? Praesentium necessitatibus provident
+                        facilis ab dolorum libero blanditiis dicta eos vero, delectus quos dolorem molestiae, alias
+                        ducimus quibusdam?
+                      </div>
+                    </Box>
+                  ) : null}
+                </Paper>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+        {/* {openEventDetail[0]} asd */}
+      </Container>
+    </>
+  );
+}
+
+function ReasonSection() {
   return (
     <>
       <Container>
@@ -364,49 +492,61 @@ function TestimonySection() {
 }
 
 function FAQSection() {
+  const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setCurrentWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
+
   return (
     <>
       <Container>
         <h4 className={`${style['section-title']}`}>Pertanyaan Yang Sering Diajukan</h4>
 
         <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ color: '#000000' }}>
-                <Typography>Accordion 1</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet
-                  blandit leo lobortis eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ color: '#000000' }}>
-                <Typography>Accordion 1</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet
-                  blandit leo lobortis eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ color: '#000000' }}>
-                <Typography>Accordion 1</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet
-                  blandit leo lobortis eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
+          {(currentWidth < 900 ? [1] : [1, 2]).map((gridTotal, gridIndex) => {
+            return (
+              <Grid item xs={12} md={6}>
+                {[1, 2, 3, 4, 5, 6, 7]
+                  .filter((filterItem, filterIndex) => {
+                    let lengthArr = 7;
+                    // console.log(currentWidth);
+                    if (currentWidth < 900) {
+                      return filterIndex <= lengthArr;
+                    } else {
+                      if (gridIndex + 1 === 1) {
+                        return filterIndex < lengthArr / 2;
+                      } else {
+                        return filterIndex >= lengthArr / 2;
+                      }
+                    }
+                  })
+                  .map((FAQitem, index) => {
+                    return (
+                      <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ color: '#000000' }}>
+                          <Typography>Accordion {FAQitem}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
+                            amet blandit leo lobortis eget.
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
+                    );
+                  })}
+              </Grid>
+            );
+          })}
         </Grid>
       </Container>
     </>
