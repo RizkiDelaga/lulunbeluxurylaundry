@@ -26,6 +26,7 @@ import EditOffIcon from '@mui/icons-material/EditOff';
 function ReasonsWhyChooseUs() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const formData = new FormData();
   const [listReasonsWhyChooseUs, setListReasonsWhyChooseUs] = useState([]);
   const [formReasonsWhyChooseUs, setFormReasonsWhyChooseUs] = useState({
     id: null,
@@ -70,11 +71,7 @@ function ReasonsWhyChooseUs() {
       const res = await axios({
         method: 'POST',
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan',
-        data: {
-          judul: data.reasonTitle,
-          deskripsi: data.description,
-          gambar: data.photo.fileName,
-        },
+        data: data,
       });
       console.log('Response POST');
       console.log(res);
@@ -97,17 +94,13 @@ function ReasonsWhyChooseUs() {
     }
   };
 
-  const putApiHandler = async (data) => {
+  const putApiHandler = async (data, id) => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'PUT',
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan/${data.id}`,
-        data: {
-          judul: data.reasonTitle,
-          deskripsi: data.description,
-          gambar: data.photo.fileName,
-        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan/${id}`,
+        data: data,
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -297,7 +290,7 @@ function ReasonsWhyChooseUs() {
                       <Chip
                         label={formReasonsWhyChooseUs.photo.fileName}
                         onDelete={() =>
-                          setFormReasonsWhyChooseUs({ ...formReasonsWhyChooseUs, photo: { img: null, fileName: '' } })
+                          setFormReasonsWhyChooseUs({ ...formReasonsWhyChooseUs, photo: { img: null, fileName: null } })
                         }
                         sx={{ maxWidth: '250px' }}
                       />
@@ -311,10 +304,13 @@ function ReasonsWhyChooseUs() {
               variant="contained"
               size="large"
               onClick={() => {
+                formData.append('judul', formReasonsWhyChooseUs.reasonTitle);
+                formData.append('deskripsi', formReasonsWhyChooseUs.description);
+                formData.append('gambar', formReasonsWhyChooseUs.photo.img);
                 if (formReasonsWhyChooseUs.id) {
-                  putApiHandler(formReasonsWhyChooseUs);
+                  putApiHandler(formData, formReasonsWhyChooseUs.id);
                 } else {
-                  postApiHandler(formReasonsWhyChooseUs);
+                  postApiHandler(formData);
                 }
                 setFormReasonsWhyChooseUs({
                   id: null,
@@ -359,7 +355,7 @@ function ReasonsWhyChooseUs() {
                           <span>{item.deskripsi}</span>
                         </TableCell>
                         <TableCell>
-                          <span>{item.gambar ? <img src="" width={60} alt={item.gambar} /> : null}</span>
+                          <span>{item.gambar ? <img src={item.gambar} width={60} alt={item.gambar} /> : null}</span>
                         </TableCell>
                         <TableCell>
                           <Box
