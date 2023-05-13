@@ -55,6 +55,14 @@ h6 {
 
 }
 
+.small-text {
+  font-size: 14px !important;
+}
+
+.super-small-text {
+  font-size: 12px !important;
+}
+
 /* ========= SCROLLBAR ======== */
 
 /* Custom Scrollbar */

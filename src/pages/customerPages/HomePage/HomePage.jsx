@@ -20,7 +20,6 @@ import SingleWave from '../../../assets/images/SingleWave.png';
 import DoubleWave from '../../../assets/images/DoubleWave.png';
 import SquareWave from '../../../assets/images/SquareWave.png';
 import style from './HomePage.module.css';
-import { display } from '@mui/system';
 import parse from 'html-react-parser';
 import InstagramIcon from '../../../assets/icons/icons8-instagram.svg';
 import FacebookIcon from '../../../assets/icons/icons8-facebook.svg';
@@ -37,6 +36,7 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination } from 'swiper';
+import RatingComponent from '../../../components/Ratings/RatingComponent';
 
 function HeroSection() {
   return (
@@ -45,11 +45,7 @@ function HeroSection() {
         <Container>
           <Grid container spacing={3}>
             <Grid item sm={6} md={5} lg={4}>
-              <img
-                src="https://loremflickr.com/cache/resized/65535_52104205072_e260b47a8e_c_640_480_nofilter.jpg"
-                width="100%"
-                alt=""
-              />
+              <img src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png" width="100%" alt="" />
             </Grid>
             <Grid
               item
@@ -99,7 +95,7 @@ function LaundryTypeSection() {
                 >
                   <h5>Lorem, ipsum dolor.</h5>
                   <img
-                    src="https://loremflickr.com/cache/resized/65535_52104205072_e260b47a8e_c_640_480_nofilter.jpg"
+                    src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
                     width={100}
                     height={100}
                     style={{ borderRadius: '16px', objectFit: 'cover', backgroundColor: '#EEEEEE' }}
@@ -139,7 +135,7 @@ function ServiceTypeSection() {
                 <Grid container sx={{ p: 2, height: '100%', display: 'flex', gap: '20px 0px' }}>
                   <Grid item xs="auto" sm="auto" md="auto" lg="auto" sx={{ display: 'flex', justifyContent: 'center' }}>
                     <img
-                      src="https://loremflickr.com/cache/resized/65535_52104205072_e260b47a8e_c_640_480_nofilter.jpg"
+                      src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
                       width={100}
                       height={100}
                       style={{
@@ -199,7 +195,7 @@ function OperatingHoursAndHowToOrderSection() {
     {
       label: 'Create an ad group',
       description: 'An ad group contains one or more ads which target a shared set of keywords.',
-      img: 'https://loremflickr.com/cache/resized/65535_52104205072_e260b47a8e_c_640_480_nofilter.jpg',
+      img: 'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png',
     },
     {
       label: 'Create an ad',
@@ -338,7 +334,7 @@ function EventSection() {
                 >
                   <div>
                     <img
-                      src="https://loremflickr.com/cache/resized/65535_52104205072_e260b47a8e_c_640_480_nofilter.jpg"
+                      src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
                       width="100%"
                       height={320}
                       alt=""
@@ -424,7 +420,9 @@ function ReasonSection() {
   return (
     <>
       <Container>
-        <div style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', marginTop: '26px' }}>Event</div>
+        <div style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', marginTop: '26px' }}>
+          Alasan Memilih Kami
+        </div>
 
         <Swiper
           grabCursor={true}
@@ -452,13 +450,37 @@ function ReasonSection() {
           {[1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => {
             return (
               <SwiperSlide>
-                <Box className={`${style['shadow-card']}`}>
-                  <img
-                    src="https://loremflickr.com/cache/resized/65535_52104205072_e260b47a8e_c_640_480_nofilter.jpg"
-                    width="100%"
-                    alt=""
-                  />
-                </Box>
+                <Paper
+                  elevation={8}
+                  className={`gap-10 ${style['shadow-card']}`}
+                  sx={{ padding: '16px', borderRadius: '24px', gap: '10px' }}
+                  // sx={{ borderRadius: '4px', height: '100%', flexDirection: 'column', justifyContent: 'space-between' }}
+                >
+                  <div style={{ display: 'flex', gap: '0px 10px' }}>
+                    <div
+                      style={{
+                        height: '30px',
+                        minWidth: '30px',
+                        backgroundColor: '#1F305C',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontWeight: 'bold',
+                        color: '#ffffff',
+                      }}
+                    >
+                      {eventItem}
+                    </div>
+                    <h5>High Technology Fabric Care Machine</h5>
+                  </div>
+                  <div style={{ wordWrap: 'break-word' }}>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos voluptatum expedita at, hic sunt odio?
+                    Tenetur quidem consectetur, at hic placeat voluptas iure unde est, velit sunt vero, cum neque?
+                  </div>
+
+                  <img src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png" width="100%" alt="" />
+                </Paper>
               </SwiperSlide>
             );
           })}
@@ -472,20 +494,81 @@ function TestimonySection() {
   return (
     <>
       <Container>
-        <h4 className={`${style['section-title']}`}>Testimoni Pelanggan</h4>
+        <div style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', marginTop: '26px' }}>
+          Testimoni Pelanggan
+        </div>
 
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. At sunt amet totam officiis voluptate placeat
-            excepturi molestiae, corrupti quos sint nobis, aspernatur maxime doloribus enim! Repudiandae vel molestiae
-            culpa est.
-          </Grid>
-          <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. At sunt amet totam officiis voluptate placeat
-            excepturi molestiae, corrupti quos sint nobis, aspernatur maxime doloribus enim! Repudiandae vel molestiae
-            culpa est.
-          </Grid>
-        </Grid>
+        <Swiper
+          grabCursor={true}
+          pagination={{
+            dynamicBullets: true,
+            clickable: true,
+          }}
+          breakpoints={{
+            600: {
+              slidesPerView: 2,
+              spaceBetween: 10,
+            },
+            900: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1200: {
+              slidesPerView: 4,
+              spaceBetween: 30,
+            },
+          }}
+          modules={[Pagination]}
+          // className="mySwiper"
+        >
+          {[1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => {
+            return (
+              <SwiperSlide>
+                <Paper
+                  // elevation={8}
+                  // className={` gap-10 ${style['shadow-card']}`}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    gap: '16px',
+                    padding: '16px',
+                    borderRadius: '24px',
+                    border: '2px solid black',
+                    textAlign: 'center',
+                  }}
+                  // sx={{ borderRadius: '4px', height: '100%', flexDirection: 'column', justifyContent: 'space-between' }}
+                >
+                  <h5>Ahmad Yusuf Pangestu</h5>
+                  <img
+                    src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
+                    width="100"
+                    height="100"
+                    style={{ borderRadius: '50%', objectFit: 'cover' }}
+                    alt=""
+                  />
+
+                  <RatingComponent readOnly={true} />
+
+                  <div className="small-text">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium amet nisi maxime ducimus ab
+                    molestias provident magnam sunt illum, numquam fugiat odio aperiam cupiditate exercitationem
+                    obcaecati esse beatae saepe reprehenderit!
+                  </div>
+
+                  <img
+                    src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
+                    width="120"
+                    height="120"
+                    style={{ objectFit: 'cover' }}
+                    alt=""
+                  />
+                  <div className="small-text">25/04/2023</div>
+                </Paper>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
       </Container>
     </>
   );
@@ -716,6 +799,8 @@ function HomePage() {
       <OperatingHoursAndHowToOrderSection />
 
       <EventSection />
+
+      <ReasonSection />
 
       <TestimonySection />
       <FAQSection />
