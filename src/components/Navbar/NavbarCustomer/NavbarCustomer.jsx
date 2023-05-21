@@ -36,7 +36,6 @@ import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { getExample } from '../../../redux/actions/exampleAction';
 import MuiToggleButton from '@mui/material/ToggleButton';
-import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { NavHashLink } from 'react-router-hash-link';
 
 const drawerWidth = 300;
