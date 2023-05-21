@@ -1,0 +1,14 @@
+/* Navbar Start */
+
+.justify-navbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-notification {
+    /* align-items: self-end !important; */
+    word-wrap: break-word !important;
+    white-space: pre-wrap !important;
+}
+
+/* Navbar End */
