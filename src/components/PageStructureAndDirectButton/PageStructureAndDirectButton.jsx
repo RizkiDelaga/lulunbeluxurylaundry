@@ -49,6 +49,11 @@ function PageStructureAndDirectButton(props) {
       link: '/Pelanggan',
       icon: <GroupsOutlinedIcon className="color-primary" sx={{ mr: 1 }} />,
     },
+    {
+      title: 'Area Pelanggan',
+      link: '/AreaPelanggan',
+      icon: <GroupsOutlinedIcon className="color-primary" sx={{ mr: 1 }} />,
+    },
   ];
   const mainMenu = listMenu.find((item) => item.title.toLowerCase() === props.defaultMenu.toLowerCase());
 

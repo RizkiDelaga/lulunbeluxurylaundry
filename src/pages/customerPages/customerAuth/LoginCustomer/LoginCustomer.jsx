@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Example() {
+function LoginCustomer() {
   const navigate = useNavigate();
 
   return <></>;
 }
 
-export default Example;
+export default LoginCustomer;

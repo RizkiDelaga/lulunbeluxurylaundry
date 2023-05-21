@@ -14,7 +14,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SingleWave from '../../../assets/images/SingleWave.png';
 import DoubleWave from '../../../assets/images/DoubleWave.png';
@@ -76,7 +76,9 @@ function HeroSection() {
 function LaundryTypeSection() {
   return (
     <Container>
-      <h4 className={`${style['section-title']}`}>Pilihan Laundry</h4>
+      <h4 className={`${style['section-title']}`} id="PilihanLaundry">
+        Pilihan Laundry
+      </h4>
       <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
         {[1, 2, 3, 4].map((item, index) => {
           return (
@@ -126,7 +128,9 @@ function LaundryTypeSection() {
 function ServiceTypeSection() {
   return (
     <Container>
-      <h4 className={`${style['section-title']}`}>Jenis Layanan Kami</h4>
+      <h4 className={`${style['section-title']}`} id="JenisLayanan">
+        Jenis Layanan Kami
+      </h4>
       <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
         {[1, 2, 3, 4].map((item, index) => {
           return (
@@ -214,7 +218,9 @@ function OperatingHoursAndHowToOrderSection() {
         <Container>
           <Grid container spacing={2}>
             <Grid item sm={6} md={5}>
-              <h4 className={`${style['section-title']}`}>Jam Operasional</h4>
+              <h4 className={`${style['section-title']}`} id="JamOperasional">
+                Jam Operasional
+              </h4>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo beatae sunt mollitia tempore, eligendi
               praesentium repellendus porro aperiam sapiente libero, asperiores assumenda quod vero dignissimos esse
               omnis. Error, repellendus eligendi.
@@ -232,7 +238,9 @@ function OperatingHoursAndHowToOrderSection() {
                 },
               }}
             >
-              <h4 className={`${style['section-title']}`}>Cara Pemesanan</h4>
+              <h4 className={`${style['section-title']}`} id="CaraPemesanan">
+                Cara Pemesanan
+              </h4>
               <Box sx={{ maxWidth: 400 }}>
                 <Stepper activeStep={activeStep} orientation="vertical">
                   {steps.map((step, index) => (
@@ -300,7 +308,9 @@ function EventSection() {
   return (
     <>
       <Container>
-        <div style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', marginTop: '26px' }}>Event</div>
+        <div id="Event" style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', marginTop: '26px' }}>
+          Event
+        </div>
         <Swiper
           grabCursor={true}
           pagination={{
@@ -494,7 +504,10 @@ function TestimonySection() {
   return (
     <>
       <Container>
-        <div style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', marginTop: '26px' }}>
+        <div
+          id="TestimoniPelanggan"
+          style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', marginTop: '26px' }}
+        >
           Testimoni Pelanggan
         </div>
 
@@ -657,7 +670,9 @@ function ContactAndLocationSection() {
         />
         <Box sx={{ backgroundColor: '#FFFFFF', py: '20px' }}>
           <Container>
-            <h4 className={`${style['section-title']}`}>Kontak & Lokasi</h4>
+            <h4 className={`${style['section-title']}`} id="KontakDanLokasi">
+              Kontak & Lokasi
+            </h4>
 
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6} md={5} lg={5}>
