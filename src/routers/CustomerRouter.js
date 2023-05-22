@@ -9,6 +9,12 @@ import Gallery from '../pages/customerPages/Gallery/Gallery';
 import DigitalReceipt from '../pages/customerPages/DigitalReceipt/DigitalReceipt';
 import CustomerArea from '../pages/customerPages/customerArea/CustomerArea';
 import RatingAndReview from '../pages/customerPages/customerArea/RatingAndReview/RatingAndReview';
+import AccountValidation from '../pages/customerPages/customerAuth/AccountValidation/AccountValidation';
+import ChangePasswordOnForgotPassword from '../pages/customerPages/customerAuth/ChangePasswordOnForgotPassword/ChangePasswordOnForgotPassword';
+import ForgotPasswordRequest from '../pages/customerPages/customerAuth/ForgotPasswordRequest/ForgotPasswordRequest';
+import CustomerRegistration from '../pages/customerPages/customerAuth/CustomerRegistration/CustomerRegistration';
+import ChangePassword from '../pages/customerPages/customerArea/ChangePassword/ChangePassword';
+import EditProfile from '../pages/customerPages/customerArea/EditProfile/EditProfile';
 
 function CustomerRouter() {
 
@@ -43,17 +49,17 @@ function CustomerRouter() {
           </Route>
 
           <Route element={<HandleLoginSuccessfully />}>
-            <Route path="Registrasi" element={<HomePage />} />
+            <Route path="Registrasi" element={<CustomerRegistration />} />
             <Route path="Login" element={<LoginCustomer />} />
-            <Route path="AjukanLupaPassword" element={<HomePage />} />
-            <Route path="ValidasiAkun" element={<HomePage />} />
-            <Route path="UbahPassword" element={<HomePage />} />
+            <Route path="LupaPassword" element={<ForgotPasswordRequest />} />
+            <Route path="ValidasiAkun" element={<AccountValidation />} />
+            <Route path="UbahPassword" element={<ChangePasswordOnForgotPassword />} />
           </Route>
 
           <Route element={<ProtectedCustomerRoute />}>
             <Route path="AreaPelanggan" element={<CustomerArea />} />
-            <Route path="AreaPelanggan/EditProfil" element={<HomePage />} />
-            <Route path="AreaPelanggan/UbahPassword" element={<HomePage />} />
+            <Route path="AreaPelanggan/EditProfil" element={<EditProfile />} />
+            <Route path="AreaPelanggan/UbahPassword" element={<ChangePassword />} />
             <Route path="AreaPelanggan/BuatPesananBaru" element={<HomePage />} />
             <Route path="AreaPelanggan/:id" element={<HomePage />} />
             <Route path="AreaPelanggan/RatingDanReview" element={<RatingAndReview />} />

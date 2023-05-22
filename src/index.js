@@ -14,6 +14,9 @@ const theme = createTheme({
       light: '#f5f5f5',
       main: '#eeeeee',
     },
+    neutral: {
+      main: '#ffffff',
+    },
   },
 });
 
