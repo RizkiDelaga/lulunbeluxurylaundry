@@ -20,7 +20,7 @@ function InformationCard(props) {
           justifyContent: 'space-between',
           gap: '16px',
           padding: '10px',
-          backgroundColor: '#ffffff',
+          backgroundColor: props.inheritColor ? 'inherit' : '#ffffff',
           borderRadius: '4px',
           color: '#000000',
         }}

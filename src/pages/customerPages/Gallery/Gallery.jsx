@@ -7,7 +7,7 @@ function Gallery() {
 
   return (
     <>
-      <Container sx={{ mt: '75px', mb: '50px' }}>
+      <Container sx={{ mt: '50px', mb: '25px' }}>
         <h3 style={{ textAlign: 'center' }}>Galeri</h3>
       </Container>
     </>

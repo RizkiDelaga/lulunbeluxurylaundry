@@ -17,17 +17,19 @@ import {
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-function LoginCustomer() {
+function CustomerRegistration() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [formLoginCustomer, setFormLoginCustomer] = useState({
+  const [formRegisterCustomer, setFormRegisterCustomer] = useState({
     customerName: '',
+    noTelp: '',
     password: '',
+    confirmPassword: '',
   });
 
   React.useEffect(() => {
-    document.title = 'Login Pelanggan';
+    document.title = 'Registrasi Pelanggan Baru';
   }, []);
 
   return (
@@ -58,12 +60,11 @@ function LoginCustomer() {
           >
             <Box className="gap-16">
               <div style={{ width: '100%', textAlign: 'center', paddingTop: '8px', paddingBottom: '8px' }}>
-                <h2 style={{ margin: 0 }}>Login Pelanggan</h2>
-                <div>Masuk ke dalam akun anda</div>
+                <h2 style={{ margin: 0 }}>Buat Akun</h2>
               </div>
               <Grid container>
-                <Grid item xs={12} sm={12} md={2.3} lg={2.5} sx={{ display: 'flex', alignItems: 'center' }}>
-                  Nama Akun
+                <Grid item xs={12} sm={12} md={2.6} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
+                  Nama Lengkap
                 </Grid>
                 <Grid
                   item
@@ -78,10 +79,10 @@ function LoginCustomer() {
                 >
                   <TextField
                     required
-                    label="Nama Akun"
-                    value={formLoginCustomer.customerName}
+                    label="Nama Lengkap"
+                    value={formRegisterCustomer.customerName}
                     onChange={(e) => {
-                      setFormLoginCustomer({ ...formLoginCustomer, customerName: e.target.value });
+                      setFormRegisterCustomer({ ...formRegisterCustomer, customerName: e.target.value });
                     }}
                     autoComplete="off"
                     sx={{ width: '100%' }}
@@ -89,7 +90,35 @@ function LoginCustomer() {
                 </Grid>
               </Grid>
               <Grid container>
-                <Grid item xs={12} sm={12} md={2.3} lg={2.5} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Grid item xs={12} sm={12} md={2.6} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
+                  Nomer Telepon
+                </Grid>
+                <Grid
+                  item
+                  xs
+                  lg
+                  sx={{
+                    display: 'flex',
+                    [theme.breakpoints.down('md')]: {
+                      paddingTop: '8px !important',
+                    },
+                  }}
+                >
+                  <TextField
+                    required
+                    type="number"
+                    label="Nomer Telepon"
+                    value={formRegisterCustomer.noTelp}
+                    onChange={(e) => {
+                      setFormRegisterCustomer({ ...formRegisterCustomer, noTelp: e.target.value });
+                    }}
+                    autoComplete="off"
+                    sx={{ width: '100%' }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={2.6} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
                   Password
                 </Grid>
                 <Grid
@@ -106,7 +135,7 @@ function LoginCustomer() {
                   <FormControl
                     variant="outlined"
                     onChange={(e) => {
-                      setFormLoginCustomer({ ...formLoginCustomer, password: e.target.value });
+                      setFormRegisterCustomer({ ...formRegisterCustomer, password: e.target.value });
                     }}
                     sx={{ width: '100%' }}
                   >
@@ -127,34 +156,72 @@ function LoginCustomer() {
                   </FormControl>
                 </Grid>
               </Grid>
-              <div style={{ fontSize: '12px', opacity: '0.6', width: '100%', textAlign: 'right' }}>
-                <Link to={'/LupaPassword'} className="disable-link-style">
-                  Lupa Password?
-                </Link>
-              </div>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={2.6} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
+                  Konfirmasi Password
+                </Grid>
+                <Grid
+                  item
+                  xs
+                  lg
+                  sx={{
+                    display: 'flex',
+                    [theme.breakpoints.down('md')]: {
+                      paddingTop: '8px !important',
+                    },
+                  }}
+                >
+                  <FormControl
+                    variant="outlined"
+                    onChange={(e) => {
+                      setFormRegisterCustomer({ ...formRegisterCustomer, confirmPassword: e.target.value });
+                    }}
+                    sx={{ width: '100%' }}
+                  >
+                    <InputLabel htmlFor="input-confirm-password">Konfirmasi Password *</InputLabel>
+                    <OutlinedInput
+                      required
+                      label="Konfirmasi Password"
+                      id="input-confirm-password"
+                      type={showPassword ? 'text' : 'password'}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" color="primary">
+                            {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+
               <Button
                 variant="contained"
                 size="large"
                 onClick={() => {
-                  navigate('/AreaPelanggan');
-                  localStorage.setItem('access_token', 'sadas7821ufye181');
+                  navigate('/Login');
                 }}
                 style={{ width: '100%', fontWeight: 'bold' }}
               >
-                Masuk
+                Registrasi
               </Button>
-              {formLoginCustomer.customerName}
+              {formRegisterCustomer.customerName}
               <br />
-              {formLoginCustomer.password}
+              {formRegisterCustomer.noTelp}
+              <br />
+              {formRegisterCustomer.password}
+              <br />
+              {formRegisterCustomer.confirmPassword}
             </Box>
           </Paper>
 
           <br />
 
           <div>
-            Belum memiliki akun?{' '}
-            <Link to={'/Registrasi'} className="disable-link-style" style={{ color: '#1F305C' }}>
-              REGISTRASI
+            Sudah memiliki akun?{' '}
+            <Link to={'/Login'} className="disable-link-style" style={{ color: '#1F305C' }}>
+              LOGIN
             </Link>
           </div>
         </Box>
@@ -163,4 +230,4 @@ function LoginCustomer() {
   );
 }
 
-export default LoginCustomer;
+export default CustomerRegistration;

@@ -9,7 +9,7 @@ function AboutUs() {
 
   return (
     <>
-      <Container sx={{ mt: '75px', mb: '50px' }}>
+      <Container sx={{ mt: '50px', mb: '25px' }}>
         <Paper
           elevation={3}
           sx={{ padding: 3, borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '24px' }}

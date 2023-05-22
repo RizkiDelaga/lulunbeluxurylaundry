@@ -512,8 +512,9 @@ function NavbarCustomer(props) {
                       display: 'flex',
                       // justifyContent: 'space-between',
                       alignItems: 'center',
-                      marginLeft: '16px',
-                      marginRight: '16px',
+                      // marginLeft: '16px',
+                      // marginRight: '16px',
+                      margin: '8px 16px',
                     }}
                   >
                     <Avatar
@@ -546,7 +547,12 @@ function NavbarCustomer(props) {
                     Ubah Password
                   </MenuItem>
                   <Divider />
-                  <MenuItem onClick={() => handleCloseAccountMenu('/Login')}>
+                  <MenuItem
+                    onClick={() => {
+                      localStorage.removeItem('access_token');
+                      handleCloseAccountMenu('/Login');
+                    }}
+                  >
                     <ListItemIcon>
                       <ExitToAppIcon className="color-primary" />
                     </ListItemIcon>
