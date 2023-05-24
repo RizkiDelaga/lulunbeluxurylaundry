@@ -21,6 +21,7 @@ import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { banyumasAreaList } from '../../../../utils/banyumasAreaList';
+import AddressCard from '../../../../components/Card/InformationCard/AddressCard';
 
 function EditProfile() {
   const theme = useTheme();
@@ -79,13 +80,6 @@ function EditProfile() {
 
   return (
     <>
-      {/* <div className="gap-24" style={{ marginBottom: '24px' }}>
-        <PageStructureAndDirectButton
-          defaultMenu="Pelanggan"
-          currentPage={{
-            title: 'Registrasi Pelanggan Baru',
-          }}
-        /> */}
       <Box
         sx={{
           display: 'flex',
@@ -324,6 +318,7 @@ function EditProfile() {
           </Box>
         </Paper>
 
+        {/* Address Configuration */}
         <Grid container spacing={2}>
           <Grid item xs={12} md={7}>
             <Paper
@@ -332,7 +327,7 @@ function EditProfile() {
             >
               <Box className="gap-16">
                 <div style={{ width: '100%', textAlign: 'center' }}>
-                  <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Tambah Alamat</h2>
+                  <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Tambah Alamat</h4>
                 </div>
                 {/* <div style={{ fontWeight: 'bold', width: '100%', textAlign: 'center' }}>Alamat Utama</div> */}
 
@@ -709,10 +704,12 @@ function EditProfile() {
             </Paper>
           </Grid>
           <Grid item xs={12} md={5}>
-            Lorem, ipsum.
+            <div style={{ width: '100%', textAlign: 'left' }}>
+              <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Alamat Pelanggan</h4>
+            </div>
+            <AddressCard data={{}} />
           </Grid>
         </Grid>
-        {/* </div> */}
       </Box>
     </>
   );

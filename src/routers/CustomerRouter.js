@@ -15,6 +15,7 @@ import ForgotPasswordRequest from '../pages/customerPages/customerAuth/ForgotPas
 import CustomerRegistration from '../pages/customerPages/customerAuth/CustomerRegistration/CustomerRegistration';
 import ChangePassword from '../pages/customerPages/customerArea/ChangePassword/ChangePassword';
 import EditProfile from '../pages/customerPages/customerArea/EditProfile/EditProfile';
+import OrderDetails from '../pages/customerPages/customerArea/OrderDetails/OrderDetails';
 
 function CustomerRouter() {
 
@@ -58,10 +59,10 @@ function CustomerRouter() {
 
           <Route element={<ProtectedCustomerRoute />}>
             <Route path="AreaPelanggan" element={<CustomerArea />} />
+            <Route path="AreaPelanggan/:id" element={<OrderDetails />} />
             <Route path="AreaPelanggan/EditProfil" element={<EditProfile />} />
             <Route path="AreaPelanggan/UbahPassword" element={<ChangePassword />} />
             <Route path="AreaPelanggan/BuatPesananBaru" element={<HomePage />} />
-            <Route path="AreaPelanggan/:id" element={<HomePage />} />
             <Route path="AreaPelanggan/RatingDanReview" element={<RatingAndReview />} />
           </Route>
         </Routes>

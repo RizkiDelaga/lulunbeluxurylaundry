@@ -110,8 +110,9 @@ function Gallery() {
               ) : (
                 <img
                   src={openDialog.data.media}
-                  height={'100%'}
-                  style={{ objectFit: 'cover', maxHeight: '500px' }}
+                  width={'100%'}
+                  // height={'100%'}
+                  style={{ objectFit: 'contain' }}
                   alt=""
                 />
               )
