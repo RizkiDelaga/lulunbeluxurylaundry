@@ -16,6 +16,7 @@ import {
 
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import axios from 'axios';
 
 function CustomerRegistration() {
   const theme = useTheme();
@@ -31,6 +32,26 @@ function CustomerRegistration() {
   React.useEffect(() => {
     document.title = 'Registrasi Pelanggan Baru';
   }, []);
+
+  const registrationCustomerHandler = async (data) => {
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/register',
+        data: {
+          nama: data.customerName,
+          noTelp: data.noTelp,
+          email: 'rizki11223@gmail.com',
+          password: data.password,
+        },
+      });
+      console.log('Response POST Register Customer');
+      console.log(res);
+      navigate('/Login');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -200,7 +221,7 @@ function CustomerRegistration() {
                 variant="contained"
                 size="large"
                 onClick={() => {
-                  navigate('/Login');
+                  registrationCustomerHandler(formRegisterCustomer);
                 }}
                 style={{ width: '100%', fontWeight: 'bold' }}
               >

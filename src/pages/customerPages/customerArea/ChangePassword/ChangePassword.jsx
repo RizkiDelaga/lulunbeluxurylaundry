@@ -16,17 +16,18 @@ import {
 } from '@mui/material';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import axios from 'axios';
 
 function ChangePassword() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [formChangePassword, setFormChangePassword] = useState({
-    currentPassword: '',
+    oldPassword: '',
     newPassword: '',
     confirmNewPassword: '',
   });
   const [showPassword, setShowPassword] = useState({
-    currentPassword: false,
+    oldPassword: false,
     newPassword: false,
     confirmNewPassword: false,
   });
@@ -34,6 +35,27 @@ function ChangePassword() {
   React.useEffect(() => {
     document.title = 'Ubah Password';
   }, []);
+
+  const changePasswordHandler = async (data) => {
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/change-password',
+        data: {
+          oldPassword: data.oldPassword,
+          password: data.newPassword,
+        },
+      });
+      console.log('Response PUT Change Password Customer');
+      console.log(res);
+      navigate('/AreaPelanggan');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -83,7 +105,7 @@ function ChangePassword() {
                 <FormControl
                   variant="outlined"
                   onChange={(e) => {
-                    setFormChangePassword({ ...formChangePassword, currentPassword: e.target.value });
+                    setFormChangePassword({ ...formChangePassword, oldPassword: e.target.value });
                   }}
                   sx={{ width: '100%' }}
                 >
@@ -92,17 +114,15 @@ function ChangePassword() {
                     required
                     label="Password Saat Ini"
                     id="current-password"
-                    type={showPassword.currentPassword ? 'text' : 'password'}
+                    type={showPassword.oldPassword ? 'text' : 'password'}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
-                          onClick={() =>
-                            setShowPassword({ ...showPassword, currentPassword: !showPassword.currentPassword })
-                          }
+                          onClick={() => setShowPassword({ ...showPassword, oldPassword: !showPassword.oldPassword })}
                           edge="end"
                           color="primary"
                         >
-                          {showPassword.currentPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          {showPassword.oldPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -204,12 +224,12 @@ function ChangePassword() {
               variant="contained"
               size="large"
               style={{ width: '100%', fontWeight: 'bold' }}
-              onClick={() => navigate('/AreaPelanggan')}
+              onClick={() => changePasswordHandler(formChangePassword)}
             >
               Ubah Password
             </Button>
 
-            {formChangePassword.currentPassword}
+            {formChangePassword.oldPassword}
             <br />
             {formChangePassword.newPassword}
             <br />

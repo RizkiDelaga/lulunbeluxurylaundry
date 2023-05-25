@@ -15,6 +15,7 @@ import {
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import LockResetIcon from '@mui/icons-material/LockReset';
+import axios from 'axios';
 
 function ChangePasswordOnForgotPassword() {
   const theme = useTheme();
@@ -28,6 +29,26 @@ function ChangePasswordOnForgotPassword() {
   React.useEffect(() => {
     document.title = 'Ubah Password';
   }, []);
+
+  const registrationCustomerHandler = async (data) => {
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/register',
+        data: {
+          nama: data.customerName,
+          noTelp: data.noTelp,
+          email: 'rizki11223@gmail.com',
+          password: data.password,
+        },
+      });
+      console.log('Response POST Register Customer');
+      console.log(res);
+      navigate('/Login');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>

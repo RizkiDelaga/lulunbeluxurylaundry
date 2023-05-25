@@ -550,6 +550,9 @@ function NavbarCustomer(props) {
                   <MenuItem
                     onClick={() => {
                       localStorage.removeItem('access_token');
+                      localStorage.removeItem('my_name');
+                      localStorage.removeItem('my_profile_picture');
+                      localStorage.removeItem('business_logo');
                       handleCloseAccountMenu('/Login');
                     }}
                   >

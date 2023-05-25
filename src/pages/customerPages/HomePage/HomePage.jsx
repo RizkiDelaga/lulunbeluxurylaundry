@@ -37,6 +37,7 @@ import 'swiper/css/pagination';
 // import required modules
 import { Pagination } from 'swiper';
 import RatingComponent from '../../../components/Ratings/RatingComponent';
+import axios from 'axios';
 
 function HeroSection() {
   return (
@@ -73,14 +74,14 @@ function HeroSection() {
   );
 }
 
-function LaundryTypeSection() {
+function LaundryTypeSection({ listLaundryType }) {
   return (
     <Container>
       <h4 className={`${style['section-title']}`} id="PilihanLaundry">
         Pilihan Laundry
       </h4>
       <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
-        {[1, 2, 3, 4].map((item, index) => {
+        {listLaundryType.map((item, index) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <Paper elevation={8} className={`${style['shadow-card']}`}>
@@ -95,21 +96,15 @@ function LaundryTypeSection() {
                     pt: 2,
                   }}
                 >
-                  <h5>Lorem, ipsum dolor.</h5>
+                  <h5>{item.nama}</h5>
                   <img
-                    src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
+                    src={item.gambar || 'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'}
                     width={100}
                     height={100}
                     style={{ borderRadius: '16px', objectFit: 'cover', backgroundColor: '#EEEEEE' }}
                     alt=""
                   />
-                  <span>
-                    {/* {index === 2
-                    ? 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cum amet ut quis laborum saepe iure magnam dignissimos aliquid qui laudantium porro nobis autem tenetur iusto.'
-                    : null} */}
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cum amet ut quis laborum saepe iure magnam
-                    dignissimos aliquid qui laudantium porro nobis autem tenetur iusto, dicta atque officia ipsam illo.
-                  </span>
+                  <span>{item.deskripsi}</span>
                 </Box>
                 <Box sx={{ mx: 2, mb: 2 }}>
                   <Button variant="contained" sx={{ width: '100%' }}>
@@ -125,21 +120,21 @@ function LaundryTypeSection() {
   );
 }
 
-function ServiceTypeSection() {
+function ServiceTypeSection({ listServiceType }) {
   return (
     <Container>
       <h4 className={`${style['section-title']}`} id="JenisLayanan">
         Jenis Layanan Kami
       </h4>
       <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
-        {[1, 2, 3, 4].map((item, index) => {
+        {listServiceType.map((item, index) => {
           return (
             <Grid item xs={12} sm={6} md={6} lg={4}>
               <Paper elevation={8} className={`${style['shadow-card']}`}>
                 <Grid container sx={{ p: 2, height: '100%', display: 'flex', gap: '20px 0px' }}>
                   <Grid item xs="auto" sm="auto" md="auto" lg="auto" sx={{ display: 'flex', justifyContent: 'center' }}>
                     <img
-                      src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
+                      src={item.gamber || 'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'}
                       width={100}
                       height={100}
                       style={{
@@ -160,15 +155,12 @@ function ServiceTypeSection() {
                         marginLeft: '10px',
                       }}
                     >
-                      <h5>Express</h5>
-                      <h6>2 Jam Penyelesaian</h6>
-                      <span>
-                        {index === 2
-                          ? 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cum amet ut quis laborum saepe iure magnam dignissimos aliquid qui laudantium porro nobis autem tenetur iusto.'
-                          : null}
-                        Waktu pencucian dilakukan dengan singkat mulai dari 2-5 jam untuk kategori barang seperti
-                        pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.
-                      </span>
+                      <h5>{item.layanan}</h5>
+                      <h6>
+                        {item.hari ? `${item.hari} Hari` : null} {item.jam ? `${item.jam} Jam` : null}{' '}
+                        {item.menit ? `${item.menit} Menit` : null} Penyelesaian
+                      </h6>
+                      <span>{item.deskripsi}</span>
                     </span>
                     <Button variant="contained" sx={{ width: '100%' }}>
                       Pesan sekarang
@@ -296,13 +288,13 @@ function OperatingHoursAndHowToOrderSection() {
   );
 }
 
-function EventSection() {
+function EventSection({ listEvent }) {
   const [openEventDetail, setOpenEventDetail] = React.useState([]);
   // let openEventDetail = [];
 
   useEffect(() => {
     // [1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => setOpenEventDetail((stateA) => [...stateA, 'false']));
-    [1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => openEventDetail.push(false));
+    // listEvent.map((eventItem, index) => openEventDetail.push(false));
     console.log(openEventDetail);
   }, []);
   return (
@@ -334,7 +326,7 @@ function EventSection() {
           modules={[Pagination]}
           // className="mySwiper"
         >
-          {[1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => {
+          {listEvent.map((eventItem, index) => {
             return (
               <SwiperSlide style={{ height: 'auto' }}>
                 <Paper
@@ -344,20 +336,20 @@ function EventSection() {
                 >
                   <div>
                     <img
-                      src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
+                      src={eventItem.gambar || 'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'}
                       width="100%"
                       height={320}
                       alt=""
                       style={{ borderRadius: '4px 4px 0px 0px', objectFit: 'cover' }}
                     />
                     <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                      <h5>Lorem ipsum dolor sit.</h5>
-                      <span>Lorem ipsum</span>
+                      <h5>{eventItem.nama}</h5>
+
+                      <span>{eventItem.deskripsi}</span>
 
                       <span>
-                        Lorem ipsum dolor sit amet.{' '}
-                        {eventItem === 2
-                          ? 'Lorem ipsum. Ea sunt impedit repellat cupiditate eveniet ut, enim odio doloremque labore voluptas quaerat?'
+                        {index === 2
+                          ? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, eaque debitis nemo, sed placeat doloribus beatae ipsa quibusdam temporibus blanditiis reiciendis soluta aliquam veritatis libero rerum quas, ipsam veniam voluptate.'
                           : null}
                       </span>
                     </div>
@@ -391,27 +383,19 @@ function EventSection() {
                       }}
                     >
                       <div style={{ padding: '16px' }}>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et voluptatem minus dolorem?
-                        Praesentium necessitatibus provident facilis ab dolorum libero blanditiis dicta eos vero,
-                        delectus quos dolorem molestiae, alias ducimus quibusdam? Lorem ipsum dolor sit, amet
-                        consectetur adipisicing elit. Et voluptatem minus dolorem? Praesentium necessitatibus provident
-                        facilis ab dolorum libero blanditiis dicta eos vero, delectus quos dolorem molestiae, alias
-                        ducimus quibusdam? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et voluptatem minus
-                        dolorem? Praesentium necessitatibus provident facilis ab dolorum libero blanditiis dicta eos
-                        vero, delectus quos dolorem molestiae, alias ducimus quibusdam? Lorem ipsum dolor sit, amet
-                        consectetur adipisicing elit. Et voluptatem minus dolorem? Praesentium necessitatibus provident
-                        facilis ab dolorum libero blanditiis dicta eos vero, delectus quos dolorem molestiae, alias
-                        ducimus quibusdam? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et voluptatem minus
-                        dolorem? Praesentium necessitatibus provident facilis ab dolorum libero blanditiis dicta eos
-                        vero, delectus quos dolorem molestiae, alias ducimus quibusdam? Lorem ipsum dolor sit, amet
-                        consectetur adipisicing elit. Et voluptatem minus dolorem? Praesentium necessitatibus provident
-                        facilis ab dolorum libero blanditiis dicta eos vero, delectus quos dolorem molestiae, alias
-                        ducimus quibusdam? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et voluptatem minus
-                        dolorem? Praesentium necessitatibus provident facilis ab dolorum libero blanditiis dicta eos
-                        vero, delectus quos dolorem molestiae, alias ducimus quibusdam? Lorem ipsum dolor sit, amet
-                        consectetur adipisicing elit. Et voluptatem minus dolorem? Praesentium necessitatibus provident
-                        facilis ab dolorum libero blanditiis dicta eos vero, delectus quos dolorem molestiae, alias
-                        ducimus quibusdam?
+                        <h6>Kriteria</h6>
+                        <ol style={{ paddingLeft: '20px', marginTop: '0px' }}>
+                          {eventItem.kriteria.map((kriteriaItem, index) => {
+                            return <li>{kriteriaItem}</li>;
+                          })}
+                        </ol>
+
+                        <h6>Reward</h6>
+                        <ol style={{ paddingLeft: '20px', marginTop: '0px' }}>
+                          {eventItem.reward.map((rewardItem, index) => {
+                            return <li>{rewardItem}</li>;
+                          })}
+                        </ol>
                       </div>
                     </Box>
                   ) : null}
@@ -420,13 +404,12 @@ function EventSection() {
             );
           })}
         </Swiper>
-        {/* {openEventDetail[0]} asd */}
       </Container>
     </>
   );
 }
 
-function ReasonSection() {
+function ReasonSection({ listReason }) {
   return (
     <>
       <Container>
@@ -443,7 +426,7 @@ function ReasonSection() {
           breakpoints={{
             600: {
               slidesPerView: 2,
-              spaceBetween: 10,
+              spaceBetween: 20,
             },
             900: {
               slidesPerView: 3,
@@ -457,39 +440,60 @@ function ReasonSection() {
           modules={[Pagination]}
           // className="mySwiper"
         >
-          {[1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => {
+          {listReason.map((reasonItem, index) => {
             return (
-              <SwiperSlide>
+              <SwiperSlide style={{ height: 'auto' }}>
                 <Paper
                   elevation={8}
                   className={`gap-10 ${style['shadow-card']}`}
-                  sx={{ padding: '16px', borderRadius: '24px', gap: '10px' }}
-                  // sx={{ borderRadius: '4px', height: '100%', flexDirection: 'column', justifyContent: 'space-between' }}
+                  sx={{
+                    height: '100%',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    borderRadius: '24px',
+                  }}
                 >
-                  <div style={{ display: 'flex', gap: '0px 10px' }}>
-                    <div
-                      style={{
-                        height: '30px',
-                        minWidth: '30px',
-                        backgroundColor: '#1F305C',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        fontWeight: 'bold',
-                        color: '#ffffff',
-                      }}
-                    >
-                      {eventItem}
+                  <div
+                    style={{ padding: '16px', paddingBottom: '0px', width: 'fit-content', flexDirection: 'column' }}
+                    className="gap-10"
+                  >
+                    <div style={{ display: 'flex', gap: '0px 10px' }}>
+                      <div
+                        style={{
+                          height: '30px',
+                          minWidth: '30px',
+                          backgroundColor: '#1F305C',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          fontWeight: 'bold',
+                          color: '#ffffff',
+                        }}
+                      >
+                        {index + 1}
+                      </div>
+                      <h5>{reasonItem.judul}</h5>
                     </div>
-                    <h5>High Technology Fabric Care Machine</h5>
-                  </div>
-                  <div style={{ wordWrap: 'break-word' }}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos voluptatum expedita at, hic sunt odio?
-                    Tenetur quidem consectetur, at hic placeat voluptas iure unde est, velit sunt vero, cum neque?
+                    <div style={{ wordWrap: 'break-word' }}>{reasonItem.deskripsi}</div>
                   </div>
 
-                  <img src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png" width="100%" alt="" />
+                  <div
+                    style={{
+                      padding: '16px',
+                      paddingTop: '0px',
+                      width: 'fit-content',
+
+                      alignSelf: 'center',
+                    }}
+                  >
+                    <img
+                      src={reasonItem.gambar || 'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'}
+                      width="100%"
+                      style={{ maxHeight: '240px', objectFit: 'contain' }}
+                      alt=""
+                    />
+                  </div>
                 </Paper>
               </SwiperSlide>
             );
@@ -798,24 +802,88 @@ function FooterSection() {
 function HomePage() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [laundryType, setLaundryType] = React.useState([]);
+  const [serviceType, setServiceType] = React.useState([]);
+  const [event, setEvent] = React.useState([]);
+  const [reason, setReason] = React.useState([]);
 
   React.useEffect(() => {
     document.title = 'Beranda | Lulu n Be Luxury Laundry';
+    handleGetLaundryType();
+    handleGetServiceType();
+    handleGetEvent();
+    handleGetReason();
   }, []);
+
+  const handleGetLaundryType = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry',
+      });
+      console.log('Response GET Data Laundry Type');
+      console.log(res);
+      setLaundryType(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetServiceType = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislayanan',
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+      setServiceType(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetEvent = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/acara',
+      });
+      console.log('Response GET Data Event');
+      console.log(res);
+      setEvent(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetReason = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan',
+      });
+      console.log('Response GET Data Reason');
+      console.log(res);
+      setReason(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '60px 0px' }}>
       <HeroSection />
 
-      <LaundryTypeSection />
+      <LaundryTypeSection listLaundryType={laundryType} />
 
-      <ServiceTypeSection />
+      <ServiceTypeSection listServiceType={serviceType} />
 
       <OperatingHoursAndHowToOrderSection />
 
-      <EventSection />
+      <EventSection listEvent={event} />
 
-      <ReasonSection />
+      <ReasonSection listReason={reason} />
 
       <TestimonySection />
       <FAQSection />
