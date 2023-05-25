@@ -39,10 +39,10 @@ function Gallery() {
 
   React.useEffect(() => {
     document.title = 'Validasi Akun';
-    getApiHandler();
+    handleGetGallery();
   }, []);
 
-  const getApiHandler = async () => {
+  const handleGetGallery = async () => {
     try {
       const res = await axios({
         method: 'GET',

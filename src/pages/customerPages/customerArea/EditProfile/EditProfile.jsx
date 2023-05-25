@@ -22,6 +22,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { banyumasAreaList } from '../../../../utils/banyumasAreaList';
 import AddressCard from '../../../../components/Card/InformationCard/AddressCard';
+import axios from 'axios';
 
 function EditProfile() {
   const theme = useTheme();
@@ -34,22 +35,22 @@ function EditProfile() {
       email: '',
     },
     birthDate: dayjs,
-    profilePicture: {},
-    mainAddress: {
-      region: {
-        subDistrict: '',
-        urbanVillage: '',
-        hamlet: '',
-        neighbourhood: '',
-      },
-      buildingDetails: {
-        buildingType: '',
-        buildingName_Or_Number: '',
-      },
-      addressDetails: '',
-      buildingPhoto: {},
-      makeItMainAddress: false,
-    },
+    profilePicture: { img: null, fileName: null },
+    // mainAddress: {
+    //   region: {
+    //     subDistrict: '',
+    //     urbanVillage: '',
+    //     hamlet: '',
+    //     neighbourhood: '',
+    //   },
+    //   buildingDetails: {
+    //     buildingType: '',
+    //     buildingName_Or_Number: '',
+    //   },
+    //   addressDetails: '',
+    //   buildingPhoto: {},
+    //   makeItMainAddress: false,
+    // },
   });
   const [mainAddress, setMainAddress] = useState({
     region: {
@@ -63,20 +64,73 @@ function EditProfile() {
       buildingName_Or_Number: '',
     },
     addressDetails: '',
-    buildingPhoto: {},
+    buildingPhoto: { img: null, fileName: '' },
     makeItMainAddress: false,
     isMainAddress: false,
   });
 
   React.useEffect(() => {
     document.title = 'Edit Profil';
+    handleGetMyProfile();
   }, []);
 
-  const getUrbanVillage = () => {
-    return banyumasAreaList.filter((item) => {
-      return item.subDistrict === mainAddress.region.subDistrict;
-    });
+  const handleGetMyProfile = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user',
+      });
+      console.log('Response GET Data My Profile');
+      console.log(res);
+      // setFormEditProfile(res.data.data);
+      setFormEditProfile({
+        customerName: res.data.data.nama,
+        contact: {
+          phoneNumber: res.data.data.noTelp,
+          email: res.data.data.email,
+        },
+        birthDate: dayjs(res.data.data.tglLahir),
+        profilePicture: { img: null, fileName: res.data.data.profilePic },
+      });
+      localStorage.setItem('my_name', res.data.data.nama);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const handleUpdateMyProfile = async () => {
+    const formData = new FormData();
+    formData.append('nama', formEditProfile.customerName);
+    formData.append('noTelp', formEditProfile.contact.phoneNumber);
+    formData.append('email', formEditProfile.contact.email);
+    formData.append('tglLahir', formEditProfile.birthDate);
+    formData.append('profilePic', formEditProfile.profilePicture.img);
+
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user',
+        data: formData,
+      });
+      console.log('Response GET Data My Profile');
+      console.log(res);
+      handleGetMyProfile();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // const getUrbanVillage = () => {
+  //   return banyumasAreaList.filter((item) => {
+  //     return item.subDistrict === mainAddress.region.subDistrict;
+  //   });
+  // };
 
   return (
     <>
@@ -298,7 +352,9 @@ function EditProfile() {
                     {formEditProfile.profilePicture.fileName ? (
                       <Chip
                         label={formEditProfile.profilePicture.fileName}
-                        onDelete={() => setFormEditProfile({ ...formEditProfile, profilePicture: {} })}
+                        onDelete={() =>
+                          setFormEditProfile({ ...formEditProfile, profilePicture: { img: null, fileName: null } })
+                        }
                         sx={{ maxWidth: '250px' }}
                       />
                     ) : null}
@@ -311,7 +367,7 @@ function EditProfile() {
               variant="contained"
               size="large"
               style={{ width: '100%', fontWeight: 'bold' }}
-              onClick={() => navigate('/AreaPelanggan')}
+              onClick={() => handleUpdateMyProfile()}
             >
               Edit Profil
             </Button>
@@ -420,14 +476,11 @@ function EditProfile() {
                           required
                           type="number"
                           label="RW"
-                          value={formEditProfile.mainAddress.region.hamlet}
+                          value={mainAddress.region.hamlet}
                           onChange={(e) => {
-                            setFormEditProfile({
-                              ...formEditProfile,
-                              mainAddress: {
-                                ...formEditProfile.mainAddress,
-                                region: { ...formEditProfile.mainAddress.region, hamlet: e.target.value },
-                              },
+                            setMainAddress({
+                              ...mainAddress,
+                              region: { ...mainAddress.region, hamlet: e.target.value },
                             });
                           }}
                           autoComplete="off"
@@ -440,14 +493,11 @@ function EditProfile() {
                           required
                           type="number"
                           label="RT"
-                          value={formEditProfile.mainAddress.region.neighbourhood}
+                          value={mainAddress.region.neighbourhood}
                           onChange={(e) => {
-                            setFormEditProfile({
-                              ...formEditProfile,
-                              mainAddress: {
-                                ...formEditProfile.mainAddress,
-                                region: { ...formEditProfile.mainAddress.region, neighbourhood: e.target.value },
-                              },
+                            setMainAddress({
+                              ...mainAddress,
+                              region: { ...mainAddress.region, neighbourhood: e.target.value },
                             });
                           }}
                           autoComplete="off"
@@ -507,16 +557,13 @@ function EditProfile() {
                         <TextField
                           required
                           label="Nama / Nomer Bangunan"
-                          value={formEditProfile.mainAddress.buildingDetails.buildingName_Or_Number}
+                          value={mainAddress.buildingDetails.buildingName_Or_Number}
                           onChange={(e) => {
-                            setFormEditProfile({
-                              ...formEditProfile,
-                              mainAddress: {
-                                ...formEditProfile.mainAddress,
-                                buildingDetails: {
-                                  ...formEditProfile.mainAddress.region,
-                                  buildingName_Or_Number: e.target.value,
-                                },
+                            setMainAddress({
+                              ...mainAddress,
+                              buildingDetails: {
+                                ...mainAddress.region,
+                                buildingName_Or_Number: e.target.value,
                               },
                             });
                           }}
@@ -548,14 +595,11 @@ function EditProfile() {
                       label="Rincian Alamat"
                       multiline
                       maxRows={4}
-                      value={formEditProfile.mainAddress.addressDetails}
+                      value={mainAddress.addressDetails}
                       onChange={(e) => {
-                        setFormEditProfile({
-                          ...formEditProfile,
-                          mainAddress: {
-                            ...formEditProfile.mainAddress,
-                            addressDetails: e.target.value,
-                          },
+                        setMainAddress({
+                          ...mainAddress,
+                          addressDetails: e.target.value,
                         });
                       }}
                       autoComplete="off"
@@ -595,14 +639,11 @@ function EditProfile() {
                             accept="image/*"
                             onChange={(e) => {
                               console.log(e.target.files);
-                              setFormEditProfile({
-                                ...formEditProfile,
-                                mainAddress: {
-                                  ...formEditProfile.mainAddress,
-                                  buildingPhoto: {
-                                    img: e.target.files[0],
-                                    fileName: !e.target.files[0] ? null : e.target.files[0].name,
-                                  },
+                              setMainAddress({
+                                ...mainAddress,
+                                buildingPhoto: {
+                                  img: e.target.files[0],
+                                  fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
                               // console.log(image);
@@ -612,13 +653,11 @@ function EditProfile() {
                         </Button>
                       </Grid>
                       <Grid item xs="auto">
-                        {formEditProfile.mainAddress.buildingPhoto.img ? (
+                        {mainAddress.buildingPhoto.img ? (
                           <img
                             id="output"
                             src={
-                              formEditProfile.mainAddress.buildingPhoto.img
-                                ? URL.createObjectURL(formEditProfile.mainAddress.buildingPhoto.img)
-                                : ''
+                              mainAddress.buildingPhoto.img ? URL.createObjectURL(mainAddress.buildingPhoto.img) : ''
                             }
                             width={70}
                             alt="Preview"
@@ -626,13 +665,13 @@ function EditProfile() {
                         ) : null}
                       </Grid>
                       <Grid item xs>
-                        {formEditProfile.mainAddress.buildingPhoto.fileName ? (
+                        {mainAddress.buildingPhoto.fileName ? (
                           <Chip
-                            label={formEditProfile.mainAddress.buildingPhoto.fileName}
+                            label={mainAddress.buildingPhoto.fileName}
                             onDelete={() =>
-                              setFormEditProfile({
-                                ...formEditProfile,
-                                mainAddress: { ...formEditProfile.mainAddress, buildingPhoto: {} },
+                              setMainAddress({
+                                ...mainAddress,
+                                buildingPhoto: {},
                               })
                             }
                             sx={{ maxWidth: '250px' }}
@@ -681,20 +720,18 @@ function EditProfile() {
                 <br />
                 {formEditProfile.contact.phoneNumber + ' ' + formEditProfile.contact.email}
                 <br />
-                {formEditProfile.mainAddress.region.subDistrict +
+                {mainAddress.region.subDistrict +
                   ' ' +
-                  formEditProfile.mainAddress.region.urbanVillage +
+                  mainAddress.region.urbanVillage +
                   ' ' +
-                  formEditProfile.mainAddress.region.hamlet +
+                  mainAddress.region.hamlet +
                   ' ' +
-                  formEditProfile.mainAddress.region.neighbourhood}
+                  mainAddress.region.neighbourhood}
                 <br />
-                {formEditProfile.mainAddress.buildingDetails.buildingType +
-                  ' ' +
-                  formEditProfile.mainAddress.buildingDetails.buildingName_Or_Number}
+                {mainAddress.buildingDetails.buildingType + ' ' + mainAddress.buildingDetails.buildingName_Or_Number}
                 <br />
-                {formEditProfile.mainAddress.addressDetails}
-                {formEditProfile.mainAddress.makeItMainAddress}
+                {mainAddress.addressDetails}
+                {mainAddress.makeItMainAddress}
                 {`${formEditProfile.birthDate.$D}
               ${formEditProfile.birthDate.$M}
               ${formEditProfile.birthDate.$y}`}

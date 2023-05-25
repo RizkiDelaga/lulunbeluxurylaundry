@@ -16,19 +16,58 @@ import {
 
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import axios from 'axios';
 
 function LoginCustomer() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formLoginCustomer, setFormLoginCustomer] = useState({
-    customerName: '',
+    noTelp: '',
     password: '',
   });
 
   React.useEffect(() => {
     document.title = 'Login Pelanggan';
   }, []);
+
+  const loginCustomerHandler = async (data) => {
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/login',
+        data: {
+          noTelp: data.noTelp,
+          password: data.password,
+        },
+      });
+      console.log('Response POST Login Customer');
+      console.log(res);
+      navigate('/AreaPelanggan');
+      localStorage.setItem('access_token', res.data.accessToken);
+      handleGetMyProfile();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetMyProfile = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user',
+      });
+      console.log('Response GET My Profile');
+      console.log(res);
+
+      localStorage.setItem('my_name', res.data.data.nama);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -63,7 +102,7 @@ function LoginCustomer() {
               </div>
               <Grid container>
                 <Grid item xs={12} sm={12} md={2.3} lg={2.5} sx={{ display: 'flex', alignItems: 'center' }}>
-                  Nama Akun
+                  Nomer Telepon
                 </Grid>
                 <Grid
                   item
@@ -78,10 +117,11 @@ function LoginCustomer() {
                 >
                   <TextField
                     required
-                    label="Nama Akun"
-                    value={formLoginCustomer.customerName}
+                    type="number"
+                    label="Nomer Telepon"
+                    value={formLoginCustomer.noTelp}
                     onChange={(e) => {
-                      setFormLoginCustomer({ ...formLoginCustomer, customerName: e.target.value });
+                      setFormLoginCustomer({ ...formLoginCustomer, noTelp: e.target.value });
                     }}
                     autoComplete="off"
                     sx={{ width: '100%' }}
@@ -136,14 +176,13 @@ function LoginCustomer() {
                 variant="contained"
                 size="large"
                 onClick={() => {
-                  navigate('/AreaPelanggan');
-                  localStorage.setItem('access_token', 'sadas7821ufye181');
+                  loginCustomerHandler(formLoginCustomer);
                 }}
                 style={{ width: '100%', fontWeight: 'bold' }}
               >
                 Masuk
               </Button>
-              {formLoginCustomer.customerName}
+              {formLoginCustomer.noTelp}
               <br />
               {formLoginCustomer.password}
             </Box>

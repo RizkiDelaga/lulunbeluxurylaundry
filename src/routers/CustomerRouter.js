@@ -44,7 +44,7 @@ function CustomerRouter() {
           {/* Public Route */}
           <Route element={<PublicCustomerRoute />}>
             <Route path="/" element={<HomePage />} />
-            <Route path="galeri" element={<Gallery />} />
+            <Route path="Galeri" element={<Gallery />} />
             <Route path="TentangKami" element={<AboutUs />} />
             <Route path="StrukPemesanan/:id" element={<DigitalReceipt />} />
           </Route>
