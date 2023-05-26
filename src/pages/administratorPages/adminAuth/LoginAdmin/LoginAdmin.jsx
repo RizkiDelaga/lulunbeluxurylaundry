@@ -16,6 +16,7 @@ import {
 import Logo from '../../../../assets/images/Logo.jpg';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import axios from 'axios';
 
 function LoginAdmin() {
   const theme = useTheme();
@@ -29,6 +30,46 @@ function LoginAdmin() {
   React.useEffect(() => {
     document.title = 'Login Administrator';
   }, []);
+
+  const handleLoginAdmin = async () => {
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin/login',
+        data: {
+          nama: formLoginAdmin.administratorName,
+          password: formLoginAdmin.password,
+        },
+      });
+      console.log('Response POST Login Customer');
+      console.log(res);
+      navigate('/Dashboard');
+      localStorage.setItem('access_token_admin', res.data.accessToken);
+      handleGetAdminProfile();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetAdminProfile = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user',
+      });
+      console.log('Response GET My Profile');
+      console.log(res);
+
+      localStorage.setItem('admin_name', res.data.data.nama);
+      localStorage.setItem('admin_profile_picture', res.data.data.profilePic);
+      localStorage.setItem('business_logo', res.data.data.profilePic);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -130,7 +171,7 @@ function LoginAdmin() {
                 variant="contained"
                 size="large"
                 onClick={() => {
-                  navigate('/Dashboard');
+                  handleLoginAdmin();
                 }}
                 style={{ width: '100%', fontWeight: 'bold' }}
               >

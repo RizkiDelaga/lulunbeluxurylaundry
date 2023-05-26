@@ -431,7 +431,15 @@ function Navbar(props) {
                 Ubah Password
               </MenuItem>
               <Divider />
-              <MenuItem onClick={() => handleCloseAccountMenu('/Admin')}>
+              <MenuItem
+                onClick={() => {
+                  localStorage.removeItem('access_token_admin');
+                  localStorage.removeItem('admin_name');
+                  localStorage.removeItem('admin_profile_picture');
+                  localStorage.removeItem('business_logo');
+                  handleCloseAccountMenu('/Login');
+                }}
+              >
                 <ListItemIcon>
                   <ExitToAppIcon className="color-primary" />
                 </ListItemIcon>

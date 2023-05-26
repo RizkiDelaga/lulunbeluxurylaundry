@@ -69,18 +69,24 @@ function PaymentMethod() {
   //     setListInstructions((list) => [...list, { id: index + 1, instructionText: itemInstruksi }]);
   //   });
   // };
-  const postApiHandler = async (data) => {
+  const handleCreatePaymentMethod = async () => {
+    const formData = new FormData();
+    formData.append('logo', formPaymentMethod.paymentLogo.img);
+    formData.append('nama', formPaymentMethod.paymentName);
+    formData.append('nomor', formPaymentMethod.iD_Or_Number);
+    listInstructions.forEach((element, index) => {
+      formData.append(`instruksi[${index}]`, element.instructionText);
+    });
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/metodepembayaran',
-        data: {
-          logo: data.paymentLogo.fileName,
-          nama: data.paymentName,
-          nomor: data.iD_Or_Number,
-          instruksi: listInstructions.map((itemInstruction) => itemInstruction.instructionText),
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/metodepembayaran',
+        data: formData,
       });
       console.log('Response POST');
       console.log(res);
@@ -102,18 +108,30 @@ function PaymentMethod() {
     }
   };
 
-  const putApiHandler = async (data) => {
+  const handleUpdatePaymentMethod = async () => {
+    const formData = new FormData();
+    formData.append('logo', formPaymentMethod.paymentLogo.img || formPaymentMethod.paymentLogo.fileName);
+    formData.append('nama', formPaymentMethod.paymentName);
+    formData.append('nomor', formPaymentMethod.iD_Or_Number);
+    listInstructions.forEach((element, index) => {
+      formData.append(`instruksi[${index}]`, element.instructionText);
+    });
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'PUT',
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/metodepembayaran/${data.id}`,
-        data: {
-          logo: data.paymentLogo.fileName,
-          nama: data.paymentName,
-          nomor: data.iD_Or_Number,
-          instruksi: listInstructions.map((itemInstruction) => itemInstruction.instructionText),
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/metodepembayaran/${formPaymentMethod.id}`,
+        data: formData,
+        // {
+        //   logo: data.paymentLogo.fileName,
+        //   nama: data.paymentName,
+        //   nomor: data.iD_Or_Number,
+        //   instruksi: listInstructions.map((itemInstruction) => itemInstruction.instructionText),
+        // },
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -135,11 +153,14 @@ function PaymentMethod() {
     }
   };
 
-  const deleteApiHandler = async (id) => {
+  const handleDeletePaymentMethod = async (id) => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/metodepembayaran/${id}`,
       });
       if (res.status === 200) {
@@ -485,7 +506,7 @@ function PaymentMethod() {
                       <Chip
                         label={formPaymentMethod.paymentLogo.fileName}
                         onDelete={() =>
-                          setFormPaymentMethod({ ...formPaymentMethod, paymentLogo: { img: null, fileName: '' } })
+                          setFormPaymentMethod({ ...formPaymentMethod, paymentLogo: { img: null, fileName: null } })
                         }
                         sx={{ maxWidth: '250px' }}
                       />
@@ -500,9 +521,9 @@ function PaymentMethod() {
               size="large"
               onClick={() => {
                 if (formPaymentMethod.id) {
-                  putApiHandler(formPaymentMethod);
+                  handleUpdatePaymentMethod();
                 } else {
-                  postApiHandler(formPaymentMethod, listInstructions);
+                  handleCreatePaymentMethod();
                 }
                 setListInstructions([]);
                 setFormPaymentMethod({
@@ -558,7 +579,7 @@ function PaymentMethod() {
                           </span>
                         </TableCell>
                         <TableCell>
-                          <span>{item.logo ? <img src="" width={60} alt={item.logo} /> : null}</span>
+                          <span>{item.logo ? <img src={item.logo} width={60} alt={item.logo} /> : null}</span>
                         </TableCell>
                         <TableCell>
                           <Box
@@ -615,7 +636,7 @@ function PaymentMethod() {
                               variant="outlined"
                               className={`button-outlined-danger`}
                               onClick={() => {
-                                deleteApiHandler(item.id);
+                                handleDeletePaymentMethod(item.id);
                                 if (item.id === formPaymentMethod.id) {
                                   setListInstructions([]);
                                   setFormPaymentMethod({

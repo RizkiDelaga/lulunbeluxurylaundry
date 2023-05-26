@@ -60,15 +60,18 @@ function FrequentlyAskedQuestions() {
     }
   };
 
-  const postApiHandler = async (data) => {
+  const handleCreateFAQ = async () => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq',
         data: {
-          pertanyaan: data.question,
-          jawaban: data.answer,
+          pertanyaan: formFrequentlyAskedQuestions.question,
+          jawaban: formFrequentlyAskedQuestions.answer,
         },
       });
       console.log('Response POST');
@@ -92,15 +95,18 @@ function FrequentlyAskedQuestions() {
     }
   };
 
-  const putApiHandler = async (data) => {
+  const handleUpdateFAQ = async () => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'PUT',
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq/${data.id}`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq/${formFrequentlyAskedQuestions.id}`,
         data: {
-          pertanyaan: data.question,
-          jawaban: data.answer,
+          pertanyaan: formFrequentlyAskedQuestions.question,
+          jawaban: formFrequentlyAskedQuestions.answer,
         },
       });
       if (res.status === 200) {
@@ -239,9 +245,9 @@ function FrequentlyAskedQuestions() {
               size="large"
               onClick={() => {
                 if (formFrequentlyAskedQuestions.id) {
-                  putApiHandler(formFrequentlyAskedQuestions);
+                  handleUpdateFAQ();
                 } else {
-                  postApiHandler(formFrequentlyAskedQuestions);
+                  handleCreateFAQ();
                 }
                 setFormFrequentlyAskedQuestions({
                   id: null,
