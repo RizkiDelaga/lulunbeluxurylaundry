@@ -26,7 +26,7 @@ import EditOffIcon from '@mui/icons-material/EditOff';
 function ReasonsWhyChooseUs() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const formData = new FormData();
+
   const [listReasonsWhyChooseUs, setListReasonsWhyChooseUs] = useState([]);
   const [formReasonsWhyChooseUs, setFormReasonsWhyChooseUs] = useState({
     id: null,
@@ -45,10 +45,10 @@ function ReasonsWhyChooseUs() {
 
   React.useEffect(() => {
     document.title = 'Edit Alasan Mengapa Memilih Kita';
-    getApiHandler();
+    handleGetReasonsWhyChooseUs();
   }, []);
 
-  const getApiHandler = async () => {
+  const handleGetReasonsWhyChooseUs = async () => {
     try {
       const res = await axios({
         method: 'GET',
@@ -65,13 +65,20 @@ function ReasonsWhyChooseUs() {
     }
   };
 
-  const postApiHandler = async (data) => {
+  const handleCreateReasonsWhyChooseUs = async () => {
+    const formData = new FormData();
+    formData.append('judul', formReasonsWhyChooseUs.reasonTitle);
+    formData.append('deskripsi', formReasonsWhyChooseUs.description);
+    formData.append('gambar', formReasonsWhyChooseUs.photo.img);
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan',
-        data: data,
+        data: formData,
       });
       console.log('Response POST');
       console.log(res);
@@ -82,7 +89,7 @@ function ReasonsWhyChooseUs() {
           statusType: 'success',
         });
       }
-      getApiHandler();
+      handleGetReasonsWhyChooseUs();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -94,13 +101,20 @@ function ReasonsWhyChooseUs() {
     }
   };
 
-  const putApiHandler = async (data, id) => {
+  const handleUpdateReasonsWhyChooseUs = async () => {
+    const formData = new FormData();
+    formData.append('judul', formReasonsWhyChooseUs.reasonTitle);
+    formData.append('deskripsi', formReasonsWhyChooseUs.description);
+    formData.append('gambar', formReasonsWhyChooseUs.photo.img);
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'PUT',
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan/${id}`,
-        data: data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan/${formReasonsWhyChooseUs.id}`,
+        data: formData,
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -111,7 +125,7 @@ function ReasonsWhyChooseUs() {
       }
       console.log('Response DELETE');
       console.log(res);
-      getApiHandler();
+      handleGetReasonsWhyChooseUs();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -122,11 +136,14 @@ function ReasonsWhyChooseUs() {
     }
   };
 
-  const deleteApiHandler = async (id) => {
+  const handleDeleteReasonsWhyChooseUs = async (id) => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan/${id}`,
       });
       if (res.status === 200) {
@@ -136,7 +153,7 @@ function ReasonsWhyChooseUs() {
           statusType: 'success',
         });
       }
-      getApiHandler();
+      handleGetReasonsWhyChooseUs();
       console.log(res);
     } catch (error) {
       setOpenLoadDecision({
@@ -304,13 +321,10 @@ function ReasonsWhyChooseUs() {
               variant="contained"
               size="large"
               onClick={() => {
-                formData.append('judul', formReasonsWhyChooseUs.reasonTitle);
-                formData.append('deskripsi', formReasonsWhyChooseUs.description);
-                formData.append('gambar', formReasonsWhyChooseUs.photo.img);
                 if (formReasonsWhyChooseUs.id) {
-                  putApiHandler(formData, formReasonsWhyChooseUs.id);
+                  handleUpdateReasonsWhyChooseUs();
                 } else {
-                  postApiHandler(formData);
+                  handleCreateReasonsWhyChooseUs();
                 }
                 setFormReasonsWhyChooseUs({
                   id: null,
@@ -404,7 +418,7 @@ function ReasonsWhyChooseUs() {
                               variant="outlined"
                               className={`button-outlined-danger`}
                               onClick={() => {
-                                deleteApiHandler(item.id);
+                                handleDeleteReasonsWhyChooseUs(item.id);
                                 if (item.id === formReasonsWhyChooseUs.id) {
                                   setFormReasonsWhyChooseUs({
                                     id: null,

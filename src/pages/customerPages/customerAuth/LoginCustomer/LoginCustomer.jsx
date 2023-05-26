@@ -63,7 +63,8 @@ function LoginCustomer() {
       console.log('Response GET My Profile');
       console.log(res);
 
-      localStorage.setItem('my_name', res.data.data.nama);
+      localStorage.setItem('customer_name', res.data.data.nama);
+      localStorage.setItem('customer_profile_picture', res.data.data.profilePic);
     } catch (error) {
       console.log(error);
     }

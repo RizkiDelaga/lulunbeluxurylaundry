@@ -37,10 +37,10 @@ function AboutUs() {
 
   React.useEffect(() => {
     document.title = 'Edit Tentang Kami';
-    getApiHandler();
+    handleGetAboutUs();
   }, []);
 
-  const getApiHandler = async () => {
+  const handleGetAboutUs = async () => {
     try {
       const res = await axios({
         method: 'GET',
@@ -57,14 +57,17 @@ function AboutUs() {
     }
   };
 
-  const postApiHandler = async (data) => {
+  const handleCreateAboutUs = async () => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/about',
         data: {
-          deskripsi: data.explanationParagraph,
+          deskripsi: formAboutUs.explanationParagraph,
         },
       });
       console.log('Response POST');
@@ -76,7 +79,7 @@ function AboutUs() {
           statusType: 'success',
         });
       }
-      getApiHandler();
+      handleGetAboutUs();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -88,14 +91,17 @@ function AboutUs() {
     }
   };
 
-  const putApiHandler = async (data) => {
+  const handleUpdateAboutUs = async () => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'PUT',
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/about/${data.id}`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/about/${formAboutUs.id}`,
         data: {
-          deskripsi: data.explanationParagraph,
+          deskripsi: formAboutUs.explanationParagraph,
         },
       });
       if (res.status === 200) {
@@ -107,7 +113,7 @@ function AboutUs() {
       }
       console.log('Response DELETE');
       console.log(res);
-      getApiHandler();
+      handleGetAboutUs();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -118,11 +124,14 @@ function AboutUs() {
     }
   };
 
-  const deleteApiHandler = async (id) => {
+  const handleDeleteAboutUs = async (id) => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/about/${id}`,
       });
       if (res.status === 200) {
@@ -132,7 +141,7 @@ function AboutUs() {
           statusType: 'success',
         });
       }
-      getApiHandler();
+      handleGetAboutUs();
       console.log(res);
     } catch (error) {
       setOpenLoadDecision({
@@ -199,9 +208,9 @@ function AboutUs() {
               size="large"
               onClick={() => {
                 if (formAboutUs.id) {
-                  putApiHandler(formAboutUs);
+                  handleUpdateAboutUs();
                 } else {
-                  postApiHandler(formAboutUs);
+                  handleCreateAboutUs();
                 }
                 setFormAboutUs({
                   id: null,
@@ -282,7 +291,7 @@ function AboutUs() {
                                     explanationParagraph: '',
                                   });
                                 }
-                                deleteApiHandler(item.id);
+                                handleDeleteAboutUs(item.id);
                               }}
                               sx={{ width: '100%' }}
                             >

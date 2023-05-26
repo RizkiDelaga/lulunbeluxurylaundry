@@ -45,7 +45,7 @@ function AdminRouter() {
   }
 
   const ProtectedAdminRoute = () => {
-    if (localStorage.getItem("access_token_admin")) {
+    if (!localStorage.getItem("access_token_admin")) {
       return <Navigate to="/admin" replace />
     }
     return <AdminLayout />;

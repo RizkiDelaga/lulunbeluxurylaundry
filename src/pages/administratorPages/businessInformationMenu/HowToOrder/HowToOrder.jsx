@@ -69,18 +69,28 @@ function HowToOrder() {
     }
   };
 
-  const postApiHandler = async (data, statusType) => {
+  const handleCreateHowToOrder = async (data, statusType) => {
+    const formData = new FormData();
+    formData.append('status', statusType);
+    formData.append('judul', data.stepTitle);
+    formData.append('deskripsi', data.description);
+    formData.append('gambar', data.photo.img || data.photo.fileName);
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan',
-        data: {
-          status: statusType,
-          judul: data.stepTitle,
-          deskripsi: data.description,
-          gambar: data.photo.fileName,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan',
+        data: formData,
+        // {
+        //   status: statusType,
+        //   judul: data.stepTitle,
+        //   deskripsi: data.description,
+        //   gambar: data.photo.fileName,
+        // },
       });
       console.log('Response POST');
       console.log(res);
@@ -103,18 +113,28 @@ function HowToOrder() {
     }
   };
 
-  const putApiHandler = async (data, statusType) => {
+  const handleUpdateHowToOrder = async (data, statusType) => {
+    const formData = new FormData();
+    formData.append('status', statusType);
+    formData.append('judul', data.stepTitle);
+    formData.append('deskripsi', data.description);
+    formData.append('gambar', data.photo.img || data.photo.fileName);
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'PUT',
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan/${data.id}`,
-        data: {
-          status: statusType,
-          judul: data.stepTitle,
-          deskripsi: data.description,
-          gambar: data.photo.fileName,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan/${data.id}`,
+        data: formData,
+        // {
+        //   status: statusType,
+        //   judul: data.stepTitle,
+        //   deskripsi: data.description,
+        //   gambar: data.photo.fileName,
+        // },
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -141,6 +161,9 @@ function HowToOrder() {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan/${id}`,
       });
       if (res.status === 200) {
@@ -329,9 +352,9 @@ function HowToOrder() {
               size="large"
               onClick={() => {
                 if (formHowToOrderViaOnline.id) {
-                  putApiHandler(formHowToOrderViaOnline, 'Via Online');
+                  handleUpdateHowToOrder(formHowToOrderViaOnline, 'Online');
                 } else {
-                  postApiHandler(formHowToOrderViaOnline, 'Via Online');
+                  handleCreateHowToOrder(formHowToOrderViaOnline, 'Online');
                 }
                 setFormHowToOrderViaOnline({
                   id: null,
@@ -350,7 +373,7 @@ function HowToOrder() {
               formHowToOrder={formHowToOrderViaOnline}
               setFormHowToOrder={setFormHowToOrderViaOnline}
               deleteApiHandler={deleteApiHandler}
-              statusType="Via Online"
+              statusType="Online"
             />
 
             {formHowToOrderViaOnline.stepTitle}
@@ -512,9 +535,9 @@ function HowToOrder() {
               size="large"
               onClick={() => {
                 if (formHowToOrderViaOutlet.id) {
-                  putApiHandler(formHowToOrderViaOutlet, 'Via Outlet');
+                  handleUpdateHowToOrder(formHowToOrderViaOutlet, 'Outlet');
                 } else {
-                  postApiHandler(formHowToOrderViaOutlet, 'Via Outlet');
+                  handleCreateHowToOrder(formHowToOrderViaOutlet, 'Outlet');
                 }
                 setFormHowToOrderViaOutlet({
                   id: null,
@@ -533,7 +556,7 @@ function HowToOrder() {
               formHowToOrder={formHowToOrderViaOutlet}
               setFormHowToOrder={setFormHowToOrderViaOutlet}
               deleteApiHandler={deleteApiHandler}
-              statusType="Via Outlet"
+              statusType="Outlet"
             />
 
             {formHowToOrderViaOutlet.stepTitle}
@@ -586,7 +609,7 @@ const TableListDataHowToOrder = (props) => {
                     <span>{item.deskripsi}</span>
                   </TableCell>
                   <TableCell>
-                    <span>{item.gambar}</span>
+                    <span>{item.gambar ? <img src={item.gambar} width={60} alt={item.gambar} /> : null}</span>
                   </TableCell>
                   <TableCell>
                     <Box
