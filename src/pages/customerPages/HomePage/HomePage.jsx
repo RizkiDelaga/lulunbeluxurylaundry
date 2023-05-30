@@ -11,6 +11,8 @@ import {
   StepContent,
   StepLabel,
   Stepper,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -27,6 +29,12 @@ import TwitterIcon from '../../../assets/icons/icons8-twitter.svg';
 import YoutubeIcon from '../../../assets/icons/icons8-youtube.svg';
 import TiktokIcon from '../../../assets/icons/icons8-tiktok.svg';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DevicesIcon from '@mui/icons-material/Devices';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import DryCleaningIcon from '@mui/icons-material/DryCleaning';
+import CallIcon from '@mui/icons-material/Call';
+import EmailIcon from '@mui/icons-material/Email';
+import FaxIcon from '@mui/icons-material/Fax';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -69,7 +77,7 @@ function HeroSection() {
           </Grid>
         </Container>
       </Box>
-      <img src={DoubleWave} width={'100%'} draggable="false" style={{ position: 'relative', top: '-5px' }} alt="" />
+      <img src={DoubleWave} width={'100%'} draggable="false" style={{ position: 'relative', top: '-10px' }} alt="" />
     </span>
   );
 }
@@ -179,6 +187,13 @@ function ServiceTypeSection({ listServiceType }) {
 function OperatingHoursAndHowToOrderSection() {
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
+  const [howToOrderType, setHowToOrderType] = React.useState('Online');
+
+  // const ToggleButton = styled(MuiToggleButton)({
+  //   '&.Mui-selected, &.Mui-selected:hover': {
+  //     backgroundColor: '#1F305C',
+  //   },
+  // })
 
   const steps = [
     {
@@ -205,17 +220,83 @@ function OperatingHoursAndHowToOrderSection() {
 
   return (
     <div>
-      <img src={SingleWave} width={'100%'} draggable="false" style={{ position: 'relative', bottom: '-5px' }} alt="" />
+      <img src={SingleWave} width={'100%'} draggable="false" style={{ position: 'relative', bottom: '-10px' }} alt="" />
       <Box sx={{ backgroundColor: '#ffffff', py: 2 }}>
         <Container>
-          <Grid container spacing={2}>
+          <Grid container spacing={4}>
             <Grid item sm={6} md={5}>
               <h4 className={`${style['section-title']}`} id="JamOperasional">
                 Jam Operasional
               </h4>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo beatae sunt mollitia tempore, eligendi
-              praesentium repellendus porro aperiam sapiente libero, asperiores assumenda quod vero dignissimos esse
-              omnis. Error, repellendus eligendi.
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#1F305C' }}>
+                <div style={{ width: '100%' }}>
+                  <hr
+                    style={{
+                      border: 'none',
+                      height: '3px',
+                      background:
+                        'repeating-linear-gradient(90deg, #1F305C, #1F305C 12px,transparent 6px,transparent 24px)',
+                    }}
+                  />
+                </div>
+
+                <DryCleaningIcon />
+
+                <div style={{ width: '100%' }}>
+                  <hr
+                    style={{
+                      border: 'none',
+                      height: '3px',
+                      background:
+                        'repeating-linear-gradient(90deg, #1F305C, #1F305C 12px,transparent 6px,transparent 24px)',
+                    }}
+                  />
+                </div>
+              </div>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'].map((item, index) => {
+                  return (
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        width: '100%',
+                        maxWidth: '180px',
+                        gap: '16px',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <strong>{item}</strong>
+                      <span>08:00 ~ 20:00</span>
+                    </div>
+                  );
+                })}
+              </Box>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#1F305C' }}>
+                <div style={{ width: '100%' }}>
+                  <hr
+                    style={{
+                      border: 'none',
+                      height: '3px',
+                      background:
+                        'repeating-linear-gradient(90deg, #1F305C, #1F305C 12px,transparent 6px,transparent 24px)',
+                    }}
+                  />
+                </div>
+
+                <DryCleaningIcon />
+
+                <div style={{ width: '100%' }}>
+                  <hr
+                    style={{
+                      border: 'none',
+                      height: '3px',
+                      background:
+                        'repeating-linear-gradient(90deg, #1F305C, #1F305C 12px,transparent 6px,transparent 24px)',
+                    }}
+                  />
+                </div>
+              </div>
             </Grid>
             <Grid
               item
@@ -233,6 +314,49 @@ function OperatingHoursAndHowToOrderSection() {
               <h4 className={`${style['section-title']}`} id="CaraPemesanan">
                 Cara Pemesanan
               </h4>
+
+              <ToggleButtonGroup
+                value={howToOrderType}
+                color="primary"
+                exclusive
+                onChange={(event, value) => {
+                  if (value) {
+                    setHowToOrderType(value);
+                  }
+                }}
+                sx={{
+                  width: '100% !important',
+                  [theme.breakpoints.down('sm')]: {
+                    height: '35px !important',
+                  },
+                }}
+              >
+                <ToggleButton
+                  value="Online"
+                  sx={{
+                    width: '100%',
+                    border: '1px solid #1F305C',
+                    fontWeight: 'bold',
+                    color: howToOrderType === 'Online' ? '#ffffff !important' : '#1F305C',
+                    backgroundColor: howToOrderType === 'Online' ? '#1F305C !important' : '#ffffff',
+                  }}
+                >
+                  <DevicesIcon sx={{ mr: 1 }} /> Via Online
+                </ToggleButton>
+                <ToggleButton
+                  value="Outlet"
+                  sx={{
+                    width: '100%',
+                    border: '1px solid #1F305C',
+                    fontWeight: 'bold',
+                    color: howToOrderType === 'Outlet' ? '#ffffff !important' : '#1F305C',
+                    backgroundColor: howToOrderType === 'Outlet' ? '#1F305C !important' : '#ffffff',
+                  }}
+                >
+                  <StorefrontIcon sx={{ mr: 1 }} /> Via Outlet
+                </ToggleButton>
+              </ToggleButtonGroup>
+
               <Box sx={{ maxWidth: 400 }}>
                 <Stepper activeStep={activeStep} orientation="vertical">
                   {steps.map((step, index) => (
@@ -281,7 +405,7 @@ function OperatingHoursAndHowToOrderSection() {
         src={SingleWave}
         width={'100%'}
         draggable="false"
-        style={{ transform: 'rotate(-180deg)', position: 'relative', top: '-5px' }}
+        style={{ transform: 'rotate(-180deg)', position: 'relative', top: '-10px' }}
         alt=""
       />
     </div>
@@ -669,7 +793,7 @@ function ContactAndLocationSection() {
           src={SquareWave}
           width={'100%'}
           draggable="false"
-          style={{ position: 'relative', bottom: '-5px' }}
+          style={{ position: 'relative', bottom: '-10px' }}
           alt=""
         />
         <Box sx={{ backgroundColor: '#FFFFFF', py: '20px' }}>
@@ -686,12 +810,17 @@ function ContactAndLocationSection() {
                 <span className="gap-10" style={{ flexDirection: 'column' }}>
                   <h6>Kontak</h6>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    <ExpandMoreIcon />
+                    <CallIcon sx={{ color: '#1F305C' }} />
                     <h6>(No Telepon)</h6>
                     <span>0851 0290 9999</span>
                   </div>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    <ExpandMoreIcon />
+                    <FaxIcon sx={{ color: '#1F305C' }} />
+                    <h6>(No Telepon)</h6>
+                    <span>0851 0290 9999</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <EmailIcon sx={{ color: '#1F305C' }} />
                     <h6>(No Telepon)</h6>
                     <span>0851 0290 9999</span>
                   </div>
@@ -760,14 +889,19 @@ function FooterSection() {
               <Grid item xs className="gap-10" style={{ flexDirection: 'column' }}>
                 <h4>Kontak</h4>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                  <ExpandMoreIcon />
+                  <CallIcon />
                   <h6>(No Telepon)</h6>
                   <span>0851 0290 9999</span>
                 </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                  <ExpandMoreIcon />
-                  <h6>(Email)</h6>
-                  <span>lulunbeluxurylaundry@gmail.com</span>
+                  <FaxIcon />
+                  <h6>(No Telepon)</h6>
+                  <span>0851 0290 9999</span>
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <EmailIcon />
+                  <h6>(No Telepon)</h6>
+                  <span>0851 0290 9999</span>
                 </div>
               </Grid>
               <Grid item xs={12} sm="auto" className="gap-10" style={{ flexDirection: 'column' }}>
@@ -806,6 +940,7 @@ function HomePage() {
   const [serviceType, setServiceType] = React.useState([]);
   const [event, setEvent] = React.useState([]);
   const [reason, setReason] = React.useState([]);
+  const [position, setPosition] = React.useState(window.pageYOffset);
 
   React.useEffect(() => {
     document.title = 'Beranda | Lulu n Be Luxury Laundry';
@@ -892,6 +1027,19 @@ function HomePage() {
         <ContactAndLocationSection />
         <FooterSection />
       </span>
+
+      <div
+        style={{
+          position: 'fixed',
+          right: '20px',
+          bottom: '50px',
+          // display: window.pageYOffset <= 500 ? 'none' : 'initial',
+        }}
+      >
+        Top
+        {/* {window.pageYOffset} */}
+        {position}
+      </div>
 
       <button onClick={() => navigate('/dashboard')}>Navbar & Sidebar Admin</button>
     </div>
