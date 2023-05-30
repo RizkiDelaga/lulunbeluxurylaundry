@@ -31,7 +31,7 @@ function LaundryType() {
     id: null,
     laundryTypeName: '',
     description: '',
-    photo: { img: null, fileName: '' },
+    photo: { img: null, fileName: null },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
@@ -41,10 +41,10 @@ function LaundryType() {
 
   React.useEffect(() => {
     document.title = 'Edit Jenis Laundry';
-    getApiHandler();
+    handleGetLaundryType();
   }, []);
 
-  const getApiHandler = async () => {
+  const handleGetLaundryType = async () => {
     try {
       const res = await axios({
         method: 'GET',
@@ -61,17 +61,26 @@ function LaundryType() {
     }
   };
 
-  const postApiHandler = async (data) => {
+  const handleCreateLaundryType = async (data) => {
+    const formData = new FormData();
+    formData.append('nama', formLaundryType.laundryTypeName);
+    formData.append('deskripsi', formLaundryType.description);
+    formData.append('gambar', formLaundryType.photo.img);
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry',
-        data: {
-          nama: data.laundryTypeName,
-          deskripsi: data.description,
-          gambar: data.photo.fileName,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry',
+        data: formData,
+        // {
+        //   nama: data.laundryTypeName,
+        //   deskripsi: data.description,
+        //   gambar: data.photo.fileName,
+        // },
       });
       console.log('Response POST');
       console.log(res);
@@ -82,7 +91,7 @@ function LaundryType() {
           statusType: 'success',
         });
       }
-      getApiHandler();
+      handleGetLaundryType();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -94,17 +103,26 @@ function LaundryType() {
     }
   };
 
-  const putApiHandler = async (data) => {
+  const handleUpdateLaundryType = async () => {
+    const formData = new FormData();
+    formData.append('nama', formLaundryType.laundryTypeName);
+    formData.append('deskripsi', formLaundryType.description);
+    formData.append('gambar', formLaundryType.photo.img);
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'PUT',
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry/${data.id}`,
-        data: {
-          nama: data.laundryTypeName,
-          deskripsi: data.description,
-          gambar: data.photo.fileName,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry/${formLaundryType.id}`,
+        data: formData,
+        // {
+        //   nama: data.laundryTypeName,
+        //   deskripsi: data.description,
+        //   gambar: data.photo.fileName,
+        // },
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -115,7 +133,7 @@ function LaundryType() {
       }
       console.log('Response DELETE');
       console.log(res);
-      getApiHandler();
+      handleGetLaundryType();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -131,6 +149,9 @@ function LaundryType() {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry/${id}`,
       });
       if (res.status === 200) {
@@ -140,7 +161,7 @@ function LaundryType() {
           statusType: 'success',
         });
       }
-      getApiHandler();
+      handleGetLaundryType();
       console.log(res);
     } catch (error) {
       setOpenLoadDecision({
@@ -309,9 +330,9 @@ function LaundryType() {
               size="large"
               onClick={() => {
                 if (formLaundryType.id) {
-                  putApiHandler(formLaundryType);
+                  handleUpdateLaundryType();
                 } else {
-                  postApiHandler(formLaundryType);
+                  handleCreateLaundryType();
                 }
                 setFormLaundryType({
                   id: null,
@@ -356,7 +377,7 @@ function LaundryType() {
                           <span>{item.deskripsi}</span>
                         </TableCell>
                         <TableCell>
-                          <span>{item.gambar ? <img src="" width={60} alt={item.gambar} /> : null}</span>
+                          <span>{item.gambar ? <img src={item.gambar} width={60} alt={item.gambar} /> : null}</span>
                         </TableCell>
                         <TableCell>
                           <Box

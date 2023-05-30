@@ -17,7 +17,7 @@ function AddIncome() {
     nominal: null,
     entryDate: dayjs(),
     notes: '',
-    photoEvidence: { img: null, fileName: '' },
+    photoEvidence: { img: null, fileName: null },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
@@ -29,29 +29,55 @@ function AddIncome() {
     document.title = 'Tambah Pemasukan';
   }, []);
 
-  const postApiHandler = async (data) => {
+  const handleCreateAddIncome = async () => {
+    const formData = new FormData();
+    formData.append('tipe', 'Income');
+    formData.append('nominal', formAddIncome.nominal);
+    formData.append('judul', formAddIncome.title);
+    formData.append('catatan', formAddIncome.notes);
+    formData.append(
+      'tanggal',
+      dayjs(
+        `${formAddIncome.entryDate.$y}-${('0' + (formAddIncome.entryDate.$M + 1)).slice(-2)}-${
+          formAddIncome.entryDate.$D
+        } ${formAddIncome.entryDate.$H}:${formAddIncome.entryDate.$m}:00`
+      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
+    );
+    formData.append('gambar', formAddIncome.photoEvidence.img);
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan',
-        data: {
-          adminId: 1,
-          tipe: 'Income',
-          nominal: data.nominal,
-          judul: data.title,
-          catatan: data.notes,
-          tanggal: dayjs(
-            `${formAddIncome.entryDate.$y}-${('0' + (formAddIncome.entryDate.$M + 1)).slice(-2)}-${
-              formAddIncome.entryDate.$D
-            } ${formAddIncome.entryDate.$H}:${formAddIncome.entryDate.$m}:00`
-          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
-          gambar: data.photoEvidence.fileName,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan',
+        data: formData,
+        //   {
+        //     adminId: 1,
+        //     tipe: 'Income',
+        //     nominal: data.nominal,
+        //     judul: data.title,
+        //     catatan: data.notes,
+        //     tanggal: dayjs(
+        //       `${formAddIncome.entryDate.$y}-${('0' + (formAddIncome.entryDate.$M + 1)).slice(-2)}-${
+        //         formAddIncome.entryDate.$D
+        //       } ${formAddIncome.entryDate.$H}:${formAddIncome.entryDate.$m}:00`
+        //     ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+        //     gambar: data.photoEvidence.fileName,
+        //   },
       });
 
       console.log('Response POST');
       console.log(res);
+      setFormAddIncome({
+        title: '',
+        nominal: null,
+        entryDate: dayjs(),
+        notes: '',
+        photoEvidence: { img: null, fileName: '' },
+      });
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -344,14 +370,7 @@ function AddIncome() {
               variant="contained"
               size="large"
               onClick={() => {
-                postApiHandler(formAddIncome);
-                setFormAddIncome({
-                  title: '',
-                  nominal: null,
-                  entryDate: dayjs(),
-                  notes: '',
-                  photoEvidence: { img: null, fileName: '' },
-                });
+                handleCreateAddIncome();
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >

@@ -17,7 +17,7 @@ function AddExpenses() {
     nominal: null,
     expenditureDate: dayjs(),
     notes: '',
-    photoEvidence: { img: null, fileName: '' },
+    photoEvidence: { img: null, fileName: null },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
@@ -29,28 +29,54 @@ function AddExpenses() {
     document.title = 'Tambah Pengeluaran';
   }, []);
 
-  const postApiHandler = async (data) => {
+  const handleCreateAddExpenses = async () => {
+    const formData = new FormData();
+    formData.append('tipe', 'Expenses');
+    formData.append('nominal', formAddExpenses.nominal);
+    formData.append('judul', formAddExpenses.title);
+    formData.append('catatan', formAddExpenses.notes);
+    formData.append(
+      'tanggal',
+      dayjs(
+        `${formAddExpenses.expenditureDate.$y}-${('0' + (formAddExpenses.expenditureDate.$M + 1)).slice(-2)}-${
+          formAddExpenses.expenditureDate.$D
+        } ${formAddExpenses.expenditureDate.$H}:${formAddExpenses.expenditureDate.$m}:00`
+      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
+    );
+    formData.append('gambar', formAddExpenses.photoEvidence.img);
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan',
-        data: {
-          adminId: 1,
-          tipe: 'Expenses',
-          nominal: data.nominal,
-          judul: data.title,
-          catatan: data.notes,
-          tanggal: dayjs(
-            `${formAddExpenses.expenditureDate.$y}-${('0' + (formAddExpenses.expenditureDate.$M + 1)).slice(-2)}-${
-              formAddExpenses.expenditureDate.$D
-            } ${formAddExpenses.expenditureDate.$H}:${formAddExpenses.expenditureDate.$m}:00`
-          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
-          gambar: data.photoEvidence.fileName,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan',
+        data: formData,
+        // {
+        //   adminId: 1,
+        //   tipe: 'Expenses',
+        //   nominal: data.nominal,
+        //   judul: data.title,
+        //   catatan: data.notes,
+        //   tanggal: dayjs(
+        //     `${formAddExpenses.expenditureDate.$y}-${('0' + (formAddExpenses.expenditureDate.$M + 1)).slice(-2)}-${
+        //       formAddExpenses.expenditureDate.$D
+        //     } ${formAddExpenses.expenditureDate.$H}:${formAddExpenses.expenditureDate.$m}:00`
+        //   ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+        //   gambar: data.photoEvidence.fileName,
+        // },
       });
       console.log('Response POST');
       console.log(res);
+      setFormAddExpenses({
+        title: '',
+        nominal: null,
+        expenditureDate: dayjs(),
+        notes: '',
+        photoEvidence: { img: null, fileName: '' },
+      });
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -343,14 +369,7 @@ function AddExpenses() {
               variant="contained"
               size="large"
               onClick={() => {
-                postApiHandler(formAddExpenses);
-                setFormAddExpenses({
-                  title: '',
-                  nominal: null,
-                  expenditureDate: dayjs(),
-                  notes: '',
-                  photoEvidence: { img: null, fileName: '' },
-                });
+                handleCreateAddExpenses();
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >

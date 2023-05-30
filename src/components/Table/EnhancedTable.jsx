@@ -14,9 +14,7 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
 import {
-  Avatar,
   Button,
   Collapse,
   Dialog,
@@ -24,200 +22,54 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
+  Menu,
+  MenuItem,
   useTheme,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Draggable from 'react-draggable';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-
-// function createData(name, calories, fat, carbs, protein) {
-//   return {
-//     name,
-//     calories,
-//     fat,
-//     carbs,
-//     protein,
-//   };
-// }
-
-// function createData(name, code, population, size, description, elementHTML) {
-//   return { name, code, population, size, description, elementHTML };
-// }
+import axios from 'axios';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const headCells = [
   {
     id: 'collapse',
-    numeric: false,
     label: '',
   },
   {
-    id: 'name',
-    numeric: false,
-    label: 'Name',
+    id: 'id',
+    label: 'ID',
   },
   {
-    id: 'code',
-    numeric: true,
-    label: 'Code',
+    id: 'tipe',
+    label: 'Tipe',
   },
   {
-    id: 'population',
-    numeric: true,
-    label: 'Population',
+    id: 'nominal',
+    label: 'Nominal',
   },
   {
-    id: 'size',
-    numeric: true,
-    label: 'Size',
+    id: 'judul',
+    label: 'Judul',
   },
   {
-    id: 'description',
-    numeric: false,
-    label: 'Description',
+    id: 'tanggal',
+    label: 'Tanggal',
   },
   {
-    id: 'elementHTML',
-    numeric: true,
-    label: 'Element HTML',
-  },
-];
-
-const dataTable = [
-  {
-    name: 'India',
-    code: 'IN',
-    population: 1324171354,
-    size: 3287263,
-    description:
-      '1 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 1,
+    id: 'catatan',
+    label: 'Catatan',
   },
   {
-    name: 'China',
-    code: 'CN',
-    population: 1403500365,
-    size: 9596961,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 2,
-  },
-  {
-    name: 'Italy',
-    code: 'IT',
-    population: 60483973,
-    size: 301340,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 3,
-  },
-  {
-    name: 'United States',
-    code: 'US',
-    population: 327167434,
-    size: 9833520,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 4,
-  },
-  {
-    name: 'Canada',
-    code: 'CA',
-    population: 37602103,
-    size: 9984670,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 5,
-  },
-  {
-    name: 'Australia',
-    code: 'AU',
-    population: 25475400,
-    size: 7692024,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 6,
-  },
-  {
-    name: 'Germany',
-    code: 'DE',
-    population: 83019200,
-    size: 357578,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 7,
-  },
-  {
-    name: 'Ireland',
-    code: 'IE',
-    population: 4857000,
-    size: 70273,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 8,
-  },
-  {
-    name: 'Mexico',
-    code: 'MX',
-    population: 126577691,
-    size: 1972550,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 9,
-  },
-  {
-    name: 'Japan',
-    code: 'JP',
-    population: 126317000,
-    size: 377973,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 10,
-  },
-  {
-    name: 'France',
-    code: 'FR',
-    population: 67022000,
-    size: 640679,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 11,
-  },
-  {
-    name: 'United Kingdom',
-    code: 'GB',
-    population: 67545757,
-    size: 242495,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 12,
-  },
-  {
-    name: 'Russia',
-    code: 'RU',
-    population: 146793744,
-    size: 17098246,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 13,
-  },
-  {
-    name: 'Nigeria',
-    code: 'NG',
-    population: 200962417,
-    size: 923768,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 14,
-  },
-  {
-    name: 'Brazil',
-    code: 'BR',
-    population: 210147125,
-    size: 8515767,
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae quas, quasi recusandae magnam quam commodi. Eum delectus et perspiciatis. Totam temporibus aliquid esse deleniti sint, cupiditate beatae fugiat autem doloremque.',
-    elementHTML: 15,
+    id: 'action',
+    label: '',
   },
 ];
 
@@ -228,7 +80,6 @@ function descendingComparator(a, b, orderBy) {
   if (b[orderBy] > a[orderBy]) {
     return 1;
   }
-
   return 0;
 }
 
@@ -261,17 +112,22 @@ function RowItem(props) {
             {openCell ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
           </IconButton>
         </TableCell>
-        <TableCell>{props.item.name}</TableCell>
-        <TableCell align="right">{props.item.code}</TableCell>
-        <TableCell align="right">{props.item.population}</TableCell>
-        <TableCell align="right">{props.item.size}</TableCell>
-        <TableCell align="right">{props.item.description}</TableCell>
-        <TableCell align="right">{props.item.elementHTML}</TableCell>
+        <TableCell>{props.item.id}</TableCell>
+        <TableCell>{props.item.tipe}</TableCell>
+        <TableCell>{props.item.nominal}</TableCell>
+        <TableCell>{props.item.judul}</TableCell>
+        <TableCell>{props.item.tanggal}</TableCell>
+        <TableCell>{props.item.catatan}</TableCell>
+        <TableCell>
+          <IconButton size="small">
+            <MoreVertIcon color="primary" />
+          </IconButton>
+        </TableCell>
       </TableRow>
 
       {/* Collapse Table */}
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={openCell} timeout="auto" unmountOnExit>
             <Typography variant="h6" gutterBottom component="div">
               History Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias id nobis, dignissimos neque
@@ -331,7 +187,7 @@ export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('name');
 
-  const [page, setPage] = React.useState(0);
+  // const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
@@ -340,13 +196,63 @@ export default function EnhancedTable() {
     setOrderBy(property);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  React.useEffect(() => {
+    handleGetFinance();
+  }, []);
+
+  const [listFinance, setListFinance] = React.useState([]);
+  const [pageConfig, setPageConfig] = React.useState({
+    currentPage: 1,
+    metadata: null,
+  });
+  const handleGetFinance = async (changePage) => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan?page=${
+          !changePage
+            ? pageConfig.currentPage
+            : changePage === 'prev'
+            ? pageConfig.currentPage - 1
+            : changePage === 'next'
+            ? pageConfig.currentPage + 1
+            : changePage
+        }&perPage=${10}`,
+      });
+
+      setPageConfig({
+        ...pageConfig,
+        metadata: res.data.metadata,
+        currentPage: !changePage
+          ? pageConfig.currentPage
+          : changePage === 'prev'
+          ? pageConfig.currentPage - 1
+          : changePage === 'next'
+          ? pageConfig.currentPage + 1
+          : changePage,
+      });
+      console.log('Response GET Data Finance');
+      console.log(res);
+      setListFinance(res.data.data);
+      // setPageConfig({ ...pageConfig, metadata: res.data.metadata });
+    } catch (error) {
+      if (error.response.status === 404) {
+        setListFinance([]);
+      }
+      console.log(error);
+    }
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -365,7 +271,7 @@ export default function EnhancedTable() {
           <Typography sx={{ fontWeight: 'bold' }} color="primary" variant="h5" id="tableTitle" component="div">
             Daftar Pesanan Sedang Berjalan
           </Typography>
-          <IconButton>
+          <IconButton onClick={() => handleGetFinance()}>
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
@@ -386,7 +292,7 @@ export default function EnhancedTable() {
               {headCells.map((headCell) => (
                 <TableCell
                   key={headCell.id}
-                  align={headCell.numeric ? 'right' : 'left'}
+                  // align={headCell.numeric ? 'right' : 'left'}
                   sortDirection={orderBy === headCell.id ? order : false}
                   sx={{ paddingY: 1 }}
                 >
@@ -409,8 +315,8 @@ export default function EnhancedTable() {
 
           {/* Table Content */}
           <TableBody>
-            {stableSort(dataTable, getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            {stableSort(listFinance, getComparator(order, orderBy))
+              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((rowItem, index) => {
                 return <RowItem key={rowItem.code} item={rowItem} />;
               })}
@@ -421,36 +327,89 @@ export default function EnhancedTable() {
       {/* Table Pagination */}
       <Box
         sx={{
-          width: '100%',
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          [theme.breakpoints.down('sm')]: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
+          justifyContent: 'end',
         }}
       >
-        <span>
-          <Button sx={{ width: 'max-content' }}>Pagination 1 (1-100)</Button>
-        </span>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50, 100]}
-          component="div"
-          count={dataTable.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            width: '100%',
-            [theme.breakpoints.up('sm')]: { justifyContent: 'right' },
-          }}
-        />
+        {pageConfig.metadata === null ? null : (
+          <Box sx={{ py: 2, px: 1 }}>
+            <Grid container spacing={1}>
+              <Grid
+                item
+                xs={12}
+                sm="auto"
+                sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+              >
+                <span>Pages:</span>
+                <Button variant="text" size="small" onClick={handleClick} sx={{ display: 'flex', fontSize: '16px' }}>
+                  {pageConfig.metadata === null ? null : pageConfig.metadata.totalPage}
+                  <ArrowDropDownIcon />
+                  <ArrowDropUpIcon />
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  {pageConfig.metadata === null
+                    ? null
+                    : Array.from(Array(pageConfig.metadata.totalPage)).map((item, index) => {
+                        return (
+                          <MenuItem
+                            onClick={() => {
+                              handleGetFinance(index + 1);
+                              handleClose();
+                            }}
+                            disabled={pageConfig.currentPage === index + 1}
+                          >
+                            {index + 1}
+                          </MenuItem>
+                        );
+                      })}
+                </Menu>
+                <div>Rows per page:</div>
+                <Button
+                  variant="text"
+                  size="small"
+                  onClick={() => console.log('asd')}
+                  sx={{ display: 'flex', fontSize: '16px' }}
+                >
+                  10
+                  <ArrowDropDownIcon />
+                  <ArrowDropUpIcon />
+                </Button>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm="auto"
+                sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+              >
+                <span>1-10 of 100</span>
+                <IconButton
+                  size="small"
+                  onClick={() => handleGetFinance('prev')}
+                  disabled={pageConfig.currentPage === 1}
+                  sx={{ color: '#1F305C' }}
+                >
+                  <ChevronLeftIcon />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  onClick={() => handleGetFinance('next')}
+                  disabled={pageConfig.currentPage === pageConfig.metadata.totalPage}
+                  sx={{ color: '#1F305C' }}
+                >
+                  <ChevronRightIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Box>
+        )}
       </Box>
     </>
   );

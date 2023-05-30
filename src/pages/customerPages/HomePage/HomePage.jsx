@@ -224,7 +224,7 @@ function OperatingHoursAndHowToOrderSection() {
       <Box sx={{ backgroundColor: '#ffffff', py: 2 }}>
         <Container>
           <Grid container spacing={4}>
-            <Grid item sm={6} md={5}>
+            <Grid item xs={12} sm={6} md={5}>
               <h4 className={`${style['section-title']}`} id="JamOperasional">
                 Jam Operasional
               </h4>
