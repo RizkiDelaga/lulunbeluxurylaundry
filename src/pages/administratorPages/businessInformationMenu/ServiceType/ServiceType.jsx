@@ -36,7 +36,7 @@ function ServiceType() {
       minutes: null,
     },
     description: '',
-    photo: { img: null, fileName: '' },
+    photo: { img: null, fileName: null },
   });
   const [nomor, setNomor] = useState(null);
 
@@ -48,10 +48,10 @@ function ServiceType() {
 
   React.useEffect(() => {
     document.title = 'Edit Jenis Layanan';
-    getApiHandler();
+    handleGetServiceType();
   }, []);
 
-  const getApiHandler = async () => {
+  const handleGetServiceType = async () => {
     try {
       const res = await axios({
         method: 'GET',
@@ -68,19 +68,31 @@ function ServiceType() {
     }
   };
 
-  const postApiHandler = async (data) => {
+  const handleCreateServiceType = async () => {
+    const formData = new FormData();
+    formData.append('layanan', formServiceType.serviceTypeName);
+    formData.append('hari', formServiceType.serviceDuration.days);
+    formData.append('jam', formServiceType.serviceDuration.hours);
+    formData.append('menit', formServiceType.serviceDuration.minutes);
+    formData.append('gambar', formServiceType.photo.img);
+    formData.append('deskripsi', formServiceType.description);
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislayanan',
-        data: {
-          layanan: data.serviceTypeName,
-          hari: parseInt(data.serviceDuration.days),
-          jam: parseInt(data.serviceDuration.hours),
-          gambar: data.photo.fileName,
-          deskripsi: data.description,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislayanan',
+        data: formData,
+        // {
+        //   layanan: formServiceType.serviceTypeName,
+        //   hari: parseInt(formServiceType.serviceDuration.days),
+        //   jam: parseInt(formServiceType.serviceDuration.hours),
+        //   gambar: formServiceType.photo.fileName,
+        //   deskripsi: formServiceType.description,
+        // },
       });
       console.log('Response POST');
       console.log(res);
@@ -91,7 +103,7 @@ function ServiceType() {
           statusType: 'success',
         });
       }
-      getApiHandler();
+      handleGetServiceType();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -103,19 +115,31 @@ function ServiceType() {
     }
   };
 
-  const putApiHandler = async (data) => {
+  const handleUpdateServiceType = async () => {
+    const formData = new FormData();
+    formData.append('layanan', formServiceType.serviceTypeName);
+    formData.append('hari', formServiceType.serviceDuration.days);
+    formData.append('jam', formServiceType.serviceDuration.hours);
+    formData.append('menit', formServiceType.serviceDuration.minutes);
+    formData.append('gambar', formServiceType.photo.img);
+    formData.append('deskripsi', formServiceType.description);
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'PUT',
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislayanan/${data.id}`,
-        data: {
-          layanan: data.serviceTypeName,
-          hari: parseInt(data.serviceDuration.days),
-          jam: parseInt(data.serviceDuration.hours),
-          gambar: data.photo.fileName,
-          deskripsi: data.description,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislayanan/${formServiceType.id}`,
+        data: formData,
+        // {
+        //   layanan: data.serviceTypeName,
+        //   hari: parseInt(data.serviceDuration.days),
+        //   jam: parseInt(data.serviceDuration.hours),
+        //   gambar: data.photo.fileName,
+        //   deskripsi: data.description,
+        // },
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -126,7 +150,7 @@ function ServiceType() {
       }
       console.log('Response DELETE');
       console.log(res);
-      getApiHandler();
+      handleGetServiceType();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -137,11 +161,14 @@ function ServiceType() {
     }
   };
 
-  const deleteApiHandler = async (id) => {
+  const handleDeleteServiceType = async (id) => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislayanan/${id}`,
       });
       if (res.status === 200) {
@@ -151,7 +178,7 @@ function ServiceType() {
           statusType: 'success',
         });
       }
-      getApiHandler();
+      handleGetServiceType();
       console.log(res);
     } catch (error) {
       setOpenLoadDecision({
@@ -386,9 +413,9 @@ function ServiceType() {
               size="large"
               onClick={() => {
                 if (formServiceType.id) {
-                  putApiHandler(formServiceType);
+                  handleUpdateServiceType();
                 } else {
-                  postApiHandler(formServiceType);
+                  handleCreateServiceType();
                 }
                 setFormServiceType({
                   id: null,
@@ -447,7 +474,7 @@ function ServiceType() {
                           <span>{item.deskripsi}</span>
                         </TableCell>
                         <TableCell>
-                          <span>{item.gambar ? <img src="" width={60} alt={item.gambar} /> : null}</span>
+                          <span>{item.gambar ? <img src={item.gambar} width={60} alt={item.gambar} /> : null}</span>
                         </TableCell>
                         <TableCell>
                           <Box
@@ -516,7 +543,7 @@ function ServiceType() {
                                     photo: { img: null, fileName: '' },
                                   });
                                 }
-                                deleteApiHandler(item.id);
+                                handleDeleteServiceType(item.id);
                               }}
                               sx={{ width: '100%' }}
                             >

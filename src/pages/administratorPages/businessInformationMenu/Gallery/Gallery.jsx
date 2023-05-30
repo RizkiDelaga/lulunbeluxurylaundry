@@ -5,6 +5,9 @@ import {
   Box,
   Button,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
   Grid,
   Paper,
   Table,
@@ -22,6 +25,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditOffIcon from '@mui/icons-material/EditOff';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import axios from 'axios';
+import { BigPlayButton, LoadingSpinner, Player } from 'video-react';
 
 function Gallery() {
   const theme = useTheme();
@@ -31,7 +35,7 @@ function Gallery() {
     id: null,
     title: '',
     description: '',
-    file: { img: null, fileName: '' },
+    file: { img: null, fileName: null },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
@@ -41,10 +45,23 @@ function Gallery() {
 
   React.useEffect(() => {
     document.title = 'Edit Galeri';
-    getApiHandler();
+    handleGetGallery();
   }, []);
 
-  const getApiHandler = async () => {
+  const [openPreviewGallery, setOpenPreviewGallery] = React.useState({
+    isOpen: false,
+    data: null,
+  });
+
+  const handleClickOpen = (data) => {
+    setOpenPreviewGallery({ ...openPreviewGallery, isOpen: true, data: data });
+  };
+
+  const handleClose = () => {
+    setOpenPreviewGallery({ ...openPreviewGallery, isOpen: false });
+  };
+
+  const handleGetGallery = async () => {
     try {
       const res = await axios({
         method: 'GET',
@@ -61,7 +78,12 @@ function Gallery() {
     }
   };
 
-  const postApiHandler = async (data) => {
+  const handleCreateGallery = async () => {
+    const formData = new FormData();
+    formData.append('judul', formGallery.title);
+    formData.append('deskripsi', formGallery.description);
+    formData.append('media', formGallery.file.img);
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
@@ -70,11 +92,12 @@ function Gallery() {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri',
-        data: {
-          judul: data.title,
-          deskripsi: data.description,
-          media: data.file.fileName,
-        },
+        data: formData,
+        // {
+        //   judul: data.title,
+        //   deskripsi: data.description,
+        //   media: data.file.fileName,
+        // },
       });
       console.log('Response POST');
       console.log(res);
@@ -85,7 +108,7 @@ function Gallery() {
           statusType: 'success',
         });
       }
-      getApiHandler();
+      handleGetGallery();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -97,7 +120,12 @@ function Gallery() {
     }
   };
 
-  const putApiHandler = async (data) => {
+  const handleUpdateGallery = async () => {
+    const formData = new FormData();
+    formData.append('judul', formGallery.title);
+    formData.append('deskripsi', formGallery.description);
+    formData.append('media', formGallery.file.img);
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
@@ -105,12 +133,13 @@ function Gallery() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri/${data.id}`,
-        data: {
-          judul: data.title,
-          deskripsi: data.description,
-          media: data.file.fileName,
-        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri/${formGallery.id}`,
+        data: formData,
+        // {
+        //   judul: data.title,
+        //   deskripsi: data.description,
+        //   media: data.file.fileName,
+        // },
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -121,7 +150,7 @@ function Gallery() {
       }
       console.log('Response DELETE');
       console.log(res);
-      getApiHandler();
+      handleGetGallery();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -149,7 +178,7 @@ function Gallery() {
           statusType: 'success',
         });
       }
-      getApiHandler();
+      handleGetGallery();
       console.log(res);
     } catch (error) {
       setOpenLoadDecision({
@@ -263,7 +292,7 @@ function Gallery() {
                       startIcon={<InsertPhotoIcon />}
                       sx={{ height: 'fit-content' }}
                     >
-                      Pilih Foto
+                      Pilih Foto/Video
                       <input
                         type="file"
                         accept="image/*"
@@ -310,9 +339,9 @@ function Gallery() {
               size="large"
               onClick={() => {
                 if (formGallery.id) {
-                  putApiHandler(formGallery);
+                  handleUpdateGallery();
                 } else {
-                  postApiHandler(formGallery);
+                  handleCreateGallery();
                 }
                 setFormGallery({
                   id: null,
@@ -353,7 +382,56 @@ function Gallery() {
                           <span>{index + 1}</span>
                         </TableCell>
                         <TableCell>
-                          <span>{item.media ? <img src="" width={60} alt={item.media} /> : null}</span>
+                          {item.status === 'video' ? (
+                            <Box onClick={() => handleClickOpen(item)} sx={{ cursor: 'pointer' }}>
+                              <Player playsInline fluid={false} aspectRatio="16:9" width={120} src={item.media}>
+                                <LoadingSpinner />
+                                <BigPlayButton position="center" />
+                              </Player>
+                            </Box>
+                          ) : (
+                            <Box onClick={() => handleClickOpen(item)} sx={{ cursor: 'pointer' }}>
+                              <img src={item.media} width={120} style={{ objectFit: 'contain' }} alt={item.media} />
+                            </Box>
+                          )}
+
+                          <Dialog
+                            fullWidth
+                            open={openPreviewGallery.isOpen}
+                            onClose={handleClose}
+                            aria-describedby="alert-dialog-description"
+                            sx={{ zIndex: 10000 }}
+                          >
+                            <DialogContent sx={{ display: 'flex', justifyContent: 'center', pb: 0 }}>
+                              {openPreviewGallery.data ? (
+                                openPreviewGallery.data.status === 'video' ? (
+                                  <Player
+                                    playsInline
+                                    fluid={false}
+                                    aspectRatio="16:9"
+                                    height={280}
+                                    src={openPreviewGallery.data.media}
+                                  >
+                                    <LoadingSpinner />
+                                    <BigPlayButton position="center" />
+                                  </Player>
+                                ) : (
+                                  <img
+                                    src={openPreviewGallery.data.media}
+                                    width={'100%'}
+                                    style={{ objectFit: 'contain' }}
+                                    alt=""
+                                  />
+                                )
+                              ) : null}
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={handleClose} autoFocus>
+                                Tutup
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
+                          {/* <span>{item.media ? <img src={item.media} width={60} alt={item.media} /> : null}</span> */}
                         </TableCell>
                         <TableCell>
                           <span>{item.judul}</span>

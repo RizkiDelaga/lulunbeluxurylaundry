@@ -24,17 +24,17 @@ function Gallery() {
   const [dataGallery, setDatagallery] = React.useState([]);
   const [openDescription, setOpenDescription] = React.useState(false);
 
-  const [openDialog, setOpenDialog] = React.useState({
+  const [openPreviewGallery, setOpenPreviewGallery] = React.useState({
     isOpen: false,
     data: null,
   });
 
   const handleClickOpen = (data) => {
-    setOpenDialog({ ...openDialog, isOpen: true, data: data });
+    setOpenPreviewGallery({ ...openPreviewGallery, isOpen: true, data: data });
   };
 
   const handleClose = () => {
-    setOpenDialog({ ...openDialog, isOpen: false });
+    setOpenPreviewGallery({ ...openPreviewGallery, isOpen: false });
   };
 
   React.useEffect(() => {
@@ -88,28 +88,28 @@ function Gallery() {
           })}
         </Grid>
 
-        <Dialog fullWidth open={openDialog.isOpen} onClose={handleClose} aria-describedby="alert-dialog-description">
+        <Dialog fullWidth open={openPreviewGallery.isOpen} onClose={handleClose} aria-describedby="alert-dialog-description">
           <h4
             style={{ padding: '0px 24px', paddingTop: '16px', display: 'flex', alignItems: 'center' }}
             onClick={() => setOpenDescription(!openDescription)}
           >
-            {openDialog.data ? openDialog.data.judul : null} {openDescription ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            {openPreviewGallery.data ? openPreviewGallery.data.judul : null} {openDescription ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </h4>
 
           <Box sx={{ px: 3, display: openDescription ? 'block' : 'none' }}>
-            {openDialog.data ? openDialog.data.deskripsi : null}
+            {openPreviewGallery.data ? openPreviewGallery.data.deskripsi : null}
           </Box>
 
           <DialogContent sx={{ display: 'flex', justifyContent: 'center', pb: 0 }}>
-            {openDialog.data ? (
-              openDialog.data.status === 'video' ? (
-                <Player playsInline fluid={false} aspectRatio="16:9" height={280} src={openDialog.data.media}>
+            {openPreviewGallery.data ? (
+              openPreviewGallery.data.status === 'video' ? (
+                <Player playsInline fluid={false} aspectRatio="16:9" height={280} src={openPreviewGallery.data.media}>
                   <LoadingSpinner />
                   <BigPlayButton position="center" />
                 </Player>
               ) : (
                 <img
-                  src={openDialog.data.media}
+                  src={openPreviewGallery.data.media}
                   width={'100%'}
                   // height={'100%'}
                   style={{ objectFit: 'contain' }}

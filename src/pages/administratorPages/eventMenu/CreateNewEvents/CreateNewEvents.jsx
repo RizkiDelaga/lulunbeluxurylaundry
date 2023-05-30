@@ -53,35 +53,77 @@ function CreateNewEvents() {
     document.title = 'Buat Event Baru';
   }, []);
 
-  const postApiHandler = async (data) => {
+  const handleCreateEvents = async () => {
+    const formData = new FormData();
+    formData.append('nama', formCreateNewEvents.eventName);
+    formData.append('gambar', formCreateNewEvents.poster.img);
+    formData.append('deskripsi', formCreateNewEvents.description);
+    formData.append('status ', '');
+    formData.append(
+      'tglMulai',
+      dayjs(
+        `${formCreateNewEvents.dateStart.$y}-${('0' + (formCreateNewEvents.dateStart.$M + 1)).slice(-2)}-${
+          formCreateNewEvents.dateStart.$D
+        } ${formCreateNewEvents.dateStart.$H}:${formCreateNewEvents.dateStart.$m}:00`
+      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
+    );
+    formData.append(
+      'tglSelesai',
+      dayjs(
+        `${formCreateNewEvents.dateEnd.$y}-${('0' + (formCreateNewEvents.dateEnd.$M + 1)).slice(-2)}-${
+          formCreateNewEvents.dateEnd.$D
+        } ${formCreateNewEvents.dateEnd.$H}:${formCreateNewEvents.dateEnd.$m}:00`
+      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
+    );
+    listCriteria.forEach((element, index) => {
+      formData.append(`kriteria[${index}]`, element.criteriaText);
+    });
+    listReward.forEach((element, index) => {
+      formData.append(`reward[${index}]`, element.rewardText);
+    });
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'POST',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/acara',
-        data: {
-          adminId: 1,
-          nama: data.eventName,
-          gambar: data.poster.fileName,
-          deskripsi: data.description,
-          kriteria: listCriteria.map((itemCriteria) => itemCriteria.criteriaText),
-          reward: listReward.map((itemReward) => itemReward.rewardText),
-          status: 'akan datang',
-          jumlah: 200,
-          tglMulai: dayjs(
-            `${formCreateNewEvents.dateStart.$y}-${('0' + (formCreateNewEvents.dateStart.$M + 1)).slice(-2)}-${
-              formCreateNewEvents.dateStart.$D
-            } ${formCreateNewEvents.dateStart.$H}:${formCreateNewEvents.dateStart.$m}:00`
-          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
-          tglSelesai: dayjs(
-            `${formCreateNewEvents.dateEnd.$y}-${('0' + (formCreateNewEvents.dateEnd.$M + 1)).slice(-2)}-${
-              formCreateNewEvents.dateEnd.$D
-            } ${formCreateNewEvents.dateEnd.$H}:${formCreateNewEvents.dateEnd.$m}:00`
-          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/acara',
+        data: formData,
+        // {
+        //   adminId: 1,
+        //   nama: data.eventName,
+        //   gambar: data.poster.fileName,
+        //   deskripsi: data.description,
+        //   kriteria: listCriteria.map((itemCriteria) => itemCriteria.criteriaText),
+        //   reward: listReward.map((itemReward) => itemReward.rewardText),
+        //   status: 'akan datang',
+        //   jumlah: 200,
+        //   tglMulai: dayjs(
+        //     `${formCreateNewEvents.dateStart.$y}-${('0' + (formCreateNewEvents.dateStart.$M + 1)).slice(-2)}-${
+        //       formCreateNewEvents.dateStart.$D
+        //     } ${formCreateNewEvents.dateStart.$H}:${formCreateNewEvents.dateStart.$m}:00`
+        //   ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+        //   tglSelesai: dayjs(
+        //     `${formCreateNewEvents.dateEnd.$y}-${('0' + (formCreateNewEvents.dateEnd.$M + 1)).slice(-2)}-${
+        //       formCreateNewEvents.dateEnd.$D
+        //     } ${formCreateNewEvents.dateEnd.$H}:${formCreateNewEvents.dateEnd.$m}:00`
+        //   ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+        // },
       });
       console.log('Response POST');
       console.log(res);
+      setFormCreateNewEvents({
+        id: null,
+        eventName: '',
+        dateStart: dayjs(),
+        dateEnd: dayjs(),
+        description: '',
+        reward: [],
+        criteria: [],
+        poster: { img: null, fileName: '' },
+      });
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -772,17 +814,7 @@ function CreateNewEvents() {
               variant="contained"
               size="large"
               onClick={() => {
-                postApiHandler(formCreateNewEvents);
-                setFormCreateNewEvents({
-                  id: null,
-                  eventName: '',
-                  dateStart: dayjs(),
-                  dateEnd: dayjs(),
-                  description: '',
-                  reward: [],
-                  criteria: [],
-                  poster: { img: null, fileName: '' },
-                });
+                handleCreateEvents();
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >
