@@ -16,15 +16,20 @@ import Tooltip from '@mui/material/Tooltip';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import {
   Button,
+  Chip,
   Collapse,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControl,
   Grid,
+  InputLabel,
   Menu,
   MenuItem,
+  Select,
+  TextField,
   useTheme,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -142,7 +147,9 @@ function RowItem(props) {
   );
 }
 
-function FilterPopUp({ openFilterPopUp, setOpenFilterPopUp }) {
+function FilterPopUp({ openFilterPopUp, setOpenFilterPopUp, state, setState }) {
+  const [formSearch, setFormSearch] = React.useState();
+
   const PaperComponent = (props) => {
     return (
       <Draggable handle="#filter-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
@@ -150,12 +157,13 @@ function FilterPopUp({ openFilterPopUp, setOpenFilterPopUp }) {
       </Draggable>
     );
   };
+
   return (
     <Dialog
       open={openFilterPopUp}
       onClose={() => setOpenFilterPopUp(!openFilterPopUp)}
       PaperComponent={PaperComponent}
-      aria-labelledby="filter-dialog"
+      // aria-labelledby="filter-dialog"
       sx={{ zIndex: 10000 }}
     >
       <DialogTitle
@@ -167,15 +175,27 @@ function FilterPopUp({ openFilterPopUp, setOpenFilterPopUp }) {
         Filter
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          To subscribe to this website, please enter your email address here. We will send updates occasionally.
-        </DialogContentText>
+        <TextField
+          required
+          label="Cari Judul"
+          // value={state}
+          onChange={(e) => {
+            setFormSearch(e.target.value);
+          }}
+          autoComplete="off"
+          sx={{ width: '100%' }}
+        />
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={() => setOpenFilterPopUp(!openFilterPopUp)}>
-          Batal
+        <Button onClick={() => setOpenFilterPopUp(!openFilterPopUp)}>Batal</Button>
+        <Button
+          onClick={() => {
+            setState(formSearch);
+            setOpenFilterPopUp(!openFilterPopUp);
+          }}
+        >
+          Terapkan
         </Button>
-        <Button onClick={() => setOpenFilterPopUp(!openFilterPopUp)}>Terapkan</Button>
       </DialogActions>
     </Dialog>
   );
@@ -246,6 +266,31 @@ export default function EnhancedTable() {
     }
   };
 
+  const handleSearchFinance = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan/search/where?judul=${searching.value}`,
+      });
+      console.log('Response GET Data Finance');
+      console.log(res);
+      // pageConfig({
+      //   currentPage: 1,
+      //   metadata: null,
+      // });
+      setListFinance(res.data.data);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setListFinance([]);
+      }
+      console.log(error);
+    }
+  };
+
+  // Menu
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -253,6 +298,13 @@ export default function EnhancedTable() {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const [searching, setSearching] = React.useState({ label: '', value: '', currentSearch: '' });
+  const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
+  const openSearch = Boolean(searchAnchorEl);
+  const handleCloseSearch = () => {
+    setSearchAnchorEl(null);
   };
 
   return (
@@ -275,14 +327,113 @@ export default function EnhancedTable() {
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
-        <Tooltip title="Filter list">
-          <IconButton onClick={() => setOpenFilterPopUp(!openFilterPopUp)}>
+        <div>
+          <Chip
+            label={`Search: ${searching.currentSearch}`}
+            onDelete={() => {
+              setSearching({ label: '', value: '', currentSearch: '' });
+              handleGetFinance();
+            }}
+            sx={{ display: !searching.currentSearch ? 'none' : null }}
+          />
+          <Tooltip title="Filter list">
+            {/* <IconButton onClick={() => setOpenFilterPopUp(!openFilterPopUp)}>
             <FilterListIcon color="primary" />
-          </IconButton>
-        </Tooltip>
+          </IconButton> */}
+            <IconButton
+              onClick={(event) => {
+                setSearchAnchorEl(event.currentTarget);
+              }}
+            >
+              <FilterListIcon color="primary" />
+            </IconButton>
+          </Tooltip>
+        </div>
       </Toolbar>
 
-      <FilterPopUp openFilterPopUp={openFilterPopUp} setOpenFilterPopUp={setOpenFilterPopUp} />
+      <Menu
+        id="basic-menu"
+        anchorEl={searchAnchorEl}
+        open={openSearch}
+        onClose={handleCloseSearch}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <Box sx={{ py: 1, px: 2, display: 'flex', gap: 1 }}>
+          <Grid container spacing={1}>
+            <Grid
+              item
+              xs
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1,
+                [theme.breakpoints.up('sm')]: {
+                  flexDirection: 'row',
+                },
+              }}
+            >
+              {/* <FormControl fullWidth> */}
+              <Select
+                value={searching.label}
+                size="small"
+                onChange={(e) => {
+                  setSearching({ ...searching, label: e.target.value });
+                }}
+                displayEmpty
+                inputProps={{ 'aria-label': 'Without label' }}
+              >
+                <MenuItem value="">
+                  <em>Pilih Label</em>
+                </MenuItem>
+                <MenuItem value={'Judul'}>Judul</MenuItem>
+              </Select>
+
+              <TextField
+                required
+                label="Kata Pencarian"
+                value={searching.value}
+                onChange={(e) => {
+                  setSearching({ ...searching, value: e.target.value });
+                }}
+                size="small"
+                autoComplete="off"
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+            <Grid item xs="auto" sx={{ display: 'flex', alignItems: 'center' }}>
+              <Button
+                size="medium"
+                variant="contained"
+                onClick={() => {
+                  setSearching({ label: '', value: '', currentSearch: searching.value });
+
+                  handleCloseSearch();
+                  handleSearchFinance();
+                }}
+              >
+                Cari
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Menu>
+
+      <div>
+        {searching.value}
+        {/* <FilterPopUp
+          openFilterPopUp={openFilterPopUp}
+          setOpenFilterPopUp={setOpenFilterPopUp}
+          state={searching}
+          setState={setSearching}
+        /> */}
+      </div>
 
       <TableContainer sx={{ maxHeight: rowsPerPage !== 10 ? 800 : 'none' }}>
         <Table stickyHeader sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
@@ -315,11 +466,9 @@ export default function EnhancedTable() {
 
           {/* Table Content */}
           <TableBody>
-            {stableSort(listFinance, getComparator(order, orderBy))
-              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((rowItem, index) => {
-                return <RowItem key={rowItem.code} item={rowItem} />;
-              })}
+            {stableSort(listFinance, getComparator(order, orderBy)).map((item, index) => {
+              return <RowItem key={item.id} item={item} />;
+            })}
           </TableBody>
         </Table>
       </TableContainer>
@@ -341,10 +490,14 @@ export default function EnhancedTable() {
                 sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
                 <span>Pages:</span>
-                <Button variant="text" size="small" onClick={handleClick} sx={{ display: 'flex', fontSize: '16px' }}>
-                  {pageConfig.metadata === null ? null : pageConfig.metadata.totalPage}
-                  <ArrowDropDownIcon />
-                  <ArrowDropUpIcon />
+                <Button
+                  variant="text"
+                  size="small"
+                  onClick={handleClick}
+                  endIcon={<ArrowDropDownIcon />}
+                  sx={{ display: 'flex', fontSize: '16px' }}
+                >
+                  {pageConfig.metadata === null ? null : pageConfig.currentPage}
                 </Button>
                 <Menu
                   id="basic-menu"
@@ -376,11 +529,10 @@ export default function EnhancedTable() {
                   variant="text"
                   size="small"
                   onClick={() => console.log('asd')}
+                  endIcon={<ArrowDropDownIcon />}
                   sx={{ display: 'flex', fontSize: '16px' }}
                 >
                   10
-                  <ArrowDropDownIcon />
-                  <ArrowDropUpIcon />
                 </Button>
               </Grid>
               <Grid
