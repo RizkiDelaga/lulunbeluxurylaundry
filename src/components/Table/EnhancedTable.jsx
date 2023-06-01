@@ -5,116 +5,32 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import {
-  Button,
-  Chip,
-  Collapse,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  FormControl,
-  Grid,
-  InputLabel,
-  Menu,
-  MenuItem,
-  Select,
-  TextField,
-  useTheme,
-} from '@mui/material';
+import { Button, Chip, Collapse, Grid, Menu, MenuItem, Select, TextField, useTheme } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import Draggable from 'react-draggable';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import axios from 'axios';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
-const headCells = [
-  {
-    id: 'collapse',
-    label: '',
-  },
-  {
-    id: 'id',
-    label: 'ID',
-  },
-  {
-    id: 'tipe',
-    label: 'Tipe',
-  },
-  {
-    id: 'nominal',
-    label: 'Nominal',
-  },
-  {
-    id: 'judul',
-    label: 'Judul',
-  },
-  {
-    id: 'tanggal',
-    label: 'Tanggal',
-  },
-  {
-    id: 'catatan',
-    label: 'Catatan',
-  },
-  {
-    id: 'action',
-    label: '',
-  },
-];
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+import SearchIcon from '@mui/icons-material/Search';
 
 function RowItem(props) {
-  const [openCell, setOpenCell] = React.useState(false);
+  const [openTableCell, setOpenTableCell] = React.useState(false);
 
   return (
     <React.Fragment>
       <TableRow hover>
         <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpenCell(!openCell)}>
-            {openCell ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
+          <IconButton aria-label="expand row" size="small" onClick={() => setOpenTableCell(!openTableCell)}>
+            {openTableCell ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
           </IconButton>
         </TableCell>
         <TableCell>{props.item.id}</TableCell>
@@ -133,13 +49,24 @@ function RowItem(props) {
       {/* Collapse Table */}
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
-          <Collapse in={openCell} timeout="auto" unmountOnExit>
-            <Typography variant="h6" gutterBottom component="div">
-              History Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias id nobis, dignissimos neque
-              reiciendis vitae fuga quisquam, dolorem inventore praesentium, corrupti nam! Esse ab consequuntur quo
-              maiores sequi labore distinctio.
-            </Typography>
-            <h1>Lorem ipsum dolor sit amet</h1>
+          <Collapse in={openTableCell} timeout="auto" unmountOnExit>
+            <Box sx={{ px: 2, py: 1 }}>
+              <div style={{ marginBottom: '16px' }}>
+                <h6>Detail Lengkap</h6>
+              </div>
+
+              <Grid container>
+                <Grid item xs={6}>
+                  <div>Lorem ipsum dolor sit amet. 1</div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div>Lorem ipsum dolor sit amet. 2</div>
+                </Grid>
+              </Grid>
+              <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                <Button variant="contained">Lihat Detail</Button>
+              </Box>
+            </Box>
           </Collapse>
         </TableCell>
       </TableRow>
@@ -147,68 +74,10 @@ function RowItem(props) {
   );
 }
 
-function FilterPopUp({ openFilterPopUp, setOpenFilterPopUp, state, setState }) {
-  const [formSearch, setFormSearch] = React.useState();
-
-  const PaperComponent = (props) => {
-    return (
-      <Draggable handle="#filter-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
-        <Paper {...props} />
-      </Draggable>
-    );
-  };
-
-  return (
-    <Dialog
-      open={openFilterPopUp}
-      onClose={() => setOpenFilterPopUp(!openFilterPopUp)}
-      PaperComponent={PaperComponent}
-      // aria-labelledby="filter-dialog"
-      sx={{ zIndex: 10000 }}
-    >
-      <DialogTitle
-        color="primary"
-        style={{ cursor: 'move', display: 'flex', alignItems: 'center', gap: '10px' }}
-        id="filter-dialog"
-      >
-        <FilterListIcon />
-        Filter
-      </DialogTitle>
-      <DialogContent>
-        <TextField
-          required
-          label="Cari Judul"
-          // value={state}
-          onChange={(e) => {
-            setFormSearch(e.target.value);
-          }}
-          autoComplete="off"
-          sx={{ width: '100%' }}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setOpenFilterPopUp(!openFilterPopUp)}>Batal</Button>
-        <Button
-          onClick={() => {
-            setState(formSearch);
-            setOpenFilterPopUp(!openFilterPopUp);
-          }}
-        >
-          Terapkan
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
-
-export default function EnhancedTable() {
+function EnhancedTable() {
   const theme = useTheme();
-  const [openFilterPopUp, setOpenFilterPopUp] = React.useState(false);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('name');
-
-  // const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -223,9 +92,12 @@ export default function EnhancedTable() {
   const [listFinance, setListFinance] = React.useState([]);
   const [pageConfig, setPageConfig] = React.useState({
     currentPage: 1,
+    dataPerPage: 10,
     metadata: null,
   });
-  const handleGetFinance = async (changePage) => {
+
+  // Handle API Get All Data Finance
+  const handleGetFinance = async (changePage, maxDataPerPage) => {
     try {
       const res = await axios({
         method: 'GET',
@@ -240,7 +112,7 @@ export default function EnhancedTable() {
             : changePage === 'next'
             ? pageConfig.currentPage + 1
             : changePage
-        }&perPage=${10}`,
+        }&perPage=${maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage}`,
       });
 
       setPageConfig({
@@ -253,11 +125,11 @@ export default function EnhancedTable() {
           : changePage === 'next'
           ? pageConfig.currentPage + 1
           : changePage,
+        dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
       console.log('Response GET Data Finance');
       console.log(res);
       setListFinance(res.data.data);
-      // setPageConfig({ ...pageConfig, metadata: res.data.metadata });
     } catch (error) {
       if (error.response.status === 404) {
         setListFinance([]);
@@ -266,6 +138,7 @@ export default function EnhancedTable() {
     }
   };
 
+  // Handle API Search Finance
   const handleSearchFinance = async () => {
     try {
       const res = await axios({
@@ -277,10 +150,7 @@ export default function EnhancedTable() {
       });
       console.log('Response GET Data Finance');
       console.log(res);
-      // pageConfig({
-      //   currentPage: 1,
-      //   metadata: null,
-      // });
+
       setListFinance(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -290,22 +160,90 @@ export default function EnhancedTable() {
     }
   };
 
-  // Menu
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
+  // Menu - Select Page
+  const [selectPageAnchorEl, setSelectPageAnchorEl] = React.useState(null);
+  const openSelectPage = Boolean(selectPageAnchorEl);
+  const handleCloseSelectPage = () => {
+    setSelectPageAnchorEl(null);
   };
 
+  // Menu - Select Page
+  const [selectDataPerPageAnchorEl, setSelectDataPerPageAnchorEl] = React.useState(null);
+  const openSelectDataPerPage = Boolean(selectDataPerPageAnchorEl);
+  const handleCloseSelectDataPerPage = () => {
+    setSelectDataPerPageAnchorEl(null);
+  };
+
+  // Menu - Searching
   const [searching, setSearching] = React.useState({ label: '', value: '', currentSearch: '' });
   const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
   const openSearch = Boolean(searchAnchorEl);
   const handleCloseSearch = () => {
     setSearchAnchorEl(null);
   };
+
+  const headCells = [
+    {
+      id: 'collapse',
+      label: '',
+    },
+    {
+      id: 'id',
+      label: 'ID',
+    },
+    {
+      id: 'tipe',
+      label: 'Tipe',
+    },
+    {
+      id: 'nominal',
+      label: 'Nominal',
+    },
+    {
+      id: 'judul',
+      label: 'Judul',
+    },
+    {
+      id: 'tanggal',
+      label: 'Tanggal',
+    },
+    {
+      id: 'catatan',
+      label: 'Catatan',
+    },
+    {
+      id: 'action',
+      label: '',
+    },
+  ];
+
+  function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function getComparator(order, orderBy) {
+    return order === 'desc'
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  }
+
+  function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) {
+        return order;
+      }
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
+  }
 
   return (
     <>
@@ -323,7 +261,12 @@ export default function EnhancedTable() {
           <Typography sx={{ fontWeight: 'bold' }} color="primary" variant="h5" id="tableTitle" component="div">
             Daftar Pesanan Sedang Berjalan
           </Typography>
-          <IconButton onClick={() => handleGetFinance()}>
+          <IconButton
+            onClick={() => {
+              handleGetFinance();
+              setSearching({ label: '', value: '', currentSearch: '' });
+            }}
+          >
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
@@ -337,22 +280,19 @@ export default function EnhancedTable() {
             sx={{ display: !searching.currentSearch ? 'none' : null }}
           />
           <Tooltip title="Filter list">
-            {/* <IconButton onClick={() => setOpenFilterPopUp(!openFilterPopUp)}>
-            <FilterListIcon color="primary" />
-          </IconButton> */}
             <IconButton
               onClick={(event) => {
                 setSearchAnchorEl(event.currentTarget);
               }}
             >
-              <FilterListIcon color="primary" />
+              {/* <FilterListIcon color="primary" /> */}
+              <SearchIcon color="primary" />
             </IconButton>
           </Tooltip>
         </div>
       </Toolbar>
-
+      {/* Menu - Searching */}
       <Menu
-        id="basic-menu"
         anchorEl={searchAnchorEl}
         open={openSearch}
         onClose={handleCloseSearch}
@@ -379,7 +319,6 @@ export default function EnhancedTable() {
                 },
               }}
             >
-              {/* <FormControl fullWidth> */}
               <Select
                 value={searching.label}
                 size="small"
@@ -425,17 +364,8 @@ export default function EnhancedTable() {
         </Box>
       </Menu>
 
-      <div>
-        {searching.value}
-        {/* <FilterPopUp
-          openFilterPopUp={openFilterPopUp}
-          setOpenFilterPopUp={setOpenFilterPopUp}
-          state={searching}
-          setState={setSearching}
-        /> */}
-      </div>
-
-      <TableContainer sx={{ maxHeight: rowsPerPage !== 10 ? 800 : 'none' }}>
+      {/* Table Section */}
+      <TableContainer sx={{ maxHeight: pageConfig.dataPerPage !== 10 ? 800 : 'none' }}>
         <Table stickyHeader sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
           {/* Table Header */}
           <TableHead>
@@ -443,11 +373,10 @@ export default function EnhancedTable() {
               {headCells.map((headCell) => (
                 <TableCell
                   key={headCell.id}
-                  // align={headCell.numeric ? 'right' : 'left'}
                   sortDirection={orderBy === headCell.id ? order : false}
                   sx={{ paddingY: 1 }}
                 >
-                  {headCell.id !== 'collapse' ? (
+                  {headCell.id !== 'collapse' && headCell.id !== 'action' ? (
                     <TableSortLabel
                       active={orderBy === headCell.id}
                       direction={orderBy === headCell.id ? order : 'asc'}
@@ -473,6 +402,21 @@ export default function EnhancedTable() {
         </Table>
       </TableContainer>
 
+      {/* 404 Data Not Found Handling */}
+      <Box
+        sx={{
+          mt: 2,
+          py: 1,
+          px: 2,
+          borderRadius: 2,
+          backgroundColor: '#eeeeee',
+          textAlign: 'center',
+          display: listFinance.length ? 'none' : null,
+        }}
+      >
+        <h5>Data tidak ditemukan!</h5>
+      </Box>
+
       {/* Table Pagination */}
       <Box
         sx={{
@@ -480,7 +424,7 @@ export default function EnhancedTable() {
           justifyContent: 'end',
         }}
       >
-        {pageConfig.metadata === null ? null : (
+        {pageConfig.metadata === null || searching.currentSearch ? null : (
           <Box sx={{ py: 2, px: 1 }}>
             <Grid container spacing={1}>
               <Grid
@@ -489,21 +433,24 @@ export default function EnhancedTable() {
                 sm="auto"
                 sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
+                {/* Change Pages */}
                 <span>Pages:</span>
                 <Button
                   variant="text"
                   size="small"
-                  onClick={handleClick}
-                  endIcon={<ArrowDropDownIcon />}
+                  onClick={(e) => {
+                    setSelectPageAnchorEl(e.currentTarget);
+                  }}
                   sx={{ display: 'flex', fontSize: '16px' }}
                 >
                   {pageConfig.metadata === null ? null : pageConfig.currentPage}
+                  <ArrowDropDownIcon />
                 </Button>
+                {/* Menu - Select Page */}
                 <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
+                  anchorEl={selectPageAnchorEl}
+                  open={openSelectPage}
+                  onClose={handleCloseSelectPage}
                   MenuListProps={{
                     'aria-labelledby': 'basic-button',
                   }}
@@ -515,7 +462,7 @@ export default function EnhancedTable() {
                           <MenuItem
                             onClick={() => {
                               handleGetFinance(index + 1);
-                              handleClose();
+                              handleCloseSelectPage();
                             }}
                             disabled={pageConfig.currentPage === index + 1}
                           >
@@ -524,16 +471,45 @@ export default function EnhancedTable() {
                         );
                       })}
                 </Menu>
+
+                {/* Change Data Per Pages */}
                 <div>Rows per page:</div>
                 <Button
                   variant="text"
                   size="small"
-                  onClick={() => console.log('asd')}
-                  endIcon={<ArrowDropDownIcon />}
+                  onClick={(e) => {
+                    setSelectDataPerPageAnchorEl(e.currentTarget);
+                  }}
                   sx={{ display: 'flex', fontSize: '16px' }}
                 >
-                  10
+                  {pageConfig.metadata === null ? null : pageConfig.dataPerPage}
+                  <ArrowDropDownIcon />
                 </Button>
+                {/* Menu - Select Data Per Page */}
+                <Menu
+                  anchorEl={selectDataPerPageAnchorEl}
+                  open={openSelectDataPerPage}
+                  onClose={handleCloseSelectDataPerPage}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  {pageConfig.metadata === null
+                    ? null
+                    : [10, 20, 50, 100].map((item, index) => {
+                        return (
+                          <MenuItem
+                            onClick={() => {
+                              handleGetFinance(1, item);
+                              handleCloseSelectDataPerPage();
+                            }}
+                            disabled={pageConfig.dataPerPage === item}
+                          >
+                            {item}
+                          </MenuItem>
+                        );
+                      })}
+                </Menu>
               </Grid>
               <Grid
                 item
@@ -541,7 +517,16 @@ export default function EnhancedTable() {
                 sm="auto"
                 sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
-                <span>1-10 of 100</span>
+                {/* Show Number Of Data */}
+                <span>
+                  {pageConfig.currentPage * pageConfig.dataPerPage - pageConfig.dataPerPage + 1}-
+                  {pageConfig.currentPage === pageConfig.metadata.totalPage &&
+                  pageConfig.currentPage * pageConfig.dataPerPage > pageConfig.metadata.totalCount
+                    ? pageConfig.metadata.totalCount
+                    : pageConfig.currentPage * pageConfig.dataPerPage}{' '}
+                  of {pageConfig.metadata.totalCount}
+                </span>
+                {/* Prev & Next Pagination */}
                 <IconButton
                   size="small"
                   onClick={() => handleGetFinance('prev')}
@@ -566,3 +551,5 @@ export default function EnhancedTable() {
     </>
   );
 }
+
+export default EnhancedTable;
