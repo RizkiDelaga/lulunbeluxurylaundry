@@ -251,7 +251,11 @@ function NavbarCustomer(props) {
               <MenuIcon />
             </IconButton>
 
-            <img src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png" height={40} alt="" />
+            {localStorage.getItem('business-logo') ? (
+              <img src={localStorage.getItem('business-logo')} height={40} alt="" />
+            ) : (
+              <img src={'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'} height={40} alt="" />
+            )}
 
             <List
               component="div"

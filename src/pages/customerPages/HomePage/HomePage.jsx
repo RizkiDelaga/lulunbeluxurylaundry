@@ -47,14 +47,14 @@ import { Pagination } from 'swiper';
 import RatingComponent from '../../../components/Ratings/RatingComponent';
 import axios from 'axios';
 
-function HeroSection() {
+function HeroSection({ businessInformation }) {
   return (
     <span>
       <Box sx={{ backgroundColor: '#FFFFFF', py: '100px' }}>
         <Container>
           <Grid container spacing={3}>
             <Grid item sm={6} md={5} lg={4}>
-              <img src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png" width="100%" alt="" />
+              {businessInformation ? <img src={businessInformation.logo} width="100%" alt="" /> : null}
             </Grid>
             <Grid
               item
@@ -63,7 +63,8 @@ function HeroSection() {
               lg={8}
               sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px 0px' }}
             >
-              <h2>Give More Than Your Hope</h2>
+              {businessInformation ? <h2>{businessInformation.slogan}</h2> : null}
+
               <span>
                 Lulu ’N Be Luxury Laundry hadir dengan menawarkan pelayanan laundry “One Stop Service” yaitu Laundry,
                 Wet Cleaning, dan Dry Cleaning dengan menggunakan teknologi terkini dan chemical terbaik, sehingga
@@ -184,16 +185,10 @@ function ServiceTypeSection({ listServiceType }) {
   );
 }
 
-function OperatingHoursAndHowToOrderSection() {
+function OperatingHoursAndHowToOrderSection({ businessInformation, listHowToOrder }) {
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
   const [howToOrderType, setHowToOrderType] = React.useState('Online');
-
-  // const ToggleButton = styled(MuiToggleButton)({
-  //   '&.Mui-selected, &.Mui-selected:hover': {
-  //     backgroundColor: '#1F305C',
-  //   },
-  // })
 
   const steps = [
     {
@@ -218,6 +213,34 @@ function OperatingHoursAndHowToOrderSection() {
     },
   ];
 
+  const LineDashLaundry = () => {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#1F305C' }}>
+        <div style={{ width: '100%' }}>
+          <hr
+            style={{
+              border: 'none',
+              height: '3px',
+              background: 'repeating-linear-gradient(90deg, #1F305C, #1F305C 12px,transparent 6px,transparent 24px)',
+            }}
+          />
+        </div>
+
+        <DryCleaningIcon />
+
+        <div style={{ width: '100%' }}>
+          <hr
+            style={{
+              border: 'none',
+              height: '3px',
+              background: 'repeating-linear-gradient(90deg, #1F305C, #1F305C 12px,transparent 6px,transparent 24px)',
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       <img src={SingleWave} width={'100%'} draggable="false" style={{ position: 'relative', bottom: '-10px' }} alt="" />
@@ -228,33 +251,11 @@ function OperatingHoursAndHowToOrderSection() {
               <h4 className={`${style['section-title']}`} id="JamOperasional">
                 Jam Operasional
               </h4>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#1F305C' }}>
-                <div style={{ width: '100%' }}>
-                  <hr
-                    style={{
-                      border: 'none',
-                      height: '3px',
-                      background:
-                        'repeating-linear-gradient(90deg, #1F305C, #1F305C 12px,transparent 6px,transparent 24px)',
-                    }}
-                  />
-                </div>
 
-                <DryCleaningIcon />
+              <LineDashLaundry />
 
-                <div style={{ width: '100%' }}>
-                  <hr
-                    style={{
-                      border: 'none',
-                      height: '3px',
-                      background:
-                        'repeating-linear-gradient(90deg, #1F305C, #1F305C 12px,transparent 6px,transparent 24px)',
-                    }}
-                  />
-                </div>
-              </div>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                {['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'].map((item, index) => {
+                {businessInformation.hari.map((item, index) => {
                   return (
                     <div
                       style={{
@@ -267,36 +268,15 @@ function OperatingHoursAndHowToOrderSection() {
                       }}
                     >
                       <strong>{item}</strong>
-                      <span>08:00 ~ 20:00</span>
+                      <span>
+                        {businessInformation.jamMulai[index]} ~ {businessInformation.jamSelesai[index]}
+                      </span>
                     </div>
                   );
                 })}
               </Box>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#1F305C' }}>
-                <div style={{ width: '100%' }}>
-                  <hr
-                    style={{
-                      border: 'none',
-                      height: '3px',
-                      background:
-                        'repeating-linear-gradient(90deg, #1F305C, #1F305C 12px,transparent 6px,transparent 24px)',
-                    }}
-                  />
-                </div>
 
-                <DryCleaningIcon />
-
-                <div style={{ width: '100%' }}>
-                  <hr
-                    style={{
-                      border: 'none',
-                      height: '3px',
-                      background:
-                        'repeating-linear-gradient(90deg, #1F305C, #1F305C 12px,transparent 6px,transparent 24px)',
-                    }}
-                  />
-                </div>
-              </div>
+              <LineDashLaundry />
             </Grid>
             <Grid
               item
@@ -777,8 +757,9 @@ function FAQSection() {
   );
 }
 
-function ContactAndLocationSection() {
+function ContactAndLocationSection({ businessInformation }) {
   let mapsEmbed =
+    businessInformation.koordinat ||
     '<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15825.291613002777!2d109.2421518!3d-7.429474!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e655e8428463883%3A0x8def4a2d764422a!2sLULU%20N&#39;BE%20LUXURY%20LAUNDRY%20PURWOKERTO!5e0!3m2!1sid!2sid!4v1682649257806!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
 
   let mapsTag = mapsEmbed
@@ -812,17 +793,17 @@ function ContactAndLocationSection() {
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <CallIcon sx={{ color: '#1F305C' }} />
                     <h6>(No Telepon)</h6>
-                    <span>0851 0290 9999</span>
+                    <span>{businessInformation.noTelp}</span>
                   </div>
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <FaxIcon sx={{ color: '#1F305C' }} />
-                    <h6>(No Telepon)</h6>
-                    <span>0851 0290 9999</span>
+                    <h6>(Fax)</h6>
+                    <span>{businessInformation.fax}</span>
                   </div>
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <EmailIcon sx={{ color: '#1F305C' }} />
-                    <h6>(No Telepon)</h6>
-                    <span>0851 0290 9999</span>
+                    <h6>(Email)</h6>
+                    <span>{businessInformation.email}</span>
                   </div>
                 </span>
                 <span className="gap-10" style={{ flexDirection: 'column' }}>
@@ -847,11 +828,7 @@ function ContactAndLocationSection() {
                 </span>
                 <span className="gap-10" style={{ flexDirection: 'column' }}>
                   <h6>Lokasi</h6>
-                  <span>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, maiores, commodi quasi distinctio
-                    ducimus natus voluptate ipsa soluta, porro maxime accusantium sint fugiat! Sapiente nostrum minus ut
-                    harum placeat totam.
-                  </span>
+                  <span>{businessInformation.lokasi}</span>
                 </span>
               </Grid>
             </Grid>
@@ -862,7 +839,7 @@ function ContactAndLocationSection() {
   );
 }
 
-function FooterSection() {
+function FooterSection({ businessInformation }) {
   return (
     <>
       <Box
@@ -879,10 +856,18 @@ function FooterSection() {
         <Grid container spacing={4}>
           <Grid item xs className="gap-10" style={{ flexDirection: 'column' }}>
             <h4>Navigasi</h4>
-            <div>Beranda</div>
-            <div>Galeri</div>
-            <div>Pemesanan Laundry</div>
-            <div>Tentang Kami</div>
+            <Link to={''} className={`${style['disable-link-style-white']}`}>
+              <div>Beranda</div>
+            </Link>
+            <Link to={'/Galeri'} className={`${style['disable-link-style-white']}`}>
+              <div>Galeri</div>
+            </Link>
+            <Link to={'/'} className={`${style['disable-link-style-white']}`}>
+              <div>Pemesanan Laundry</div>
+            </Link>
+            <Link to={'/TentangKami'} className={`${style['disable-link-style-white']}`}>
+              <div>Tentang Kami</div>
+            </Link>
           </Grid>
           <Grid item xs={12} md="auto">
             <Grid container spacing={4}>
@@ -891,37 +876,47 @@ function FooterSection() {
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <CallIcon />
                   <h6>(No Telepon)</h6>
-                  <span>0851 0290 9999</span>
+                  <span>{businessInformation.noTelp}</span>
                 </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <FaxIcon />
-                  <h6>(No Telepon)</h6>
-                  <span>0851 0290 9999</span>
+                  <h6>(Fax)</h6>
+                  <span>{businessInformation.fax}</span>
                 </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <EmailIcon />
-                  <h6>(No Telepon)</h6>
-                  <span>0851 0290 9999</span>
+                  <h6>(Email)</h6>
+                  <span>{businessInformation.email}</span>
                 </div>
               </Grid>
               <Grid item xs={12} sm="auto" className="gap-10" style={{ flexDirection: 'column' }}>
                 <h4>Sosial Media</h4>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                  <Link to={''}>
-                    <img src={InstagramIcon} height="40" alt="" />
-                  </Link>
-                  <Link to={''}>
-                    <img src={FacebookIcon} height="40" alt="" />
-                  </Link>
-                  <Link to={''}>
-                    <img src={TwitterIcon} height="40" alt="" />
-                  </Link>
-                  <Link to={''}>
-                    <img src={YoutubeIcon} height="40" alt="" />
-                  </Link>
-                  <Link to={''}>
-                    <img src={TiktokIcon} height="40" alt="" />
-                  </Link>
+                  {businessInformation.instagram ? (
+                    <Link to={businessInformation.instagram}>
+                      <img src={InstagramIcon} height="40" alt="" />
+                    </Link>
+                  ) : null}
+                  {businessInformation.facebook ? (
+                    <Link to={businessInformation.facebook}>
+                      <img src={FacebookIcon} height="40" alt="" />
+                    </Link>
+                  ) : null}
+                  {businessInformation.twitter ? (
+                    <Link to={businessInformation.twitter}>
+                      <img src={TwitterIcon} height="40" alt="" />
+                    </Link>
+                  ) : null}
+                  {businessInformation.youtube ? (
+                    <Link to={businessInformation.youtube}>
+                      <img src={YoutubeIcon} height="40" alt="" />
+                    </Link>
+                  ) : null}
+                  {businessInformation.tiktok ? (
+                    <Link to={businessInformation.tiktok}>
+                      <img src={TiktokIcon} height="40" alt="" />
+                    </Link>
+                  ) : null}
                 </div>
               </Grid>
             </Grid>
@@ -936,19 +931,38 @@ function FooterSection() {
 function HomePage() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [businessInformation, setBusinessInformation] = React.useState();
   const [laundryType, setLaundryType] = React.useState([]);
   const [serviceType, setServiceType] = React.useState([]);
+  const [howToOrder, setHowToOrder] = React.useState([]);
   const [event, setEvent] = React.useState([]);
   const [reason, setReason] = React.useState([]);
   const [position, setPosition] = React.useState(window.pageYOffset);
 
   React.useEffect(() => {
     document.title = 'Beranda | Lulu n Be Luxury Laundry';
+    handleGetBusinessInformation();
     handleGetLaundryType();
     handleGetServiceType();
+    handleGetHowToOrder();
     handleGetEvent();
     handleGetReason();
   }, []);
+
+  const handleGetBusinessInformation = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum',
+      });
+      console.log('Response GET Data Laundry Type');
+      console.log(res);
+      localStorage.setItem('business-logo', res.data.data[0].logo);
+      setBusinessInformation(res.data.data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleGetLaundryType = async () => {
     try {
@@ -973,6 +987,20 @@ function HomePage() {
       console.log('Response GET Data Service Type');
       console.log(res);
       setServiceType(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetHowToOrder = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan',
+      });
+      console.log('Response GET Data Reason');
+      console.log(res);
+      setHowToOrder(res.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -1008,25 +1036,26 @@ function HomePage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '60px 0px' }}>
-      <HeroSection />
+      {businessInformation ? <HeroSection businessInformation={businessInformation} /> : null}
 
-      <LaundryTypeSection listLaundryType={laundryType} />
+      {laundryType ? <LaundryTypeSection listLaundryType={laundryType} /> : null}
+      {serviceType ? <ServiceTypeSection listServiceType={serviceType} /> : null}
 
-      <ServiceTypeSection listServiceType={serviceType} />
+      {businessInformation && howToOrder ? (
+        <OperatingHoursAndHowToOrderSection businessInformation={businessInformation} listHowToOrder={howToOrder} />
+      ) : null}
 
-      <OperatingHoursAndHowToOrderSection />
+      {event ? <EventSection listEvent={event} /> : null}
+      {reason ? <ReasonSection listReason={reason} /> : null}
+      {serviceType ? <TestimonySection /> : null}
+      {serviceType ? <FAQSection /> : null}
 
-      <EventSection listEvent={event} />
-
-      <ReasonSection listReason={reason} />
-
-      <TestimonySection />
-      <FAQSection />
-
-      <span>
-        <ContactAndLocationSection />
-        <FooterSection />
-      </span>
+      {businessInformation ? (
+        <span>
+          <ContactAndLocationSection businessInformation={businessInformation} />
+          <FooterSection businessInformation={businessInformation} />
+        </span>
+      ) : null}
 
       <div
         style={{

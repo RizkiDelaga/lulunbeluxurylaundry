@@ -295,7 +295,7 @@ function Gallery() {
                       Pilih Foto/Video
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/*, video/*"
                         onChange={(e) => {
                           console.log(e.target.files);
                           setFormGallery({

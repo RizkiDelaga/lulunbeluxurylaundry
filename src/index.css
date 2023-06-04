@@ -225,11 +225,23 @@ input[type=number] {
 /* OVERWRITE VIDEO REACT JS STYLE */
 /* =================== */
 
-.video-react .video-react-big-play-button.video-react-big-play-button-center{
+.video-react .video-react-big-play-button.video-react-big-play-button-center {
   display: none;
 }
 
- .video-react-video {
+.video-react-video {
   background-color: #eeeeee;
+
+  height: 100%;
   /* background-color: rgba(0, 0, 0, 0); */
+}
+
+
+.video-react-controls-enabled,
+.video-react-paused,
+.video-react-user-active,
+.video-react-workinghover,
+.video-react {
+  height: 100%;
+
 }

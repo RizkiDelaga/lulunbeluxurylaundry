@@ -17,6 +17,7 @@ import { BigPlayButton, ControlBar, LoadingSpinner, Player } from 'video-react';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
 function Gallery() {
   const theme = useTheme();
@@ -68,7 +69,23 @@ function Gallery() {
             if (item.status === 'video') {
               return (
                 <Grid item xs={6} sm={4} md={3} lg={3}>
-                  <Box onClick={() => handleClickOpen(item)} sx={{ cursor: 'pointer' }}>
+                  <Box onClick={() => handleClickOpen(item)} sx={{ cursor: 'pointer', position: 'relative' }}>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: '100%',
+                        height: '100%',
+                        zIndex: 1,
+                      }}
+                    >
+                      <div style={{ width: '100%' }}>
+                        <PlayCircleOutlineIcon fontSize="large" sx={{ width: '100%', color: 'white' }} />
+                      </div>
+                    </div>
+
                     <Player playsInline fluid={false} width="100%" height={180} src={item.media}>
                       <LoadingSpinner />
                       <BigPlayButton position="center" />
@@ -80,7 +97,18 @@ function Gallery() {
               return (
                 <Grid item xs={6} sm={4} md={3} lg={3}>
                   <Box onClick={() => handleClickOpen(item)} sx={{ cursor: 'pointer' }}>
-                    <img src={item.media} width={'100%'} height={180} style={{ objectFit: 'cover' }} alt="" />
+                    <div
+                      style={{
+                        width: '100%',
+                        height: 180,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <img src={item.media} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" />
+                    </div>
                   </Box>
                 </Grid>
               );
@@ -88,12 +116,18 @@ function Gallery() {
           })}
         </Grid>
 
-        <Dialog fullWidth open={openPreviewGallery.isOpen} onClose={handleClose} aria-describedby="alert-dialog-description">
+        <Dialog
+          fullWidth
+          open={openPreviewGallery.isOpen}
+          onClose={handleClose}
+          aria-describedby="alert-dialog-description"
+        >
           <h4
             style={{ padding: '0px 24px', paddingTop: '16px', display: 'flex', alignItems: 'center' }}
             onClick={() => setOpenDescription(!openDescription)}
           >
-            {openPreviewGallery.data ? openPreviewGallery.data.judul : null} {openDescription ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            {openPreviewGallery.data ? openPreviewGallery.data.judul : null}{' '}
+            {openDescription ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </h4>
 
           <Box sx={{ px: 3, display: openDescription ? 'block' : 'none' }}>
