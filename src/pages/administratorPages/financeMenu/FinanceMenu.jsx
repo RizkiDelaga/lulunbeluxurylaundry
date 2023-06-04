@@ -201,6 +201,8 @@ function FinanceStats({}) {
 function RowItem(props) {
   const [openTableCell, setOpenTableCell] = React.useState(false);
 
+  const date = new Date(props.item.tanggal);
+
   return (
     <React.Fragment>
       <TableRow hover>
@@ -240,9 +242,16 @@ function RowItem(props) {
             <div>{props.item.tipe}</div>
           </div>
         </TableCell>
-        <TableCell>{props.item.nominal}</TableCell>
+        <TableCell>
+          {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.item.nominal)}
+        </TableCell>
         <TableCell>{props.item.judul}</TableCell>
-        <TableCell>{props.item.tanggal}</TableCell>
+        <TableCell>
+          {`${('0' + date.getDate()).slice(-2)}/${('0' + date.getMonth()).slice(-2)}/${date.getFullYear()} ${(
+            '0' + date.getHours()
+          ).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`}
+          <div style={{ fontSize: '12px' }}>oleh Admin Name Namefull</div>
+        </TableCell>
         <TableCell>{props.item.catatan}</TableCell>
         <TableCell>
           <IconButton size="small">
