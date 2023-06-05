@@ -58,7 +58,7 @@ function CreateNewEvents() {
     formData.append('nama', formCreateNewEvents.eventName);
     formData.append('gambar', formCreateNewEvents.poster.img);
     formData.append('deskripsi', formCreateNewEvents.description);
-    formData.append('status ', '');
+    // formData.append('status ', '');
     formData.append(
       'tglMulai',
       dayjs(
