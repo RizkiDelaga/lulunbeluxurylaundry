@@ -71,9 +71,9 @@ function AdminRouter() {
 
             {/* Order Menu Route */}
             <Route path="Pesanan" element={<OrderMenu />} />
+            <Route path="Pesanan/:id" element={<OrderDetails />} />
             <Route path="Pesanan/BuatPesananBaru" element={<CreateNewOrder />} />
             <Route path="Pesanan/EditPesanan" element={<HomePage />} />
-            <Route path="Pesanan/:id" element={<OrderDetails />} />
             <Route path="Pesanan/RatingDanReviewPelanggan" element={<CustomerRatingsAndReviews />} />
             <Route path="Pesanan/DaftarPesanan" element={<OrderList />} />
 

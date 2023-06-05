@@ -381,7 +381,7 @@ function FinancialHistoryTable() {
     setSelectPageAnchorEl(null);
   };
 
-  // Menu - Select Page
+  // Menu - Select Data Per Page
   const [selectDataPerPageAnchorEl, setSelectDataPerPageAnchorEl] = React.useState(null);
   const openSelectDataPerPage = Boolean(selectDataPerPageAnchorEl);
   const handleCloseSelectDataPerPage = () => {
