@@ -214,7 +214,7 @@ function RowItem(props) {
         <TableCell>{props.item.id}</TableCell>
         <TableCell>
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            {props.item.tipe === 'Expenses' ? (
+            {props.item.tipe === 'Pengeluaran' ? (
               <div
                 style={{
                   backgroundColor: 'rgb(211, 47, 47)',
