@@ -31,8 +31,16 @@ function InformationCard(props) {
             <Typography sx={{ fontSize: '32px', color: '#1F305C', fontWeight: 'bold' }}>
               {props.content.normalText}
             </Typography>
-            <Typography sx={{ fontSize: '14px', color: '#1F305C', fontWeight: 'bold', mb: 1 }}>
-              {props.content.smallText}
+            <Typography
+              sx={{
+                fontSize: '14px',
+                color: '#1F305C',
+                fontWeight: 'bold',
+                mb: 1,
+                display: props.content.smallText ? 'block' : 'none',
+              }}
+            >
+              ({props.content.smallText})
             </Typography>
           </div>
           <div className="centerXY">{props.content.embedHTML}</div>

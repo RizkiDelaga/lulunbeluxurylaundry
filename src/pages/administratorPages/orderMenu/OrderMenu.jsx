@@ -38,7 +38,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SearchIcon from '@mui/icons-material/Search';
 
-
 function RowItem(props) {
   const navigate = useNavigate();
   const [openTableCell, setOpenTableCell] = React.useState(false);
@@ -146,7 +145,7 @@ function RowItem(props) {
   );
 }
 
-function OrderTable() {
+function OrderTable({ setState }) {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -161,7 +160,7 @@ function OrderTable() {
     handleGetOrder();
   }, []);
 
-  const [listFinance, setListFinance] = React.useState([]);
+  const [listOrder, setListOrder] = React.useState([]);
   const [pageConfig, setPageConfig] = React.useState({
     currentPage: 1,
     dataPerPage: 10,
@@ -201,10 +200,20 @@ function OrderTable() {
       });
       console.log('Response GET Data Finance');
       console.log(res);
-      setListFinance(res.data.data);
+      setListOrder(res.data.data);
+      setState({
+        needApproval: res.data.otherData.perluDisetujui,
+        needsToBePickedUp: res.data.otherData.perluDijemput,
+        needsToBeDone: res.data.otherData.perluDikerjakan,
+        needsToBeDelivered: res.data.otherData.perluDiantar,
+        completed: res.data.otherData.completed,
+        cancelled: res.data.otherData.cancelled,
+        averageRating: res.data.otherData.averageRating,
+        totalReviews: res.data.otherData.totalReview,
+      });
     } catch (error) {
       if (error.response.status === 404) {
-        setListFinance([]);
+        setListOrder([]);
       }
       console.log(error);
     }
@@ -223,10 +232,10 @@ function OrderTable() {
       console.log('Response GET Data Finance');
       console.log(res);
 
-      setListFinance(res.data.data);
+      setListOrder(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
-        setListFinance([]);
+        setListOrder([]);
       }
       console.log(error);
     }
@@ -470,7 +479,7 @@ function OrderTable() {
 
           {/* Table Content */}
           <TableBody>
-            {stableSort(listFinance, getComparator(order, orderBy)).map((item, index) => {
+            {stableSort(listOrder, getComparator(order, orderBy)).map((item, index) => {
               return <RowItem key={item.id} item={item} />;
             })}
           </TableBody>
@@ -486,7 +495,7 @@ function OrderTable() {
           borderRadius: 2,
           backgroundColor: '#eeeeee',
           textAlign: 'center',
-          display: listFinance.length ? 'none' : null,
+          display: listOrder.length ? 'none' : null,
         }}
       >
         <h5>Data tidak ditemukan!</h5>
@@ -634,6 +643,17 @@ function OrderMenu() {
     document.title = 'Menu Pesanan';
   }, []);
 
+  const [orderStats, setOrderStats] = React.useState({
+    needApproval: null,
+    needsToBePickedUp: null,
+    needsToBeDone: null,
+    needsToBeDelivered: null,
+    completed: null,
+    cancelled: null,
+    averageRating: null,
+    totalReviews: null,
+  });
+
   return (
     <>
       <div className="gap-24" style={{ marginBottom: '24px' }}>
@@ -651,27 +671,27 @@ function OrderMenu() {
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <OrderTable />
+          <OrderTable setState={setOrderStats} />
         </Paper>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={4} md={4} lg={4}>
             <InformationCard
               title="Order Completed"
-              content={{ normalText: '81.235' }}
+              content={{ normalText: orderStats.completed }}
               navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
             />
           </Grid>
           <Grid item xs={6} sm={4} md={4} lg={4}>
             <InformationCard
               title="Order Cancelled"
-              content={{ normalText: '135' }}
+              content={{ normalText: orderStats.cancelled }}
               navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
             />
           </Grid>
           <Grid item xs={12} sm={4} md={4} lg={4}>
             <InformationCard
               title="Rating & Review"
-              content={{ normalText: '4.8', smallText: '(23.112)' }}
+              content={{ normalText: orderStats.averageRating, smallText: orderStats.totalReviews }}
               navigate={{ text: 'Lihat lebih banyak', url: '/Pesanan/RatingDanReviewPelanggan' }}
             />
           </Grid>

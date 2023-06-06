@@ -41,79 +41,79 @@ import CloseIcon from '@mui/icons-material/Close';
 import Navbar from '../../components/Navbar/NavbarAdmin/NavbarAdmin';
 import SidebarAdmin from '../../components/Sidebar/SidebarAdmin/SidebarAdmin';
 
-const drawerWidth = 300;
+// const drawerWidth = 300;
 
-const openedMixin = (theme) => ({
-  [theme.breakpoints.down('md')]: {
-    width: '100vw',
-  },
-  [theme.breakpoints.up('md')]: {
-    width: drawerWidth,
-  },
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: 'hidden',
-  zIndex: 10000,
-});
+// const openedMixin = (theme) => ({
+//   [theme.breakpoints.down('md')]: {
+//     width: '100vw',
+//   },
+//   [theme.breakpoints.up('md')]: {
+//     width: drawerWidth,
+//   },
+//   transition: theme.transitions.create('width', {
+//     easing: theme.transitions.easing.sharp,
+//     duration: theme.transitions.duration.enteringScreen,
+//   }),
+//   overflowX: 'hidden',
+//   zIndex: 10000,
+// });
 
-const closedMixin = (theme) => ({
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: 'hidden',
-  zIndex: 10000,
-  width: `calc(${theme.spacing(8)} + 1px)`,
-  [theme.breakpoints.down('sm')]: {
-    display: 'none',
-  },
-});
+// const closedMixin = (theme) => ({
+//   transition: theme.transitions.create('width', {
+//     easing: theme.transitions.easing.sharp,
+//     duration: theme.transitions.duration.leavingScreen,
+//   }),
+//   overflowX: 'hidden',
+//   zIndex: 10000,
+//   width: `calc(${theme.spacing(8)} + 1px)`,
+//   [theme.breakpoints.down('sm')]: {
+//     display: 'none',
+//   },
+// });
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-}));
+// const DrawerHeader = styled('div')(({ theme }) => ({
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'flex-end',
+//   padding: theme.spacing(0, 1),
+//   // necessary for content to be below app bar
+//   ...theme.mixins.toolbar,
+// }));
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  height: '64px',
-  justifyContent: 'center',
-  // zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
+// const AppBar = styled(MuiAppBar, {
+//   shouldForwardProp: (prop) => prop !== 'open',
+// })(({ theme, open }) => ({
+//   height: '64px',
+//   justifyContent: 'center',
+//   // zIndex: theme.zIndex.drawer + 1,
+//   transition: theme.transitions.create(['width', 'margin'], {
+//     easing: theme.transitions.easing.sharp,
+//     duration: theme.transitions.duration.leavingScreen,
+//   }),
+//   ...(open && {
+//     marginLeft: drawerWidth,
+//     width: `calc(100% - ${drawerWidth}px)`,
+//     transition: theme.transitions.create(['width', 'margin'], {
+//       easing: theme.transitions.easing.sharp,
+//       duration: theme.transitions.duration.enteringScreen,
+//     }),
+//   }),
+// }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: 'nowrap',
-  boxSizing: 'border-box',
-  ...(open && {
-    ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
-  }),
-}));
+// const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+//   width: drawerWidth,
+//   flexShrink: 0,
+//   whiteSpace: 'nowrap',
+//   boxSizing: 'border-box',
+//   ...(open && {
+//     ...openedMixin(theme),
+//     '& .MuiDrawer-paper': openedMixin(theme),
+//   }),
+//   ...(!open && {
+//     ...closedMixin(theme),
+//     '& .MuiDrawer-paper': closedMixin(theme),
+//   }),
+// }));
 
 function DashboardAdminLayout() {
   const navigate = useNavigate();
@@ -123,25 +123,25 @@ function DashboardAdminLayout() {
     setOpenSidebar(!openSidebar);
   };
 
-  const [notificationMenu, setNotificationMenu] = React.useState(false);
-  // const openMenu = Boolean(accountMenu);
-  const handleClickNotificationMenu = (event) => {
-    setNotificationMenu(event.currentTarget);
-  };
-  const handleCloseNotificationMenu = () => {
-    setNotificationMenu(null);
-  };
+  // const [notificationMenu, setNotificationMenu] = React.useState(false);
+  // // const openMenu = Boolean(accountMenu);
+  // const handleClickNotificationMenu = (event) => {
+  //   setNotificationMenu(event.currentTarget);
+  // };
+  // const handleCloseNotificationMenu = () => {
+  //   setNotificationMenu(null);
+  // };
 
-  const [accountMenu, setAccountMenu] = React.useState(false);
-  const handleClickAccountMenu = (event) => {
-    setAccountMenu(event.currentTarget);
-  };
-  const handleCloseAccountMenu = (linkDirection) => {
-    if (linkDirection) {
-      navigate(linkDirection);
-    }
-    setAccountMenu(null);
-  };
+  // const [accountMenu, setAccountMenu] = React.useState(false);
+  // const handleClickAccountMenu = (event) => {
+  //   setAccountMenu(event.currentTarget);
+  // };
+  // const handleCloseAccountMenu = (linkDirection) => {
+  //   if (linkDirection) {
+  //     navigate(linkDirection);
+  //   }
+  //   setAccountMenu(null);
+  // };
 
   return (
     <>
