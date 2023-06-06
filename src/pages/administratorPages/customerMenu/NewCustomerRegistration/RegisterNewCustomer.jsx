@@ -20,6 +20,7 @@ import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { banyumasAreaList } from '../../../../utils/banyumasAreaList';
+import axios from 'axios';
 
 function RegisterNewCustomer() {
   const theme = useTheme();
@@ -32,22 +33,7 @@ function RegisterNewCustomer() {
       email: '',
     },
     birthDate: dayjs,
-    profilePicture: {},
-    mainAddress: {
-      region: {
-        subDistrict: '',
-        urbanVillage: '',
-        hamlet: '',
-        neighbourhood: '',
-      },
-      buildingDetails: {
-        buildingType: '',
-        buildingName_Or_Number: '',
-      },
-      addressDetails: '',
-      buildingPhoto: {},
-      makeItMainAddress: false,
-    },
+    profilePicture: { img: null, fileName: null },
   });
   const [mainAddress, setMainAddress] = useState({
     region: {
@@ -61,18 +47,56 @@ function RegisterNewCustomer() {
       buildingName_Or_Number: '',
     },
     addressDetails: '',
-    buildingPhoto: {},
-    makeItMainAddress: false,
+    buildingPhoto: { img: null, fileName: null },
+    makeItMainAddress: true,
   });
 
   React.useEffect(() => {
     document.title = 'Registrasi Pelanggan Baru';
   }, []);
 
-  const getUrbanVillage = () => {
-    return banyumasAreaList.filter((item) => {
-      return item.subDistrict === mainAddress.region.subDistrict;
-    });
+  // const getUrbanVillage = () => {
+  //   return banyumasAreaList.filter((item) => {
+  //     return item.subDistrict === mainAddress.region.subDistrict;
+  //   });
+  // };
+
+  const handleCreateNewCustomer = async () => {
+    const formData = new FormData();
+    formData.append('nama', formRegisterNewCustomer.customerName);
+    formData.append('email', formRegisterNewCustomer.contact.email);
+    formData.append('noTelp', formRegisterNewCustomer.contact.phoneNumber);
+    formData.append(
+      'tglLahir',
+      typeof formRegisterNewCustomer.birthDate !== 'function' ? formRegisterNewCustomer.birthDate : null
+    );
+    formData.append('profilePic', formRegisterNewCustomer.profilePicture.img);
+    formData.append('kategori', mainAddress.buildingDetails.buildingType);
+    formData.append('detail', mainAddress.buildingDetails.buildingName_Or_Number);
+    formData.append('kecamatan', mainAddress.region.subDistrict);
+    formData.append('kelurahan', mainAddress.region.urbanVillage);
+    formData.append('rt', mainAddress.region.neighbourhood);
+    formData.append('rw', mainAddress.region.hamlet);
+    formData.append('deskripsi', mainAddress.addressDetails);
+    formData.append('gambar', mainAddress.buildingPhoto.img);
+    formData.append('status', 'Priority');
+
+    try {
+      const res = await axios({
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin/user`,
+        data: formData,
+      });
+
+      console.log('Response POST');
+      console.log(res);
+      navigate('/Pelanggan');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -383,14 +407,11 @@ function RegisterNewCustomer() {
                       required
                       type="number"
                       label="RW"
-                      value={formRegisterNewCustomer.mainAddress.region.hamlet}
+                      value={mainAddress.region.hamlet}
                       onChange={(e) => {
-                        setFormRegisterNewCustomer({
-                          ...formRegisterNewCustomer,
-                          mainAddress: {
-                            ...formRegisterNewCustomer.mainAddress,
-                            region: { ...formRegisterNewCustomer.mainAddress.region, hamlet: e.target.value },
-                          },
+                        setMainAddress({
+                          ...mainAddress,
+                          region: { ...mainAddress.region, hamlet: e.target.value },
                         });
                       }}
                       autoComplete="off"
@@ -403,14 +424,11 @@ function RegisterNewCustomer() {
                       required
                       type="number"
                       label="RT"
-                      value={formRegisterNewCustomer.mainAddress.region.neighbourhood}
+                      value={mainAddress.region.neighbourhood}
                       onChange={(e) => {
-                        setFormRegisterNewCustomer({
-                          ...formRegisterNewCustomer,
-                          mainAddress: {
-                            ...formRegisterNewCustomer.mainAddress,
-                            region: { ...formRegisterNewCustomer.mainAddress.region, neighbourhood: e.target.value },
-                          },
+                        setMainAddress({
+                          ...mainAddress,
+                          region: { ...mainAddress.region, neighbourhood: e.target.value },
                         });
                       }}
                       autoComplete="off"
@@ -470,16 +488,13 @@ function RegisterNewCustomer() {
                     <TextField
                       required
                       label="Nama / Nomer Bangunan"
-                      value={formRegisterNewCustomer.mainAddress.buildingDetails.buildingName_Or_Number}
+                      value={mainAddress.buildingDetails.buildingName_Or_Number}
                       onChange={(e) => {
-                        setFormRegisterNewCustomer({
-                          ...formRegisterNewCustomer,
-                          mainAddress: {
-                            ...formRegisterNewCustomer.mainAddress,
-                            buildingDetails: {
-                              ...formRegisterNewCustomer.mainAddress.region,
-                              buildingName_Or_Number: e.target.value,
-                            },
+                        setMainAddress({
+                          ...mainAddress,
+                          buildingDetails: {
+                            ...mainAddress.buildingDetails,
+                            buildingName_Or_Number: e.target.value,
                           },
                         });
                       }}
@@ -511,14 +526,11 @@ function RegisterNewCustomer() {
                   label="Rincian Alamat"
                   multiline
                   maxRows={4}
-                  value={formRegisterNewCustomer.mainAddress.addressDetails}
+                  value={mainAddress.addressDetails}
                   onChange={(e) => {
-                    setFormRegisterNewCustomer({
-                      ...formRegisterNewCustomer,
-                      mainAddress: {
-                        ...formRegisterNewCustomer.mainAddress,
-                        addressDetails: e.target.value,
-                      },
+                    setMainAddress({
+                      ...mainAddress,
+                      addressDetails: e.target.value,
                     });
                   }}
                   autoComplete="off"
@@ -558,14 +570,11 @@ function RegisterNewCustomer() {
                         accept="image/*"
                         onChange={(e) => {
                           console.log(e.target.files);
-                          setFormRegisterNewCustomer({
-                            ...formRegisterNewCustomer,
-                            mainAddress: {
-                              ...formRegisterNewCustomer.mainAddress,
-                              buildingPhoto: {
-                                img: e.target.files[0],
-                                fileName: !e.target.files[0] ? null : e.target.files[0].name,
-                              },
+                          setMainAddress({
+                            ...mainAddress,
+                            buildingPhoto: {
+                              img: e.target.files[0],
+                              fileName: !e.target.files[0] ? null : e.target.files[0].name,
                             },
                           });
                           // console.log(image);
@@ -575,27 +584,23 @@ function RegisterNewCustomer() {
                     </Button>
                   </Grid>
                   <Grid item xs="auto">
-                    {formRegisterNewCustomer.mainAddress.buildingPhoto.img ? (
+                    {mainAddress.buildingPhoto.img ? (
                       <img
                         id="output"
-                        src={
-                          formRegisterNewCustomer.mainAddress.buildingPhoto.img
-                            ? URL.createObjectURL(formRegisterNewCustomer.mainAddress.buildingPhoto.img)
-                            : ''
-                        }
+                        src={mainAddress.buildingPhoto.img ? URL.createObjectURL(mainAddress.buildingPhoto.img) : ''}
                         width={70}
                         alt="Preview"
                       />
                     ) : null}
                   </Grid>
                   <Grid item xs>
-                    {formRegisterNewCustomer.mainAddress.buildingPhoto.fileName ? (
+                    {mainAddress.buildingPhoto.fileName ? (
                       <Chip
-                        label={formRegisterNewCustomer.mainAddress.buildingPhoto.fileName}
+                        label={mainAddress.buildingPhoto.fileName}
                         onDelete={() =>
-                          setFormRegisterNewCustomer({
-                            ...formRegisterNewCustomer,
-                            mainAddress: { ...formRegisterNewCustomer.mainAddress, buildingPhoto: {} },
+                          setMainAddress({
+                            ...mainAddress,
+                            buildingPhoto: {},
                           })
                         }
                         sx={{ maxWidth: '250px' }}
@@ -610,7 +615,7 @@ function RegisterNewCustomer() {
               variant="contained"
               size="large"
               style={{ width: '100%', fontWeight: 'bold' }}
-              onClick={() => navigate('/Pelanggan')}
+              onClick={() => handleCreateNewCustomer()}
             >
               Registrasi Pelanggan
             </Button>
@@ -619,20 +624,18 @@ function RegisterNewCustomer() {
             <br />
             {formRegisterNewCustomer.contact.phoneNumber + ' ' + formRegisterNewCustomer.contact.email}
             <br />
-            {formRegisterNewCustomer.mainAddress.region.subDistrict +
+            {mainAddress.region.subDistrict +
               ' ' +
-              formRegisterNewCustomer.mainAddress.region.urbanVillage +
+              mainAddress.region.urbanVillage +
               ' ' +
-              formRegisterNewCustomer.mainAddress.region.hamlet +
+              mainAddress.region.hamlet +
               ' ' +
-              formRegisterNewCustomer.mainAddress.region.neighbourhood}
+              mainAddress.region.neighbourhood}
             <br />
-            {formRegisterNewCustomer.mainAddress.buildingDetails.buildingType +
-              ' ' +
-              formRegisterNewCustomer.mainAddress.buildingDetails.buildingName_Or_Number}
+            {mainAddress.buildingDetails.buildingType + ' ' + mainAddress.buildingDetails.buildingName_Or_Number}
             <br />
-            {formRegisterNewCustomer.mainAddress.addressDetails}
-            {formRegisterNewCustomer.mainAddress.makeItMainAddress}
+            {mainAddress.addressDetails}
+            {mainAddress.makeItMainAddress}
             {`${formRegisterNewCustomer.birthDate.$D}
               ${formRegisterNewCustomer.birthDate.$M}
               ${formRegisterNewCustomer.birthDate.$y}`}

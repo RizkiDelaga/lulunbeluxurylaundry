@@ -31,7 +31,7 @@ function AddIncome() {
 
   const handleCreateAddIncome = async () => {
     const formData = new FormData();
-    formData.append('tipe', 'Income');
+    formData.append('tipe', 'Pemasukan');
     formData.append('nominal', formAddIncome.nominal);
     formData.append('judul', formAddIncome.title);
     formData.append('catatan', formAddIncome.notes);

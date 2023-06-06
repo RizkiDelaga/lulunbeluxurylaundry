@@ -14,7 +14,7 @@ function GeneralInformation() {
   const navigate = useNavigate();
 
   const [formGeneralInformation, setFormGeneralInformation] = useState({
-    logo: { img: null, fileName: '' },
+    logo: { img: null, fileName: null },
     slogan: '',
     location: {
       location: '',
@@ -38,38 +38,38 @@ function GeneralInformation() {
   const [operatingHours, setOperatingHours] = useState({
     monday: {
       dayNameInIndonesia: 'Senin',
-      setOpenTime: dayjs,
-      setCloseTime: dayjs,
+      setOpenTime: dayjs(),
+      setCloseTime: dayjs(),
     },
     tuesday: {
       dayNameInIndonesia: 'Selasa',
-      setOpenTime: dayjs,
-      setCloseTime: dayjs,
+      setOpenTime: dayjs(),
+      setCloseTime: dayjs(),
     },
     wednesday: {
       dayNameInIndonesia: 'Rabu',
-      setOpenTime: dayjs,
-      setCloseTime: dayjs,
+      setOpenTime: dayjs(),
+      setCloseTime: dayjs(),
     },
     thursday: {
       dayNameInIndonesia: 'Kamis',
-      setOpenTime: dayjs,
-      setCloseTime: dayjs,
+      setOpenTime: dayjs(),
+      setCloseTime: dayjs(),
     },
     friday: {
       dayNameInIndonesia: 'Jumat',
-      setOpenTime: dayjs,
-      setCloseTime: dayjs,
+      setOpenTime: dayjs(),
+      setCloseTime: dayjs(),
     },
     saturday: {
       dayNameInIndonesia: 'Sabtu',
-      setOpenTime: dayjs,
-      setCloseTime: dayjs,
+      setOpenTime: dayjs(),
+      setCloseTime: dayjs(),
     },
     sunday: {
       dayNameInIndonesia: 'Minggu',
-      setOpenTime: dayjs,
-      setCloseTime: dayjs,
+      setOpenTime: dayjs(),
+      setCloseTime: dayjs(),
     },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
@@ -80,10 +80,10 @@ function GeneralInformation() {
 
   React.useEffect(() => {
     document.title = 'Edit Informasi Umum';
-    getApiHandler();
+    handleGetGeneralInformation();
   }, []);
 
-  const getApiHandler = async () => {
+  const handleGetGeneralInformation = async () => {
     try {
       const res = await axios({
         method: 'GET',
@@ -115,13 +115,10 @@ function GeneralInformation() {
       });
 
       ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item, index) => {
-        // operatingHours[item].setOpenTime((timeItem) => dayjs('0000-00-00 ' + res.data.data[0].jamMulai[index] + ':00'));
         setOperatingHours((prev) => ({
           ...prev,
           [item]: {
             ...prev[item],
-            // openingHour: res.data.data[0].jamMulai[index],
-            // closingHour: res.data.data[0].jamSelesai[index],
             setOpenTime: dayjs('0000-00-00 ' + res.data.data[0].jamMulai[index] + ':00'),
             setCloseTime: dayjs('0000-00-00 ' + res.data.data[0].jamSelesai[index] + ':00'),
           },
@@ -134,15 +131,42 @@ function GeneralInformation() {
     }
   };
 
-  const putApiHandler = async (data) => {
+  const handleUpdateGeneralInformation = async () => {
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'PUT',
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum/${data.id}`,
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum/1`,
         data: {
-          pertanyaan: data.question,
-          jawaban: data.answer,
+          logo: formGeneralInformation.logo,
+          slogan: formGeneralInformation.slogan,
+          lokasi: formGeneralInformation.location.location,
+          koordinat: formGeneralInformation.location.googleMapsEmbed,
+          noTelp: formGeneralInformation.contact.phoneNumber,
+          email: formGeneralInformation.contact.email,
+          fax: formGeneralInformation.contact.fax,
+          instagram: formGeneralInformation.socialMedia.instagram,
+          facebook: formGeneralInformation.socialMedia.facebook,
+          tiktok: formGeneralInformation.socialMedia.tikTok,
+          twitter: formGeneralInformation.socialMedia.twitter,
+          youtube: formGeneralInformation.socialMedia.youtube,
+          hari: [
+            ...['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(
+              (item) => operatingHours[item].dayNameInIndonesia
+            ),
+          ],
+          jamMulai: [
+            ...['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item) => {
+              let date = new Date(operatingHours[item].setOpenTime);
+              return `${date.getHours()}:${date.getMinutes()}`;
+            }),
+          ],
+          jamSelesai: [
+            ...['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item) => {
+              let date = new Date(operatingHours[item].setCloseTime);
+              return `${date.getHours()}:${date.getMinutes()}`;
+            }),
+          ],
         },
       });
       if (res.status === 200) {
@@ -152,9 +176,9 @@ function GeneralInformation() {
           statusType: 'success',
         });
       }
-      console.log('Response DELETE');
+      console.log('Response Update');
       console.log(res);
-      getApiHandler();
+      handleGetGeneralInformation();
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -621,7 +645,12 @@ function GeneralInformation() {
               })}
             </div>
 
-            <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }} onClick={() => {}}>
+            <Button
+              variant="contained"
+              size="large"
+              style={{ width: '100%', fontWeight: 'bold' }}
+              onClick={() => handleUpdateGeneralInformation()}
+            >
               Simpan
             </Button>
             {formGeneralInformation.slogan}

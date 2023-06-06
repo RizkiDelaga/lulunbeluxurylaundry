@@ -31,7 +31,7 @@ function AddExpenses() {
 
   const handleCreateAddExpenses = async () => {
     const formData = new FormData();
-    formData.append('tipe', 'Expenses');
+    formData.append('tipe', 'Pengeluaran');
     formData.append('nominal', formAddExpenses.nominal);
     formData.append('judul', formAddExpenses.title);
     formData.append('catatan', formAddExpenses.notes);
