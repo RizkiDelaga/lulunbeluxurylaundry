@@ -36,23 +36,10 @@ function EditProfile() {
     },
     birthDate: dayjs,
     profilePicture: { img: null, fileName: null },
-    // mainAddress: {
-    //   region: {
-    //     subDistrict: '',
-    //     urbanVillage: '',
-    //     hamlet: '',
-    //     neighbourhood: '',
-    //   },
-    //   buildingDetails: {
-    //     buildingType: '',
-    //     buildingName_Or_Number: '',
-    //   },
-    //   addressDetails: '',
-    //   buildingPhoto: {},
-    //   makeItMainAddress: false,
-    // },
   });
+  const [listMyAddress, setListMyAddress] = useState([]);
   const [mainAddress, setMainAddress] = useState({
+    id: null,
     region: {
       subDistrict: '',
       urbanVillage: '',
@@ -64,14 +51,15 @@ function EditProfile() {
       buildingName_Or_Number: '',
     },
     addressDetails: '',
-    buildingPhoto: { img: null, fileName: '' },
-    makeItMainAddress: false,
+    buildingPhoto: { img: null, fileName: null },
+    // makeItMainAddress: false,
     isMainAddress: false,
   });
 
   React.useEffect(() => {
     document.title = 'Edit Profil';
     handleGetMyProfile();
+    handleGetMyAddress();
   }, []);
 
   const handleGetMyProfile = async () => {
@@ -126,11 +114,134 @@ function EditProfile() {
     }
   };
 
-  // const getUrbanVillage = () => {
-  //   return banyumasAreaList.filter((item) => {
-  //     return item.subDistrict === mainAddress.region.subDistrict;
-  //   });
-  // };
+  const handleGetMyAddress = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/address',
+      });
+      console.log('Response GET Data My Address');
+      console.log(res);
+      // setFormEditProfile(res.data.data);
+      setListMyAddress(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCreateAddress = async () => {
+    const formData = new FormData();
+    formData.append('kategori', mainAddress.buildingDetails.buildingType);
+    formData.append('detail', mainAddress.buildingDetails.buildingName_Or_Number);
+    formData.append('kecamatan', mainAddress.region.subDistrict);
+    formData.append('kelurahan', mainAddress.region.urbanVillage);
+    formData.append('rt', mainAddress.region.neighbourhood);
+    formData.append('rw', mainAddress.region.hamlet);
+    formData.append('deskripsi', mainAddress.addressDetails);
+    formData.append('gambar', mainAddress.buildingPhoto.img);
+    formData.append('status', mainAddress.isMainAddress ? 'Priority' : 'Standard');
+
+    try {
+      const res = await axios({
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/address',
+        data: formData,
+      });
+      console.log('Response POST Data My Address');
+      console.log(res);
+      setMainAddress({
+        id: null,
+        region: {
+          subDistrict: '',
+          urbanVillage: '',
+          hamlet: '',
+          neighbourhood: '',
+        },
+        buildingDetails: {
+          buildingType: null,
+          buildingName_Or_Number: '',
+        },
+        addressDetails: '',
+        buildingPhoto: { img: null, fileName: null },
+        // makeItMainAddress: false,
+        isMainAddress: false,
+      });
+      setUrbanVillage();
+      handleGetMyAddress();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUpdateAddress = async () => {
+    const formData = new FormData();
+    formData.append('kategori', mainAddress.buildingDetails.buildingType);
+    formData.append('detail', mainAddress.buildingDetails.buildingName_Or_Number);
+    formData.append('kecamatan', mainAddress.region.subDistrict);
+    formData.append('kelurahan', mainAddress.region.urbanVillage);
+    formData.append('rt', mainAddress.region.neighbourhood);
+    formData.append('rw', mainAddress.region.hamlet);
+    formData.append('deskripsi', mainAddress.addressDetails);
+    formData.append('gambar', mainAddress.buildingPhoto.img);
+    formData.append('status', mainAddress.isMainAddress ? 'Priority' : 'Standard');
+
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/address/${mainAddress.id}`,
+        data: formData,
+      });
+      console.log('Response PUT Data My Address');
+      console.log(res);
+      setMainAddress({
+        id: null,
+        region: {
+          subDistrict: '',
+          urbanVillage: '',
+          hamlet: '',
+          neighbourhood: '',
+        },
+        buildingDetails: {
+          buildingType: null,
+          buildingName_Or_Number: '',
+        },
+        addressDetails: '',
+        buildingPhoto: { img: null, fileName: null },
+        // makeItMainAddress: false,
+        isMainAddress: false,
+      });
+      setUrbanVillage();
+      handleGetMyAddress();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeleteAddress = async (id) => {
+    try {
+      const res = await axios({
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/address/${id}`,
+      });
+      console.log('Response DELETE Data My Address');
+      console.log(res);
+      handleGetMyAddress();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -381,7 +492,7 @@ function EditProfile() {
               elevation={3}
               sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}
             >
-              <Box className="gap-16">
+              <Box className="gap-16" sx={{ flexDirection: 'column' }}>
                 <div style={{ width: '100%', textAlign: 'center' }}>
                   <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Tambah Alamat</h4>
                 </div>
@@ -532,7 +643,7 @@ function EditProfile() {
                             required
                             labelId="select-building-type-label"
                             id="select-building-type"
-                            value={mainAddress.buildingDetails.buildingType}
+                            value={mainAddress.buildingDetails.buildingType || ''}
                             label="Tipe Bangunan"
                             onChange={(e) => {
                               setMainAddress({
@@ -562,7 +673,7 @@ function EditProfile() {
                             setMainAddress({
                               ...mainAddress,
                               buildingDetails: {
-                                ...mainAddress.region,
+                                ...mainAddress.buildingDetails,
                                 buildingName_Or_Number: e.target.value,
                               },
                             });
@@ -707,34 +818,73 @@ function EditProfile() {
                   </Grid>
                 </Grid>
 
-                <Button
-                  variant="contained"
-                  size="large"
-                  style={{ width: '100%', fontWeight: 'bold' }}
-                  onClick={() => navigate('/AreaPelanggan')}
-                >
-                  Tambah Alamat
-                </Button>
+                <div style={{ display: 'flex', gap: 4, justifyContent: 'space-between' }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    style={{ width: '100%', fontWeight: 'bold' }}
+                    onClick={() => {
+                      if (mainAddress.id) {
+                        handleUpdateAddress();
+                      } else {
+                        handleCreateAddress();
+                      }
+                    }}
+                  >
+                    {mainAddress.id ? 'Update Alamat' : 'Tambah Alamat'}
+                  </Button>
+                  {mainAddress.id ? (
+                    <Button
+                      variant="outlined"
+                      size="large"
+                      style={{ width: 'fit-content', fontWeight: 'bold' }}
+                      onClick={() => {
+                        setMainAddress({
+                          id: null,
+                          region: {
+                            subDistrict: '',
+                            urbanVillage: '',
+                            hamlet: '',
+                            neighbourhood: '',
+                          },
+                          buildingDetails: {
+                            buildingType: null,
+                            buildingName_Or_Number: '',
+                          },
+                          addressDetails: '',
+                          buildingPhoto: { img: null, fileName: null },
+                          // makeItMainAddress: false,
+                          isMainAddress: false,
+                        });
+                        setUrbanVillage();
+                      }}
+                    >
+                      Batal
+                    </Button>
+                  ) : null}
+                </div>
 
-                {formEditProfile.customerName}
-                <br />
-                {formEditProfile.contact.phoneNumber + ' ' + formEditProfile.contact.email}
-                <br />
-                {mainAddress.region.subDistrict +
-                  ' ' +
-                  mainAddress.region.urbanVillage +
-                  ' ' +
-                  mainAddress.region.hamlet +
-                  ' ' +
-                  mainAddress.region.neighbourhood}
-                <br />
-                {mainAddress.buildingDetails.buildingType + ' ' + mainAddress.buildingDetails.buildingName_Or_Number}
-                <br />
-                {mainAddress.addressDetails}
-                {mainAddress.makeItMainAddress}
-                {`${formEditProfile.birthDate.$D}
+                <div>
+                  {formEditProfile.customerName}
+                  <br />
+                  {formEditProfile.contact.phoneNumber + ' ' + formEditProfile.contact.email}
+                  <br />
+                  {mainAddress.region.subDistrict +
+                    ' ' +
+                    mainAddress.region.urbanVillage +
+                    ' ' +
+                    mainAddress.region.hamlet +
+                    ' ' +
+                    mainAddress.region.neighbourhood}
+                  <br />
+                  {mainAddress.buildingDetails.buildingType + ' ' + mainAddress.buildingDetails.buildingName_Or_Number}
+                  <br />
+                  {mainAddress.addressDetails}
+                  {/* {mainAddress.makeItMainAddress} */}
+                  {`${formEditProfile.birthDate.$D}
               ${formEditProfile.birthDate.$M}
               ${formEditProfile.birthDate.$y}`}
+                </div>
 
                 <br />
               </Box>
@@ -744,7 +894,18 @@ function EditProfile() {
             <div style={{ width: '100%', textAlign: 'left' }}>
               <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Alamat Pelanggan</h4>
             </div>
-            <AddressCard data={{}} />
+            <div className="gap-10">
+              {listMyAddress.map((item) => {
+                return (
+                  <AddressCard
+                    data={item}
+                    setUpdateAddress={setMainAddress}
+                    setUrbanVillage={setUrbanVillage}
+                    handleDeleteAddress={handleDeleteAddress}
+                  />
+                );
+              })}
+            </div>
           </Grid>
         </Grid>
       </Box>

@@ -18,6 +18,7 @@ import {
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import axios from 'axios';
 
 function EditProfile() {
   const theme = useTheme();
@@ -29,12 +30,70 @@ function EditProfile() {
       email: '',
     },
     role: '',
-    profilePicture: {},
+    profilePicture: { img: null, fileName: null },
+    status: '',
   });
 
   React.useEffect(() => {
     document.title = 'Edit Profile';
+    handleGetMyProfile();
   }, []);
+
+  const handleGetMyProfile = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin/my/profile',
+      });
+      console.log('Response GET');
+      console.log(res);
+      setFormEditProfile({
+        administratorName: res.data.data.nama,
+        contact: {
+          phoneNumber: res.data.data.noTelp,
+          email: res.data.data.email,
+        },
+        role: res.data.data.role,
+        profilePicture: { img: null, fileName: res.data.data.profilePic },
+        status: res.data.data.status,
+      });
+    } catch (error) {
+      // if (error.response.status === 404) {
+      // }
+      console.log(error);
+    }
+  };
+
+  const handleUpdateMyProfile = async () => {
+    const formData = new FormData();
+    formData.append('role', formEditProfile.role);
+    formData.append('nama', formEditProfile.administratorName);
+    formData.append('noTelp', formEditProfile.contact.phoneNumber);
+    formData.append('email', formEditProfile.contact.email);
+    formData.append('profilePic', formEditProfile.profilePicture.img);
+    formData.append('status', formEditProfile.status);
+
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin',
+        data: formData,
+      });
+      console.log('Response Update');
+      console.log(res);
+      handleGetMyProfile();
+    } catch (error) {
+      // if (error.response.status === 404) {
+      // }
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -253,7 +312,7 @@ function EditProfile() {
               variant="contained"
               size="large"
               style={{ width: '100%', fontWeight: 'bold' }}
-              onClick={() => navigate('/Dashboard')}
+              onClick={() => handleUpdateMyProfile()}
             >
               Edit Profil
             </Button>

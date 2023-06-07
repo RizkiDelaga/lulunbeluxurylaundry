@@ -136,6 +136,9 @@ function GeneralInformation() {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum/1`,
         data: {
           logo: formGeneralInformation.logo,
@@ -158,13 +161,13 @@ function GeneralInformation() {
           jamMulai: [
             ...['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item) => {
               let date = new Date(operatingHours[item].setOpenTime);
-              return `${date.getHours()}:${date.getMinutes()}`;
+              return `${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
             }),
           ],
           jamSelesai: [
             ...['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item) => {
               let date = new Date(operatingHours[item].setCloseTime);
-              return `${date.getHours()}:${date.getMinutes()}`;
+              return `${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
             }),
           ],
         },

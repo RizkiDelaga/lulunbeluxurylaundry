@@ -21,7 +21,7 @@ import axios from 'axios';
 function CustomerRegistration() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState({ password: false, confirmPassword: false });
   const [formRegisterCustomer, setFormRegisterCustomer] = useState({
     customerName: '',
     noTelp: '',
@@ -33,21 +33,21 @@ function CustomerRegistration() {
     document.title = 'Registrasi Pelanggan Baru';
   }, []);
 
-  const registrationCustomerHandler = async (data) => {
+  const handleCreateCustomer = async () => {
     try {
       const res = await axios({
         method: 'POST',
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/register',
         data: {
-          nama: data.customerName,
-          noTelp: data.noTelp,
+          nama: formRegisterCustomer.customerName,
+          noTelp: formRegisterCustomer.noTelp,
           email: 'rizki11223@gmail.com',
-          password: data.password,
+          password: formRegisterCustomer.password,
         },
       });
       console.log('Response POST Register Customer');
       console.log(res);
-      navigate('/Login');
+      // navigate('/Login');
     } catch (error) {
       console.log(error);
     }
@@ -165,11 +165,17 @@ function CustomerRegistration() {
                       required
                       label="Password"
                       id="input-password"
-                      type={showPassword ? 'text' : 'password'}
+                      type={showPassword.password ? 'text' : 'password'}
                       endAdornment={
                         <InputAdornment position="end">
-                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" color="primary">
-                            {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          <IconButton
+                            onClick={() => {
+                              setShowPassword({ ...showPassword, password: !showPassword.password });
+                            }}
+                            edge="end"
+                            color="primary"
+                          >
+                            {showPassword.password ? <VisibilityIcon /> : <VisibilityOffIcon />}
                           </IconButton>
                         </InputAdornment>
                       }
@@ -204,11 +210,17 @@ function CustomerRegistration() {
                       required
                       label="Konfirmasi Password"
                       id="input-confirm-password"
-                      type={showPassword ? 'text' : 'password'}
+                      type={showPassword.confirmPassword ? 'text' : 'password'}
                       endAdornment={
                         <InputAdornment position="end">
-                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" color="primary">
-                            {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          <IconButton
+                            onClick={() => {
+                              setShowPassword({ ...showPassword, confirmPassword: !showPassword.confirmPassword });
+                            }}
+                            edge="end"
+                            color="primary"
+                          >
+                            {showPassword.confirmPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                           </IconButton>
                         </InputAdornment>
                       }
@@ -221,7 +233,11 @@ function CustomerRegistration() {
                 variant="contained"
                 size="large"
                 onClick={() => {
-                  registrationCustomerHandler(formRegisterCustomer);
+                  if (formRegisterCustomer.password === formRegisterCustomer.confirmPassword) {
+                    handleCreateCustomer();
+                  } else {
+                    alert('Password tidak match!');
+                  }
                 }}
                 style={{ width: '100%', fontWeight: 'bold' }}
               >
