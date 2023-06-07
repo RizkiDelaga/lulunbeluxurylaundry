@@ -16,17 +16,18 @@ import {
 } from '@mui/material';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import axios from 'axios';
 
 function ChangePassword() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [formChangePassword, setFormChangePassword] = useState({
-    currentPassword: '',
+    oldPassword: '',
     newPassword: '',
     confirmNewPassword: '',
   });
   const [showPassword, setShowPassword] = useState({
-    currentPassword: false,
+    oldPassword: false,
     newPassword: false,
     confirmNewPassword: false,
   });
@@ -34,6 +35,28 @@ function ChangePassword() {
   React.useEffect(() => {
     document.title = 'Ubah Password';
   }, []);
+
+  const handleUpdatePassword = async () => {
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin/change/password',
+        data: {
+          oldPassword: formChangePassword.oldPassword,
+          password: formChangePassword.newPassword,
+        },
+      });
+      console.log('Response Update Password');
+      console.log(res);
+    } catch (error) {
+      // if (error.response.status === 404) {
+      // }
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -71,7 +94,7 @@ function ChangePassword() {
                 <FormControl
                   variant="outlined"
                   onChange={(e) => {
-                    setFormChangePassword({ ...formChangePassword, currentPassword: e.target.value });
+                    setFormChangePassword({ ...formChangePassword, oldPassword: e.target.value });
                   }}
                   sx={{ width: '100%' }}
                 >
@@ -80,17 +103,15 @@ function ChangePassword() {
                     required
                     label="Password Saat Ini"
                     id="current-password"
-                    type={showPassword.currentPassword ? 'text' : 'password'}
+                    type={showPassword.oldPassword ? 'text' : 'password'}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
-                          onClick={() =>
-                            setShowPassword({ ...showPassword, currentPassword: !showPassword.currentPassword })
-                          }
+                          onClick={() => setShowPassword({ ...showPassword, oldPassword: !showPassword.oldPassword })}
                           edge="end"
                           color="primary"
                         >
-                          {showPassword.currentPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          {showPassword.oldPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -192,12 +213,18 @@ function ChangePassword() {
               variant="contained"
               size="large"
               style={{ width: '100%', fontWeight: 'bold' }}
-              onClick={() => navigate('/Dashboard')}
+              onClick={() => {
+                if (formChangePassword.newPassword === formChangePassword.confirmNewPassword) {
+                  handleUpdatePassword();
+                } else {
+                  alert('Password tidak macth');
+                }
+              }}
             >
               Ubah Password
             </Button>
 
-            {formChangePassword.currentPassword}
+            {formChangePassword.oldPassword}
             <br />
             {formChangePassword.newPassword}
             <br />

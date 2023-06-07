@@ -36,22 +36,21 @@ function ChangePassword() {
     document.title = 'Ubah Password';
   }, []);
 
-  const changePasswordHandler = async (data) => {
+  const handleUpdatePassword = async () => {
     try {
       const res = await axios({
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/change-password',
+        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/change/password',
         data: {
-          oldPassword: data.oldPassword,
-          password: data.newPassword,
+          oldPassword: formChangePassword.oldPassword,
+          password: formChangePassword.newPassword,
         },
       });
       console.log('Response PUT Change Password Customer');
       console.log(res);
-      navigate('/AreaPelanggan');
     } catch (error) {
       console.log(error);
     }
@@ -224,7 +223,13 @@ function ChangePassword() {
               variant="contained"
               size="large"
               style={{ width: '100%', fontWeight: 'bold' }}
-              onClick={() => changePasswordHandler(formChangePassword)}
+              onClick={() => {
+                if (formChangePassword.newPassword === formChangePassword.confirmNewPassword) {
+                  handleUpdatePassword();
+                } else {
+                  alert('Password tidak macth');
+                }
+              }}
             >
               Ubah Password
             </Button>
