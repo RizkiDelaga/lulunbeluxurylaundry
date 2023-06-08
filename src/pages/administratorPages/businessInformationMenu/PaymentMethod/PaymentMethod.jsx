@@ -33,7 +33,7 @@ function PaymentMethod() {
     id: null,
     paymentName: '',
     iD_Or_Number: '',
-    paymentLogo: { img: null, fileName: '' },
+    paymentLogo: { img: null, fileName: null },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
@@ -97,6 +97,13 @@ function PaymentMethod() {
           statusType: 'success',
         });
       }
+      setListInstructions([]);
+      setFormPaymentMethod({
+        id: null,
+        paymentName: '',
+        iD_Or_Number: '',
+        paymentLogo: { img: null, fileName: null },
+      });
       getApiHandler();
     } catch (error) {
       setOpenLoadDecision({
@@ -126,12 +133,6 @@ function PaymentMethod() {
         },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/metodepembayaran/${formPaymentMethod.id}`,
         data: formData,
-        // {
-        //   logo: data.paymentLogo.fileName,
-        //   nama: data.paymentName,
-        //   nomor: data.iD_Or_Number,
-        //   instruksi: listInstructions.map((itemInstruction) => itemInstruction.instructionText),
-        // },
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -140,6 +141,13 @@ function PaymentMethod() {
           statusType: 'success',
         });
       }
+      setListInstructions([]);
+      setFormPaymentMethod({
+        id: null,
+        paymentName: '',
+        iD_Or_Number: '',
+        paymentLogo: { img: null, fileName: null },
+      });
       console.log('Response DELETE');
       console.log(res);
       getApiHandler();
@@ -525,13 +533,6 @@ function PaymentMethod() {
                 } else {
                   handleCreatePaymentMethod();
                 }
-                setListInstructions([]);
-                setFormPaymentMethod({
-                  id: null,
-                  paymentName: '',
-                  iD_Or_Number: '',
-                  paymentLogo: { img: null, fileName: '' },
-                });
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >
@@ -607,7 +608,7 @@ function PaymentMethod() {
                                     id: null,
                                     paymentName: '',
                                     iD_Or_Number: '',
-                                    paymentLogo: { img: null, fileName: '' },
+                                    paymentLogo: { img: null, fileName: null },
                                   });
                                 } else {
                                   item.instruksi.map((itemInstruksi, index) => {
@@ -644,7 +645,7 @@ function PaymentMethod() {
                                     paymentName: '',
                                     iD_Or_Number: '',
 
-                                    paymentLogo: { img: null, fileName: '' },
+                                    paymentLogo: { img: null, fileName: null },
                                   });
                                 }
                               }}

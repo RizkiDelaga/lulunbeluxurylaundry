@@ -7,3 +7,7 @@ export const DETELE_EXAMPLE = 'DETELE_EXAMPLE';
 // Business Information
 export const GET_GENERAL_INFORMATION = 'GET_GENERAL_INFORMATION';
 export const GET_REASON_WHY_CHOOSE_US = 'GET_REASON_WHY_CHOOSE_US';
+export const GET_HOW_TO_ORDER = 'GET_HOW_TO_ORDER';
+export const GET_TESTIMONY = 'GET_TESTIMONY';
+export const GET_FAQ = 'GET_FAQ';
+export const GET_GALLERY = 'GET_GALLERY';

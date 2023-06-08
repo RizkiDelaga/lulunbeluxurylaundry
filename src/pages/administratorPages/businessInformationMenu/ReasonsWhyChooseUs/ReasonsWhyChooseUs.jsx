@@ -34,7 +34,7 @@ function ReasonsWhyChooseUs() {
     description: '',
     photo: {
       img: null,
-      fileName: '',
+      fileName: null,
     },
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
@@ -89,6 +89,12 @@ function ReasonsWhyChooseUs() {
           statusType: 'success',
         });
       }
+      setFormReasonsWhyChooseUs({
+        id: null,
+        reasonTitle: '',
+        description: '',
+        photo: { img: null, fileName: null },
+      });
       handleGetReasonsWhyChooseUs();
     } catch (error) {
       setOpenLoadDecision({
@@ -123,6 +129,12 @@ function ReasonsWhyChooseUs() {
           statusType: 'success',
         });
       }
+      setFormReasonsWhyChooseUs({
+        id: null,
+        reasonTitle: '',
+        description: '',
+        photo: { img: null, fileName: null },
+      });
       console.log('Response DELETE');
       console.log(res);
       handleGetReasonsWhyChooseUs();
@@ -326,12 +338,6 @@ function ReasonsWhyChooseUs() {
                 } else {
                   handleCreateReasonsWhyChooseUs();
                 }
-                setFormReasonsWhyChooseUs({
-                  id: null,
-                  reasonTitle: '',
-                  description: '',
-                  photo: { img: null, fileName: '' },
-                });
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >

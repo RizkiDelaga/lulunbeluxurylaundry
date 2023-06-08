@@ -1,15 +1,36 @@
-import { combineReducers } from "redux";
-import { createExampleReducer, deleteExampleReducer, editExampleReducer, getExampleReducer } from "./exampleReducer";
-import { getGeneralInformationReducer, getReasonWhyChooseUsReducer } from "./getBusinessInformationReducer";
+import {
+    combineReducers
+} from "redux";
+import {
+    createExampleReducer,
+    deleteExampleReducer,
+    editExampleReducer,
+    getExampleReducer
+} from "./exampleReducer";
+import {
+    getGeneralInformationReducer,
+    getReasonWhyChooseUsReducer,
+    getHowToOrderReducer,
+    getTestimonyReducer,
+    getFAQReducer,
+    getGalleryReducer
+} from "./getBusinessInformationReducer";
 
 export default combineReducers({
     // ======== Example Reducer ========
     createExample: createExampleReducer,
     getExample: getExampleReducer,
-    getGeneralInformation: getGeneralInformationReducer,
-    getReasonWhyChooseUs: getReasonWhyChooseUsReducer,
     editExample: editExampleReducer,
     deleteExample: deleteExampleReducer,
+
+    // ======== Business Information Reducer ========
+    getGeneralInformation: getGeneralInformationReducer,
+    getReasonWhyChooseUs: getReasonWhyChooseUsReducer,
+    getHowToOrder: getHowToOrderReducer,
+    getTestimony: getTestimonyReducer,
+    getFAQ: getFAQReducer,
+    getGallery: getGalleryReducer,
+
 
     // ======== Admin Reducer ========
     // createAdmin: createAdminReducer,

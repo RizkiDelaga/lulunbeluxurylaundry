@@ -31,14 +31,14 @@ function HowToOrder() {
     id: null,
     stepTitle: '',
     description: '',
-    photo: { img: null, fileName: '' },
+    photo: { img: null, fileName: null },
   });
 
   const [formHowToOrderViaOutlet, setFormHowToOrderViaOutlet] = useState({
     id: null,
     stepTitle: '',
     description: '',
-    photo: { img: null, fileName: '' },
+    photo: { img: null, fileName: null },
   });
 
   const [openLoadDecision, setOpenLoadDecision] = useState({
@@ -85,12 +85,6 @@ function HowToOrder() {
         },
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan',
         data: formData,
-        // {
-        //   status: statusType,
-        //   judul: data.stepTitle,
-        //   deskripsi: data.description,
-        //   gambar: data.photo.fileName,
-        // },
       });
       console.log('Response POST');
       console.log(res);
@@ -129,12 +123,6 @@ function HowToOrder() {
         },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan/${data.id}`,
         data: formData,
-        // {
-        //   status: statusType,
-        //   judul: data.stepTitle,
-        //   deskripsi: data.description,
-        //   gambar: data.photo.fileName,
-        // },
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -336,7 +324,7 @@ function HowToOrder() {
                         onDelete={() =>
                           setFormHowToOrderViaOnline({
                             ...formHowToOrderViaOnline,
-                            photo: { img: null, fileName: '' },
+                            photo: { img: null, fileName: null },
                           })
                         }
                         sx={{ maxWidth: '250px' }}
@@ -360,7 +348,7 @@ function HowToOrder() {
                   id: null,
                   stepTitle: '',
                   description: '',
-                  photo: { img: null, fileName: '' },
+                  photo: { img: null, fileName: null },
                 });
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
@@ -519,7 +507,7 @@ function HowToOrder() {
                         onDelete={() =>
                           setFormHowToOrderViaOutlet({
                             ...formHowToOrderViaOutlet,
-                            photo: { img: null, fileName: '' },
+                            photo: { img: null, fileName: null },
                           })
                         }
                         sx={{ maxWidth: '250px' }}
@@ -543,7 +531,7 @@ function HowToOrder() {
                   id: null,
                   stepTitle: '',
                   description: '',
-                  photo: { img: null, fileName: '' },
+                  photo: { img: null, fileName: null },
                 });
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
@@ -636,7 +624,7 @@ const TableListDataHowToOrder = (props) => {
                               id: null,
                               stepTitle: '',
                               description: '',
-                              photo: { img: null, fileName: '' },
+                              photo: { img: null, fileName: null },
                             });
                           } else {
                             props.setFormHowToOrder({
@@ -664,7 +652,7 @@ const TableListDataHowToOrder = (props) => {
                               id: null,
                               stepTitle: '',
                               description: '',
-                              photo: { img: null, fileName: '' },
+                              photo: { img: null, fileName: null },
                             });
                           }
                         }}

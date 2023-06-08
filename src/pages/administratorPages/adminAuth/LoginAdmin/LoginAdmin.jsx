@@ -65,7 +65,6 @@ function LoginAdmin() {
 
       localStorage.setItem('admin_name', res.data.data.nama);
       localStorage.setItem('admin_profile_picture', res.data.data.profilePic);
-      localStorage.setItem('business_logo', res.data.data.profilePic);
     } catch (error) {
       console.log(error);
     }

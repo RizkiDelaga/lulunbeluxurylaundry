@@ -5,6 +5,9 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
   Grid,
   Paper,
   Step,
@@ -14,6 +17,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
+  useMediaQuery,
   useTheme,
 } from '@mui/material';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -35,6 +39,9 @@ import DryCleaningIcon from '@mui/icons-material/DryCleaning';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
 import FaxIcon from '@mui/icons-material/Fax';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -47,7 +54,15 @@ import { Pagination } from 'swiper';
 import RatingComponent from '../../../components/Ratings/RatingComponent';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGeneralInformation, getReasonWhyChooseUs } from '../../../redux/actions/getBusinessInformationAction';
+import {
+  getFAQ,
+  getGallery,
+  getGeneralInformation,
+  getHowToOrder,
+  getReasonWhyChooseUs,
+  getTestimony,
+} from '../../../redux/actions/getBusinessInformationAction';
+import { BigPlayButton, LoadingSpinner, Player } from 'video-react';
 
 function HeroSection({ generalInformation }) {
   return (
@@ -192,29 +207,6 @@ function OperatingHoursAndHowToOrderSection({ generalInformation, listHowToOrder
   const [activeStep, setActiveStep] = React.useState(0);
   const [howToOrderType, setHowToOrderType] = React.useState('Online');
 
-  const steps = [
-    {
-      label: 'Select campaign settings',
-      description: `For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.`,
-      img: 'https://loremflickr.com/cache/resized/65535_52496308828_4dac1ce096_b_640_480_nofilter.jpg',
-    },
-    {
-      label: 'Create an ad group',
-      description: 'An ad group contains one or more ads which target a shared set of keywords.',
-      img: 'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png',
-    },
-    {
-      label: 'Create an ad',
-      description: `Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.`,
-      img: 'https://loremflickr.com/cache/resized/65535_52302919685_7002b85a5b_c_640_480_nofilter.jpg',
-    },
-  ];
-
   const LineDashLaundry = () => {
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#1F305C' }}>
@@ -341,37 +333,42 @@ function OperatingHoursAndHowToOrderSection({ generalInformation, listHowToOrder
 
               <Box sx={{ maxWidth: 400 }}>
                 <Stepper activeStep={activeStep} orientation="vertical">
-                  {steps.map((step, index) => (
-                    <Step key={step.label}>
-                      <StepLabel>
-                        <span style={{ fontWeight: 'bold' }}> {step.label}</span>
-                      </StepLabel>
-                      <StepContent>
-                        <img src={step.img} width={'100%'} style={{ borderRadius: '4px' }} alt="" />
-                        <Typography>{step.description}</Typography>
-                        <Box sx={{ mb: 2 }}>
-                          <div>
-                            <Button
-                              variant="contained"
-                              onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
-                              sx={{ mt: 1, mr: 1 }}
-                            >
-                              {index === steps.length - 1 ? 'Selesai' : 'Lanjut'}
-                            </Button>
-                            <Button
-                              disabled={index === 0}
-                              onClick={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)}
-                              sx={{ mt: 1, mr: 1 }}
-                            >
-                              Kembali
-                            </Button>
-                          </div>
-                        </Box>
-                      </StepContent>
-                    </Step>
-                  ))}
+                  {listHowToOrder
+                    .filter((element) => element.status === howToOrderType)
+                    .map((step, index) => (
+                      <Step key={index + 1}>
+                        <StepLabel>
+                          <span style={{ fontWeight: 'bold' }}> {step.judul}</span>
+                        </StepLabel>
+                        <StepContent>
+                          <img src={step.gambar} width={'100%'} style={{ borderRadius: '4px' }} alt="" />
+                          <Typography>{step.deskripsi}</Typography>
+                          <Box sx={{ mb: 2 }}>
+                            <div>
+                              <Button
+                                variant="contained"
+                                onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+                                sx={{ mt: 1, mr: 1 }}
+                              >
+                                {index ===
+                                listHowToOrder.filter((element) => element.status === howToOrderType).length - 1
+                                  ? 'Selesai'
+                                  : 'Lanjut'}
+                              </Button>
+                              <Button
+                                disabled={index === 0}
+                                onClick={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)}
+                                sx={{ mt: 1, mr: 1 }}
+                              >
+                                Kembali
+                              </Button>
+                            </div>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                    ))}
                 </Stepper>
-                {activeStep === steps.length && (
+                {activeStep === listHowToOrder.filter((element) => element.status === howToOrderType).length && (
                   <Box sx={{ px: 3, py: 1 }}>
                     <Button onClick={() => setActiveStep(0)} sx={{ mt: 1, mr: 1 }}>
                       Reset
@@ -551,12 +548,13 @@ function ReasonSection({ listReason }) {
               <SwiperSlide style={{ height: 'auto' }}>
                 <Paper
                   elevation={8}
-                  className={`gap-10 ${style['shadow-card']}`}
+                  className={`${style['shadow-card']}`}
                   sx={{
                     height: '100%',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     borderRadius: '24px',
+                    gap: '0px !important',
                   }}
                 >
                   <div
@@ -581,7 +579,7 @@ function ReasonSection({ listReason }) {
                       </div>
                       <h5>{reasonItem.judul}</h5>
                     </div>
-                    <div style={{ wordWrap: 'break-word' }}>{reasonItem.deskripsi}</div>
+                    <div style={{ wordWrap: 'break-word', marginBottom: '10px' }}>{reasonItem.deskripsi}</div>
                   </div>
 
                   <div
@@ -589,16 +587,17 @@ function ReasonSection({ listReason }) {
                       padding: '16px',
                       paddingTop: '0px',
                       width: 'fit-content',
-
                       alignSelf: 'center',
                     }}
                   >
-                    <img
-                      src={reasonItem.gambar || 'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'}
-                      width="100%"
-                      style={{ maxHeight: '240px', objectFit: 'contain' }}
-                      alt=""
-                    />
+                    {reasonItem.gambar ? (
+                      <img
+                        src={reasonItem.gambar}
+                        width="100%"
+                        style={{ maxHeight: '240px', objectFit: 'contain' }}
+                        alt=""
+                      />
+                    ) : null}
                   </div>
                 </Paper>
               </SwiperSlide>
@@ -610,7 +609,158 @@ function ReasonSection({ listReason }) {
   );
 }
 
-function TestimonySection() {
+function GallerySection({ listGallery }) {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  // const [dataGallery, setDatagallery] = React.useState([]);
+  const [openDescription, setOpenDescription] = React.useState(false);
+
+  const [openPreviewGallery, setOpenPreviewGallery] = React.useState({
+    isOpen: false,
+    data: null,
+  });
+
+  const handleClickOpen = (data) => {
+    setOpenPreviewGallery({ ...openPreviewGallery, isOpen: true, data: data });
+  };
+
+  const handleClose = () => {
+    setOpenPreviewGallery({ ...openPreviewGallery, isOpen: false });
+  };
+
+  const isMobileSize = useMediaQuery(theme.breakpoints.down('sm'));
+
+  return (
+    <Fragment>
+      <Container sx={{ marginTop: '26px' }}>
+        <h3 style={{ textAlign: 'center' }}>Galeri</h3>
+        <Grid container spacing={1} sx={{ mt: 2 }}>
+          {listGallery.map((item, index) => {
+            if (index < (isMobileSize ? 5 : listGallery.length)) {
+              if (item.status === 'video') {
+                return (
+                  <Grid item xs={4} sm={4} md={3} lg={2}>
+                    <Box
+                      onClick={() => handleClickOpen(item)}
+                      sx={{ cursor: 'pointer', position: 'relative', backgroundColor: '#ffffff' }}
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          width: '100%',
+                          height: '100%',
+                          zIndex: 1,
+                        }}
+                      >
+                        <div style={{ width: '100%' }}>
+                          <PlayCircleOutlineIcon fontSize="large" sx={{ width: '100%', color: 'white' }} />
+                        </div>
+                      </div>
+
+                      <Player playsInline fluid={false} width="100%" height={isMobileSize ? 180 : 240} src={item.media}>
+                        <LoadingSpinner />
+                        <BigPlayButton position="center" />
+                      </Player>
+                    </Box>
+                  </Grid>
+                );
+              } else {
+                return (
+                  <Grid item xs={4} sm={4} md={3} lg={2}>
+                    <Box onClick={() => handleClickOpen(item)} sx={{ cursor: 'pointer', backgroundColor: '#ffffff' }}>
+                      <div
+                        style={{
+                          width: '100%',
+                          height: isMobileSize ? 180 : 240,
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <img src={item.media} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
+                      </div>
+                    </Box>
+                  </Grid>
+                );
+              }
+            } else if (index === 5) {
+              return (
+                <Grid item xs={4} sm={4} md={3} lg={2}>
+                  <Box
+                    onClick={() => navigate('/Galeri')}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      height: '100%',
+                      backgroundColor: '#ffffff',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Lihat Lebih Banyak
+                    {/* <NavigateNextIcon /> */}
+                  </Box>
+                </Grid>
+              );
+            } else {
+              return null;
+            }
+          })}
+        </Grid>
+
+        <Dialog
+          fullWidth
+          open={openPreviewGallery.isOpen}
+          onClose={handleClose}
+          aria-describedby="alert-dialog-description"
+        >
+          <h4
+            style={{ padding: '0px 24px', paddingTop: '16px', display: 'flex', alignItems: 'center' }}
+            onClick={() => setOpenDescription(!openDescription)}
+          >
+            {openPreviewGallery.data ? openPreviewGallery.data.judul : null}{' '}
+            {openDescription ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </h4>
+
+          <Box sx={{ px: 3, display: openDescription ? 'block' : 'none' }}>
+            {openPreviewGallery.data ? openPreviewGallery.data.deskripsi : null}
+          </Box>
+
+          <DialogContent sx={{ display: 'flex', justifyContent: 'center', pb: 0 }}>
+            {openPreviewGallery.data ? (
+              openPreviewGallery.data.status === 'video' ? (
+                <Player playsInline fluid={false} aspectRatio="16:9" height={280} src={openPreviewGallery.data.media}>
+                  <LoadingSpinner />
+                  <BigPlayButton position="center" />
+                </Player>
+              ) : (
+                <img
+                  src={openPreviewGallery.data.media}
+                  width={'100%'}
+                  // height={'100%'}
+                  style={{ objectFit: 'contain' }}
+                  alt=""
+                />
+              )
+            ) : null}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} autoFocus>
+              Tutup
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Container>
+    </Fragment>
+  );
+}
+
+function TestimonySection({ listTestimony }) {
   return (
     <>
       <Container>
@@ -697,7 +847,7 @@ function TestimonySection() {
   );
 }
 
-function FAQSection() {
+function FAQSection({ listFAQ }) {
   const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -721,9 +871,9 @@ function FAQSection() {
           {(currentWidth < 900 ? [1] : [1, 2]).map((gridTotal, gridIndex) => {
             return (
               <Grid item xs={12} md={6}>
-                {[1, 2, 3, 4, 5, 6, 7]
+                {listFAQ
                   .filter((filterItem, filterIndex) => {
-                    let lengthArr = 7;
+                    let lengthArr = listFAQ.length;
                     // console.log(currentWidth);
                     if (currentWidth < 900) {
                       return filterIndex <= lengthArr;
@@ -739,13 +889,10 @@ function FAQSection() {
                     return (
                       <Accordion>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ color: '#000000' }}>
-                          <Typography>Accordion {FAQitem}</Typography>
+                          <Typography>{FAQitem.pertanyaan}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                          <Typography>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
-                            amet blandit leo lobortis eget.
-                          </Typography>
+                          <Typography>{FAQitem.jawaban}</Typography>
                         </AccordionDetails>
                       </Accordion>
                     );
@@ -760,9 +907,7 @@ function FAQSection() {
 }
 
 function ContactAndLocationSection({ generalInformation }) {
-  let mapsEmbed =
-    generalInformation.koordinat ||
-    '<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15825.291613002777!2d109.2421518!3d-7.429474!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e655e8428463883%3A0x8def4a2d764422a!2sLULU%20N&#39;BE%20LUXURY%20LAUNDRY%20PURWOKERTO!5e0!3m2!1sid!2sid!4v1682649257806!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+  let mapsEmbed = generalInformation.koordinat;
 
   let mapsTag = mapsEmbed
     .replace('width="600"', 'width="100%"')
@@ -802,7 +947,7 @@ function ContactAndLocationSection({ generalInformation }) {
                     <h6>(Fax)</h6>
                     <span>{generalInformation.fax}</span>
                   </div>
-                  <div style={{ display: 'flex', gap: '10px' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                     <EmailIcon sx={{ color: '#1F305C' }} />
                     <h6>(Email)</h6>
                     <span>{generalInformation.email}</span>
@@ -885,7 +1030,7 @@ function FooterSection({ generalInformation }) {
                   <h6>(Fax)</h6>
                   <span>{generalInformation.fax}</span>
                 </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                   <EmailIcon />
                   <h6>(Email)</h6>
                   <span>{generalInformation.email}</span>
@@ -935,7 +1080,7 @@ function HomePage() {
   const navigate = useNavigate();
   const [laundryType, setLaundryType] = React.useState([]);
   const [serviceType, setServiceType] = React.useState([]);
-  const [howToOrder, setHowToOrder] = React.useState([]);
+  // const [howToOrder, setHowToOrder] = React.useState([]);
   const [event, setEvent] = React.useState([]);
   // const [reason, setReason] = React.useState([]);
   const [position, setPosition] = React.useState(window.pageYOffset);
@@ -944,28 +1089,50 @@ function HomePage() {
   const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
     (state) => state.getGeneralInformation
   );
-  const {
-    isLoading: loadingGetReasonWhyChooseUs,
-    data: dataGetReasonWhyChooseUs,
-    error: errorGetReasonWhyChooseUs,
-  } = useSelector((state) => state.getReasonWhyChooseUs);
+  const { isLoading: loadingGetReasonWhyChooseUs, data: dataGetReasonWhyChooseUs } = useSelector(
+    (state) => state.getReasonWhyChooseUs
+  );
+  const { isLoading: loadingGetHowToOrder, data: dataGetHowToOrder } = useSelector((state) => state.getHowToOrder);
+  const { isLoading: loadingGetTestimony, data: dataGetTestimony } = useSelector((state) => state.getTestimony);
+  const { isLoading: loadingGetFAQ, data: dataGetFAQ } = useSelector((state) => state.getFAQ);
+  const { isLoading: loadingGetGallery, data: dataGetGallery } = useSelector((state) => state.getGallery);
 
   React.useEffect(() => {
     document.title = 'Beranda | Lulu n Be Luxury Laundry';
     dispatchGetGeneralInformation();
+    dispatchGetHowToOrder();
+    dispatchGetReasonWhyChooseUs();
+    dispatchGetGallery();
+    dispatchGetTestimony();
+    dispatchGetFAQ();
+
     handleGetLaundryType();
     handleGetServiceType();
-    handleGetHowToOrder();
     handleGetEvent();
-    dispatchGetReasonWhyChooseUs();
   }, []);
 
   const dispatchGetGeneralInformation = async () => {
     return await dispatch(getGeneralInformation());
   };
 
+  const dispatchGetHowToOrder = async () => {
+    return await dispatch(getHowToOrder());
+  };
+
   const dispatchGetReasonWhyChooseUs = async () => {
     return await dispatch(getReasonWhyChooseUs());
+  };
+
+  const dispatchGetGallery = async () => {
+    return await dispatch(getGallery());
+  };
+
+  const dispatchGetTestimony = async () => {
+    return await dispatch(getTestimony());
+  };
+
+  const dispatchGetFAQ = async () => {
+    return await dispatch(getFAQ());
   };
 
   const handleGetLaundryType = async () => {
@@ -996,20 +1163,6 @@ function HomePage() {
     }
   };
 
-  const handleGetHowToOrder = async () => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan',
-      });
-      console.log('Response GET Data Reason');
-      console.log(res);
-      setHowToOrder(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleGetEvent = async () => {
     try {
       const res = await axios({
@@ -1024,40 +1177,29 @@ function HomePage() {
     }
   };
 
-  // const handleGetReason = async () => {
-  //   try {
-  //     const res = await axios({
-  //       method: 'GET',
-  //       url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan',
-  //     });
-  //     console.log('Response GET Data Reason');
-  //     console.log(res);
-  //     setReason(res.data.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '60px 0px' }}>
-      {!loadingGetGeneralInformation ? <HeroSection generalInformation={dataGetGeneralInformation} /> : null}
+      {!loadingGetGeneralInformation && sessionStorage.getItem('business_information') ? (
+        <HeroSection generalInformation={dataGetGeneralInformation} />
+      ) : null}
 
       {laundryType ? <LaundryTypeSection listLaundryType={laundryType} /> : null}
       {serviceType ? <ServiceTypeSection listServiceType={serviceType} /> : null}
 
-      {!loadingGetGeneralInformation && howToOrder ? (
+      {!loadingGetGeneralInformation && sessionStorage.getItem('business_information') && !loadingGetHowToOrder ? (
         <OperatingHoursAndHowToOrderSection
           generalInformation={dataGetGeneralInformation}
-          listHowToOrder={howToOrder}
+          listHowToOrder={dataGetHowToOrder}
         />
       ) : null}
 
       {event ? <EventSection listEvent={event} /> : null}
       {!loadingGetReasonWhyChooseUs ? <ReasonSection listReason={dataGetReasonWhyChooseUs} /> : null}
-      {serviceType ? <TestimonySection /> : null}
-      {serviceType ? <FAQSection /> : null}
+      {!loadingGetGallery ? <GallerySection listGallery={dataGetGallery} /> : null}
+      {!loadingGetTestimony ? <TestimonySection listTestimony={dataGetTestimony} /> : null}
+      {!loadingGetFAQ ? <FAQSection listFAQ={dataGetFAQ} /> : null}
 
-      {!loadingGetGeneralInformation ? (
+      {!loadingGetGeneralInformation && sessionStorage.getItem('business_information') ? (
         <span>
           <ContactAndLocationSection generalInformation={dataGetGeneralInformation} />
           <FooterSection generalInformation={dataGetGeneralInformation} />

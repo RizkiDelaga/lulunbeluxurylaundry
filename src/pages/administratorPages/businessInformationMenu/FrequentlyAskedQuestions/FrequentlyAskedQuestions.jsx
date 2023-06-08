@@ -116,6 +116,11 @@ function FrequentlyAskedQuestions() {
           statusType: 'success',
         });
       }
+      setFormFrequentlyAskedQuestions({
+        id: null,
+        question: '',
+        answer: '',
+      });
       console.log('Response DELETE');
       console.log(res);
       getApiHandler();
@@ -143,6 +148,11 @@ function FrequentlyAskedQuestions() {
           statusType: 'success',
         });
       }
+      setFormFrequentlyAskedQuestions({
+        id: null,
+        question: '',
+        answer: '',
+      });
       getApiHandler();
       console.log(res);
     } catch (error) {
@@ -249,11 +259,6 @@ function FrequentlyAskedQuestions() {
                 } else {
                   handleCreateFAQ();
                 }
-                setFormFrequentlyAskedQuestions({
-                  id: null,
-                  question: '',
-                  answer: '',
-                });
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >

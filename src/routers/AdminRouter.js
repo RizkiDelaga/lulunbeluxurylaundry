@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router';
 import { Outlet } from 'react-router-dom';
 import AdminLayout from '../layouts/AdminLayout/AdminLayout';
 import HomePage from '../pages/customerPages/HomePage/HomePage';
-import PageStructure from '../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import CreateNewOrder from '../pages/administratorPages/orderMenu/CreateNewOrder/CreateNewOrder';
 import RegisterNewAdministrator from '../pages/administratorPages/dashboardMenu/RegisterNewAdministrator/RegisterNewAdministrator';
 import EditProfile from '../pages/administratorPages/dashboardMenu/EditProfile/EditProfile';

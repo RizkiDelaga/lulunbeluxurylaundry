@@ -124,6 +124,7 @@ function GeneralInformation() {
           },
         }));
       });
+      sessionStorage.setItem('business_information', JSON.stringify(res.data.data[0]));
     } catch (error) {
       // if (error.response.status === 404) {
       // }
@@ -132,6 +133,37 @@ function GeneralInformation() {
   };
 
   const handleUpdateGeneralInformation = async () => {
+    const formData = new FormData();
+    formData.append('logo', formGeneralInformation.logo.img);
+    formData.append('slogan', formGeneralInformation.slogan);
+    formData.append('lokasi', formGeneralInformation.location.location);
+    formData.append('koordinat', formGeneralInformation.location.googleMapsEmbed);
+    formData.append('noTelp', formGeneralInformation.contact.phoneNumber);
+    formData.append('email', formGeneralInformation.contact.email);
+    formData.append('fax', formGeneralInformation.contact.fax);
+    formData.append('instagram', formGeneralInformation.socialMedia.instagram);
+    formData.append('facebook', formGeneralInformation.socialMedia.facebook);
+    formData.append('tiktok', formGeneralInformation.socialMedia.tikTok);
+    formData.append('twitter', formGeneralInformation.socialMedia.twitter);
+    formData.append('youtube', formGeneralInformation.socialMedia.youtube);
+    ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item, index) => {
+      return formData.append(`hari[${index}]`, operatingHours[item].dayNameInIndonesia);
+    });
+    ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item, index) => {
+      let date = new Date(operatingHours[item].setOpenTime);
+      return formData.append(
+        `jamMulai[${index}]`,
+        `${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`
+      );
+    });
+    ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item, index) => {
+      let date = new Date(operatingHours[item].setCloseTime);
+      return formData.append(
+        `jamSelesai[${index}]`,
+        `${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`
+      );
+    });
+
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
@@ -140,37 +172,7 @@ function GeneralInformation() {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum/1`,
-        data: {
-          logo: formGeneralInformation.logo.img,
-          slogan: formGeneralInformation.slogan,
-          lokasi: formGeneralInformation.location.location,
-          koordinat: formGeneralInformation.location.googleMapsEmbed,
-          noTelp: formGeneralInformation.contact.phoneNumber,
-          email: formGeneralInformation.contact.email,
-          fax: formGeneralInformation.contact.fax,
-          instagram: formGeneralInformation.socialMedia.instagram,
-          facebook: formGeneralInformation.socialMedia.facebook,
-          tiktok: formGeneralInformation.socialMedia.tikTok,
-          twitter: formGeneralInformation.socialMedia.twitter,
-          youtube: formGeneralInformation.socialMedia.youtube,
-          hari: [
-            ...['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(
-              (item) => operatingHours[item].dayNameInIndonesia
-            ),
-          ],
-          jamMulai: [
-            ...['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item) => {
-              let date = new Date(operatingHours[item].setOpenTime);
-              return `${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
-            }),
-          ],
-          jamSelesai: [
-            ...['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item) => {
-              let date = new Date(operatingHours[item].setCloseTime);
-              return `${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
-            }),
-          ],
-        },
+        data: formData,
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -183,12 +185,13 @@ function GeneralInformation() {
       console.log(res);
       handleGetGeneralInformation();
     } catch (error) {
+      console.log('error', error);
+      console.log('error', error.response.data.message);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 

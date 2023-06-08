@@ -2,6 +2,8 @@ import { Container, Grid, Paper } from '@mui/material';
 import axios from 'axios';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
+import { useDispatch, useSelector } from 'react-redux';
 
 function AboutUs() {
   const navigate = useNavigate();
@@ -11,7 +13,16 @@ function AboutUs() {
   React.useEffect(() => {
     document.title = 'Tentang Kami';
     handleGetAboutUs();
+    dispatchGetGeneralInformation();
   }, []);
+
+  const dispatch = useDispatch();
+  const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
+    (state) => state.getGeneralInformation
+  );
+  const dispatchGetGeneralInformation = async () => {
+    return await dispatch(getGeneralInformation());
+  };
 
   const handleGetAboutUs = async () => {
     try {
@@ -42,12 +53,9 @@ function AboutUs() {
               })}
             </Grid>
             <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'center' }}>
-              <img
-                src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
-                width={'100%'}
-                alt=""
-                style={{ maxWidth: '400px' }}
-              />
+              {loadingGetGeneralInformation ? null : (
+                <img src={dataGetGeneralInformation.logo} width={'100%'} alt="Logo" style={{ maxWidth: '400px' }} />
+              )}
             </Grid>
           </Grid>
         </Paper>

@@ -16,6 +16,8 @@ import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import LogoWebsite from '../../../assets/images/Logo.jpg';
 
 import CloseIcon from '@mui/icons-material/Close';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
 
 const drawerWidth = 300;
 
@@ -75,14 +77,28 @@ function SidebarAdmin(props) {
   const navigate = useNavigate();
   const theme = useTheme();
 
+  const dispatch = useDispatch();
+  const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
+    (state) => state.getGeneralInformation
+  );
+
+  React.useEffect(() => {
+    document.title = 'Tentang Kami';
+    dispatchGetGeneralInformation();
+  }, [sessionStorage.getItem('business_information')]);
+
+  const dispatchGetGeneralInformation = async () => {
+    return await dispatch(getGeneralInformation());
+  };
+
   return (
     <>
       <Drawer variant="permanent" open={props.openSidebar}>
         <DrawerHeader sx={{ border: 'none', display: 'flex', justifyContent: 'center' }}>
-          {props.openSidebar ? (
-            <img src={LogoWebsite} alt="Logo" style={{ height: '48px', alignSelf: 'left' }} />
+          {loadingGetGeneralInformation ? null : props.openSidebar ? (
+            <img src={dataGetGeneralInformation.logo} alt="Logo" style={{ height: '48px', alignSelf: 'left' }} />
           ) : (
-            <img src={LogoWebsite} alt="Logo" style={{ width: '30px' }} />
+            <img src={dataGetGeneralInformation.logo} alt="Logo" style={{ width: '30px' }} />
           )}
           <IconButton
             onClick={props.handleSidebar}
