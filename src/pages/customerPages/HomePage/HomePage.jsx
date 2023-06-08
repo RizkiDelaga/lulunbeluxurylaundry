@@ -46,15 +46,17 @@ import 'swiper/css/pagination';
 import { Pagination } from 'swiper';
 import RatingComponent from '../../../components/Ratings/RatingComponent';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGeneralInformation, getReasonWhyChooseUs } from '../../../redux/actions/getBusinessInformationAction';
 
-function HeroSection({ businessInformation }) {
+function HeroSection({ generalInformation }) {
   return (
     <span>
       <Box sx={{ backgroundColor: '#FFFFFF', py: '100px' }}>
         <Container>
           <Grid container spacing={3}>
             <Grid item sm={6} md={5} lg={4}>
-              {businessInformation ? <img src={businessInformation.logo} width="100%" alt="" /> : null}
+              {generalInformation ? <img src={generalInformation.logo} width="100%" alt="" /> : null}
             </Grid>
             <Grid
               item
@@ -63,7 +65,7 @@ function HeroSection({ businessInformation }) {
               lg={8}
               sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px 0px' }}
             >
-              {businessInformation ? <h2>{businessInformation.slogan}</h2> : null}
+              {generalInformation ? <h2>{generalInformation.slogan}</h2> : null}
 
               <span>
                 Lulu ’N Be Luxury Laundry hadir dengan menawarkan pelayanan laundry “One Stop Service” yaitu Laundry,
@@ -185,7 +187,7 @@ function ServiceTypeSection({ listServiceType }) {
   );
 }
 
-function OperatingHoursAndHowToOrderSection({ businessInformation, listHowToOrder }) {
+function OperatingHoursAndHowToOrderSection({ generalInformation, listHowToOrder }) {
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
   const [howToOrderType, setHowToOrderType] = React.useState('Online');
@@ -255,7 +257,7 @@ function OperatingHoursAndHowToOrderSection({ businessInformation, listHowToOrde
               <LineDashLaundry />
 
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                {businessInformation.hari.map((item, index) => {
+                {generalInformation.hari.map((item, index) => {
                   return (
                     <div
                       style={{
@@ -269,7 +271,7 @@ function OperatingHoursAndHowToOrderSection({ businessInformation, listHowToOrde
                     >
                       <strong>{item}</strong>
                       <span>
-                        {businessInformation.jamMulai[index]} ~ {businessInformation.jamSelesai[index]}
+                        {generalInformation.jamMulai[index]} ~ {generalInformation.jamSelesai[index]}
                       </span>
                     </div>
                   );
@@ -757,9 +759,9 @@ function FAQSection() {
   );
 }
 
-function ContactAndLocationSection({ businessInformation }) {
+function ContactAndLocationSection({ generalInformation }) {
   let mapsEmbed =
-    businessInformation.koordinat ||
+    generalInformation.koordinat ||
     '<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15825.291613002777!2d109.2421518!3d-7.429474!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e655e8428463883%3A0x8def4a2d764422a!2sLULU%20N&#39;BE%20LUXURY%20LAUNDRY%20PURWOKERTO!5e0!3m2!1sid!2sid!4v1682649257806!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
 
   let mapsTag = mapsEmbed
@@ -793,17 +795,17 @@ function ContactAndLocationSection({ businessInformation }) {
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <CallIcon sx={{ color: '#1F305C' }} />
                     <h6>(No Telepon)</h6>
-                    <span>{businessInformation.noTelp}</span>
+                    <span>{generalInformation.noTelp}</span>
                   </div>
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <FaxIcon sx={{ color: '#1F305C' }} />
                     <h6>(Fax)</h6>
-                    <span>{businessInformation.fax}</span>
+                    <span>{generalInformation.fax}</span>
                   </div>
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <EmailIcon sx={{ color: '#1F305C' }} />
                     <h6>(Email)</h6>
-                    <span>{businessInformation.email}</span>
+                    <span>{generalInformation.email}</span>
                   </div>
                 </span>
                 <span className="gap-10" style={{ flexDirection: 'column' }}>
@@ -828,7 +830,7 @@ function ContactAndLocationSection({ businessInformation }) {
                 </span>
                 <span className="gap-10" style={{ flexDirection: 'column' }}>
                   <h6>Lokasi</h6>
-                  <span>{businessInformation.lokasi}</span>
+                  <span>{generalInformation.lokasi}</span>
                 </span>
               </Grid>
             </Grid>
@@ -839,7 +841,7 @@ function ContactAndLocationSection({ businessInformation }) {
   );
 }
 
-function FooterSection({ businessInformation }) {
+function FooterSection({ generalInformation }) {
   return (
     <>
       <Box
@@ -876,44 +878,44 @@ function FooterSection({ businessInformation }) {
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <CallIcon />
                   <h6>(No Telepon)</h6>
-                  <span>{businessInformation.noTelp}</span>
+                  <span>{generalInformation.noTelp}</span>
                 </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <FaxIcon />
                   <h6>(Fax)</h6>
-                  <span>{businessInformation.fax}</span>
+                  <span>{generalInformation.fax}</span>
                 </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <EmailIcon />
                   <h6>(Email)</h6>
-                  <span>{businessInformation.email}</span>
+                  <span>{generalInformation.email}</span>
                 </div>
               </Grid>
               <Grid item xs={12} sm="auto" className="gap-10" style={{ flexDirection: 'column' }}>
                 <h4>Sosial Media</h4>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                  {businessInformation.instagram ? (
-                    <Link to={businessInformation.instagram}>
+                  {generalInformation.instagram ? (
+                    <Link to={generalInformation.instagram}>
                       <img src={InstagramIcon} height="40" alt="" />
                     </Link>
                   ) : null}
-                  {businessInformation.facebook ? (
-                    <Link to={businessInformation.facebook}>
+                  {generalInformation.facebook ? (
+                    <Link to={generalInformation.facebook}>
                       <img src={FacebookIcon} height="40" alt="" />
                     </Link>
                   ) : null}
-                  {businessInformation.twitter ? (
-                    <Link to={businessInformation.twitter}>
+                  {generalInformation.twitter ? (
+                    <Link to={generalInformation.twitter}>
                       <img src={TwitterIcon} height="40" alt="" />
                     </Link>
                   ) : null}
-                  {businessInformation.youtube ? (
-                    <Link to={businessInformation.youtube}>
+                  {generalInformation.youtube ? (
+                    <Link to={generalInformation.youtube}>
                       <img src={YoutubeIcon} height="40" alt="" />
                     </Link>
                   ) : null}
-                  {businessInformation.tiktok ? (
-                    <Link to={businessInformation.tiktok}>
+                  {generalInformation.tiktok ? (
+                    <Link to={generalInformation.tiktok}>
                       <img src={TiktokIcon} height="40" alt="" />
                     </Link>
                   ) : null}
@@ -931,37 +933,39 @@ function FooterSection({ businessInformation }) {
 function HomePage() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [businessInformation, setBusinessInformation] = React.useState();
   const [laundryType, setLaundryType] = React.useState([]);
   const [serviceType, setServiceType] = React.useState([]);
   const [howToOrder, setHowToOrder] = React.useState([]);
   const [event, setEvent] = React.useState([]);
-  const [reason, setReason] = React.useState([]);
+  // const [reason, setReason] = React.useState([]);
   const [position, setPosition] = React.useState(window.pageYOffset);
+
+  const dispatch = useDispatch();
+  const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
+    (state) => state.getGeneralInformation
+  );
+  const {
+    isLoading: loadingGetReasonWhyChooseUs,
+    data: dataGetReasonWhyChooseUs,
+    error: errorGetReasonWhyChooseUs,
+  } = useSelector((state) => state.getReasonWhyChooseUs);
 
   React.useEffect(() => {
     document.title = 'Beranda | Lulu n Be Luxury Laundry';
-    handleGetBusinessInformation();
+    dispatchGetGeneralInformation();
     handleGetLaundryType();
     handleGetServiceType();
     handleGetHowToOrder();
     handleGetEvent();
-    handleGetReason();
+    dispatchGetReasonWhyChooseUs();
   }, []);
 
-  const handleGetBusinessInformation = async () => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum',
-      });
-      console.log('Response GET Data Laundry Type');
-      console.log(res);
-      localStorage.setItem('business-logo', res.data.data[0].logo);
-      setBusinessInformation(res.data.data[0]);
-    } catch (error) {
-      console.log(error);
-    }
+  const dispatchGetGeneralInformation = async () => {
+    return await dispatch(getGeneralInformation());
+  };
+
+  const dispatchGetReasonWhyChooseUs = async () => {
+    return await dispatch(getReasonWhyChooseUs());
   };
 
   const handleGetLaundryType = async () => {
@@ -1020,40 +1024,43 @@ function HomePage() {
     }
   };
 
-  const handleGetReason = async () => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan',
-      });
-      console.log('Response GET Data Reason');
-      console.log(res);
-      setReason(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleGetReason = async () => {
+  //   try {
+  //     const res = await axios({
+  //       method: 'GET',
+  //       url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan',
+  //     });
+  //     console.log('Response GET Data Reason');
+  //     console.log(res);
+  //     setReason(res.data.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '60px 0px' }}>
-      {businessInformation ? <HeroSection businessInformation={businessInformation} /> : null}
+      {!loadingGetGeneralInformation ? <HeroSection generalInformation={dataGetGeneralInformation} /> : null}
 
       {laundryType ? <LaundryTypeSection listLaundryType={laundryType} /> : null}
       {serviceType ? <ServiceTypeSection listServiceType={serviceType} /> : null}
 
-      {businessInformation && howToOrder ? (
-        <OperatingHoursAndHowToOrderSection businessInformation={businessInformation} listHowToOrder={howToOrder} />
+      {!loadingGetGeneralInformation && howToOrder ? (
+        <OperatingHoursAndHowToOrderSection
+          generalInformation={dataGetGeneralInformation}
+          listHowToOrder={howToOrder}
+        />
       ) : null}
 
       {event ? <EventSection listEvent={event} /> : null}
-      {reason ? <ReasonSection listReason={reason} /> : null}
+      {!loadingGetReasonWhyChooseUs ? <ReasonSection listReason={dataGetReasonWhyChooseUs} /> : null}
       {serviceType ? <TestimonySection /> : null}
       {serviceType ? <FAQSection /> : null}
 
-      {businessInformation ? (
+      {!loadingGetGeneralInformation ? (
         <span>
-          <ContactAndLocationSection businessInformation={businessInformation} />
-          <FooterSection businessInformation={businessInformation} />
+          <ContactAndLocationSection generalInformation={dataGetGeneralInformation} />
+          <FooterSection generalInformation={dataGetGeneralInformation} />
         </span>
       ) : null}
 

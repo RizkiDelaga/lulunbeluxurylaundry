@@ -1,6 +1,7 @@
 import {
     CREATE_EXAMPLE,
     GET_EXAMPLE,
+    GET_EXAMPLE2,
     EDIT_EXAMPLE,
     DETELE_EXAMPLE
 } from '../types';

@@ -39,7 +39,7 @@ function Gallery() {
   };
 
   React.useEffect(() => {
-    document.title = 'Validasi Akun';
+    document.title = 'Galeri';
     handleGetGallery();
   }, []);
 
@@ -64,12 +64,15 @@ function Gallery() {
     <>
       <Container sx={{ mt: '50px', mb: '25px' }}>
         <h3 style={{ textAlign: 'center' }}>Galeri</h3>
-        <Grid container spacing={0.25}>
+        <Grid container spacing={1}>
           {dataGallery.map((item, index) => {
             if (item.status === 'video') {
               return (
-                <Grid item xs={6} sm={4} md={3} lg={3}>
-                  <Box onClick={() => handleClickOpen(item)} sx={{ cursor: 'pointer', position: 'relative' }}>
+                <Grid item xs={4} sm={4} md={3} lg={2}>
+                  <Box
+                    onClick={() => handleClickOpen(item)}
+                    sx={{ cursor: 'pointer', position: 'relative', backgroundColor: '#ffffff' }}
+                  >
                     <div
                       style={{
                         position: 'absolute',
@@ -86,7 +89,7 @@ function Gallery() {
                       </div>
                     </div>
 
-                    <Player playsInline fluid={false} width="100%" height={180} src={item.media}>
+                    <Player playsInline fluid={false} width="100%" height={240} src={item.media}>
                       <LoadingSpinner />
                       <BigPlayButton position="center" />
                     </Player>
@@ -95,19 +98,19 @@ function Gallery() {
               );
             } else {
               return (
-                <Grid item xs={6} sm={4} md={3} lg={3}>
-                  <Box onClick={() => handleClickOpen(item)} sx={{ cursor: 'pointer' }}>
+                <Grid item xs={4} sm={4} md={3} lg={2}>
+                  <Box onClick={() => handleClickOpen(item)} sx={{ cursor: 'pointer', backgroundColor: '#ffffff' }}>
                     <div
                       style={{
                         width: '100%',
-                        height: 180,
+                        height: 240,
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
                         overflow: 'hidden',
                       }}
                     >
-                      <img src={item.media} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" />
+                      <img src={item.media} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
                     </div>
                   </Box>
                 </Grid>
