@@ -141,7 +141,7 @@ function GeneralInformation() {
         },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum/1`,
         data: {
-          logo: formGeneralInformation.logo,
+          logo: formGeneralInformation.logo.img,
           slogan: formGeneralInformation.slogan,
           lokasi: formGeneralInformation.location.location,
           koordinat: formGeneralInformation.location.googleMapsEmbed,
