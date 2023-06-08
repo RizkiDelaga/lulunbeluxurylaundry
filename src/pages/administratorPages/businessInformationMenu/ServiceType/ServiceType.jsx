@@ -38,7 +38,7 @@ function ServiceType() {
     description: '',
     photo: { img: null, fileName: null },
   });
-  const [nomor, setNomor] = useState(null);
+  // const [nomor, setNomor] = useState(null);
 
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
@@ -86,13 +86,6 @@ function ServiceType() {
         },
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislayanan',
         data: formData,
-        // {
-        //   layanan: formServiceType.serviceTypeName,
-        //   hari: parseInt(formServiceType.serviceDuration.days),
-        //   jam: parseInt(formServiceType.serviceDuration.hours),
-        //   gambar: formServiceType.photo.fileName,
-        //   deskripsi: formServiceType.description,
-        // },
       });
       console.log('Response POST');
       console.log(res);
@@ -103,6 +96,17 @@ function ServiceType() {
           statusType: 'success',
         });
       }
+      setFormServiceType({
+        id: null,
+        serviceTypeName: '',
+        serviceDuration: {
+          days: null,
+          hours: null,
+          minutes: null,
+        },
+        description: '',
+        photo: { img: null, fileName: null },
+      });
       handleGetServiceType();
     } catch (error) {
       setOpenLoadDecision({
@@ -133,13 +137,6 @@ function ServiceType() {
         },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislayanan/${formServiceType.id}`,
         data: formData,
-        // {
-        //   layanan: data.serviceTypeName,
-        //   hari: parseInt(data.serviceDuration.days),
-        //   jam: parseInt(data.serviceDuration.hours),
-        //   gambar: data.photo.fileName,
-        //   deskripsi: data.description,
-        // },
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -148,6 +145,17 @@ function ServiceType() {
           statusType: 'success',
         });
       }
+      setFormServiceType({
+        id: null,
+        serviceTypeName: '',
+        serviceDuration: {
+          days: null,
+          hours: null,
+          minutes: null,
+        },
+        description: '',
+        photo: { img: null, fileName: null },
+      });
       console.log('Response DELETE');
       console.log(res);
       handleGetServiceType();
@@ -399,7 +407,9 @@ function ServiceType() {
                     {formServiceType.photo.fileName ? (
                       <Chip
                         label={formServiceType.photo.fileName}
-                        onDelete={() => setFormServiceType({ ...formServiceType, photo: { img: null, fileName: '' } })}
+                        onDelete={() =>
+                          setFormServiceType({ ...formServiceType, photo: { img: null, fileName: null } })
+                        }
                         sx={{ maxWidth: '250px' }}
                       />
                     ) : null}
@@ -417,18 +427,8 @@ function ServiceType() {
                 } else {
                   handleCreateServiceType();
                 }
-                setFormServiceType({
-                  id: null,
-                  serviceTypeName: '',
-                  serviceDuration: {
-                    days: null,
-                    hours: null,
-                    minutes: null,
-                  },
-                  description: '',
-                  photo: { img: null, fileName: '' },
-                });
-                setNomor(parseInt(1));
+
+                // setNomor(parseInt(1));
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >
@@ -506,7 +506,7 @@ function ServiceType() {
                                       minutes: null,
                                     },
                                     description: '',
-                                    photo: { img: null, fileName: '' },
+                                    photo: { img: null, fileName: null },
                                   });
                                 } else {
                                   setFormServiceType({
@@ -540,7 +540,7 @@ function ServiceType() {
                                       minutes: null,
                                     },
                                     description: '',
-                                    photo: { img: null, fileName: '' },
+                                    photo: { img: null, fileName: null },
                                   });
                                 }
                                 handleDeleteServiceType(item.id);

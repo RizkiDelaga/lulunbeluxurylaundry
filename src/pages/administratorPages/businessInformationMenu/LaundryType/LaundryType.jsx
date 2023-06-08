@@ -76,11 +76,6 @@ function LaundryType() {
         },
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry',
         data: formData,
-        // {
-        //   nama: data.laundryTypeName,
-        //   deskripsi: data.description,
-        //   gambar: data.photo.fileName,
-        // },
       });
       console.log('Response POST');
       console.log(res);
@@ -91,6 +86,12 @@ function LaundryType() {
           statusType: 'success',
         });
       }
+      setFormLaundryType({
+        id: null,
+        laundryTypeName: '',
+        description: '',
+        photo: { img: null, fileName: null },
+      });
       handleGetLaundryType();
     } catch (error) {
       setOpenLoadDecision({
@@ -118,11 +119,6 @@ function LaundryType() {
         },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry/${formLaundryType.id}`,
         data: formData,
-        // {
-        //   nama: data.laundryTypeName,
-        //   deskripsi: data.description,
-        //   gambar: data.photo.fileName,
-        // },
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -131,6 +127,12 @@ function LaundryType() {
           statusType: 'success',
         });
       }
+      setFormLaundryType({
+        id: null,
+        laundryTypeName: '',
+        description: '',
+        photo: { img: null, fileName: null },
+      });
       console.log('Response DELETE');
       console.log(res);
       handleGetLaundryType();
@@ -316,7 +318,9 @@ function LaundryType() {
                     {formLaundryType.photo.fileName ? (
                       <Chip
                         label={formLaundryType.photo.fileName}
-                        onDelete={() => setFormLaundryType({ ...formLaundryType, photo: { img: null, fileName: '' } })}
+                        onDelete={() =>
+                          setFormLaundryType({ ...formLaundryType, photo: { img: null, fileName: null } })
+                        }
                         sx={{ maxWidth: '250px' }}
                       />
                     ) : null}
@@ -334,12 +338,6 @@ function LaundryType() {
                 } else {
                   handleCreateLaundryType();
                 }
-                setFormLaundryType({
-                  id: null,
-                  laundryTypeName: '',
-                  description: '',
-                  photo: { img: null, fileName: '' },
-                });
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >
@@ -404,7 +402,7 @@ function LaundryType() {
                                     id: null,
                                     laundryTypeName: '',
                                     description: '',
-                                    photo: { img: null, fileName: '' },
+                                    photo: { img: null, fileName: null },
                                   });
                                 } else {
                                   setFormLaundryType({
@@ -428,7 +426,7 @@ function LaundryType() {
                                     id: null,
                                     laundryTypeName: '',
                                     description: '',
-                                    photo: { img: null, fileName: '' },
+                                    photo: { img: null, fileName: null },
                                   });
                                 }
                               }}

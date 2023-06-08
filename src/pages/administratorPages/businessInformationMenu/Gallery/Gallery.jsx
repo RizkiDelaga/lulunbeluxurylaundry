@@ -93,11 +93,6 @@ function Gallery() {
         },
         url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri',
         data: formData,
-        // {
-        //   judul: data.title,
-        //   deskripsi: data.description,
-        //   media: data.file.fileName,
-        // },
       });
       console.log('Response POST');
       console.log(res);
@@ -108,6 +103,12 @@ function Gallery() {
           statusType: 'success',
         });
       }
+      setFormGallery({
+        id: null,
+        title: '',
+        description: '',
+        file: { img: null, fileName: null },
+      });
       handleGetGallery();
     } catch (error) {
       setOpenLoadDecision({
@@ -135,11 +136,6 @@ function Gallery() {
         },
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri/${formGallery.id}`,
         data: formData,
-        // {
-        //   judul: data.title,
-        //   deskripsi: data.description,
-        //   media: data.file.fileName,
-        // },
       });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -148,6 +144,12 @@ function Gallery() {
           statusType: 'success',
         });
       }
+      setFormGallery({
+        id: null,
+        title: '',
+        description: '',
+        file: { img: null, fileName: null },
+      });
       console.log('Response DELETE');
       console.log(res);
       handleGetGallery();
@@ -325,7 +327,7 @@ function Gallery() {
                     {formGallery.file.fileName ? (
                       <Chip
                         label={formGallery.file.fileName}
-                        onDelete={() => setFormGallery({ ...formGallery, file: { img: null, fileName: '' } })}
+                        onDelete={() => setFormGallery({ ...formGallery, file: { img: null, fileName: null } })}
                         sx={{ maxWidth: '250px' }}
                       />
                     ) : null}
@@ -343,12 +345,6 @@ function Gallery() {
                 } else {
                   handleCreateGallery();
                 }
-                setFormGallery({
-                  id: null,
-                  title: '',
-                  description: '',
-                  file: { img: null, fileName: '' },
-                });
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >
@@ -464,7 +460,7 @@ function Gallery() {
                                     id: null,
                                     title: '',
                                     description: '',
-                                    file: { img: null, fileName: '' },
+                                    file: { img: null, fileName: null },
                                   });
                                 } else {
                                   setFormGallery({
@@ -488,7 +484,7 @@ function Gallery() {
                                     id: null,
                                     title: '',
                                     description: '',
-                                    file: { img: null, fileName: '' },
+                                    file: { img: null, fileName: null },
                                   });
                                 }
                               }}

@@ -436,7 +436,6 @@ function Navbar(props) {
                   localStorage.removeItem('access_token_admin');
                   localStorage.removeItem('admin_name');
                   localStorage.removeItem('admin_profile_picture');
-                  localStorage.removeItem('business_logo');
                   handleCloseAccountMenu('/Admin');
                 }}
               >

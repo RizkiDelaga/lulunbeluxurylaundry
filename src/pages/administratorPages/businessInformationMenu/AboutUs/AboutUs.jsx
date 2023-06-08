@@ -79,6 +79,10 @@ function AboutUs() {
           statusType: 'success',
         });
       }
+      setFormAboutUs({
+        id: null,
+        explanationParagraph: '',
+      });
       handleGetAboutUs();
     } catch (error) {
       setOpenLoadDecision({
@@ -111,6 +115,10 @@ function AboutUs() {
           statusType: 'success',
         });
       }
+      setFormAboutUs({
+        id: null,
+        explanationParagraph: '',
+      });
       console.log('Response DELETE');
       console.log(res);
       handleGetAboutUs();
@@ -212,10 +220,6 @@ function AboutUs() {
                 } else {
                   handleCreateAboutUs();
                 }
-                setFormAboutUs({
-                  id: null,
-                  explanationParagraph: '',
-                });
               }}
               style={{ width: '100%', fontWeight: 'bold' }}
             >

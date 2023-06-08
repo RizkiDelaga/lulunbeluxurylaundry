@@ -562,7 +562,6 @@ function NavbarCustomer(props) {
                       localStorage.removeItem('access_token');
                       localStorage.removeItem('customer_name');
                       localStorage.removeItem('customer_profile_picture');
-                      localStorage.removeItem('business_logo');
                       handleCloseAccountMenu('/Login');
                     }}
                   >

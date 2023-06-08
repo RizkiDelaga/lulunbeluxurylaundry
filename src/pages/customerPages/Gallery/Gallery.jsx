@@ -9,6 +9,7 @@ import {
   DialogTitle,
   Grid,
   Paper,
+  useMediaQuery,
   useTheme,
 } from '@mui/material';
 import React from 'react';
@@ -60,6 +61,8 @@ function Gallery() {
     }
   };
 
+  const isMobileSize = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <>
       <Container sx={{ mt: '50px', mb: '25px' }}>
@@ -89,7 +92,7 @@ function Gallery() {
                       </div>
                     </div>
 
-                    <Player playsInline fluid={false} width="100%" height={240} src={item.media}>
+                    <Player playsInline fluid={false} width="100%" height={isMobileSize ? 180 : 240} src={item.media}>
                       <LoadingSpinner />
                       <BigPlayButton position="center" />
                     </Player>
@@ -103,7 +106,7 @@ function Gallery() {
                     <div
                       style={{
                         width: '100%',
-                        height: 240,
+                        height: isMobileSize ? 180 : 240,
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
