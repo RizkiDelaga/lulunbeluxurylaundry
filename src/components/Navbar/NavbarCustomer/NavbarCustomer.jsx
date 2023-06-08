@@ -37,6 +37,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getExample } from '../../../redux/actions/exampleAction';
 import MuiToggleButton from '@mui/material/ToggleButton';
 import { NavHashLink } from 'react-router-hash-link';
+import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
 
 const drawerWidth = 300;
 
@@ -174,17 +175,26 @@ const NotificationList = (props) => {
 function NavbarCustomer(props) {
   const navigate = useNavigate();
   const theme = useTheme();
+
   const [notificationStatus, setNotificationStatus] = React.useState('All');
 
   const dispatch = useDispatch();
   const { isLoading: loadingGetExample, data: dataGetExample } = useSelector((state) => state.getExample);
+  const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
+    (state) => state.getGeneralInformation
+  );
 
   React.useEffect(() => {
     dispatchGetExample();
+    dispatchGetGeneralInformation();
   }, []);
 
   const dispatchGetExample = async () => {
     return await dispatch(getExample());
+  };
+
+  const dispatchGetGeneralInformation = async () => {
+    return await dispatch(getGeneralInformation());
   };
 
   // Open Notification Menu
@@ -251,11 +261,7 @@ function NavbarCustomer(props) {
               <MenuIcon />
             </IconButton>
 
-            {localStorage.getItem('business-logo') ? (
-              <img src={localStorage.getItem('business-logo')} height={40} alt="" />
-            ) : (
-              <img src={'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'} height={40} alt="" />
-            )}
+            {!loadingGetGeneralInformation ? <img src={dataGetGeneralInformation.logo} height={40} alt="" /> : null}
 
             <List
               component="div"

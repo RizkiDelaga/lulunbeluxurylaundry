@@ -3,3 +3,7 @@ export const CREATE_EXAMPLE = 'CREATE_EXAMPLE';
 export const GET_EXAMPLE = 'GET_EXAMPLE';
 export const EDIT_EXAMPLE = 'EDIT_EXAMPLE';
 export const DETELE_EXAMPLE = 'DETELE_EXAMPLE';
+
+// Business Information
+export const GET_GENERAL_INFORMATION = 'GET_GENERAL_INFORMATION';
+export const GET_REASON_WHY_CHOOSE_US = 'GET_REASON_WHY_CHOOSE_US';

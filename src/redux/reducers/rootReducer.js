@@ -1,10 +1,13 @@
 import { combineReducers } from "redux";
 import { createExampleReducer, deleteExampleReducer, editExampleReducer, getExampleReducer } from "./exampleReducer";
+import { getGeneralInformationReducer, getReasonWhyChooseUsReducer } from "./getBusinessInformationReducer";
 
 export default combineReducers({
     // ======== Example Reducer ========
     createExample: createExampleReducer,
     getExample: getExampleReducer,
+    getGeneralInformation: getGeneralInformationReducer,
+    getReasonWhyChooseUs: getReasonWhyChooseUsReducer,
     editExample: editExampleReducer,
     deleteExample: deleteExampleReducer,
 

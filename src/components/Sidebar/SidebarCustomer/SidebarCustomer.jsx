@@ -8,6 +8,8 @@ import LogoWebsite from '../../../assets/images/Logo.jpg';
 import CloseIcon from '@mui/icons-material/Close';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { NavHashLink } from 'react-router-hash-link';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
 
 const drawerWidth = 300;
 
@@ -75,6 +77,19 @@ function SidebarCustomer(props) {
     window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
   };
 
+  const dispatch = useDispatch();
+  const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
+    (state) => state.getGeneralInformation
+  );
+
+  React.useEffect(() => {
+    dispatchGetGeneralInformation();
+  }, []);
+
+  const dispatchGetGeneralInformation = async () => {
+    return await dispatch(getGeneralInformation());
+  };
+
   return (
     <>
       <Drawer
@@ -87,10 +102,10 @@ function SidebarCustomer(props) {
         }}
       >
         <DrawerHeader sx={{ border: 'none', display: 'flex', justifyContent: 'center' }}>
-          {props.openSidebar ? (
-            <img src={LogoWebsite} alt="Logo" style={{ height: '48px', alignSelf: 'left' }} />
+          {loadingGetGeneralInformation ? null : props.openSidebar ? (
+            <img src={dataGetGeneralInformation.logo} alt="Logo" style={{ height: '48px', alignSelf: 'left' }} />
           ) : (
-            <img src={LogoWebsite} alt="Logo" style={{ width: '30px' }} />
+            <img src={dataGetGeneralInformation.logo} alt="Logo" style={{ width: '30px' }} />
           )}
           <IconButton
             onClick={props.handleSidebar}
