@@ -6,7 +6,9 @@ import {
   Button,
   Chip,
   Collapse,
+  FormControl,
   Grid,
+  InputLabel,
   Menu,
   MenuItem,
   Paper,
@@ -50,8 +52,11 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SearchIcon from '@mui/icons-material/Search';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
-function FinanceStats({}) {
+function FinanceStats({ dataset }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const [lineBarChart, setLineBarChart] = React.useState('Line Chart');
@@ -64,137 +69,202 @@ function FinanceStats({}) {
     },
   });
 
+  const sumIncome = dataset[
+    dataset.reportType === 'Minggu'
+      ? 'laporanMingguan'
+      : dataset.reportType === 'Bulan'
+      ? 'laporanBulanan'
+      : 'laporanTahunan'
+  ].reduce((acc, obj) => acc + obj.Pemasukan, 0);
+
+  const sumExpenses = dataset[
+    dataset.reportType === 'Minggu'
+      ? 'laporanMingguan'
+      : dataset.reportType === 'Bulan'
+      ? 'laporanBulanan'
+      : 'laporanTahunan'
+  ].reduce((acc, obj) => acc + obj.Pengeluaran, 0);
+
+  const listIncome = dataset[
+    dataset.reportType === 'Minggu'
+      ? 'laporanMingguan'
+      : dataset.reportType === 'Bulan'
+      ? 'laporanBulanan'
+      : 'laporanTahunan'
+  ].map((item) => item.Pemasukan);
+
+  const listExpenses = dataset[
+    dataset.reportType === 'Minggu'
+      ? 'laporanMingguan'
+      : dataset.reportType === 'Bulan'
+      ? 'laporanBulanan'
+      : 'laporanTahunan'
+  ].map((item) => item.Pengeluaran);
+
+  console.log(
+    'asdasd =',
+    JSON.stringify(
+      dataset[
+        dataset.reportType === 'Minggu'
+          ? 'laporanMingguan'
+          : dataset.reportType === 'Bulan'
+          ? 'laporanBulanan'
+          : 'laporanTahunan'
+      ]
+    )
+  );
+  console.log('asdasd =', sumIncome);
+  console.log(
+    'asdasd =',
+    dataset[
+      dataset.reportType === 'Minggu'
+        ? 'laporanMingguan'
+        : dataset.reportType === 'Bulan'
+        ? 'laporanBulanan'
+        : 'laporanTahunan'
+    ].map((item) => item.Pemasukan)
+  );
+
+  const labels = ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'];
+
+  let chartData = {
+    labels,
+    datasets: [
+      {
+        label: 'Pemasukan',
+        data: [...listIncome],
+        borderColor: 'rgb(31, 48, 92)',
+        backgroundColor: 'rgb(31, 48, 92)',
+      },
+      {
+        label: 'Pengeluaran',
+        data: [...listExpenses],
+        borderColor: 'rgb(211, 47, 47)',
+        backgroundColor: 'rgb(211, 47, 47)',
+      },
+    ],
+  };
+
+  let percentageData = {
+    labels: ['Pemasukan', 'Pengeluaran'],
+    datasets: [
+      {
+        label: 'Statistik Keuangan Mingguan',
+        data: [sumIncome, sumExpenses],
+        backgroundColor: ['rgb(31, 48, 92)', 'rgb(211, 47, 47)'],
+        borderColor: ['rgb(31, 48, 92)', 'rgb(211, 47, 47)'],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
-    <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={8} lg={8}>
-          <Grid container>
-            <Grid item xs={12} sm sx={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontSize: '24px', fontWeight: 'bold' }}>Grafik Keuangan</span>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm
-              sx={{
+    <Grid container spacing={3}>
+      <Grid item xs={12} md={8} lg={8}>
+        <Grid container>
+          <Grid item xs={12} sm sx={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ fontSize: '24px', fontWeight: 'bold' }}>Grafik Keuangan</span>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm
+            sx={{
+              display: 'flex',
+              justifyContent: 'right',
+              [theme.breakpoints.down('sm')]: {
                 display: 'flex',
-                justifyContent: 'right',
+                justifyContent: 'center',
+                py: 1,
+              },
+            }}
+          >
+            <ToggleButtonGroup
+              value={lineBarChart}
+              color="primary"
+              exclusive
+              onChange={(event, value) => {
+                if (value) {
+                  setLineBarChart(value);
+                }
+              }}
+              sx={{
+                // border: '1px solid #1F305C',
                 [theme.breakpoints.down('sm')]: {
-                  display: 'flex',
-                  justifyContent: 'center',
-                  py: 1,
+                  height: '35px !important',
                 },
               }}
             >
-              <ToggleButtonGroup
-                value={lineBarChart}
-                color="primary"
-                exclusive
-                onChange={(event, value) => {
-                  if (value) {
-                    setLineBarChart(value);
-                  }
-                }}
-                sx={{
-                  // border: '1px solid #1F305C',
-                  [theme.breakpoints.down('sm')]: {
-                    height: '35px !important',
-                  },
-                }}
-              >
-                <ToggleButton value="Line Chart" sx={{ border: '1px solid #1F305C' }}>
-                  <TimelineIcon />
-                </ToggleButton>
-                <ToggleButton value="Horizontal Bar Chart" sx={{ border: '1px solid #1F305C' }}>
-                  <BarChartIcon />
-                </ToggleButton>
-                <ToggleButton value="Vertical Bar Chart" sx={{ border: '1px solid #1F305C' }}>
-                  <BarChartIcon sx={{ transform: 'rotate(90deg)' }} />
-                </ToggleButton>
-                <ToggleButton value="Stacked Bar Chart" sx={{ border: '1px solid #1F305C' }}>
-                  <StackedBarChartIcon />
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Grid>
+              <ToggleButton value="Line Chart" sx={{ border: '1px solid #1F305C' }}>
+                <TimelineIcon />
+              </ToggleButton>
+              <ToggleButton value="Horizontal Bar Chart" sx={{ border: '1px solid #1F305C' }}>
+                <BarChartIcon />
+              </ToggleButton>
+              <ToggleButton value="Vertical Bar Chart" sx={{ border: '1px solid #1F305C' }}>
+                <BarChartIcon sx={{ transform: 'rotate(90deg)' }} />
+              </ToggleButton>
+              <ToggleButton value="Stacked Bar Chart" sx={{ border: '1px solid #1F305C' }}>
+                <StackedBarChartIcon />
+              </ToggleButton>
+            </ToggleButtonGroup>
           </Grid>
-
-          {lineBarChart === 'Line Chart' ? (
-            <AreaChart
-              data={{
-                labels: ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'],
-                datasets: [
-                  {
-                    fill: true,
-                    label: 'Income',
-                    data: [598884, 819838, 674452, 454919, 925132],
-                    borderColor: 'rgb(31, 48, 92)',
-                    backgroundColor: 'rgb(31, 48, 92, 0.5)',
-                  },
-                  {
-                    fill: false,
-                    label: 'Expenses',
-                    data: [218828, 53563, 221413, 54946, 91714],
-                    borderColor: 'rgb(211, 47, 47)',
-                    backgroundColor: 'rgb(211, 47, 47, 0.5)',
-                  },
-                ],
-              }}
-            />
-          ) : null}
-          {lineBarChart === 'Horizontal Bar Chart' ? <HorizontalBarChart /> : null}
-          {lineBarChart === 'Vertical Bar Chart' ? <VerticalBarChart /> : null}
-          {lineBarChart === 'Stacked Bar Chart' ? <StackedBarChart /> : null}
         </Grid>
-        <Grid item xs={12} md={4} lg={4}>
-          <Grid container>
-            <Grid item xs={12} sm sx={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontSize: '24px', fontWeight: 'bold' }}>Persentase</span>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm
-              sx={{
-                display: 'flex',
-                justifyContent: 'right',
-                [theme.breakpoints.down('sm')]: {
-                  display: 'flex',
-                  justifyContent: 'center',
-                  py: 1,
-                },
-              }}
-            >
-              <ToggleButtonGroup
-                value={percentageChart}
-                color="primary"
-                exclusive
-                onChange={(event, value) => {
-                  if (value) {
-                    setPercentageChart(value);
-                  }
-                }}
-                sx={{
-                  // border: '1px solid #1F305C',
-                  [theme.breakpoints.down('sm')]: {
-                    height: '35px !important',
-                  },
-                }}
-              >
-                <ToggleButton value="Pie Chart" sx={{ border: '1px solid #1F305C' }}>
-                  <PieChartIcon />
-                </ToggleButton>
-                <ToggleButton value="Donut Chart" sx={{ border: '1px solid #1F305C' }}>
-                  <DonutSmallIcon />
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Grid>
-          </Grid>
 
-          {percentageChart === 'Pie Chart' ? <PieChart /> : null}
-          {percentageChart === 'Donut Chart' ? <DoughnutChart /> : null}
-        </Grid>
+        {lineBarChart === 'Line Chart' ? <AreaChart dataset={chartData} /> : null}
+        {lineBarChart === 'Horizontal Bar Chart' ? <HorizontalBarChart dataset={chartData} /> : null}
+        {lineBarChart === 'Vertical Bar Chart' ? <VerticalBarChart dataset={chartData} /> : null}
+        {lineBarChart === 'Stacked Bar Chart' ? <StackedBarChart dataset={chartData} /> : null}
       </Grid>
-    </Paper>
+      <Grid item xs={12} md={4} lg={4}>
+        <Grid container>
+          <Grid item xs={12} sm sx={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ fontSize: '24px', fontWeight: 'bold' }}>Persentase</span>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm
+            sx={{
+              display: 'flex',
+              justifyContent: 'right',
+              [theme.breakpoints.down('sm')]: {
+                display: 'flex',
+                justifyContent: 'center',
+                py: 1,
+              },
+            }}
+          >
+            <ToggleButtonGroup
+              value={percentageChart}
+              color="primary"
+              exclusive
+              onChange={(event, value) => {
+                if (value) {
+                  setPercentageChart(value);
+                }
+              }}
+              sx={{
+                // border: '1px solid #1F305C',
+                [theme.breakpoints.down('sm')]: {
+                  height: '35px !important',
+                },
+              }}
+            >
+              <ToggleButton value="Pie Chart" sx={{ border: '1px solid #1F305C' }}>
+                <PieChartIcon />
+              </ToggleButton>
+              <ToggleButton value="Donut Chart" sx={{ border: '1px solid #1F305C' }}>
+                <DonutSmallIcon />
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
+        </Grid>
+
+        {percentageChart === 'Pie Chart' ? <PieChart dataset={percentageData} /> : null}
+        {percentageChart === 'Donut Chart' ? <DoughnutChart dataset={percentageData} /> : null}
+      </Grid>
+    </Grid>
   );
 }
 
@@ -769,10 +839,47 @@ function FinancialHistoryTable() {
 function FinanceMenu() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [dateReport, setDateReport] = useState(dayjs());
+  const [financeReport, setFinanceReport] = useState([]);
+  const [reportType, setReportType] = useState('Minggu');
+  const [loadingReport, setLoadingReport] = useState(false);
 
   React.useEffect(() => {
     document.title = 'Menu Keuangan';
+    handleGetFinanceReport();
   }, []);
+
+  const handleGetFinanceReport = async () => {
+    // setLoadingReport(!loadingReport);
+
+    const date = new Date(dateReport);
+    if (reportType !== 'Minggu') {
+      date.setDate('01');
+    }
+
+    try {
+      const res = await axios({
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan/${
+          reportType === 'Minggu' ? 'week' : reportType === 'Bulan' ? 'month' : 'year'
+        }/report`,
+        data: { tanggal: date },
+      });
+
+      console.log('Response POST Data Finance Report');
+      console.log(res);
+      setFinanceReport({ ...res.data.data, reportType: reportType });
+      // setLoadingReport(!loadingReport);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setFinanceReport([]);
+      }
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -796,10 +903,151 @@ function FinanceMenu() {
         />
 
         {/* Main Content */}
-        <FinanceStats />
+        <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
+          <Grid container spacing={2}>
+            <Grid item md sx={{ display: 'flex', alignItems: 'center' }}>
+              <FormControl fullWidth>
+                <InputLabel id="select-type-report">Tipe Laporan</InputLabel>
+                <Select
+                  required
+                  labelId="select-type-report"
+                  id="select-type-report"
+                  value={reportType}
+                  label="Tipe Laporan"
+                  onChange={(e) => {
+                    setReportType(e.target.value);
+                  }}
+                  // MenuProps={{ PaperProps: { sx: { maxHeight: 400 } } }}
+                >
+                  {['Minggu', 'Bulan', 'Tahun'].map((item) => {
+                    return (
+                      <MenuItem value={item} sx={{ py: '16px' }}>
+                        {item}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item md sx={{ display: 'flex', alignItems: 'center' }}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {reportType === 'Minggu' ? (
+                  <MobileDatePicker
+                    label="Pilih Tanggal"
+                    value={dateReport}
+                    onChange={(newValue) => {
+                      // setValue(newValue);
+                      // setValueX(dayjs(`${date.year}-01-25 12:45:02`));
+                      // setDate({ year: newValue.$y, month: newValue.$M, date: newValue.$D });
+                      console.log(newValue);
+                      setDateReport(newValue);
+
+                      // setDateReport(dayjs(`${newValue.$y}-${newValue.$M + 1}-${newValue.$D}T00:00:00.000Z`));
+
+                      console.log('Tanggal: ' + newValue.$D);
+                      console.log('Bulan: ' + newValue.$M);
+                      console.log('Tahun: ' + newValue.$y);
+                      // setLoading(false);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                    slotProps={{
+                      textField: {
+                        // helperText: 'MM / DD / YYYY',
+                      },
+                    }}
+                    sx={{
+                      width: '100%',
+                      '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
+                        zIndex: 100000,
+                      },
+                    }}
+                  />
+                ) : null}
+
+                {reportType === 'Bulan' ? (
+                  <MobileDatePicker
+                    views={['month', 'year']}
+                    label="Pilih Bulan"
+                    value={dateReport}
+                    onChange={(newValue) => {
+                      // setValue(newValue);
+                      // 2023-02-17T00:00:00.000Z
+                      console.log(newValue);
+                      setDateReport(newValue);
+                      // setDate({ year: newValue.$y, month: newValue.$M, date: newValue.$D });
+
+                      console.log('Tanggal: ' + newValue.$D);
+                      console.log('Bulan: ' + newValue.$M);
+                      console.log('Tahun: ' + newValue.$y);
+                      // setLoading(false);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                    slotProps={{
+                      textField: {
+                        // helperText: 'MM / DD / YYYY',
+                      },
+                    }}
+                    sx={{
+                      width: '100%',
+                      '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
+                        zIndex: 100000,
+                      },
+                    }}
+                  />
+                ) : null}
+
+                {reportType === 'Tahun' ? (
+                  <MobileDatePicker
+                    views={['year']}
+                    label="Pilih Tahun"
+                    value={dateReport}
+                    onChange={(newValue) => {
+                      // setValue(newValue);
+                      // setValueX(dayjs(`${date.year}-01-25 12:45:02`));
+                      // setDate({ year: newValue.$y, month: newValue.$M, date: newValue.$D });
+                      console.log(newValue);
+                      setDateReport(newValue);
+
+                      console.log('Tanggal: ' + newValue.$D);
+                      console.log('Bulan: ' + newValue.$M);
+                      console.log('Tahun: ' + newValue.$y);
+                      // setLoading(false);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                    slotProps={{
+                      textField: {
+                        // helperText: 'MM / DD / YYYY',
+                      },
+                    }}
+                    sx={{
+                      width: '100%',
+                      '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
+                        zIndex: 100000,
+                      },
+                    }}
+                  />
+                ) : null}
+              </LocalizationProvider>
+            </Grid>
+            <Grid item md="auto" sx={{ display: 'flex', alignItems: 'center' }}>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={() => {
+                  setFinanceReport([]);
+                  handleGetFinanceReport();
+                }}
+              >
+                Lihat Laporan
+              </Button>
+            </Grid>
+          </Grid>
+
+          {financeReport.length !== 0 ? <FinanceStats dataset={financeReport} /> : null}
+        </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <FinancialHistoryTable />
+          {/* <FinancialHistoryTable /> */}
         </Paper>
       </div>
     </>

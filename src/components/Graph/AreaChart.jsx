@@ -51,12 +51,12 @@ export const options = {
 //   ],
 // };
 
-function AreaChart(props) {
+function AreaChart({ dataset }) {
   const navigate = useNavigate();
 
   return (
     <Fragment>
-      <Line options={options} data={props.data}  />
+      <Line options={options} data={dataset} />
     </Fragment>
   );
 }
