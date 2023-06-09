@@ -19,30 +19,30 @@ export const options = {
   },
 };
 
-const labels = ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'];
+// const labels = ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Income',
-      data: [598884, 819838, 674452, 454919, 925132, 759443, 767332],
-      backgroundColor: 'rgb(31, 48, 92)',
-    },
-    {
-      label: 'Expenses',
-      data: [218828, 53563, 221413, 54946, 91714, 80128, 279408],
-      backgroundColor: 'rgb(211, 47, 47)',
-    },
-  ],
-};
+// export const data = {
+//   labels,
+//   datasets: [
+//     {
+//       label: 'Income',
+//       data: [598884, 819838, 674452, 454919, 925132, 759443, 767332],
+//       backgroundColor: 'rgb(31, 48, 92)',
+//     },
+//     {
+//       label: 'Expenses',
+//       data: [218828, 53563, 221413, 54946, 91714, 80128, 279408],
+//       backgroundColor: 'rgb(211, 47, 47)',
+//     },
+//   ],
+// };
 
-function VerticalBarChart() {
+function VerticalBarChart({ dataset }) {
   const navigate = useNavigate();
 
   return (
     <Fragment>
-      <Bar options={options} data={data} />
+      <Bar options={options} data={dataset} />
     </Fragment>
   );
 }
