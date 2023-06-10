@@ -583,11 +583,6 @@ function AdminTable({ setState }) {
 
 function DashboardMenu() {
   const navigate = useNavigate();
-
-  React.useEffect(() => {
-    document.title = 'Menu Dashboard';
-  }, []);
-
   const [businessStats, setBusinessStats] = React.useState({
     activeOrders: null,
     ordersCompleted: null,
@@ -596,6 +591,57 @@ function DashboardMenu() {
     averageRating: null,
     totalReviews: null,
   });
+  const [financeReport, setFinanceReport] = useState([]);
+  const [chartData, setChartData] = useState();
+
+  React.useEffect(() => {
+    document.title = 'Menu Dashboard';
+    handleGetFinanceReport();
+  }, []);
+
+  const handleGetFinanceReport = async () => {
+    const date = new Date();
+    date.setDate(date.getDate() - 6);
+
+    try {
+      const res = await axios({
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan/week/report`,
+        data: { tanggal: date },
+      });
+
+      console.log('Response POST Data Finance Report');
+      console.log(res);
+      setFinanceReport({ ...res.data.data });
+      setChartData({
+        labels: ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'],
+        datasets: [
+          {
+            label: 'Pemasukan',
+            data: res.data.data.laporanMingguan.map((item) => item.Pemasukan),
+            borderColor: 'rgb(31, 48, 92)',
+            backgroundColor: 'rgb(31, 48, 92)',
+          },
+          {
+            label: 'Pengeluaran',
+            data: res.data.data.laporanMingguan.map((item) => item.Pengeluaran),
+            borderColor: 'rgb(211, 47, 47)',
+            backgroundColor: 'rgb(211, 47, 47)',
+          },
+        ],
+      });
+
+      // setLoadingReport(!loadingReport);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setFinanceReport([]);
+      }
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -657,37 +703,19 @@ function DashboardMenu() {
             </Grid>
           </Grid>
           <Grid item xs={12} lg={6}>
-            <InformationCard
-              title="Laporan keuangan mingguan terbaru"
-              content={{
-                embedHTML: (
-                  <>
-                    <AreaChart
-                      data={{
-                        labels: ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'],
-                        datasets: [
-                          {
-                            fill: true,
-                            label: 'Pendapatan',
-                            data: [598884, 819838, 674452, 454919, 925132, 791527, 672380],
-                            borderColor: 'rgb(31, 48, 92)',
-                            backgroundColor: 'rgb(31, 48, 92, 0.5)',
-                          },
-                          {
-                            fill: false,
-                            label: 'Pengeluaran',
-                            data: [218828, 53563, 221413, 54946, 91714, 891632, 872923],
-                            borderColor: 'rgb(211, 47, 47)',
-                            backgroundColor: 'rgb(211, 47, 47, 0.5)',
-                          },
-                        ],
-                      }}
-                    />
-                  </>
-                ),
-              }}
-              navigate={{ text: 'Lihat laporan keuangan', url: '/Keuangan' }}
-            />
+            {financeReport.length !== 0 && chartData ? (
+              <InformationCard
+                title="Laporan keuangan mingguan terbaru"
+                content={{
+                  embedHTML: (
+                    <>
+                      <AreaChart dataset={chartData} />
+                    </>
+                  ),
+                }}
+                navigate={{ text: 'Lihat laporan keuangan', url: '/Keuangan' }}
+              />
+            ) : null}
           </Grid>
         </Grid>
 

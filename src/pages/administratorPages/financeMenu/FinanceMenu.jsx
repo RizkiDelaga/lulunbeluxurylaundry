@@ -846,11 +846,13 @@ function FinanceMenu() {
 
   React.useEffect(() => {
     document.title = 'Menu Keuangan';
-    handleGetFinanceReport();
+    handleGetFinanceReport(true);
   }, []);
 
-  const handleGetFinanceReport = async () => {
+  const handleGetFinanceReport = async (firstLoad) => {
     // setLoadingReport(!loadingReport);
+    const sevenDayBefore = new Date(dateReport);
+    sevenDayBefore.setDate(sevenDayBefore.getDate() - 6);
 
     const date = new Date(dateReport);
     if (reportType !== 'Minggu') {
@@ -866,7 +868,7 @@ function FinanceMenu() {
         url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan/${
           reportType === 'Minggu' ? 'week' : reportType === 'Bulan' ? 'month' : 'year'
         }/report`,
-        data: { tanggal: date },
+        data: { tanggal: firstLoad ? sevenDayBefore : date },
       });
 
       console.log('Response POST Data Finance Report');
