@@ -41,7 +41,7 @@ function CustomerRegistration() {
         data: {
           nama: formRegisterCustomer.customerName,
           noTelp: formRegisterCustomer.noTelp,
-          email: 'rizki11223@gmail.com',
+          email: `rizki${Math.floor(Math.random() * 10000)}@gmail.com`,
           password: formRegisterCustomer.password,
         },
       });

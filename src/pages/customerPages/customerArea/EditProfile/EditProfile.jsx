@@ -80,7 +80,7 @@ function EditProfile() {
           phoneNumber: res.data.data.noTelp,
           email: res.data.data.email,
         },
-        birthDate: dayjs(res.data.data.tglLahir),
+        birthDate: res.data.data.tglLahir ? dayjs(res.data.data.tglLahir) : dayjs,
         profilePicture: { img: null, fileName: res.data.data.profilePic },
       });
       localStorage.setItem('customer_name', res.data.data.nama);
@@ -94,7 +94,9 @@ function EditProfile() {
     formData.append('nama', formEditProfile.customerName);
     formData.append('noTelp', formEditProfile.contact.phoneNumber);
     formData.append('email', formEditProfile.contact.email);
-    formData.append('tglLahir', formEditProfile.birthDate);
+    if (typeof formEditProfile.birthDate !== 'function') {
+      formData.append('tglLahir', formEditProfile.birthDate);
+    }
     formData.append('profilePic', formEditProfile.profilePicture.img);
 
     try {
