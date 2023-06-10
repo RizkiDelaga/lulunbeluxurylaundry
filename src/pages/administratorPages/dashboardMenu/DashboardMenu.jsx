@@ -609,7 +609,7 @@ function DashboardMenu() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan/week/report`,
+        url: `${process.env.REACT_APP_API_KEY}/keuangan/week/report`,
         data: { tanggal: date },
       });
 
