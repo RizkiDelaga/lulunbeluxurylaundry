@@ -22,10 +22,10 @@ export const options = {
     legend: {
       position: 'top',
     },
-    title: {
-      display: true,
-      text: 'Weekly financial statistics',
-    },
+    // title: {
+    //   display: true,
+    //   text: 'Weekly financial statistics',
+    // },
   },
 };
 

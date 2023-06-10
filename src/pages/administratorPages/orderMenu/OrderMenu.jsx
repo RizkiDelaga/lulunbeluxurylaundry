@@ -128,7 +128,7 @@ function RowItem(props) {
                   </div>
                   <div>
                     <strong>Jenis laundry : </strong>
-                    {props.item.jenisLayanan[0]}
+                    {props.item.namaLayanan}
                   </div>
                 </Grid>
               </Grid>
@@ -670,6 +670,53 @@ function OrderMenu() {
         />
 
         {/* Main Content */}
+        {/* Progress Order Menu */}
+        <Paper
+          elevation={3}
+          sx={{
+            width: '100%',
+            padding: 2.5,
+            borderRadius: '16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            backgroundColor: '#1F305C',
+            color: '#ffffff',
+          }}
+        >
+          <h4>Progres Pesanan</h4>
+          <Grid container spacing={2}>
+            <Grid item xs={6} md={3} lg={3}>
+              <InformationCard
+                title="Perlu Disetujui"
+                content={{ normalText: orderStats.needApproval }}
+                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
+              />
+            </Grid>
+            <Grid item xs={6} md={3} lg={3}>
+              <InformationCard
+                title="Perlu Dijemput"
+                content={{ normalText: orderStats.needsToBePickedUp }}
+                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
+              />
+            </Grid>
+            <Grid item xs={6} md={3} lg={3}>
+              <InformationCard
+                title="Perlu Dikerjakan"
+                content={{ normalText: orderStats.needsToBeDone }}
+                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
+              />
+            </Grid>
+            <Grid item xs={6} md={3} lg={3}>
+              <InformationCard
+                title="Perlu Diantar"
+                content={{ normalText: orderStats.needsToBeDelivered }}
+                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
+              />
+            </Grid>
+          </Grid>
+        </Paper>
+
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
           <OrderTable setState={setOrderStats} />
         </Paper>

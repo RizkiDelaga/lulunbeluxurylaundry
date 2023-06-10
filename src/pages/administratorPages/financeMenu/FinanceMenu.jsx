@@ -842,7 +842,6 @@ function FinanceMenu() {
   const [dateReport, setDateReport] = useState(dayjs());
   const [financeReport, setFinanceReport] = useState([]);
   const [reportType, setReportType] = useState('Minggu');
-  const [loadingReport, setLoadingReport] = useState(false);
 
   React.useEffect(() => {
     document.title = 'Menu Keuangan';
@@ -850,14 +849,28 @@ function FinanceMenu() {
   }, []);
 
   const handleGetFinanceReport = async (firstLoad) => {
-    // setLoadingReport(!loadingReport);
     const sevenDayBefore = new Date(dateReport);
     sevenDayBefore.setDate(sevenDayBefore.getDate() - 6);
 
-    const date = new Date(dateReport);
+    const customDate = new Date(dateReport);
     if (reportType !== 'Minggu') {
-      date.setDate('01');
+      customDate.setDate('01');
     }
+
+    if (reportType === 'Tahun') {
+      customDate.setMonth('00');
+    }
+
+    const startDateReport = dayjs(
+      firstLoad
+        ? `${sevenDayBefore.getFullYear()}-${(sevenDayBefore.getMonth() + 1)
+            .toString()
+            .padStart(2, '0')}-${sevenDayBefore.getDate().toString().padStart(2, '0')}T00:00:00.000Z`
+        : `${customDate.getFullYear()}-${(customDate.getMonth() + 1).toString().padStart(2, '0')}-${customDate
+            .getDate()
+            .toString()
+            .padStart(2, '0')}T00:00:00.000Z`
+    );
 
     try {
       const res = await axios({
@@ -868,13 +881,12 @@ function FinanceMenu() {
         url: `${process.env.REACT_APP_API_KEY}/keuangan/${
           reportType === 'Minggu' ? 'week' : reportType === 'Bulan' ? 'month' : 'year'
         }/report`,
-        data: { tanggal: firstLoad ? sevenDayBefore : date },
+        data: { tanggal: startDateReport },
       });
 
       console.log('Response POST Data Finance Report');
       console.log(res);
       setFinanceReport({ ...res.data.data, reportType: reportType });
-      // setLoadingReport(!loadingReport);
     } catch (error) {
       if (error.response.status === 404) {
         setFinanceReport([]);
@@ -906,12 +918,11 @@ function FinanceMenu() {
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Grid container spacing={2}>
-            <Grid item md sx={{ display: 'flex', alignItems: 'center' }}>
+          <Grid container spacing={2} sx={{ mb: 2 }}>
+            <Grid item xs={5.5} sm sx={{ display: 'flex', alignItems: 'center' }}>
               <FormControl fullWidth>
                 <InputLabel id="select-type-report">Tipe Laporan</InputLabel>
                 <Select
-                  required
                   labelId="select-type-report"
                   id="select-type-report"
                   value={reportType}
@@ -919,7 +930,6 @@ function FinanceMenu() {
                   onChange={(e) => {
                     setReportType(e.target.value);
                   }}
-                  // MenuProps={{ PaperProps: { sx: { maxHeight: 400 } } }}
                 >
                   {['Minggu', 'Bulan', 'Tahun'].map((item) => {
                     return (
@@ -931,32 +941,21 @@ function FinanceMenu() {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item md sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item xs={6.5} sm sx={{ display: 'flex', alignItems: 'center' }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 {reportType === 'Minggu' ? (
                   <MobileDatePicker
-                    label="Pilih Tanggal"
+                    label="Pilih Tanggal Mulai"
                     value={dateReport}
                     onChange={(newValue) => {
-                      // setValue(newValue);
-                      // setValueX(dayjs(`${date.year}-01-25 12:45:02`));
-                      // setDate({ year: newValue.$y, month: newValue.$M, date: newValue.$D });
                       console.log(newValue);
                       setDateReport(newValue);
-
-                      // setDateReport(dayjs(`${newValue.$y}-${newValue.$M + 1}-${newValue.$D}T00:00:00.000Z`));
 
                       console.log('Tanggal: ' + newValue.$D);
                       console.log('Bulan: ' + newValue.$M);
                       console.log('Tahun: ' + newValue.$y);
-                      // setLoading(false);
                     }}
                     renderInput={(params) => <TextField {...params} />}
-                    slotProps={{
-                      textField: {
-                        // helperText: 'MM / DD / YYYY',
-                      },
-                    }}
                     sx={{
                       width: '100%',
                       '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
@@ -972,23 +971,14 @@ function FinanceMenu() {
                     label="Pilih Bulan"
                     value={dateReport}
                     onChange={(newValue) => {
-                      // setValue(newValue);
-                      // 2023-02-17T00:00:00.000Z
                       console.log(newValue);
                       setDateReport(newValue);
-                      // setDate({ year: newValue.$y, month: newValue.$M, date: newValue.$D });
 
                       console.log('Tanggal: ' + newValue.$D);
                       console.log('Bulan: ' + newValue.$M);
                       console.log('Tahun: ' + newValue.$y);
-                      // setLoading(false);
                     }}
                     renderInput={(params) => <TextField {...params} />}
-                    slotProps={{
-                      textField: {
-                        // helperText: 'MM / DD / YYYY',
-                      },
-                    }}
                     sx={{
                       width: '100%',
                       '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
@@ -1004,23 +994,14 @@ function FinanceMenu() {
                     label="Pilih Tahun"
                     value={dateReport}
                     onChange={(newValue) => {
-                      // setValue(newValue);
-                      // setValueX(dayjs(`${date.year}-01-25 12:45:02`));
-                      // setDate({ year: newValue.$y, month: newValue.$M, date: newValue.$D });
                       console.log(newValue);
                       setDateReport(newValue);
 
                       console.log('Tanggal: ' + newValue.$D);
                       console.log('Bulan: ' + newValue.$M);
                       console.log('Tahun: ' + newValue.$y);
-                      // setLoading(false);
                     }}
                     renderInput={(params) => <TextField {...params} />}
-                    slotProps={{
-                      textField: {
-                        // helperText: 'MM / DD / YYYY',
-                      },
-                    }}
                     sx={{
                       width: '100%',
                       '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
@@ -1031,7 +1012,7 @@ function FinanceMenu() {
                 ) : null}
               </LocalizationProvider>
             </Grid>
-            <Grid item md="auto" sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item xs={12} sm="auto" sx={{ display: 'flex', alignItems: 'center' }}>
               <Button
                 variant="contained"
                 size="large"
@@ -1039,6 +1020,7 @@ function FinanceMenu() {
                   setFinanceReport([]);
                   handleGetFinanceReport();
                 }}
+                sx={{ [theme.breakpoints.down('sm')]: { width: '100%' } }}
               >
                 Lihat Laporan
               </Button>

@@ -1,17 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Box, Button, Grid, Paper, useTheme } from '@mui/material';
 import AddressCard from '../../../../components/Card/InformationCard/AddressCard';
+import axios from 'axios';
 
 function OrderDetails() {
   let { id } = useParams();
   const theme = useTheme();
   const navigate = useNavigate();
+  const [detailOrder, setDetailOrder] = useState();
 
   React.useEffect(() => {
     document.title = 'Detail Pesanan';
+    handleGetDetailOrder();
   }, []);
+
+  const handleGetDetailOrder = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/nomor/${id}`,
+      });
+
+      console.log('Response GET Data Finance');
+      console.log(res);
+      setDetailOrder(res.data.data);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setDetailOrder();
+      }
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -47,64 +71,74 @@ function OrderDetails() {
                   <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Informasi Pelanggan</h4>
                 </div>
 
-                <Box sx={{ borderRadius: '4px', backgroundColor: '#eeeeee', p: 2 }}>
-                  <Grid container spacing={1}>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={'auto'}
-                      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                    >
-                      <Box
-                        component="img"
-                        sx={{
-                          width: '120px',
-                          height: '100%',
-                          minHeight: '120px',
-                          objectFit: 'cover',
-                          borderRadius: '8px',
-                        }}
-                        alt=""
-                        src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm>
-                      <Box
-                        component={'h4'}
-                        sx={{
-                          [theme.breakpoints.down('sm')]: {
-                            textAlign: 'center',
-                          },
-                        }}
+                {!detailOrder ? null : (
+                  <Box sx={{ borderRadius: '4px', backgroundColor: '#eeeeee', p: 2, width: '100%' }}>
+                    <Grid container spacing={1}>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={'auto'}
+                        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                       >
-                        Ahmad Yusuf Pangestu
-                      </Box>
-                      <div>
-                        <strong>Tanggal Lahir :</strong> 05/02/1999
-                      </div>
-                      <div>
-                        <strong>Kontak :</strong> 081234567890 || ahmadyusuf@gmail.com
-                      </div>
-                      <div>
-                        <strong>Alamat Utama :</strong> Kecamatan Purwokerto Timur, Kelurahan Purwokerto Lor, RW/003,
-                        RT/001, Rumah No.15C, Rumah warna hijau di sebelah warung.
-                      </div>
+                        <Box
+                          component="img"
+                          sx={{
+                            width: '120px',
+                            height: '100%',
+                            minHeight: '120px',
+                            objectFit: 'cover',
+                            borderRadius: '8px',
+                          }}
+                          alt=""
+                          src={detailOrder.User.profilePic}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm>
+                        <Box
+                          component={'h4'}
+                          sx={{
+                            [theme.breakpoints.down('sm')]: {
+                              textAlign: 'center',
+                            },
+                          }}
+                        >
+                          {detailOrder.User.nama}
+                        </Box>
+                        <div>
+                          <strong>Tanggal Lahir :</strong> 05/02/1999
+                        </div>
+                        <div>
+                          <strong>Kontak :</strong> {detailOrder.User.noTelp}
+                          {detailOrder.User.email ? ` || ${detailOrder.User.email}` : null}
+                        </div>
+                        <div>
+                          <strong>Alamat Utama :</strong> {detailOrder.User.alamatUser}
+                        </div>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Box>
+                  </Box>
+                )}
 
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <h6>Alamat Penjemputan</h6>
-                    <Box sx={{ border: '1px solid #1F305C', borderRadius: '4px', mt: 2 }}>
-                      <AddressCard designType={'card'} />
-                    </Box>
+                    {!detailOrder ? null : (
+                      <>
+                        <h6>Alamat Penjemputan</h6>
+                        <Box sx={{ border: '1px solid #1F305C', borderRadius: '4px', mt: 1 }}>
+                          <AddressCard designType={'card'} data={'data'} />
+                        </Box>
+                      </>
+                    )}
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <h6>Alamat Pengantaran</h6>
-                    <Box sx={{ border: '1px solid #1F305C', borderRadius: '4px', mt: 2 }}>
-                      <AddressCard designType={'card'} />
-                    </Box>
+                    {!detailOrder ? null : (
+                      <>
+                        <h6>Alamat Pengantaran</h6>
+                        <Box sx={{ border: '1px solid #1F305C', borderRadius: '4px', mt: 1 }}>
+                          <AddressCard designType={'card'} data={'data'} />
+                        </Box>
+                      </>
+                    )}
                   </Grid>
                 </Grid>
               </Box>
@@ -130,56 +164,71 @@ function OrderDetails() {
                   <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Informasi Pesanan</h4>
                 </div>
 
-                <div
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'space-between',
-                    gap: '16px',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h6>No Pesanan</h6>
-                    <span style={{ textAlign: 'end' }}>#231621965213</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h6>Tanggal Pemesanan</h6>
-                    <span style={{ textAlign: 'end' }}>23/03/2023 12:54</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h6>Tenggat Waktu</h6>
-                    <span style={{ textAlign: 'end' }}>23/03/2023 12:54</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h6>Total Pembayaran</h6>
-                    <span style={{ textAlign: 'end' }}>Rp 143.000,00 (Belum Bayar)</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h6>Metode Pembayaran</h6>
-                    <span style={{ textAlign: 'end' }}>Cash</span>
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: '#eeeeee',
-                    width: '100%',
-                    maxWidth: '400px',
-                    padding: '8px 16px',
-                    borderRadius: '8px',
-                    textAlign: 'center',
-                    margin: 'auto',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
-                    <h6>Status Pesanan</h6>
-                    <div style={{ backgroundColor: '#ffffff', padding: '4px 24px', borderRadius: '8px' }}>
-                      Sedang di Jemput
+                {!detailOrder ? null : (
+                  <div
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'space-between',
+                      gap: '16px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <h6>No Pesanan</h6>
+                      <span style={{ textAlign: 'end' }}>#{detailOrder.nomorPesanan}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <h6>Tanggal Pemesanan</h6>
+                      <span style={{ textAlign: 'end' }}>23/03/2023 12:54</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <h6>Tenggat Waktu</h6>
+                      <span style={{ textAlign: 'end' }}>23/03/2023 12:54</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <h6>Total Pembayaran</h6>
+                      <span style={{ textAlign: 'end' }}>
+                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
+                          detailOrder.totalHarga
+                        )}{' '}
+                        ({detailOrder.statusPembayaran})
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <h6>Metode Pembayaran</h6>
+                      <span style={{ textAlign: 'end' }}>{detailOrder.mPembayaran}</span>
                     </div>
                   </div>
-                  <div style={{ fontSize: '12px', marginTop: '5px' }}>Status diubah pada 23/03/2023 14:47</div>
-                </div>
+                )}
+
+                {!detailOrder ? null : (
+                  <div
+                    style={{
+                      backgroundColor: '#eeeeee',
+                      width: '100%',
+                      maxWidth: '400px',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      textAlign: 'center',
+                      margin: 'auto',
+                    }}
+                  >
+                    <div
+                      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+                    >
+                      <h6>Status Pesanan</h6>
+                      <div style={{ backgroundColor: '#ffffff', padding: '4px 24px', borderRadius: '8px' }}>
+                        {detailOrder.status === 'Perlu Disetujui'
+                          ? 'Menunggu Persetujuan Admin'
+                          : detailOrder.status === 'Perlu Diantar'
+                          ? 'Pesanan Sedang Dalam Pengantaran'
+                          : 'Isi Konsisi Disini'}
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '12px', marginTop: '5px' }}>Status diubah pada 23/03/2023 14:47</div>
+                  </div>
+                )}
 
                 <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
                   Struk Digital

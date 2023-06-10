@@ -18,10 +18,10 @@ export const options = {
     legend: {
       position: 'right',
     },
-    title: {
-      display: true,
-      text: 'Weekly financial statistics',
-    },
+    // title: {
+    //   display: true,
+    //   text: 'Weekly financial statistics',
+    // },
   },
 };
 
