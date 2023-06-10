@@ -118,7 +118,7 @@ function RowItem(props) {
                 <Grid item xs={6}>
                   <div>
                     <strong>Jenis laundry : </strong>
-                    {props.item.jenisLayanan[0]}
+                    {props.item.namaLayanan}
                   </div>
                 </Grid>
               </Grid>
@@ -163,9 +163,9 @@ function OrderTable() {
       const res = await axios({
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/pemesanan?page=${
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/all?page=${
           !changePage
             ? pageConfig.currentPage
             : changePage === 'prev'
@@ -614,6 +614,10 @@ function CustomerArea() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [buttonStatusOrder, setButtonStatusOrder] = useState('Pesanan sedang Berjalan');
+
+  React.useEffect(() => {
+    document.title = 'Area Pelanggan';
+  }, []);
 
   return (
     <>

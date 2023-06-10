@@ -7,12 +7,12 @@ import { Bar } from 'react-chartjs-2';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export const options = {
-  plugins: {
-    title: {
-      display: true,
-      text: 'Weekly financial statistics',
-    },
-  },
+  // plugins: {
+  //   title: {
+  //     display: true,
+  //     text: 'Weekly financial statistics',
+  //   },
+  // },
   responsive: true,
   scales: {
     x: {

@@ -39,6 +39,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SearchIcon from '@mui/icons-material/Search';
+import dayjs from 'dayjs';
 
 function RowItem(props) {
   const navigate = useNavigate();
@@ -600,8 +601,21 @@ function DashboardMenu() {
   }, []);
 
   const handleGetFinanceReport = async () => {
-    const date = new Date();
-    date.setDate(date.getDate() - 6);
+    const dateToday = new Date();
+    dateToday.setDate(dateToday.getDate() - 6);
+    console.log(
+      `${dateToday.getFullYear()}-${(dateToday.getMonth() + 1).toString().padStart(2, '0')}-${dateToday
+        .getDate()
+        .toString()
+        .padStart(2, '0')}T00:00:00.000Z`
+    );
+
+    let date = dayjs(
+      `${dateToday.getFullYear()}-${(dateToday.getMonth() + 1).toString().padStart(2, '0')}-${dateToday
+        .getDate()
+        .toString()
+        .padStart(2, '0')}T00:00:00.000Z`
+    );
 
     try {
       const res = await axios({
