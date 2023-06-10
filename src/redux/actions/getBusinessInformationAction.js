@@ -17,7 +17,7 @@ export const getGeneralInformation = () => {
         if (!sessionStorage.getItem('business_information')) {
             axios({
                 method: 'GET',
-                url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum'
+                url: `${process.env.REACT_APP_API_KEY}/infoumum`
             }).then((res) => {
                 console.log("data.. ", res);
                 console.log("data.. ", res.data);
@@ -53,7 +53,7 @@ export const getReasonWhyChooseUs = () => {
         if (!sessionStorage.getItem('reason_why_choose_us')) {
             axios({
                 method: 'GET',
-                url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan'
+                url: `${process.env.REACT_APP_API_KEY}/alasan`
             }).then((res) => {
                 console.log("data.. ", res);
                 console.log("data.. ", res.data);
@@ -88,7 +88,7 @@ export const getHowToOrder = () => {
         if (!sessionStorage.getItem('how_to_order')) {
             axios({
                 method: 'GET',
-                url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan'
+                url: `${process.env.REACT_APP_API_KEY}/carapesan`
             }).then((res) => {
                 console.log("data.. ", res);
                 console.log("data.. ", res.data);
@@ -123,7 +123,7 @@ export const getTestimony = () => {
         if (!sessionStorage.getItem('testimony')) {
             axios({
                 method: 'GET',
-                url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/review'
+                url: `${process.env.REACT_APP_API_KEY}/review`
             }).then((res) => {
                 console.log("data.. ", res);
                 console.log("data.. ", res.data);
@@ -158,7 +158,7 @@ export const getFAQ = () => {
         if (!sessionStorage.getItem('faq')) {
             axios({
                 method: 'GET',
-                url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq'
+                url: `${process.env.REACT_APP_API_KEY}/faq`
             }).then((res) => {
                 console.log("data.. ", res);
                 console.log("data.. ", res.data);
@@ -193,7 +193,7 @@ export const getGallery = () => {
         if (!sessionStorage.getItem('gallery')) {
             axios({
                 method: 'GET',
-                url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri'
+                url: `${process.env.REACT_APP_API_KEY}/galeri`
             }).then((res) => {
                 console.log("data.. ", res);
                 console.log("data.. ", res.data);

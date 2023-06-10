@@ -56,7 +56,7 @@ function HowToOrder() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan',
+        url: `${process.env.REACT_APP_API_KEY}/carapesan`,
       });
       console.log('Response GET');
       console.log(res);
@@ -83,7 +83,7 @@ function HowToOrder() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan',
+        url: `${process.env.REACT_APP_API_KEY}/carapesan`,
         data: formData,
       });
       console.log('Response POST');
@@ -121,7 +121,7 @@ function HowToOrder() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan/${data.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/carapesan/${data.id}`,
         data: formData,
       });
       if (res.status === 200) {
@@ -152,7 +152,7 @@ function HowToOrder() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/carapesan/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/carapesan/${id}`,
       });
       if (res.status === 200) {
         setOpenLoadDecision({

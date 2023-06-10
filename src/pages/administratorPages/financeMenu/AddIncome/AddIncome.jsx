@@ -52,7 +52,7 @@ function AddIncome() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan',
+        url: `${process.env.REACT_APP_API_KEY}/keuangan`,
         data: formData,
         //   {
         //     adminId: 1,

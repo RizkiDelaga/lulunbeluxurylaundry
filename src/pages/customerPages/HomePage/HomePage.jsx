@@ -1139,7 +1139,7 @@ function HomePage() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry',
+        url: `${process.env.REACT_APP_API_KEY}/jenislaundry`,
       });
       console.log('Response GET Data Laundry Type');
       console.log(res);
@@ -1153,7 +1153,7 @@ function HomePage() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislayanan',
+        url: `${process.env.REACT_APP_API_KEY}/jenislayanan`,
       });
       console.log('Response GET Data Service Type');
       console.log(res);
@@ -1167,7 +1167,7 @@ function HomePage() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/acara',
+        url: `${process.env.REACT_APP_API_KEY}/acara`,
       });
       console.log('Response GET Data Event');
       console.log(res);

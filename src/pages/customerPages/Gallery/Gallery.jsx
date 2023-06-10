@@ -48,7 +48,7 @@ function Gallery() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri',
+        url: `${process.env.REACT_APP_API_KEY}/galeri`,
       });
       console.log('Response GET');
       console.log(res);

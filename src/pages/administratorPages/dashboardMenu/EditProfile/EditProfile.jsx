@@ -46,7 +46,7 @@ function EditProfile() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin/my/profile',
+        url: `${process.env.REACT_APP_API_KEY}/admin/my/profile`,
       });
       console.log('Response GET');
       console.log(res);
@@ -82,7 +82,7 @@ function EditProfile() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin',
+        url: `${process.env.REACT_APP_API_KEY}/admin`,
         data: formData,
       });
       console.log('Response Update');

@@ -89,7 +89,7 @@ function CreateNewEvents() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/acara',
+        url: `${process.env.REACT_APP_API_KEY}/acara`,
         data: formData,
         // {
         //   adminId: 1,

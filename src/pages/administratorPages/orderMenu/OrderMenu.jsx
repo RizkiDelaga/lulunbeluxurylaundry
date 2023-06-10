@@ -175,7 +175,7 @@ function OrderTable({ setState }) {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/pemesanan?page=${
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan?page=${
           !changePage
             ? pageConfig.currentPage
             : changePage === 'prev'
@@ -227,7 +227,7 @@ function OrderTable({ setState }) {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan/search/where?judul=${searching.value}`,
+        url: `${process.env.REACT_APP_API_KEY}/keuangan/search/where?judul=${searching.value}`,
       });
       console.log('Response GET Data Finance');
       console.log(res);

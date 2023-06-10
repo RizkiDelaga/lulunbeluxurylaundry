@@ -69,7 +69,7 @@ function EditProfile() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user',
+        url: `${process.env.REACT_APP_API_KEY}/user`,
       });
       console.log('Response GET Data My Profile');
       console.log(res);
@@ -105,7 +105,7 @@ function EditProfile() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user',
+        url: `${process.env.REACT_APP_API_KEY}/user`,
         data: formData,
       });
       console.log('Response GET Data My Profile');
@@ -123,7 +123,7 @@ function EditProfile() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/address',
+        url: `${process.env.REACT_APP_API_KEY}/user/address`,
       });
       console.log('Response GET Data My Address');
       console.log(res);
@@ -152,7 +152,7 @@ function EditProfile() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/address',
+        url: `${process.env.REACT_APP_API_KEY}/user/address`,
         data: formData,
       });
       console.log('Response POST Data My Address');
@@ -199,7 +199,7 @@ function EditProfile() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/address/${mainAddress.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/user/address/${mainAddress.id}`,
         data: formData,
       });
       console.log('Response PUT Data My Address');
@@ -235,7 +235,7 @@ function EditProfile() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/address/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/user/address/${id}`,
       });
       console.log('Response DELETE Data My Address');
       console.log(res);

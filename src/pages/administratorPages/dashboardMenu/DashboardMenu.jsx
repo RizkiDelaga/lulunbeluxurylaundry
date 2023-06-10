@@ -122,7 +122,7 @@ function AdminTable({ setState }) {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin?page=${
+        url: `${process.env.REACT_APP_API_KEY}/admin?page=${
           !changePage
             ? pageConfig.currentPage
             : changePage === 'prev'
@@ -173,7 +173,7 @@ function AdminTable({ setState }) {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin/search/where${
+        url: `${process.env.REACT_APP_API_KEY}/admin/search/where${
           searching.label === 'Nama' ? '?nama=' + searching.value : '?noTelp=' + searching.value
         }`,
       });
