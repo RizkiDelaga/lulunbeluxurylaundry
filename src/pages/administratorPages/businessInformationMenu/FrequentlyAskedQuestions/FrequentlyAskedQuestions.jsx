@@ -47,7 +47,7 @@ function FrequentlyAskedQuestions() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq',
+        url: `${process.env.REACT_APP_API_KEY}/faq`,
       });
       console.log('Response GET');
       console.log(res);
@@ -68,7 +68,7 @@ function FrequentlyAskedQuestions() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq',
+        url: `${process.env.REACT_APP_API_KEY}/faq`,
         data: {
           pertanyaan: formFrequentlyAskedQuestions.question,
           jawaban: formFrequentlyAskedQuestions.answer,
@@ -103,7 +103,7 @@ function FrequentlyAskedQuestions() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq/${formFrequentlyAskedQuestions.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/faq/${formFrequentlyAskedQuestions.id}`,
         data: {
           pertanyaan: formFrequentlyAskedQuestions.question,
           jawaban: formFrequentlyAskedQuestions.answer,
@@ -139,7 +139,7 @@ function FrequentlyAskedQuestions() {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'DELETE',
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/faq/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/faq/${id}`,
       });
       if (res.status === 200) {
         setOpenLoadDecision({

@@ -87,7 +87,7 @@ function GeneralInformation() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum',
+        url: `${process.env.REACT_APP_API_KEY}/infoumum`,
       });
       console.log('Response GET');
       console.log(res);
@@ -171,7 +171,7 @@ function GeneralInformation() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/infoumum/1`,
+        url: `${process.env.REACT_APP_API_KEY}/infoumum/1`,
         data: formData,
       });
       if (res.status === 200) {

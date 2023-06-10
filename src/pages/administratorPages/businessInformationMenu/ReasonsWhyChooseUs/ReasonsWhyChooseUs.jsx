@@ -52,7 +52,7 @@ function ReasonsWhyChooseUs() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan',
+        url: `${process.env.REACT_APP_API_KEY}/alasan`,
       });
       console.log('Response GET');
       console.log(res);
@@ -77,7 +77,7 @@ function ReasonsWhyChooseUs() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan',
+        url: `${process.env.REACT_APP_API_KEY}/alasan`,
         data: formData,
       });
       console.log('Response POST');
@@ -119,7 +119,7 @@ function ReasonsWhyChooseUs() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan/${formReasonsWhyChooseUs.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/alasan/${formReasonsWhyChooseUs.id}`,
         data: formData,
       });
       if (res.status === 200) {
@@ -156,7 +156,7 @@ function ReasonsWhyChooseUs() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/alasan/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/alasan/${id}`,
       });
       if (res.status === 200) {
         setOpenLoadDecision({

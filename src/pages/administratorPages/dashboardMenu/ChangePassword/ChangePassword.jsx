@@ -43,7 +43,7 @@ function ChangePassword() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin/change/password',
+        url: `${process.env.REACT_APP_API_KEY}/admin/change/password`,
         data: {
           oldPassword: formChangePassword.oldPassword,
           password: formChangePassword.newPassword,

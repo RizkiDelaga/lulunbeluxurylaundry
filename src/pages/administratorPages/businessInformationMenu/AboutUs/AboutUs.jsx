@@ -44,7 +44,7 @@ function AboutUs() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/about',
+        url: `${process.env.REACT_APP_API_KEY}/about`,
       });
       console.log('Response GET');
       console.log(res);
@@ -65,7 +65,7 @@ function AboutUs() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/about',
+        url: `${process.env.REACT_APP_API_KEY}/about`,
         data: {
           deskripsi: formAboutUs.explanationParagraph,
         },
@@ -103,7 +103,7 @@ function AboutUs() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/about/${formAboutUs.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/about/${formAboutUs.id}`,
         data: {
           deskripsi: formAboutUs.explanationParagraph,
         },
@@ -140,7 +140,7 @@ function AboutUs() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/about/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/about/${id}`,
       });
       if (res.status === 200) {
         setOpenLoadDecision({

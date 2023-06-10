@@ -65,7 +65,7 @@ function Gallery() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri',
+        url: `${process.env.REACT_APP_API_KEY}/galeri`,
       });
       console.log('Response GET');
       console.log(res);
@@ -91,7 +91,7 @@ function Gallery() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri',
+        url: `${process.env.REACT_APP_API_KEY}/galeri`,
         data: formData,
       });
       console.log('Response POST');
@@ -134,7 +134,7 @@ function Gallery() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri/${formGallery.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/galeri/${formGallery.id}`,
         data: formData,
       });
       if (res.status === 200) {
@@ -171,7 +171,7 @@ function Gallery() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/galeri/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/galeri/${id}`,
       });
       if (res.status === 200) {
         setOpenLoadDecision({

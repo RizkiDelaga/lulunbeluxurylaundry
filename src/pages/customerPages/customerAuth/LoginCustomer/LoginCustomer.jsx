@@ -35,7 +35,7 @@ function LoginCustomer() {
     try {
       const res = await axios({
         method: 'POST',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user/login',
+        url: `${process.env.REACT_APP_API_KEY}/user/login`,
         data: {
           noTelp: data.noTelp,
           password: data.password,
@@ -58,7 +58,7 @@ function LoginCustomer() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/user',
+        url: `${process.env.REACT_APP_API_KEY}/user`,
       });
       console.log('Response GET My Profile');
       console.log(res);

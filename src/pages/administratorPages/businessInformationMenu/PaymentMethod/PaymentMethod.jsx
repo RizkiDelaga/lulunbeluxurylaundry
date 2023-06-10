@@ -50,7 +50,7 @@ function PaymentMethod() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/metodepembayaran',
+        url: `${process.env.REACT_APP_API_KEY}/metodepembayaran`,
       });
       console.log('Response GET');
       console.log(res);
@@ -85,7 +85,7 @@ function PaymentMethod() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/metodepembayaran',
+        url: `${process.env.REACT_APP_API_KEY}/metodepembayaran`,
         data: formData,
       });
       console.log('Response POST');
@@ -131,7 +131,7 @@ function PaymentMethod() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/metodepembayaran/${formPaymentMethod.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/metodepembayaran/${formPaymentMethod.id}`,
         data: formData,
       });
       if (res.status === 200) {
@@ -169,7 +169,7 @@ function PaymentMethod() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/metodepembayaran/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/metodepembayaran/${id}`,
       });
       if (res.status === 200) {
         setOpenLoadDecision({

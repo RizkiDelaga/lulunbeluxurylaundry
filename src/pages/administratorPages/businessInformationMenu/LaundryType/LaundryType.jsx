@@ -48,7 +48,7 @@ function LaundryType() {
     try {
       const res = await axios({
         method: 'GET',
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry',
+        url: `${process.env.REACT_APP_API_KEY}/jenislaundry`,
       });
       console.log('Response GET');
       console.log(res);
@@ -74,7 +74,7 @@ function LaundryType() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: 'https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry',
+        url: `${process.env.REACT_APP_API_KEY}/jenislaundry`,
         data: formData,
       });
       console.log('Response POST');
@@ -117,7 +117,7 @@ function LaundryType() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry/${formLaundryType.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/jenislaundry/${formLaundryType.id}`,
         data: formData,
       });
       if (res.status === 200) {
@@ -154,7 +154,7 @@ function LaundryType() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/jenislaundry/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/jenislaundry/${id}`,
       });
       if (res.status === 200) {
         setOpenLoadDecision({

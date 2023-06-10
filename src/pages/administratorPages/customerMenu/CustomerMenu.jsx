@@ -111,7 +111,7 @@ function CustomerTable() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/admin/user/all?page=${
+        url: `${process.env.REACT_APP_API_KEY}/admin/user/all?page=${
           !changePage
             ? pageConfig.currentPage
             : changePage === 'prev'
@@ -153,7 +153,7 @@ function CustomerTable() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `https://api-tugasakhir-lulu-laundry-git-develop-raihaniqbalpasya.vercel.app/api/v1/keuangan/search/where?judul=${searching.value}`,
+        url: `${process.env.REACT_APP_API_KEY}/keuangan/search/where?judul=${searching.value}`,
       });
       console.log('Response GET Data Finance');
       console.log(res);
