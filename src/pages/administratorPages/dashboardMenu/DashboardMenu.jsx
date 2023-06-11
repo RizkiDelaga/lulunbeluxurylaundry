@@ -40,6 +40,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SearchIcon from '@mui/icons-material/Search';
 import dayjs from 'dayjs';
+import { getProfileAccountAdmin } from '../../../redux/actions/getProfileAccount';
 
 function RowItem(props) {
   const navigate = useNavigate();
@@ -595,10 +596,20 @@ function DashboardMenu() {
   const [financeReport, setFinanceReport] = useState([]);
   const [chartData, setChartData] = useState();
 
+  const dispatch = useDispatch();
+  const { isLoading: loadingGetProfileAccountAdmin, data: dataGetProfileAccountAdmin } = useSelector(
+    (state) => state.getProfileAccountAdmin
+  );
+
   React.useEffect(() => {
     document.title = 'Menu Dashboard';
+    dispatchGetProfileAccountAdmin();
     handleGetFinanceReport();
   }, []);
+
+  const dispatchGetProfileAccountAdmin = async () => {
+    return await dispatch(getProfileAccountAdmin());
+  };
 
   const handleGetFinanceReport = async () => {
     const dateToday = new Date();
@@ -659,89 +670,106 @@ function DashboardMenu() {
 
   return (
     <>
-      <div className="gap-24" style={{ marginBottom: '24px' }}>
-        <PageStructureAndDirectButton
-          defaultMenu="Dashboard"
-          directButton={[
-            {
-              color: 'primary',
-              iconType: 'add',
-              value: 'Registrasi administrator baru',
-              link: '/Dashboard/RegistrasiAdministratorBaru',
-            },
-          ]}
-        />
+      {loadingGetProfileAccountAdmin ? null : (
+        <div className="gap-24" style={{ marginBottom: '24px' }}>
+          <PageStructureAndDirectButton
+            defaultMenu="Dashboard"
+            directButton={
+              dataGetProfileAccountAdmin.role === 'Basic'
+                ? null
+                : [
+                    {
+                      color: 'primary',
+                      iconType: 'add',
+                      value: 'Registrasi administrator baru',
+                      link: '/Dashboard/RegistrasiAdministratorBaru',
+                    },
+                  ]
+            }
+          />
 
-        {/* Main Content */}
-        <Grid container spacing={2}>
-          <Grid item md={12} lg={6} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={6} sm={6} md={4} lg={6}>
-                <InformationCard
-                  title="Pesanan sedang Berjalan"
-                  content={{ normalText: businessStats.activeOrders }}
-                  navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
-                />
-              </Grid>
-              <Grid item xs={6} sm={6} md={4} lg={6}>
-                <InformationCard
-                  title="Event Sedang berlangsung"
-                  content={{ normalText: businessStats.eventActive }}
-                  navigate={{ text: 'Lihat daftar cara', url: '/Event' }}
-                />
-              </Grid>
-              <Grid item xs={6} sm={6} md={4} lg={6}>
-                <InformationCard
-                  title="Pesanan selesai"
-                  content={{ normalText: businessStats.ordersCompleted }}
-                  navigate={{ text: 'Lihat daftar pesanan selesai', url: '/Pesanan' }}
-                />
-              </Grid>
-              <Grid item xs={6} sm={6} md={6} lg={6}>
-                <InformationCard
-                  title="Total pelanggan"
-                  content={{ normalText: businessStats.totalCustomers }}
-                  navigate={{ text: 'Lihat daftar pelanggan', url: '/Pelanggan' }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={12}>
-                <InformationCard
-                  title="Rating dan Review Pelanggan"
-                  content={{
-                    normalText: businessStats.averageRating,
-                    smallText: businessStats.totalReviews,
-                  }}
-                  navigate={{ text: 'Lihat rating dan review pelanggan', url: '/Pesanan/RatingDanReviewPelanggan' }}
-                />
+          {/* Main Content */}
+          <Grid container spacing={2}>
+            <Grid
+              item
+              md={12}
+              lg={dataGetProfileAccountAdmin.role === 'Basic' ? 12 : 6}
+              sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={6} sm={6} md={4} lg={6}>
+                  <InformationCard
+                    title="Pesanan sedang Berjalan"
+                    content={{ normalText: businessStats.activeOrders }}
+                    navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={4} lg={6}>
+                  <InformationCard
+                    title="Event Sedang berlangsung"
+                    content={{ normalText: businessStats.eventActive }}
+                    navigate={{ text: 'Lihat daftar cara', url: '/Event' }}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={4} lg={6}>
+                  <InformationCard
+                    title="Pesanan selesai"
+                    content={{ normalText: businessStats.ordersCompleted }}
+                    navigate={{ text: 'Lihat daftar pesanan selesai', url: '/Pesanan' }}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6}>
+                  <InformationCard
+                    title="Total pelanggan"
+                    content={{ normalText: businessStats.totalCustomers }}
+                    navigate={{ text: 'Lihat daftar pelanggan', url: '/Pelanggan' }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={12}>
+                  <InformationCard
+                    title="Rating dan Review Pelanggan"
+                    content={{
+                      normalText: businessStats.averageRating,
+                      smallText: businessStats.totalReviews,
+                    }}
+                    navigate={{ text: 'Lihat rating dan review pelanggan', url: '/Pesanan/RatingDanReviewPelanggan' }}
+                  />
+                </Grid>
               </Grid>
             </Grid>
+            {dataGetProfileAccountAdmin.role === 'Basic' ? null : (
+              <Grid item xs={12} lg={6}>
+                {financeReport.length !== 0 && chartData ? (
+                  <InformationCard
+                    title="Laporan keuangan mingguan terbaru"
+                    content={{
+                      embedHTML: (
+                        <>
+                          <AreaChart dataset={chartData} />
+                        </>
+                      ),
+                    }}
+                    navigate={{ text: 'Lihat laporan keuangan', url: '/Keuangan' }}
+                  />
+                ) : null}
+              </Grid>
+            )}
           </Grid>
-          <Grid item xs={12} lg={6}>
-            {financeReport.length !== 0 && chartData ? (
-              <InformationCard
-                title="Laporan keuangan mingguan terbaru"
-                content={{
-                  embedHTML: (
-                    <>
-                      <AreaChart dataset={chartData} />
-                    </>
-                  ),
-                }}
-                navigate={{ text: 'Lihat laporan keuangan', url: '/Keuangan' }}
-              />
-            ) : null}
-          </Grid>
-        </Grid>
 
-        <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          {/* <EnhancedTable /> */}
-          <AdminTable setState={setBusinessStats} />
-        </Paper>
+          {dataGetProfileAccountAdmin.role === 'Basic' ? null : (
+            <Paper
+              elevation={3}
+              sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}
+            >
+              <AdminTable setState={setBusinessStats} />
+            </Paper>
+          )}
 
-        <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Box className="gap-16"></Box>
-        </Paper>
-      </div>
+          {/* <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
+            <Box className="gap-16"></Box>
+          </Paper> */}
+        </div>
+      )}
     </>
   );
 }

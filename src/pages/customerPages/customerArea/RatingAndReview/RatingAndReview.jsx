@@ -1,6 +1,6 @@
 import { Box, Button, Chip, Container, Grid, Paper, TextField, useTheme } from '@mui/material';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import RatingComponent from '../../../../components/Ratings/RatingComponent';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
@@ -8,6 +8,7 @@ import PageStructureAndDirectButton from '../../../../components/PageStructureAn
 function RatingAndReview() {
   const theme = useTheme();
   const navigate = useNavigate();
+  let { id } = useParams();
   const [formRatingAndReview, setFormRatingAndReview] = useState({
     rating: null,
     review: '',
@@ -32,7 +33,7 @@ function RatingAndReview() {
         <PageStructureAndDirectButton
           defaultMenu="Area Pelanggan"
           currentPage={{
-            title: 'Rating & Review',
+            title: `Rating & Review Pesanan #${id}`,
           }}
         />
 

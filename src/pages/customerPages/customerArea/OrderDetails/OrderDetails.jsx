@@ -4,17 +4,23 @@ import PageStructureAndDirectButton from '../../../../components/PageStructureAn
 import { Box, Button, Grid, Paper, useTheme } from '@mui/material';
 import AddressCard from '../../../../components/Card/InformationCard/AddressCard';
 import axios from 'axios';
+import RatingComponent from '../../../../components/Ratings/RatingComponent';
 
 function OrderDetails() {
-  let { id } = useParams();
   const theme = useTheme();
   const navigate = useNavigate();
+  let { id } = useParams();
   const [detailOrder, setDetailOrder] = useState();
+  const [ratingReview, setRatingReview] = useState();
 
   React.useEffect(() => {
     document.title = 'Detail Pesanan';
-    handleGetDetailOrder();
-  }, []);
+    if (!detailOrder) {
+      handleGetDetailOrder();
+    } else {
+      handleGetRatingReview();
+    }
+  }, [detailOrder]);
 
   const handleGetDetailOrder = async () => {
     try {
@@ -29,6 +35,27 @@ function OrderDetails() {
       console.log('Response GET Data Finance');
       console.log(res);
       setDetailOrder(res.data.data);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setDetailOrder();
+      }
+      console.log(error);
+    }
+  };
+
+  const handleGetRatingReview = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/review/${detailOrder.id}`,
+      });
+
+      console.log('Response GET Data Finance');
+      console.log(res);
+      setRatingReview(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
         setDetailOrder();
@@ -180,11 +207,23 @@ function OrderDetails() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <h6>Tanggal Pemesanan</h6>
-                      <span style={{ textAlign: 'end' }}>23/03/2023 12:54</span>
+                      <span style={{ textAlign: 'end' }}>{`${detailOrder.tglMulai.slice(
+                        8,
+                        10
+                      )}/${detailOrder.tglMulai.slice(5, 7)}/${detailOrder.tglMulai.slice(
+                        0,
+                        4
+                      )} ${detailOrder.tglMulai.slice(11, 16)}`}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <h6>Tenggat Waktu</h6>
-                      <span style={{ textAlign: 'end' }}>23/03/2023 12:54</span>
+                      <span style={{ textAlign: 'end' }}>{`${detailOrder.tenggatWaktu.slice(
+                        8,
+                        10
+                      )}/${detailOrder.tenggatWaktu.slice(5, 7)}/${detailOrder.tenggatWaktu.slice(
+                        0,
+                        4
+                      )} ${detailOrder.tenggatWaktu.slice(11, 16)}`}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <h6>Total Pembayaran</h6>
@@ -220,17 +259,36 @@ function OrderDetails() {
                       <h6>Status Pesanan</h6>
                       <div style={{ backgroundColor: '#ffffff', padding: '4px 24px', borderRadius: '8px' }}>
                         {detailOrder.status === 'Perlu Disetujui'
-                          ? 'Menunggu Persetujuan Admin'
+                          ? 'Menunggu Persetujuan'
+                          : detailOrder.status === 'Perlu Dijemput'
+                          ? 'Pesanan Akan Segera Di Jemput'
+                          : detailOrder.status === 'Perlu Dikerjakan'
+                          ? 'Pesanan Sedang Di Kerjakan'
                           : detailOrder.status === 'Perlu Diantar'
-                          ? 'Pesanan Sedang Dalam Pengantaran'
-                          : 'Isi Konsisi Disini'}
+                          ? 'Pesanan Akan Segera Di Antar'
+                          : detailOrder.status === 'Selesai'
+                          ? 'Pesanan Selesai'
+                          : detailOrder.status === 'Dibatalkan'
+                          ? 'Pesanan Di Batalkan'
+                          : null}
                       </div>
                     </div>
-                    <div style={{ fontSize: '12px', marginTop: '5px' }}>Status diubah pada 23/03/2023 14:47</div>
+                    <div style={{ fontSize: '12px', marginTop: '5px' }}>
+                      Status diubah pada{' '}
+                      {`${detailOrder.updatedAt.slice(8, 10)}/${detailOrder.updatedAt.slice(
+                        5,
+                        7
+                      )}/${detailOrder.updatedAt.slice(0, 4)} ${detailOrder.updatedAt.slice(11, 16)}`}
+                    </div>
                   </div>
                 )}
 
-                <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={() => navigate(`/StrukPemesanan/${id}`)}
+                  sx={{ width: '100%', fontWeight: 'bold' }}
+                >
                   Struk Digital
                 </Button>
               </Box>
@@ -239,44 +297,58 @@ function OrderDetails() {
               elevation={3}
               sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '16px' }}
             >
-              <Box className="gap-16">
-                <div style={{ width: '100%', textAlign: 'center' }}>
-                  <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Rating & Review</h4>
-                </div>
+              {!ratingReview ? null : (
+                <Box className="gap-16">
+                  <div style={{ width: '100%', textAlign: 'center' }}>
+                    <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Rating & Review</h4>
+                  </div>
 
-                <div
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '16px',
-                  }}
-                >
-                  <h6>Rating</h6>
-
-                  <span style={{}}>N/A</span>
-
-                  <h6>Review</h6>
-
-                  <span
+                  <div
                     style={{
                       width: '100%',
-                      backgroundColor: '#eeeeee',
-                      padding: '8px 24px',
-                      borderRadius: '8px',
-                      textAlign: 'center',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '16px',
                     }}
                   >
-                    N/A
-                  </span>
-                </div>
+                    <h6>Rating</h6>
 
-                <Button variant="contained" size="large" style={{ width: '100%', fontWeight: 'bold' }}>
-                  Rating & Review Sekarang
-                </Button>
-              </Box>
+                    <span>
+                      {!ratingReview ? 'N/A' : <RatingComponent readOnly={true} ratingValue={ratingReview.rating} />}
+                    </span>
+
+                    <h6>Review</h6>
+
+                    <span
+                      style={{
+                        width: '100%',
+                        backgroundColor: '#eeeeee',
+                        padding: '8px 24px',
+                        borderRadius: '8px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {!ratingReview ? 'N/A' : ratingReview.review}
+                    </span>
+
+                    {!ratingReview ? null : !ratingReview.gambar ? null : <img src={ratingReview.gambar} alt="" />}
+                  </div>
+
+                  {!detailOrder ? null : (
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={() => navigate(`/AreaPelanggan/RatingDanReview/${id}`)}
+                      disabled={detailOrder.status !== 'Selesai'}
+                      style={{ width: '100%', fontWeight: 'bold' }}
+                    >
+                      Rating & Review Sekarang
+                    </Button>
+                  )}
+                </Box>
+              )}
             </Paper>
           </Grid>
         </Grid>

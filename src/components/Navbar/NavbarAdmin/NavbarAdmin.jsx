@@ -32,6 +32,7 @@ import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { getExample } from '../../../redux/actions/exampleAction';
 import MuiToggleButton from '@mui/material/ToggleButton';
+import { getProfileAccountAdmin } from '../../../redux/actions/getProfileAccount';
 
 const drawerWidth = 300;
 
@@ -173,13 +174,21 @@ function Navbar(props) {
 
   const dispatch = useDispatch();
   const { isLoading: loadingGetExample, data: dataGetExample } = useSelector((state) => state.getExample);
+  const { isLoading: loadingGetProfileAccountAdmin, data: dataGetProfileAccountAdmin } = useSelector(
+    (state) => state.getProfileAccountAdmin
+  );
 
   React.useEffect(() => {
     dispatchGetExample();
+    dispatchGetProfileAccountAdmin();
   }, []);
 
   const dispatchGetExample = async () => {
     return await dispatch(getExample());
+  };
+
+  const dispatchGetProfileAccountAdmin = async () => {
+    return await dispatch(getProfileAccountAdmin());
   };
 
   // Open Notification Menu
@@ -359,19 +368,17 @@ function Navbar(props) {
             </Menu>
 
             {/* Account Menu */}
-            <IconButton
-              color="inherit"
-              onClick={(event) => {
-                setOpenMyAccount(event.currentTarget);
-              }}
-              sx={{ padding: 0 }}
-            >
-              <Avatar
-                alt="Remy Sharp"
-                src="https://www.parenting.co.id/img/images/LELA28_shutterstock_800x400.jpg"
-                sx={{ width: 32, height: 32 }}
-              />
-            </IconButton>
+            {loadingGetProfileAccountAdmin ? null : (
+              <IconButton
+                color="inherit"
+                onClick={(event) => {
+                  setOpenMyAccount(event.currentTarget);
+                }}
+                sx={{ padding: 0 }}
+              >
+                <Avatar src={dataGetProfileAccountAdmin.profilePic} sx={{ width: 32, height: 32 }} />
+              </IconButton>
+            )}
 
             <Menu
               anchorEl={openMyAccount}
@@ -391,6 +398,7 @@ function Navbar(props) {
               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
+              {/* {loadingGetProfileAccountAdmin ? null : ( */}
               <div
                 style={{
                   display: 'flex',
@@ -400,18 +408,16 @@ function Navbar(props) {
                   marginRight: '16px',
                 }}
               >
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://www.parenting.co.id/img/images/LELA28_shutterstock_800x400.jpg"
-                  sx={{ marginRight: 1.5 }}
-                />
+                <Avatar src={dataGetProfileAccountAdmin.profilePic} sx={{ marginRight: 1.5 }} />
                 <div style={{ width: 'fit-content' }}>
                   <div style={{ fontWeight: 'bold', wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
-                    Nama Administrator Lorem ipsum dolor sit amet.
+                    {dataGetProfileAccountAdmin.nama}
                   </div>
-                  <div>Role admin : Master</div>
+                  <div>Role admin : {dataGetProfileAccountAdmin.role}</div>
                 </div>
               </div>
+              {/* )} */}
+
               <MenuItem onClick={() => handleCloseAccountMenu('/Dashboard')}>
                 <ListItemIcon>
                   <DashboardOutlinedIcon className="color-primary" />

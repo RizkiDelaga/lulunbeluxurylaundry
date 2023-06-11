@@ -18,6 +18,7 @@ import LogoWebsite from '../../../assets/images/Logo.jpg';
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
+import { getProfileAccountAdmin } from '../../../redux/actions/getProfileAccount';
 
 const drawerWidth = 300;
 
@@ -81,11 +82,19 @@ function SidebarAdmin(props) {
   const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
     (state) => state.getGeneralInformation
   );
+  const { isLoading: loadingGetProfileAccountAdmin, data: dataGetProfileAccountAdmin } = useSelector(
+    (state) => state.getProfileAccountAdmin
+  );
 
   React.useEffect(() => {
     document.title = 'Tentang Kami';
+    dispatchGetProfileAccountAdmin();
     dispatchGetGeneralInformation();
-  }, [sessionStorage.getItem('business_information')]);
+  }, []);
+
+  const dispatchGetProfileAccountAdmin = async () => {
+    return await dispatch(getProfileAccountAdmin());
+  };
 
   const dispatchGetGeneralInformation = async () => {
     return await dispatch(getGeneralInformation());
@@ -117,45 +126,52 @@ function SidebarAdmin(props) {
             <CloseIcon />
           </IconButton>
         </DrawerHeader>
-
-        <List>
-          {[
-            { title: 'Dashboard', icon: <DashboardOutlinedIcon />, link: '/Dashboard' },
-            { title: 'Pesanan', icon: <AddToPhotosOutlinedIcon />, link: '/Pesanan' },
-            { title: 'Informasi Bisnis', icon: <StoreMallDirectoryOutlinedIcon />, link: '/InformasiBisnis' },
-            { title: 'Event', icon: <LocalActivityOutlinedIcon />, link: '/Event' },
-            { title: 'Keuangan', icon: <LocalAtmOutlinedIcon />, link: '/Keuangan' },
-            { title: 'Pelanggan', icon: <GroupsOutlinedIcon />, link: '/Pelanggan' },
-          ].map((listNavbar, index) => (
-            <Link
-              to={listNavbar.link}
-              className="disable-link-style"
-              onClick={window.innerWidth <= 900 ? props.handleSidebar : null}
-            >
-              <ListItem key={listNavbar.title} disablePadding sx={{ display: 'block' }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: props.openSidebar ? 'initial' : 'center',
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: props.openSidebar ? 3 : 'auto',
-                      justifyContent: 'center',
-                    }}
-                    className="color-primary"
-                  >
-                    {listNavbar.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={listNavbar.title} sx={{ opacity: props.openSidebar ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-          ))}
-        </List>
+        {loadingGetProfileAccountAdmin ? null : (
+          <List>
+            {[
+              { title: 'Dashboard', icon: <DashboardOutlinedIcon />, link: '/Dashboard' },
+              { title: 'Pesanan', icon: <AddToPhotosOutlinedIcon />, link: '/Pesanan' },
+              { title: 'Informasi Bisnis', icon: <StoreMallDirectoryOutlinedIcon />, link: '/InformasiBisnis' },
+              { title: 'Event', icon: <LocalActivityOutlinedIcon />, link: '/Event' },
+              { title: 'Keuangan', icon: <LocalAtmOutlinedIcon />, link: '/Keuangan' },
+              { title: 'Pelanggan', icon: <GroupsOutlinedIcon />, link: '/Pelanggan' },
+            ].map((listNavbar, index) => {
+              return (
+                <>
+                  {listNavbar.title === 'Keuangan' && dataGetProfileAccountAdmin.role === 'Basic' ? null : (
+                    <Link
+                      to={listNavbar.link}
+                      className="disable-link-style"
+                      onClick={window.innerWidth <= 900 ? props.handleSidebar : null}
+                    >
+                      <ListItem key={listNavbar.title} disablePadding sx={{ display: 'block' }}>
+                        <ListItemButton
+                          sx={{
+                            minHeight: 48,
+                            justifyContent: props.openSidebar ? 'initial' : 'center',
+                            px: 2.5,
+                          }}
+                        >
+                          <ListItemIcon
+                            sx={{
+                              minWidth: 0,
+                              mr: props.openSidebar ? 3 : 'auto',
+                              justifyContent: 'center',
+                            }}
+                            className="color-primary"
+                          >
+                            {listNavbar.icon}
+                          </ListItemIcon>
+                          <ListItemText primary={listNavbar.title} sx={{ opacity: props.openSidebar ? 1 : 0 }} />
+                        </ListItemButton>
+                      </ListItem>
+                    </Link>
+                  )}
+                </>
+              );
+            })}
+          </List>
+        )}
       </Drawer>
     </>
   );

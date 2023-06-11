@@ -778,6 +778,10 @@ function TestimonySection({ listTestimony }) {
             clickable: true,
           }}
           breakpoints={{
+            0: {
+              slidesPerView: 1,
+              spaceBetween: 10,
+            },
             600: {
               slidesPerView: 2,
               spaceBetween: 10,
@@ -792,52 +796,76 @@ function TestimonySection({ listTestimony }) {
             },
           }}
           modules={[Pagination]}
-          // className="mySwiper"
         >
-          {[1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => {
+          {[1, 2, 3, 4, 21, 12, 12].map((item, index) => {
             return (
-              <SwiperSlide>
-                <Paper
-                  // elevation={8}
-                  // className={` gap-10 ${style['shadow-card']}`}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    gap: '16px',
-                    padding: '16px',
+              // <>
+              <SwiperSlide
+                style={{
+                  height: 'auto',
+                }}
+              >
+                <div
+                  style={{
                     borderRadius: '24px',
                     border: '2px solid black',
+                    backgroundColor: 'white',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '16px',
                     textAlign: 'center',
+                    height: '100%',
                   }}
-                  // sx={{ borderRadius: '4px', height: '100%', flexDirection: 'column', justifyContent: 'space-between' }}
                 >
-                  <h5>Ahmad Yusuf Pangestu</h5>
-                  <img
-                    src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
-                    width="100"
-                    height="100"
-                    style={{ borderRadius: '50%', objectFit: 'cover' }}
-                    alt=""
-                  />
+                  <div
+                    style={{
+                      marginTop: '16px',
+                      marginLeft: '10px',
+                      marginRight: '10px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 16,
+                    }}
+                  >
+                    <h5>Ahmad Yusuf Pangestu</h5>
+                    <img
+                      src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
+                      width="100"
+                      height="100"
+                      style={{ borderRadius: '50%', objectFit: 'cover' }}
+                      alt=""
+                    />
 
-                  <RatingComponent readOnly={true} />
+                    <RatingComponent readOnly={true} ratingValue={item} />
 
-                  <div className="small-text">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium amet nisi maxime ducimus ab
-                    molestias provident magnam sunt illum, numquam fugiat odio aperiam cupiditate exercitationem
-                    obcaecati esse beatae saepe reprehenderit!
+                    <div className="small-text">
+                      {item}{' '}
+                      {item === 2
+                        ? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt doloremque nihil doloribus animi atque, perferendis cupiditate explicabo dolore nemo maxime vel impedit ex! Reprehenderit sapiente velit sit consequatur eligendi ipsa!'
+                        : null}
+                    </div>
+
+                    <img
+                      src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
+                      width="120"
+                      height="120"
+                      style={{ objectFit: 'cover' }}
+                      alt=""
+                    />
                   </div>
-
-                  <img
-                    src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
-                    width="120"
-                    height="120"
-                    style={{ objectFit: 'cover' }}
-                    alt=""
-                  />
-                  <div className="small-text">25/04/2023</div>
-                </Paper>
+                  <div
+                    className="small-text"
+                    style={{
+                      marginBottom: '16px',
+                    }}
+                  >
+                    25/04/2023
+                  </div>
+                </div>
               </SwiperSlide>
             );
           })}

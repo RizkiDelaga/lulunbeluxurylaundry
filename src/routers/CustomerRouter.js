@@ -63,7 +63,7 @@ function CustomerRouter() {
             <Route path="AreaPelanggan/EditProfil" element={<EditProfile />} />
             <Route path="AreaPelanggan/UbahPassword" element={<ChangePassword />} />
             <Route path="AreaPelanggan/BuatPesananBaru" element={<HomePage />} />
-            <Route path="AreaPelanggan/RatingDanReview" element={<RatingAndReview />} />
+            <Route path="AreaPelanggan/RatingDanReview/:id" element={<RatingAndReview />} />
           </Route>
         </Routes>
   );

@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Chip,
@@ -41,6 +42,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SearchIcon from '@mui/icons-material/Search';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProfileAccountCustomer } from '../../../redux/actions/getProfileAccount';
 
 function RowItem(props) {
   const navigate = useNavigate();
@@ -76,7 +79,20 @@ function RowItem(props) {
         </TableCell>
         <TableCell>{props.item.mPembayaran}</TableCell>
         <TableCell>
-          {props.item.status}
+          {}
+          {props.item.status === 'Perlu Disetujui'
+            ? 'Menunggu Persetujuan'
+            : props.item.status === 'Perlu Dijemput'
+            ? 'Pesanan Akan Segera Di Jemput'
+            : props.item.status === 'Perlu Dikerjakan'
+            ? 'Pesanan Sedang Di Kerjakan'
+            : props.item.status === 'Perlu Diantar'
+            ? 'Pesanan Akan Segera Di Antar'
+            : props.item.status === 'Selesai'
+            ? 'Pesanan Selesai'
+            : props.item.status === 'Dibatalkan'
+            ? 'Pesanan Di Batalkan'
+            : null}
           <div style={{ fontSize: '12px' }}>
             pada{' '}
             {`${('0' + lastUpdate.getDate()).slice(-2)}/${('0' + lastUpdate.getMonth()).slice(
@@ -614,10 +630,21 @@ function CustomerArea() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [buttonStatusOrder, setButtonStatusOrder] = useState('Pesanan sedang Berjalan');
+  // const myProfile = JSON.parse(localStorage.getItem('my_profile_account'));
+
+  const dispatch = useDispatch();
+  const { isLoading: loadingGetProfileAccountCustomer, data: dataGetProfileAccountCustomer } = useSelector(
+    (state) => state.getProfileAccountCustomer
+  );
 
   React.useEffect(() => {
     document.title = 'Area Pelanggan';
+    dispatchGetProfileAccountCustomer();
   }, []);
+
+  const dispatchGetProfileAccountCustomer = async () => {
+    return await dispatch(getProfileAccountCustomer());
+  };
 
   return (
     <>
@@ -636,40 +663,44 @@ function CustomerArea() {
       >
         <PageStructureAndDirectButton defaultMenu="Area Pelanggan" />
 
-        <Paper
-          elevation={3}
-          sx={{
-            width: '100%',
-            padding: 2.5,
-            borderRadius: '8px',
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <img
-              src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
-              width={60}
-              height={60}
-              alt=""
-              style={{ borderRadius: '50%', objectFit: 'cover' }}
-            />
-            <span style={{ fontSize: '24px' }}>Nama Pelanggan</span>
-          </div>
-          <Button
-            variant="text"
-            startIcon={<EditIcon />}
+        {loadingGetProfileAccountCustomer ? null : (
+          <Paper
+            elevation={3}
             sx={{
-              width: 'fit-content',
-              fontWeight: 'bold',
-              [theme.breakpoints.down('sm')]: {
-                display: 'none',
-              },
+              width: '100%',
+              padding: 2.5,
+              borderRadius: '8px',
+              display: 'flex',
+              justifyContent: 'space-between',
             }}
           >
-            Edit Profil
-          </Button>
-        </Paper>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+              <Avatar src={dataGetProfileAccountCustomer.profilePic} sx={{ width: 60, height: 60 }} />
+              {/* <img
+                src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
+                width={60}
+                height={60}
+                alt=""
+                style={{ borderRadius: '50%', objectFit: 'cover' }}
+              /> */}
+              <span style={{ fontSize: '24px' }}>Hey, {dataGetProfileAccountCustomer.nama}</span>
+            </div>
+            <Button
+              variant="text"
+              startIcon={<EditIcon />}
+              onClick={() => navigate('/AreaPelanggan/EditProfil')}
+              sx={{
+                width: 'fit-content',
+                fontWeight: 'bold',
+                [theme.breakpoints.down('sm')]: {
+                  display: 'none',
+                },
+              }}
+            >
+              Edit Profil
+            </Button>
+          </Paper>
+        )}
 
         {/* Progress Order Menu */}
         <Paper
