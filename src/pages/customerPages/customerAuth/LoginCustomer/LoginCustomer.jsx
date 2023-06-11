@@ -17,6 +17,8 @@ import {
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProfileAccountCustomer } from '../../../../redux/actions/getProfileAccount';
 
 function LoginCustomer() {
   const theme = useTheme();
@@ -26,6 +28,8 @@ function LoginCustomer() {
     noTelp: '',
     password: '',
   });
+
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     document.title = 'Login Pelanggan';
@@ -43,32 +47,38 @@ function LoginCustomer() {
       });
       console.log('Response POST Login Customer');
       console.log(res);
-      navigate('/AreaPelanggan');
       localStorage.setItem('access_token', res.data.accessToken);
-      handleGetMyProfile();
+      // handleGetMyProfile();
+
+      dispatchGetProfileAccountCustomer(res.data.accessToken);
+
+      navigate('/AreaPelanggan');
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleGetMyProfile = async () => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        },
-        url: `${process.env.REACT_APP_API_KEY}/user`,
-      });
-      console.log('Response GET My Profile');
-      console.log(res);
-
-      localStorage.setItem('customer_name', res.data.data.nama);
-      localStorage.setItem('customer_profile_picture', res.data.data.profilePic);
-    } catch (error) {
-      console.log(error);
-    }
+  const dispatchGetProfileAccountCustomer = async (access_token) => {
+    return await dispatch(getProfileAccountCustomer(access_token));
   };
+
+  // const handleGetMyProfile = async () => {
+  //   try {
+  //     const res = await axios({
+  //       method: 'GET',
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+  //       },
+  //       url: `${process.env.REACT_APP_API_KEY}/user`,
+  //     });
+  //     console.log('Response GET My Profile');
+  //     console.log(res);
+
+  //     localStorage.setItem('my_profile_account', JSON.stringify(res.data.data));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <>

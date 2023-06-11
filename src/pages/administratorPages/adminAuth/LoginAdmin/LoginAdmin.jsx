@@ -17,6 +17,8 @@ import Logo from '../../../../assets/images/Logo.jpg';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { getProfileAccountAdmin } from '../../../../redux/actions/getProfileAccount';
 
 function LoginAdmin() {
   const theme = useTheme();
@@ -26,6 +28,8 @@ function LoginAdmin() {
     administratorName: '',
     password: '',
   });
+
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     document.title = 'Login Administrator';
@@ -45,29 +49,14 @@ function LoginAdmin() {
       console.log(res);
       navigate('/Dashboard');
       localStorage.setItem('access_token_admin', res.data.accessToken);
-      handleGetAdminProfile();
+      dispatchGetProfileAccountCustomer(res.data.accessToken);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleGetAdminProfile = async () => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        },
-        url: `${process.env.REACT_APP_API_KEY}/user`,
-      });
-      console.log('Response GET My Profile');
-      console.log(res);
-
-      localStorage.setItem('admin_name', res.data.data.nama);
-      localStorage.setItem('admin_profile_picture', res.data.data.profilePic);
-    } catch (error) {
-      console.log(error);
-    }
+  const dispatchGetProfileAccountCustomer = async (access_token_admin) => {
+    return await dispatch(getProfileAccountAdmin(access_token_admin));
   };
 
   return (

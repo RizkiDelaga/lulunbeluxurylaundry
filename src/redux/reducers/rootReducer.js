@@ -15,6 +15,7 @@ import {
     getFAQReducer,
     getGalleryReducer
 } from "./getBusinessInformationReducer";
+import { getProfileAccountAdminReducer, getProfileAccountCustomerReducer } from "./getProfileAccountReducer";
 
 export default combineReducers({
     // ======== Example Reducer ========
@@ -31,6 +32,10 @@ export default combineReducers({
     getFAQ: getFAQReducer,
     getGallery: getGalleryReducer,
 
+    // ======== Profile Account Reducer ========
+    getProfileAccountCustomer:getProfileAccountCustomerReducer,
+    getProfileAccountAdmin:getProfileAccountAdminReducer,
+    
 
     // ======== Admin Reducer ========
     // createAdmin: createAdminReducer,

@@ -26,6 +26,8 @@ import EditOffIcon from '@mui/icons-material/EditOff';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import axios from 'axios';
 import { BigPlayButton, LoadingSpinner, Player } from 'video-react';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 function Gallery() {
   const theme = useTheme();
@@ -37,6 +39,11 @@ function Gallery() {
     description: '',
     file: { img: null, fileName: null },
   });
+  const [pageConfig, setPageConfig] = React.useState({
+    currentPage: 1,
+    metadata: null,
+  });
+
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
     message: '',
@@ -61,11 +68,31 @@ function Gallery() {
     setOpenPreviewGallery({ ...openPreviewGallery, isOpen: false });
   };
 
-  const handleGetGallery = async () => {
+  const handleGetGallery = async (changePage) => {
     try {
       const res = await axios({
         method: 'GET',
-        url: `${process.env.REACT_APP_API_KEY}/galeri`,
+        url: `${process.env.REACT_APP_API_KEY}/galeri?page=${
+          !changePage
+            ? pageConfig.currentPage
+            : changePage === 'prev'
+            ? pageConfig.currentPage - 1
+            : changePage === 'next'
+            ? pageConfig.currentPage + 1
+            : changePage
+        }`,
+      });
+
+      setPageConfig({
+        ...pageConfig,
+        metadata: res.data.metadata,
+        currentPage: !changePage
+          ? pageConfig.currentPage
+          : changePage === 'prev'
+          ? pageConfig.currentPage - 1
+          : changePage === 'next'
+          ? pageConfig.currentPage + 1
+          : changePage,
       });
       console.log('Response GET');
       console.log(res);
@@ -125,7 +152,7 @@ function Gallery() {
     const formData = new FormData();
     formData.append('judul', formGallery.title);
     formData.append('deskripsi', formGallery.description);
-    formData.append('media', formGallery.file.img);
+    formData.append('media', formGallery.file.img || formGallery.file.fileName);
 
     try {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
@@ -206,7 +233,7 @@ function Gallery() {
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Box className="gap-16">
+          <Box className="gap-16" sx={{ flexDirection: 'column' }}>
             <div style={{ width: '100%', textAlign: 'center' }}>
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Geleri</h2>
             </div>
@@ -500,6 +527,48 @@ function Gallery() {
                 </TableBody>
               </Table>
             </TableContainer>
+
+            {/* Table Pagination */}
+            {!pageConfig.metadata ? null : (
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 25,
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  size="small"
+                  disabled={pageConfig.currentPage === 1}
+                  onClick={() => handleGetGallery('prev')}
+                >
+                  <ChevronLeftIcon />
+                </Button>
+                {Array.from(Array(pageConfig.metadata.totalPage)).map((item, index) => {
+                  return (
+                    <Button
+                      variant={pageConfig.currentPage === index + 1 ? 'contained' : 'outlined'}
+                      size="small"
+                      onClick={() => handleGetGallery(index + 1)}
+                    >
+                      {index + 1}
+                    </Button>
+                  );
+                })}
+                <Button
+                  variant="outlined"
+                  size="small"
+                  disabled={pageConfig.currentPage === pageConfig.metadata.totalPage}
+                  onClick={() => handleGetGallery('next')}
+                >
+                  <ChevronRightIcon />
+                </Button>
+              </div>
+            )}
 
             {formGallery.title}
             <br />

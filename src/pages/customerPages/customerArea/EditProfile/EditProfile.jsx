@@ -83,7 +83,7 @@ function EditProfile() {
         birthDate: res.data.data.tglLahir ? dayjs(res.data.data.tglLahir) : dayjs,
         profilePicture: { img: null, fileName: res.data.data.profilePic },
       });
-      localStorage.setItem('customer_name', res.data.data.nama);
+      localStorage.setItem('my_profile_account', JSON.stringify(res.data.data));
     } catch (error) {
       console.log(error);
     }

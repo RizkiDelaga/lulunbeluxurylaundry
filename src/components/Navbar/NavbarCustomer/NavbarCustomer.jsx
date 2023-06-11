@@ -38,6 +38,7 @@ import { getExample } from '../../../redux/actions/exampleAction';
 import MuiToggleButton from '@mui/material/ToggleButton';
 import { NavHashLink } from 'react-router-hash-link';
 import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
+import { getProfileAccountCustomer } from '../../../redux/actions/getProfileAccount';
 
 const drawerWidth = 300;
 
@@ -183,14 +184,22 @@ function NavbarCustomer(props) {
   const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
     (state) => state.getGeneralInformation
   );
+  const { isLoading: loadingGetProfileAccountCustomer, data: dataGetProfileAccountCustomer } = useSelector(
+    (state) => state.getProfileAccountCustomer
+  );
 
   React.useEffect(() => {
     dispatchGetExample();
     dispatchGetGeneralInformation();
+    dispatchGetProfileAccountCustomer();
   }, []);
 
   const dispatchGetExample = async () => {
     return await dispatch(getExample());
+  };
+
+  const dispatchGetProfileAccountCustomer = async () => {
+    return await dispatch(getProfileAccountCustomer());
   };
 
   const dispatchGetGeneralInformation = async () => {
@@ -485,19 +494,17 @@ function NavbarCustomer(props) {
                 </Menu>
 
                 {/* Account Menu */}
-                <IconButton
-                  color="inherit"
-                  onClick={(event) => {
-                    setOpenMyAccount(event.currentTarget);
-                  }}
-                  sx={{ padding: 0 }}
-                >
-                  <Avatar
-                    alt="Remy Sharp"
-                    src="https://www.parenting.co.id/img/images/LELA28_shutterstock_800x400.jpg"
-                    sx={{ width: 32, height: 32 }}
-                  />
-                </IconButton>
+                {loadingGetProfileAccountCustomer ? null : (
+                  <IconButton
+                    color="inherit"
+                    onClick={(event) => {
+                      setOpenMyAccount(event.currentTarget);
+                    }}
+                    sx={{ padding: 0 }}
+                  >
+                    <Avatar src={dataGetProfileAccountCustomer.profilePic} sx={{ width: 32, height: 32 }} />
+                  </IconButton>
+                )}
 
                 <Menu
                   anchorEl={openMyAccount}
@@ -517,6 +524,7 @@ function NavbarCustomer(props) {
                   transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                   anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
+                  {/* {loadingGetProfileAccountCustomer ? null : ( */}
                   <div
                     style={{
                       display: 'flex',
@@ -527,17 +535,14 @@ function NavbarCustomer(props) {
                       margin: '8px 16px',
                     }}
                   >
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="https://www.parenting.co.id/img/images/LELA28_shutterstock_800x400.jpg"
-                      sx={{ marginRight: 1.5 }}
-                    />
+                    <Avatar src={dataGetProfileAccountCustomer.profilePic} sx={{ marginRight: 1.5 }} />
                     <div style={{ width: 'fit-content' }}>
                       <div style={{ fontWeight: 'bold', wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
-                        Nama Customer
+                        {dataGetProfileAccountCustomer.nama}
                       </div>
                     </div>
                   </div>
+                  {/* )} */}
                   <MenuItem onClick={() => handleCloseAccountMenu('/AreaPelanggan')}>
                     <ListItemIcon>
                       <AccountBoxIcon className="color-primary" />
@@ -560,8 +565,7 @@ function NavbarCustomer(props) {
                   <MenuItem
                     onClick={() => {
                       localStorage.removeItem('access_token');
-                      localStorage.removeItem('customer_name');
-                      localStorage.removeItem('customer_profile_picture');
+                      localStorage.removeItem('my_profile_account');
                       handleCloseAccountMenu('/Login');
                     }}
                   >

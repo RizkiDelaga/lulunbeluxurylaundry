@@ -19,13 +19,19 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 function Gallery() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [dataGallery, setDatagallery] = React.useState([]);
-  const [openDescription, setOpenDescription] = React.useState(false);
+  const [pageConfig, setPageConfig] = React.useState({
+    currentPage: 1,
+    metadata: null,
+  });
 
+  const [openDescription, setOpenDescription] = React.useState(false);
   const [openPreviewGallery, setOpenPreviewGallery] = React.useState({
     isOpen: false,
     data: null,
@@ -44,11 +50,31 @@ function Gallery() {
     handleGetGallery();
   }, []);
 
-  const handleGetGallery = async () => {
+  const handleGetGallery = async (changePage, maxDataPerPage) => {
     try {
       const res = await axios({
         method: 'GET',
-        url: `${process.env.REACT_APP_API_KEY}/galeri`,
+        url: `${process.env.REACT_APP_API_KEY}/galeri?page=${
+          !changePage
+            ? pageConfig.currentPage
+            : changePage === 'prev'
+            ? pageConfig.currentPage - 1
+            : changePage === 'next'
+            ? pageConfig.currentPage + 1
+            : changePage
+        }`,
+      });
+
+      setPageConfig({
+        ...pageConfig,
+        metadata: res.data.metadata,
+        currentPage: !changePage
+          ? pageConfig.currentPage
+          : changePage === 'prev'
+          ? pageConfig.currentPage - 1
+          : changePage === 'next'
+          ? pageConfig.currentPage + 1
+          : changePage,
       });
       console.log('Response GET');
       console.log(res);
@@ -121,6 +147,50 @@ function Gallery() {
             }
           })}
         </Grid>
+
+        {/* Table Pagination */}
+        {/* pageConfig.metadata.totalPage */}
+        {/* setPageConfig({ ...pageConfig, currentPage: index + 1 }) */}
+        {!pageConfig.metadata ? null : (
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 25,
+            }}
+          >
+            <Button
+              variant="outlined"
+              size="small"
+              disabled={pageConfig.currentPage === 1}
+              onClick={() => handleGetGallery('prev')}
+            >
+              <ChevronLeftIcon />
+            </Button>
+            {Array.from(Array(13)).map((item, index) => {
+              return (
+                <Button
+                  variant={pageConfig.currentPage === index + 1 ? 'contained' : 'outlined'}
+                  size="small"
+                  onClick={() => handleGetGallery(index + 1)}
+                >
+                  {index + 1}
+                </Button>
+              );
+            })}
+            <Button
+              variant="outlined"
+              size="small"
+              disabled={pageConfig.currentPage === pageConfig.metadata.totalPage}
+              onClick={() => handleGetGallery('next')}
+            >
+              <ChevronRightIcon />
+            </Button>
+          </div>
+        )}
 
         <Dialog
           fullWidth

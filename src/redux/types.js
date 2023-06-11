@@ -11,3 +11,9 @@ export const GET_HOW_TO_ORDER = 'GET_HOW_TO_ORDER';
 export const GET_TESTIMONY = 'GET_TESTIMONY';
 export const GET_FAQ = 'GET_FAQ';
 export const GET_GALLERY = 'GET_GALLERY';
+
+// Profile Account
+export const GET_PROFILE_ACCOUNT_CUSTOMER = 'GET_PROFILE_ACCOUNT_CUSTOMER';
+export const GET_PROFILE_ACCOUNT_ADMIN = 'GET_PROFILE_ACCOUNT_ADMIN';
+
+
