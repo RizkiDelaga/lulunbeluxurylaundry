@@ -16,6 +16,7 @@ import {
     getGalleryReducer
 } from "./getBusinessInformationReducer";
 import { getProfileAccountAdminReducer, getProfileAccountCustomerReducer } from "./getProfileAccountReducer";
+import { getNotificationAdminReducer } from "./getNotificationReducer";
 
 export default combineReducers({
     // ======== Example Reducer ========
@@ -35,6 +36,10 @@ export default combineReducers({
     // ======== Profile Account Reducer ========
     getProfileAccountCustomer:getProfileAccountCustomerReducer,
     getProfileAccountAdmin:getProfileAccountAdminReducer,
+    
+    // ======== Notification Reducer ========
+    getNotificationAdmin:getNotificationAdminReducer,
+
     
 
     // ======== Admin Reducer ========

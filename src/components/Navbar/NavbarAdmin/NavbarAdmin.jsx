@@ -33,6 +33,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getExample } from '../../../redux/actions/exampleAction';
 import MuiToggleButton from '@mui/material/ToggleButton';
 import { getProfileAccountAdmin } from '../../../redux/actions/getProfileAccount';
+import { getNotificationAdmin } from '../../../redux/actions/getNotificationAction';
+import axios from 'axios';
 
 const drawerWidth = 300;
 
@@ -57,7 +59,7 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 // Notification Popup for mobile version
-const MobileNotificationDialog = (props) => {
+const MobileNotificationDialog = ({ openNotifDialog, handleClose, loadingData, data, handleCloseNotificationMenu }) => {
   const theme = useTheme();
   const fullScreenDialog = useMediaQuery(theme.breakpoints.up('xs'));
 
@@ -75,8 +77,8 @@ const MobileNotificationDialog = (props) => {
   return (
     <Dialog
       fullScreen={fullScreenDialog}
-      onClose={props.handleClose}
-      open={props.openNotifDialog}
+      onClose={handleClose}
+      open={openNotifDialog}
       sx={{
         zIndex: '10000',
         [theme.breakpoints.up('md')]: {
@@ -87,15 +89,15 @@ const MobileNotificationDialog = (props) => {
       <div ref={topDialog} id="asd">
         <DialogTitle style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
           Notifikasi
-          <IconButton onClick={props.handleClose}>
+          <IconButton onClick={handleClose}>
             <MenuIcon color="primary" />
           </IconButton>
         </DialogTitle>
         Lorem ipsum dolor sit amet consectetur adipisicing elit.
         <NotificationList
-          loadingGetExample={props.loadingGetExample}
-          dataGetExample={props.dataGetExample}
-          handleCloseNotificationMenu={props.handleCloseNotificationMenu}
+          loadingData={loadingData}
+          data={data}
+          handleCloseNotificationMenu={handleCloseNotificationMenu}
         />
       </div>
 
@@ -123,46 +125,68 @@ const MobileNotificationDialog = (props) => {
   );
 };
 
-const NotificationList = (props) => {
+const NotificationList = ({ loadingData, data, notificationStatus, handleUpdateReadNotification }) => {
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    document.title = 'Buat Pesanan Baru';
+  }, []);
 
   return (
     <div style={{ height: '100%' }}>
-      {props.loadingGetExample
+      {loadingData
         ? null
-        : props.dataGetExample.map((data, index) => (
-            <span key={data.id}>
-              <MenuItem
-                onClick={() => {
-                  navigate(`Pesanan/${data.id}`);
-                  // props.setOpenMyAccount(null);
-                }}
-                className={`${style['list-notification']}`}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                  }}
-                >
-                  <div style={{ fontWeight: 'bold' }}>Pesanan #281931290 menunggu persetujuan</div>
-                  <div style={{ fontSize: '14px' }}>
-                    <span style={{ fontWeight: 'bold' }}>Nama Pengguna </span>
-                    melakukan pemesanan dengan nomer pesanan #32672161276.
-                  </div>
-                  <div style={{ fontSize: '12px', textAlign: 'right' }}>23/04/2023 15:52</div>
-                </div>
-                <div>
-                  {data.status ? (
-                    <Badge style={{ width: '20px' }} color="primary" overlap="circular" badgeContent="" />
-                  ) : null}
-                </div>
-              </MenuItem>
-              <Divider />
-            </span>
-          ))}
+        : data
+            .filter((element) => (notificationStatus !== 'All' ? element.dibacaAdmin === false : true))
+            .map((item, index) => {
+              const parseItem = JSON.parse(item.pesan);
+              return (
+                <span key={item.id}>
+                  <MenuItem
+                    onClick={() => {
+                      handleUpdateReadNotification(item.id);
+                      // navigate(`/Pesanan/${item.id}`);
+                    }}
+                    className={`${style['list-notification']}`}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                      }}
+                    >
+                      <div style={{ fontWeight: 'bold' }}>{parseItem.header}</div>
+                      <div style={{ fontSize: '14px' }}>{parseItem.deskripsi}</div>
+                      <div style={{ fontSize: '12px', textAlign: 'right' }}>{`${item.updatedAt.slice(
+                        8,
+                        10
+                      )}/${item.updatedAt.slice(5, 7)}/${item.updatedAt.slice(0, 4)} ${item.updatedAt.slice(
+                        11,
+                        16
+                      )}`}</div>
+                    </div>
+                    <div>
+                      {!item.dibacaAdmin ? (
+                        <div
+                          style={{
+                            backgroundColor: '#1F305C',
+                            borderRadius: '100%',
+                            padding: '5px',
+                            width: '14px',
+                            height: '14px',
+                          }}
+                        >
+                          {' '}
+                        </div>
+                      ) : null}
+                    </div>
+                  </MenuItem>
+                  <Divider />
+                </span>
+              );
+            })}
     </div>
   );
 };
@@ -173,22 +197,41 @@ function Navbar(props) {
   const [notificationStatus, setNotificationStatus] = React.useState('All');
 
   const dispatch = useDispatch();
-  const { isLoading: loadingGetExample, data: dataGetExample } = useSelector((state) => state.getExample);
+  const { isLoading: loadingGetNotificationAdmin, data: dataGetNotificationAdmin } = useSelector(
+    (state) => state.getNotificationAdmin
+  );
   const { isLoading: loadingGetProfileAccountAdmin, data: dataGetProfileAccountAdmin } = useSelector(
     (state) => state.getProfileAccountAdmin
   );
 
   React.useEffect(() => {
-    dispatchGetExample();
+    dispatchGetNotificationAdmin();
     dispatchGetProfileAccountAdmin();
   }, []);
 
-  const dispatchGetExample = async () => {
-    return await dispatch(getExample());
+  const dispatchGetNotificationAdmin = async () => {
+    return await dispatch(getNotificationAdmin());
   };
 
   const dispatchGetProfileAccountAdmin = async () => {
     return await dispatch(getProfileAccountAdmin());
+  };
+
+  const handleUpdateReadNotification = async (id) => {
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/notifikasi/admin/${id}`,
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+      dispatchGetNotificationAdmin();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Open Notification Menu
@@ -246,7 +289,11 @@ function Navbar(props) {
             >
               <Badge
                 color="primary"
-                badgeContent={loadingGetExample ? null : dataGetExample.filter((item) => item.status === true).length}
+                badgeContent={
+                  loadingGetNotificationAdmin
+                    ? null
+                    : dataGetNotificationAdmin.filter((item) => item.dibacaAdmin === false).length
+                }
                 max={999}
               >
                 <NotificationsNoneOutlinedIcon />
@@ -254,14 +301,14 @@ function Navbar(props) {
             </IconButton>
 
             {/* Notification display for mobile size */}
-            {loadingGetExample ? null : (
+            {loadingGetNotificationAdmin ? null : (
               <MobileNotificationDialog
                 handleClose={() => {
                   setOpenNotification(!openNotification);
                 }}
                 openNotifDialog={openNotification}
-                loadingGetExample={loadingGetExample}
-                dataGetExample={dataGetExample}
+                loadingData={loadingGetNotificationAdmin}
+                data={dataGetNotificationAdmin}
                 handleCloseNotificationMenu={handleCloseNotificationMenu}
               />
             )}
@@ -361,8 +408,10 @@ function Navbar(props) {
               </div>
 
               <NotificationList
-                loadingGetExample={loadingGetExample}
-                dataGetExample={dataGetExample}
+                handleUpdateReadNotification={handleUpdateReadNotification}
+                notificationStatus={notificationStatus}
+                loadingData={loadingGetNotificationAdmin}
+                data={dataGetNotificationAdmin}
                 handleCloseNotificationMenu={handleCloseNotificationMenu}
               />
             </Menu>
