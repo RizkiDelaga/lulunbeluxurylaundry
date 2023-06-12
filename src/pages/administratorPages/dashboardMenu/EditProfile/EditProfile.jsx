@@ -34,6 +34,7 @@ function EditProfile() {
     status: '',
   });
 
+  
   React.useEffect(() => {
     document.title = 'Edit Profile';
     handleGetMyProfile();

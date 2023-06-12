@@ -345,6 +345,18 @@ function NavbarCustomer(props) {
             </List>
             <Button
               variant="contained"
+              onClick={() => {
+                if (localStorage.getItem('access_token')) {
+                  const profileAccount = JSON.parse(localStorage.getItem('my_profile_account'));
+                  if (!profileAccount.alamatUser) {
+                    alert('Harap input alamat terlebih dahulu!');
+                  } else {
+                    navigate('/AreaPelanggan/BuatPesananBaru');
+                  }
+                } else {
+                  navigate('/Login');
+                }
+              }}
               sx={{
                 ml: 2,
                 [theme.breakpoints.down('md')]: {

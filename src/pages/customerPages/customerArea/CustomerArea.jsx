@@ -661,7 +661,18 @@ function CustomerArea() {
           },
         }}
       >
-        <PageStructureAndDirectButton defaultMenu="Area Pelanggan" />
+        {/* <PageStructureAndDirectButton defaultMenu="Area Pelanggan" /> */}
+        <PageStructureAndDirectButton
+          defaultMenu="Area Pelanggan"
+          directButton={[
+            {
+              color: 'primary',
+              iconType: 'add',
+              value: 'Buat pesanan baru',
+              link: '/AreaPelanggan/BuatPesananBaru',
+            },
+          ]}
+        />
 
         {loadingGetProfileAccountCustomer ? null : (
           <Paper

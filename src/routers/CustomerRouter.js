@@ -16,6 +16,7 @@ import CustomerRegistration from '../pages/customerPages/customerAuth/CustomerRe
 import ChangePassword from '../pages/customerPages/customerArea/ChangePassword/ChangePassword';
 import EditProfile from '../pages/customerPages/customerArea/EditProfile/EditProfile';
 import OrderDetails from '../pages/customerPages/customerArea/OrderDetails/OrderDetails';
+import CreateNewOrder from '../pages/customerPages/customerArea/CreateNewOrder/CreateNewOrder';
 
 function CustomerRouter() {
 
@@ -36,7 +37,7 @@ function CustomerRouter() {
   const PublicCustomerRoute = () => {
 
     return <CustomerLayout />;
-    // return <SidebarCustomer />;
+    
   }
 
   return (
@@ -46,7 +47,7 @@ function CustomerRouter() {
             <Route path="/" element={<HomePage />} />
             <Route path="Galeri" element={<Gallery />} />
             <Route path="TentangKami" element={<AboutUs />} />
-            <Route path="StrukPemesanan/:id" element={<DigitalReceipt />} />
+            <Route path="StrukPemesanan/:noPesanan" element={<DigitalReceipt />} />
           </Route>
 
           <Route element={<HandleLoginSuccessfully />}>
@@ -59,11 +60,11 @@ function CustomerRouter() {
 
           <Route element={<ProtectedCustomerRoute />}>
             <Route path="AreaPelanggan" element={<CustomerArea />} />
-            <Route path="AreaPelanggan/:id" element={<OrderDetails />} />
+            <Route path="AreaPelanggan/:noPesanan" element={<OrderDetails />} />
             <Route path="AreaPelanggan/EditProfil" element={<EditProfile />} />
             <Route path="AreaPelanggan/UbahPassword" element={<ChangePassword />} />
-            <Route path="AreaPelanggan/BuatPesananBaru" element={<HomePage />} />
-            <Route path="AreaPelanggan/RatingDanReview/:id" element={<RatingAndReview />} />
+            <Route path="AreaPelanggan/BuatPesananBaru" element={<CreateNewOrder />} />
+            <Route path="AreaPelanggan/RatingDanReview/:idPesanan/:noPesanan" element={<RatingAndReview />} />
           </Route>
         </Routes>
   );

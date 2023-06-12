@@ -129,6 +129,7 @@ function EditProfile() {
       console.log(res);
       // setFormEditProfile(res.data.data);
       setListMyAddress(res.data.data);
+      handleGetMyProfile();
     } catch (error) {
       console.log(error);
     }

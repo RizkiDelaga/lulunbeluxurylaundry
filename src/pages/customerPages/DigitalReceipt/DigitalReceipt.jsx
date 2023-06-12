@@ -1,13 +1,15 @@
-import { Button, Container, Grid, Paper } from '@mui/material';
+import { Box, Button, Container, Grid, Paper, useTheme } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
+import RatingComponent from '../../../components/Ratings/RatingComponent';
 
 function DigitalReceipt() {
+  const theme = useTheme();
   const navigate = useNavigate();
-  let { id } = useParams();
+  let { noPesanan } = useParams();
   const [detailOrder, setDetailOrder] = useState();
 
   const dispatch = useDispatch();
@@ -32,7 +34,7 @@ function DigitalReceipt() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/nomor/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/nomor/${noPesanan}`,
       });
 
       console.log('Response GET Data Finance');
@@ -68,7 +70,7 @@ function DigitalReceipt() {
               <h4 style={{ textAlign: 'center' }}>Lulu N’ Be Luxury Laundry</h4>
               <span style={{ textAlign: 'center', maxWidth: '450px' }}>{dataGetGeneralInformation.lokasi}</span>
               <span style={{ textAlign: 'center' }}>
-                <strong>Nomer Pesanan:</strong> #{id}
+                <strong>Nomer Pesanan:</strong> #{noPesanan}
               </span>
             </div>
 
@@ -193,21 +195,66 @@ function DigitalReceipt() {
               </div>
             </div>
 
-            <Button
-              variant="outlined"
-              // className="button-outlined-primary"
-              onClick={() => {
-                if (localStorage.getItem('access_token')) {
-                  navigate(`/AreaPelanggan/RatingDanReview/${id}`);
-                } else {
-                  navigate('/Login');
-                }
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1,
+                maxWidth: '800px',
+                bgcolor: '#eeeeee',
+                borderRadius: 2,
+                p: 2,
               }}
-              disabled={detailOrder.status !== 'Selesai'}
-              style={{ fontWeight: 'bold' }}
             >
-              Rating & Review
-            </Button>
+              <h5 style={{ textAlign: 'center' }}>Rating & Review</h5>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm="auto" sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <img
+                    src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
+                    style={{ width: '120px', height: '120px', objectFit: 'cover', borderRadius: 4 }}
+                    alt=""
+                  />
+                </Grid>
+
+                <Grid
+                  item
+                  xs={12}
+                  sm
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,
+                    [theme.breakpoints.down('sm')]: {
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      textAlign: 'center',
+                    },
+                  }}
+                >
+                  <RatingComponent readOnly={true} ratingValue={5} />
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odio repellendus non maiores facilis enim
+                  cupiditate tenetur possimus nihil voluptatem qui consectetur natus est magni debitis officiis, cumque
+                  laudantium tempora in.
+                </Grid>
+              </Grid>
+            </Box>
+
+            {!detailOrder ? null : (
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  if (localStorage.getItem('access_token')) {
+                    navigate(`/AreaPelanggan/RatingDanReview/${detailOrder.id}/${noPesanan}`);
+                  } else {
+                    navigate('/Login');
+                  }
+                }}
+                disabled={detailOrder.status !== 'Selesai'}
+                style={{ fontWeight: 'bold' }}
+              >
+                Rating & Review
+              </Button>
+            )}
           </Paper>
         )}
       </Container>
