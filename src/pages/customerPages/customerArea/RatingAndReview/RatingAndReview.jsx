@@ -4,16 +4,44 @@ import { useNavigate, useParams } from 'react-router-dom';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import RatingComponent from '../../../../components/Ratings/RatingComponent';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
+import axios from 'axios';
 
 function RatingAndReview() {
   const theme = useTheme();
   const navigate = useNavigate();
-  let { id } = useParams();
-  const [formRatingAndReview, setFormRatingAndReview] = useState({
-    rating: null,
-    review: '',
-    photo: { img: null, fileName: '' },
-  });
+  let { idPesanan, noPesanan } = useParams();
+  const [rating, setRating] = useState();
+  const [review, setReview] = useState();
+  const [photo, setPhoto] = useState({ img: null, fileName: null });
+
+  React.useEffect(() => {
+    document.title = 'Rating & Review Pesanan';
+  }, []);
+
+  const handleCreateRatingReview = async () => {
+    const formData = new FormData();
+    formData.append('pemesananId', idPesanan);
+    formData.append('rating', rating);
+    formData.append('review', review);
+    formData.append('gambar', photo.img);
+
+    try {
+      const res = await axios({
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/review`,
+        data: formData,
+      });
+      console.log('Response POST Login Customer');
+      console.log(res);
+
+      navigate(`/AreaPelanggan/${noPesanan}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -33,7 +61,7 @@ function RatingAndReview() {
         <PageStructureAndDirectButton
           defaultMenu="Area Pelanggan"
           currentPage={{
-            title: `Rating & Review Pesanan #${id}`,
+            title: `Rating & Review Pesanan #${noPesanan}`,
           }}
         />
 
@@ -52,7 +80,7 @@ function RatingAndReview() {
           <h4 style={{ textAlign: 'center' }}>Rating & Review</h4>
           <span style={{ alignSelf: 'center' }}>
             <h6 style={{ textAlign: 'center' }}>Rating</h6>
-            <RatingComponent />
+            <RatingComponent setRating={setRating} />
           </span>
           <span>
             <h6 style={{ textAlign: 'center' }}>Review</h6>
@@ -63,24 +91,27 @@ function RatingAndReview() {
               multiline
               maxRows={4}
               autoComplete="off"
+              onChange={(e) => {
+                setReview(e.target.value);
+              }}
               sx={{ width: '100%' }}
             />
           </span>
 
-          {formRatingAndReview.photo.img ? (
+          {photo.img ? (
             <img
               id="output"
-              src={formRatingAndReview.photo.img ? URL.createObjectURL(formRatingAndReview.photo.img) : ''}
+              src={photo.img ? URL.createObjectURL(photo.img) : ''}
               height={120}
               alt="Preview"
               style={{ alignSelf: 'center' }}
             />
           ) : null}
 
-          {formRatingAndReview.photo.fileName ? (
+          {photo.fileName ? (
             <Chip
-              label={formRatingAndReview.photo.fileName}
-              onDelete={() => setFormRatingAndReview({ ...formRatingAndReview, photo: { img: null, fileName: '' } })}
+              label={photo.fileName}
+              onDelete={() => setPhoto({ img: null, fileName: null })}
               sx={{ maxWidth: '250px', width: 'fit-content', alignSelf: 'center' }}
             />
           ) : null}
@@ -98,19 +129,16 @@ function RatingAndReview() {
               accept="image/*"
               onChange={(e) => {
                 console.log(e.target.files);
-                setFormRatingAndReview({
-                  ...formRatingAndReview,
-                  photo: {
-                    img: e.target.files[0],
-                    fileName: !e.target.files[0] ? null : e.target.files[0].name,
-                  },
+                setPhoto({
+                  img: e.target.files[0],
+                  fileName: !e.target.files[0] ? null : e.target.files[0].name,
                 });
                 // console.log(image);
               }}
               hidden
             />
           </Button>
-          <Button variant="contained" sx={{ width: '100%' }}>
+          <Button variant="contained" onClick={() => handleCreateRatingReview()} sx={{ width: '100%' }}>
             Kirim
           </Button>
         </Paper>

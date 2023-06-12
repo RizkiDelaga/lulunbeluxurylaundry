@@ -9,7 +9,7 @@ import RatingComponent from '../../../../components/Ratings/RatingComponent';
 function OrderDetails() {
   const theme = useTheme();
   const navigate = useNavigate();
-  let { id } = useParams();
+  let { noPesanan } = useParams();
   const [detailOrder, setDetailOrder] = useState();
   const [ratingReview, setRatingReview] = useState();
 
@@ -29,7 +29,7 @@ function OrderDetails() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/nomor/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/nomor/${noPesanan}`,
       });
 
       console.log('Response GET Data Finance');
@@ -82,7 +82,7 @@ function OrderDetails() {
         <PageStructureAndDirectButton
           defaultMenu="Area Pelanggan"
           currentPage={{
-            title: `Detail Pesanan #${id}`,
+            title: `Detail Pesanan #${noPesanan}`,
           }}
         />
 
@@ -286,7 +286,7 @@ function OrderDetails() {
                 <Button
                   variant="contained"
                   size="large"
-                  onClick={() => navigate(`/StrukPemesanan/${id}`)}
+                  onClick={() => navigate(`/StrukPemesanan/${noPesanan}`)}
                   sx={{ width: '100%', fontWeight: 'bold' }}
                 >
                   Struk Digital
@@ -340,7 +340,9 @@ function OrderDetails() {
                     <Button
                       variant="contained"
                       size="large"
-                      onClick={() => navigate(`/AreaPelanggan/RatingDanReview/${id}`)}
+                      onClick={() =>
+                        navigate(`/AreaPelanggan/RatingDanReview/${detailOrder.id}/${detailOrder.nomorPesanan}`)
+                      }
                       disabled={detailOrder.status !== 'Selesai'}
                       style={{ width: '100%', fontWeight: 'bold' }}
                     >
