@@ -58,7 +58,7 @@ function OrderDetails() {
       setRatingReview(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
-        setDetailOrder();
+        setRatingReview();
       }
       console.log(error);
     }
@@ -111,8 +111,7 @@ function OrderDetails() {
                           component="img"
                           sx={{
                             width: '120px',
-                            height: '100%',
-                            minHeight: '120px',
+                            height: '120px',
                             objectFit: 'cover',
                             borderRadius: '8px',
                           }}
@@ -297,60 +296,58 @@ function OrderDetails() {
               elevation={3}
               sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '16px' }}
             >
-              {!ratingReview ? null : (
-                <Box className="gap-16">
-                  <div style={{ width: '100%', textAlign: 'center' }}>
-                    <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Rating & Review</h4>
-                  </div>
+              <Box className="gap-16">
+                <div style={{ width: '100%', textAlign: 'center' }}>
+                  <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Rating & Review</h4>
+                </div>
 
-                  <div
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '16px',
+                  }}
+                >
+                  <h6>Rating</h6>
+
+                  <span>
+                    {!ratingReview ? 'N/A' : <RatingComponent readOnly={true} ratingValue={ratingReview.rating} />}
+                  </span>
+
+                  <h6>Review</h6>
+
+                  <span
                     style={{
                       width: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      gap: '16px',
+                      backgroundColor: '#eeeeee',
+                      padding: '8px 24px',
+                      borderRadius: '8px',
+                      textAlign: 'center',
                     }}
                   >
-                    <h6>Rating</h6>
+                    {!ratingReview ? 'N/A' : ratingReview.review}
+                  </span>
 
-                    <span>
-                      {!ratingReview ? 'N/A' : <RatingComponent readOnly={true} ratingValue={ratingReview.rating} />}
-                    </span>
+                  {!ratingReview ? null : !ratingReview.gambar ? null : <img src={ratingReview.gambar} alt="" />}
+                </div>
 
-                    <h6>Review</h6>
-
-                    <span
-                      style={{
-                        width: '100%',
-                        backgroundColor: '#eeeeee',
-                        padding: '8px 24px',
-                        borderRadius: '8px',
-                        textAlign: 'center',
-                      }}
-                    >
-                      {!ratingReview ? 'N/A' : ratingReview.review}
-                    </span>
-
-                    {!ratingReview ? null : !ratingReview.gambar ? null : <img src={ratingReview.gambar} alt="" />}
-                  </div>
-
-                  {!detailOrder ? null : (
-                    <Button
-                      variant="contained"
-                      size="large"
-                      onClick={() =>
-                        navigate(`/AreaPelanggan/RatingDanReview/${detailOrder.id}/${detailOrder.nomorPesanan}`)
-                      }
-                      disabled={detailOrder.status !== 'Selesai'}
-                      style={{ width: '100%', fontWeight: 'bold' }}
-                    >
-                      Rating & Review Sekarang
-                    </Button>
-                  )}
-                </Box>
-              )}
+                {!detailOrder ? null : (
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() =>
+                      navigate(`/AreaPelanggan/RatingDanReview/${detailOrder.id}/${detailOrder.nomorPesanan}`)
+                    }
+                    disabled={detailOrder.status !== 'Selesai'}
+                    style={{ width: '100%', fontWeight: 'bold' }}
+                  >
+                    Rating & Review Sekarang
+                  </Button>
+                )}
+              </Box>
             </Paper>
           </Grid>
         </Grid>

@@ -21,117 +21,58 @@ import { LocalizationProvider, MobileDatePicker, MobileTimePicker, TimePicker } 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
+import axios from 'axios';
+import StarIcon from '@mui/icons-material/Star';
 
-const OrderInformationForm = ({ state, setState }) => {
+const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMethod }) => {
   const theme = useTheme();
-
-  const [formOrder, setFormOrder] = React.useState({
-    dateOrder: dayjs(),
-    serviceType: '',
-    discount: '',
-    paymentMethod: '',
-    customerInformation: {},
-    address: {
-      pickupAddress: '',
-      deliveryAddress: '',
-    },
-    items: [
-      {
-        itemName: '',
-        quantity: 0,
-        pricePerUnit: 0,
-        laundryType: '',
-        notation: '',
-        photo: {},
-      },
-    ],
-  });
-
-  const dataServiceType = [
-    {
-      id: 12,
-      layanan: 'Express',
-      hari: null,
-      jam: 2,
-      gambar: 'IMG_20220730_140826.jpg',
-      deskripsi:
-        'Waktu pencucian dilakukan dengan singkat mulai dari 2-5 jam untuk kategori barang seperti pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.',
-      createdAt: '2023-04-13T06:24:07.039Z',
-      updatedAt: '2023-04-13T06:25:43.930Z',
-    },
-    {
-      id: 15,
-      layanan: 'Standard',
-      hari: 2,
-      jam: 5,
-      gambar: 'IMG_20220730_140826.jpg',
-      deskripsi:
-        'Waktu pencucian biasa dilakukan selama 1-2 hari untuk beberapa kategori barang seperti pakaian, bedcover, sepatu, tas, sajadah, jas, dan boneka.',
-      createdAt: '2023-04-13T06:29:47.875Z',
-      updatedAt: '2023-04-13T06:33:59.303Z',
-    },
-    {
-      id: 16,
-      layanan: 'Khusus',
-      hari: 7,
-      jam: null,
-      gambar: 'IMG_20220730_140826.jpg',
-      deskripsi:
-        'Waktu pencucian dilakukan lebih lama dari biasanya, antara 4-7 hari untuk kategori barang besar seperti karpet dan gordyn.',
-      createdAt: '2023-04-13T06:30:38.369Z',
-      updatedAt: '2023-04-13T06:35:36.549Z',
-    },
-  ];
-
-  const dataPaymentMethod = [
-    {
-      id: 23,
-      logo: 'logo-uang.png',
-      nama: 'Cash',
-      nomor: null,
-      instruksi: ['Lakukan Pembayaran Secara Langsung Melalui Petugas Outlet'],
-      createdAt: '2023-04-14T07:46:11.853Z',
-      updatedAt: '2023-04-14T10:14:02.762Z',
-    },
-    {
-      id: 20,
-      logo: 'logo-uang.png',
-      nama: 'Ovo',
-      nomor: '08123456789',
-      instruksi: [
-        'Buka Aplikasi Ovo',
-        "Masuk ke menu 'Pay'",
-        'Pilih metode Input Nomor HP',
-        'Pilih metode pembayaran (OVO Cash atau OVO Point)',
-        'Masukkan Security Code',
-        'Pembayaran berhasil! Lakukan konfirmasi dengan menghubungi admin',
-      ],
-      createdAt: '2023-04-14T07:36:16.294Z',
-      updatedAt: '2023-04-15T03:05:18.877Z',
-    },
-    {
-      id: 24,
-      logo: 'logo-uang.png',
-      nama: 'Transfer Bank',
-      nomor: '091312923121398',
-      instruksi: [
-        'Lakukan pembayaran dengan cara melakukan transfer ke nomer bank 091312923121398 sesuai dengan nominal struk tagihan yang ada',
-        'Transfer dapat dilakukan dengan cara transfer via mesin ATM, Internet Banking, dan Mobile banking ',
-        'Pembayaran berhasil! Lakukan konfirmasi dengan menghubungi admin',
-      ],
-      createdAt: '2023-04-15T03:06:07.080Z',
-      updatedAt: '2023-04-15T03:06:07.080Z',
-    },
-  ];
+  const profileCustomer = JSON.parse(localStorage.getItem('my_profile_account'));
 
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         <div className={`dash-card`}>
           <div style={{ fontWeight: 'bold', marginBottom: '16px' }}>Informasi Pelanggan</div>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis libero, repellendus doloremque, dolor
-          impedit reprehenderit culpa a explicabo quas nihil autem totam quia obcaecati aliquam iusto laborum eum magni
-          ex!
+          <Box sx={{ borderRadius: '4px', backgroundColor: '#eeeeee', p: 2, width: '100%' }}>
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm={'auto'} sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Box
+                  component="img"
+                  sx={{
+                    width: '120px',
+                    height: '120px',
+                    objectFit: 'cover',
+                    borderRadius: '8px',
+                  }}
+                  alt=""
+                  src={profileCustomer.profilePic}
+                />
+              </Grid>
+              <Grid item xs={12} sm>
+                <Box
+                  component={'h4'}
+                  sx={{
+                    [theme.breakpoints.down('sm')]: {
+                      textAlign: 'center',
+                    },
+                  }}
+                >
+                  {profileCustomer.nama}
+                </Box>
+                <div>
+                  <strong>Tanggal Lahir :</strong> 05/02/1999
+                </div>
+                <div>
+                  <strong>Kontak :</strong> {profileCustomer.noTelp}
+                  {profileCustomer.email ? ` || ${profileCustomer.email}` : null}
+                </div>
+                <div>
+                  <strong>Alamat Utama :</strong> {profileCustomer.alamatUser}
+                </div>
+              </Grid>
+            </Grid>
+          </Box>
+
           <br />
           <Button variant="outlined" className={`button-outlined-primary`} style={{ width: '100%' }}>
             Cari Pelanggan
@@ -163,10 +104,10 @@ const OrderInformationForm = ({ state, setState }) => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
                       label="Pilih Tanggal"
-                      value={formOrder.dateOrder}
+                      value={state.dateOrder}
                       onChange={(value) => {
-                        setFormOrder({
-                          ...formOrder,
+                        setState({
+                          ...state,
                           dateOrder: value,
                         });
 
@@ -194,10 +135,10 @@ const OrderInformationForm = ({ state, setState }) => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileTimePicker
                       label="Pilih Jam"
-                      value={formOrder.dateOrder}
+                      value={state.dateOrder}
                       onChange={(value) => {
-                        setFormOrder({
-                          ...formOrder,
+                        setState({
+                          ...state,
                           dateOrder: value,
                         });
 
@@ -209,8 +150,7 @@ const OrderInformationForm = ({ state, setState }) => {
                       slotProps={{
                         textField: {
                           error: false,
-                          helperText:
-                            ('0' + formOrder.dateOrder.$H).slice(-2) + ':' + ('0' + formOrder.dateOrder.$m).slice(-2),
+                          helperText: ('0' + state.dateOrder.$H).slice(-2) + ':' + ('0' + state.dateOrder.$m).slice(-2),
                         },
                       }}
                       sx={{ width: '100%' }}
@@ -242,39 +182,45 @@ const OrderInformationForm = ({ state, setState }) => {
                   required
                   labelId="select-service-type-label"
                   id="select-service-type"
-                  value={formOrder.serviceType}
+                  // value={state.serviceType.name}
                   label="Jenis Layanan"
                   onChange={(e) => {
-                    setFormOrder({
-                      ...formOrder,
-                      serviceType: e.target.value,
+                    setState({
+                      ...state,
+                      serviceType: {
+                        name: listServiceType[e.target.value].layanan,
+                        duration: [
+                          listServiceType[e.target.value].hari,
+                          listServiceType[e.target.value].jam,
+                          listServiceType[e.target.value].menit,
+                        ],
+                      },
                     });
                   }}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxWidth: 500,
+                        maxHeight: 400,
+                      },
+                    },
+                  }}
                 >
-                  {dataServiceType.map((item) => {
+                  {listServiceType.map((item, index) => {
                     return (
-                      <MenuItem value={item.layanan} sx={{ py: '16px', whiteSpace: 'normal' }}>
-                        {formOrder.serviceType === item.layanan ? (
-                          item.layanan
-                        ) : (
-                          <div style={{ display: 'block' }}>
-                            <div style={{ fontWeight: 'bold' }}>
-                              {item.layanan} (
-                              {(item.hari ? item.hari + ' Hari' : '') +
-                                (item.hari && item.jam ? ' ' : '') +
-                                (item.jam ? item.jam + ' Jam' : '')}
-                              )
-                            </div>
-                            <div>{item.deskripsi}</div>
-                          </div>
-                        )}
+                      <MenuItem value={index} sx={{ py: '16px' }}>
+                        {item.layanan} (
+                        {(item.hari ? item.hari + ' Hari' : '') +
+                          (item.hari && item.jam ? ' ' : '') +
+                          (item.jam ? item.jam + ' Jam' : '') +
+                          (item.jam && item.menit ? ' ' : '') +
+                          (item.menit ? item.menit + ' Menit' : '')}
+                        )
                       </MenuItem>
                     );
                   })}
                 </Select>
               </FormControl>
-
-              {formOrder.serviceType}
             </Grid>
           </Grid>
           <Grid container spacing={2}>
@@ -296,9 +242,9 @@ const OrderInformationForm = ({ state, setState }) => {
               <TextField
                 type="number"
                 label="Diskon"
-                value={formOrder.discount}
+                value={state.discount}
                 onChange={(e) => {
-                  setFormOrder({ ...formOrder, discount: e.target.value });
+                  setState({ ...state, discount: e.target.value });
                 }}
                 autoComplete="off"
                 onWheel={(e) => e.target.blur()}
@@ -328,43 +274,24 @@ const OrderInformationForm = ({ state, setState }) => {
                   required
                   labelId="select-payment-method-label"
                   id="select-payment-method"
-                  value={formOrder.paymentMethod}
+                  value={state.paymentMethod}
                   label="Metode Pembayaran"
                   onChange={(e) => {
-                    setFormOrder({
-                      ...formOrder,
+                    setState({
+                      ...state,
                       paymentMethod: e.target.value,
                     });
                   }}
                 >
-                  {dataPaymentMethod.map((item) => {
+                  {listPaymentMethod.map((item) => {
                     return (
-                      <MenuItem value={item.nama} sx={{ py: '16px', whiteSpace: 'normal' }}>
-                        {formOrder.paymentMethod === item.nama ? (
-                          item.nama
-                        ) : (
-                          <div style={{ display: 'block' }}>
-                            <div style={{ fontWeight: 'bold' }}>{item.nama}</div>
-                            <div style={{ fontWeight: 'bold' }}>Instruksi:</div>
-                            {item.instruksi.map((itemInstruction, index) => {
-                              return (
-                                <table>
-                                  <tr>
-                                    <td style={{ display: 'block' }}>{index + 1}.</td>
-                                    <td>{itemInstruction}</td>
-                                  </tr>
-                                </table>
-                              );
-                            })}
-                          </div>
-                        )}
+                      <MenuItem value={item.nama} sx={{ py: '16px' }}>
+                        {item.nama}
                       </MenuItem>
                     );
                   })}
                 </Select>
               </FormControl>
-
-              {formOrder.paymentMethod}
             </Grid>
           </Grid>
         </div>
@@ -373,134 +300,27 @@ const OrderInformationForm = ({ state, setState }) => {
   );
 };
 
-const LaundryShuttle = ({ state, setState }) => {
+const LaundryShuttle = ({ state, setState, listAddress }) => {
   const theme = useTheme();
-  const [isUseProgram, setIsUseProgram] = React.useState(false);
-
-  const [formOrder, setFormOrder] = React.useState({
-    dateOrder: '',
-    serviceType: '',
-    discount: '',
-    paymentMethod: '',
-    customerInformation: {},
-    address: {
-      pickupAddress: '',
-      deliveryAddress: '',
-    },
-  });
-
-  const dataAddress = [
-    {
-      id: 12,
-      kategori: 'Rumah',
-      detail: 'No.15C',
-      kecamatan: 'Purwokerto Utara',
-      kelurahan: 'Purwokerto Lor',
-      rt: '05',
-      rw: '03',
-      deskripsi: 'rumah warna hijau sebelah warung',
-      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
-    },
-    {
-      id: 13,
-      kategori: 'Rumah',
-      detail: 'No.15C',
-      kecamatan: 'Purwokerto Utara',
-      kelurahan: 'Purwokerto Lor',
-      rt: '05',
-      rw: '03',
-      deskripsi: 'rumah warna hijau sebelah warung',
-      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
-    },
-    {
-      id: 14,
-      kategori: 'Rumah',
-      detail: 'No.15C',
-      kecamatan: 'Purwokerto Utara',
-      kelurahan: 'Purwokerto Lor',
-      rt: '05',
-      rw: '03',
-      deskripsi: 'rumah warna hijau sebelah warung',
-      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
-    },
-    {
-      id: 1,
-      kategori: 'Rumah',
-      detail: 'No.15C',
-      kecamatan: 'Purwokerto Utara',
-      kelurahan: 'Purwokerto Lor',
-      rt: '05',
-      rw: '03',
-      deskripsi: 'rumah warna hijau sebelah warung',
-      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
-    },
-    {
-      id: 1342783289,
-      kategori: 'Rumah',
-      detail: 'No.15C',
-      kecamatan: 'Purwokerto Utara',
-      kelurahan: 'Purwokerto Lor',
-      rt: '05',
-      rw: '03',
-      deskripsi: 'rumah warna hijau sebelah warung',
-      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
-    },
-    {
-      id: 178321,
-      kategori: 'Rumah',
-      detail: 'No.15C',
-      kecamatan: 'Purwokerto Utara',
-      kelurahan: 'Purwokerto Lor',
-      rt: '05',
-      rw: '03',
-      deskripsi: 'rumah warna hijau sebelah warung',
-      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
-    },
-    {
-      id: 134,
-      kategori: 'Rumah',
-      detail: 'No.15C',
-      kecamatan: 'Purwokerto Utara',
-      kelurahan: 'Purwokerto Lor',
-      rt: '05',
-      rw: '03',
-      deskripsi: 'rumah warna hijau sebelah warung',
-      gambar: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/House2008.jpg',
-    },
-    {
-      id: 2,
-      kategori: 'Kost',
-      detail: 'Yellow',
-      kecamatan: 'Purwokerto Utara',
-      kelurahan: 'Purwokerto Lor',
-      rt: '07',
-      rw: '13',
-      deskripsi: 'Kost warna kuning depan fotokopi',
-      gambar: 'https://pix10.agoda.net/hotelImages/135/1353767/1353767_16081917290045634234.jpg?ca=6&ce=1&s=1024x768',
-    },
-    {
-      id: 3,
-      kategori: 'Hotel',
-      detail: 'Aston',
-      kecamatan: 'Purwokerto Utara',
-      kelurahan: 'Purwokerto Lor',
-      rt: null,
-      rw: null,
-      deskripsi: 'Lobi hotel',
-      gambar: 'https://nubanyumas.com/wp-content/uploads/2022/04/images-16.jpeg',
-    },
-  ];
+  const [isUseProgram, setIsUseProgram] = React.useState(true);
 
   return (
     <div className={`dash-card gap-16`} style={{ width: '100%' }}>
       <div style={{ fontWeight: 'bold' }}>
         Program Antar Jemput
-        <Switch
+        {/* <Switch
           onChange={(e) => {
             setIsUseProgram(e.target.checked);
+            setState({
+              ...state,
+              address: {
+                pickupAddress: '',
+                deliveryAddress: '',
+              },
+            });
             console.log(e.target.checked);
           }}
-        />
+        /> */}
       </div>
 
       {isUseProgram ? (
@@ -513,28 +333,49 @@ const LaundryShuttle = ({ state, setState }) => {
                 required
                 labelId="select-pickup-address-label"
                 id="select-pickup-address"
-                value={formOrder.address.pickupAddress}
+                // value={state.address.pickupAddress}
                 label="Alamat Pengantaran"
                 onChange={(e) => {
-                  setFormOrder({
-                    ...formOrder,
-                    address: { ...formOrder.address, pickupAddress: e.target.value },
+                  setState({
+                    ...state,
+                    address: { ...state.address, pickupAddress: JSON.stringify(listAddress[e.target.value]) },
                   });
                 }}
                 MenuProps={{
                   style: { zIndex: 10000 },
+                  PaperProps: {
+                    style: {
+                      maxHeight: 400,
+                    },
+                  },
                 }}
               >
-                {dataAddress.map((itemAddress) => {
+                {listAddress.map((item, index) => {
                   return (
-                    <MenuItem value={itemAddress.id} sx={{ py: '16px' }}>
+                    <MenuItem value={index} sx={{ py: '16px' }}>
                       <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
-                        <img src={itemAddress.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
+                        <img src={item.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
                         <div>
-                          <div>
-                            Kecamatan {itemAddress.kecamatan}, Kelurahan {itemAddress.kelurahan}, RW/{itemAddress.rw},
-                            RT/{itemAddress.rt}, {itemAddress.kategori}, {itemAddress.deskripsi}
-                          </div>
+                          {item.status === 'Priority' ? (
+                            <div
+                              style={{
+                                backgroundColor: '#1F305C',
+                                color: 'white',
+                                padding: '4px 12px',
+                                borderRadius: '24px',
+                                width: 'fit-content',
+                                fontSize: '12px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,
+                              }}
+                            >
+                              <StarIcon fontSize="inherit" />
+                              Alamat Utama
+                            </div>
+                          ) : null}
+                          Kecamatan {item.kecamatan}, Kelurahan {item.kelurahan}, RW/{item.rw}, RT/{item.rt},{' '}
+                          {item.kategori} {item.detail}, {item.deskripsi}
                         </div>
                       </Box>
                     </MenuItem>
@@ -552,28 +393,49 @@ const LaundryShuttle = ({ state, setState }) => {
                 required
                 labelId="select-delivery-address-label"
                 id="select-delivery-address"
-                value={formOrder.address.deliveryAddress}
+                // value={state.address.deliveryAddress}
                 label="Alamat Pengantaran"
                 onChange={(e) => {
-                  setFormOrder({
-                    ...formOrder,
-                    address: { ...formOrder.address, deliveryAddress: e.target.value },
+                  setState({
+                    ...state,
+                    address: { ...state.address, deliveryAddress: JSON.stringify(listAddress[e.target.value]) },
                   });
                 }}
                 MenuProps={{
                   style: { zIndex: 10000 },
+                  PaperProps: {
+                    style: {
+                      maxHeight: 400,
+                    },
+                  },
                 }}
               >
-                {dataAddress.map((itemAddress) => {
+                {listAddress.map((item, index) => {
                   return (
-                    <MenuItem value={itemAddress.id} sx={{ py: '16px' }}>
+                    <MenuItem value={index} sx={{ py: '16px' }}>
                       <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
-                        <img src={itemAddress.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
+                        <img src={item.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
                         <div>
-                          <div>
-                            Kecamatan {itemAddress.kecamatan}, Kelurahan {itemAddress.kelurahan}, RW/{itemAddress.rw},
-                            RT/{itemAddress.rt}, {itemAddress.kategori}, {itemAddress.deskripsi}
-                          </div>
+                          {item.status === 'Priority' ? (
+                            <div
+                              style={{
+                                backgroundColor: '#1F305C',
+                                color: 'white',
+                                padding: '4px 12px',
+                                borderRadius: '24px',
+                                width: 'fit-content',
+                                fontSize: '12px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,
+                              }}
+                            >
+                              <StarIcon fontSize="inherit" />
+                              Alamat Utama
+                            </div>
+                          ) : null}
+                          Kecamatan {item.kecamatan}, Kelurahan {item.kelurahan}, RW/{item.rw}, RT/{item.rt},{' '}
+                          {item.kategori} {item.detail}, {item.deskripsi}
                         </div>
                       </Box>
                     </MenuItem>
@@ -593,7 +455,10 @@ function CreateNewOrder() {
   const navigate = useNavigate();
   const [formOrder, setFormOrder] = React.useState({
     dateOrder: dayjs(),
-    serviceType: '',
+    serviceType: {
+      name: '',
+      duration: [],
+    },
     discount: '',
     paymentMethod: '',
     customerInformation: null,
@@ -602,14 +467,86 @@ function CreateNewOrder() {
       deliveryAddress: '',
     },
   });
+  const [listCustomerAddress, setListCustomerAddress] = React.useState([]);
+  const [listServiceType, setListServiceType] = React.useState([]);
+  const [listPaymentMethod, setListPaymentMethod] = React.useState([]);
 
   React.useEffect(() => {
     document.title = 'Buat Pesanan Baru';
+    handleGetServiceType();
+    handleGetPaymentMethod();
+    handleGetCustomerAddress();
   }, []);
 
-  // const handleFormOrder = (e) => {
-  //   setFormOrder({ ...formOrder, discount: e.target.value });
-  // };
+  const handleGetServiceType = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: `${process.env.REACT_APP_API_KEY}/jenislayanan`,
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+      setListServiceType(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetPaymentMethod = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: `${process.env.REACT_APP_API_KEY}/metodepembayaran`,
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+      setListPaymentMethod(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetCustomerAddress = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/user/address`,
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+      setListCustomerAddress(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCreateOrder = async () => {
+    try {
+      const res = await axios({
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user`,
+        data: {
+          namaLayanan: formOrder.serviceType.name,
+          jenisLayanan: formOrder.serviceType.duration,
+          mPembayaran: formOrder.paymentMethod,
+          tglMulai: formOrder.dateOrder,
+          alamatJemput: formOrder.address.pickupAddress,
+          alamatAntar: formOrder.address.deliveryAddress,
+        },
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+      setListCustomerAddress(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -641,15 +578,23 @@ function CreateNewOrder() {
                 <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Formulir Pemesanan Laundry</h2>
               </div>
 
-              <OrderInformationForm state={formOrder} setState={setFormOrder} />
-              <LaundryShuttle state={formOrder} setState={setFormOrder} />
-              {/* <InputItem stateValue={formOrder} handleState={setFormOrder} /> */}
+              {!listServiceType && !listPaymentMethod ? null : (
+                <OrderInformationForm
+                  state={formOrder}
+                  setState={setFormOrder}
+                  listServiceType={listServiceType}
+                  listPaymentMethod={listPaymentMethod}
+                />
+              )}
+              {!listCustomerAddress ? null : (
+                <LaundryShuttle state={formOrder} setState={setFormOrder} listAddress={listCustomerAddress} />
+              )}
 
               <Button
                 variant="contained"
                 size="large"
                 style={{ width: '100%', fontWeight: 'bold' }}
-                onClick={() => navigate('/Pesanan/2')}
+                onClick={() => handleCreateOrder()}
               >
                 Buat pesanan
               </Button>
@@ -657,7 +602,7 @@ function CreateNewOrder() {
               {formOrder.discount}
               {formOrder.customerInformation}
               {formOrder.paymentMethod}
-              {formOrder.serviceType}
+              {formOrder.serviceType.name}
               {formOrder.address.deliveryAddress}
               {formOrder.address.pickupAddress}
               <br />
