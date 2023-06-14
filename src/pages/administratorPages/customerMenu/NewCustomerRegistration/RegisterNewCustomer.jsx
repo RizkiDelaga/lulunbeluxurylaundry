@@ -21,6 +21,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { banyumasAreaList } from '../../../../utils/banyumasAreaList';
 import axios from 'axios';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 
 function RegisterNewCustomer() {
   const theme = useTheme();
@@ -50,26 +51,24 @@ function RegisterNewCustomer() {
     buildingPhoto: { img: null, fileName: null },
     makeItMainAddress: true,
   });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
+  });
 
   React.useEffect(() => {
     document.title = 'Registrasi Pelanggan Baru';
   }, []);
-
-  // const getUrbanVillage = () => {
-  //   return banyumasAreaList.filter((item) => {
-  //     return item.subDistrict === mainAddress.region.subDistrict;
-  //   });
-  // };
 
   const handleCreateNewCustomer = async () => {
     const formData = new FormData();
     formData.append('nama', formRegisterNewCustomer.customerName);
     formData.append('email', formRegisterNewCustomer.contact.email);
     formData.append('noTelp', formRegisterNewCustomer.contact.phoneNumber);
-    formData.append(
-      'tglLahir',
-      typeof formRegisterNewCustomer.birthDate !== 'function' ? formRegisterNewCustomer.birthDate : null
-    );
+    if (typeof formRegisterNewCustomer.birthDate !== 'function') {
+      formData.append('tglLahir', formRegisterNewCustomer.birthDate);
+    }
     formData.append('profilePic', formRegisterNewCustomer.profilePicture.img);
     formData.append('kategori', mainAddress.buildingDetails.buildingType);
     formData.append('detail', mainAddress.buildingDetails.buildingName_Or_Number);
@@ -80,6 +79,8 @@ function RegisterNewCustomer() {
     formData.append('deskripsi', mainAddress.addressDetails);
     formData.append('gambar', mainAddress.buildingPhoto.img);
     formData.append('status', 'Priority');
+
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
 
     try {
       const res = await axios({
@@ -93,9 +94,21 @@ function RegisterNewCustomer() {
 
       console.log('Response POST');
       console.log(res);
-      navigate('/Pelanggan');
+
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Registrasi Pelanggan Baru Berhasil!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
@@ -108,6 +121,7 @@ function RegisterNewCustomer() {
             title: 'Registrasi Pelanggan Baru',
           }}
         />
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} redirect={'/Pelanggan'} />
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>

@@ -96,13 +96,13 @@ function RowItem(props) {
             ? 'Pesanan Di Tolak'
             : null}
           <div style={{ fontSize: '12px' }}>
-            pada{' '}
-            {`${('0' + lastUpdate.getDate()).slice(-2)}/${('0' + lastUpdate.getMonth()).slice(
+            pada
+            {` ${('0' + lastUpdate.getDate()).slice(-2)}/${('0' + lastUpdate.getMonth()).slice(
               -2
             )}/${lastUpdate.getFullYear()} ${('0' + lastUpdate.getHours()).slice(-2)}:${(
               '0' + lastUpdate.getMinutes()
-            ).slice(-2)}`}{' '}
-            oleh {props.item.updatedBy}
+            ).slice(-2)}`}
+            {props.item.updatedBy ? ` oleh ${props.item.updatedBy}` : null}
           </div>
         </TableCell>
 
@@ -165,7 +165,7 @@ function OrderTable({ orderStatusType, setState }) {
   };
 
   React.useEffect(() => {
-    handleGetOrder(null, null, orderStatusType === 'Pesanan sedang Berjalan' ? 'Perlu Dikerjakan' : orderStatusType);
+    handleGetOrder(null, null, orderStatusType === 'Pesanan sedang Berjalan' ? filterOrderStatus : orderStatusType);
   }, [orderStatusType]);
 
   const [listFinance, setListFinance] = React.useState([]);
@@ -244,10 +244,10 @@ function OrderTable({ orderStatusType, setState }) {
 
   // Menu - Filter
   const [filterOrderStatus, setFilterOrderStatus] = React.useState('Perlu Dikerjakan');
-  const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
-  const openSearch = Boolean(searchAnchorEl);
-  const handleCloseSearch = () => {
-    setSearchAnchorEl(null);
+  const [filterAnchorEl, setFilterAnchorEl] = React.useState(null);
+  const openFilter = Boolean(filterAnchorEl);
+  const handleCloseFilter = () => {
+    setFilterAnchorEl(null);
   };
 
   const headCells = [
@@ -299,7 +299,11 @@ function OrderTable({ orderStatusType, setState }) {
           </Typography>
           <IconButton
             onClick={() => {
-              handleGetOrder();
+              handleGetOrder(
+                null,
+                null,
+                orderStatusType === 'Pesanan sedang Berjalan' ? filterOrderStatus : orderStatusType
+              );
             }}
           >
             <RefreshIcon color="primary" />
@@ -309,7 +313,7 @@ function OrderTable({ orderStatusType, setState }) {
           <div>
             <IconButton
               onClick={(event) => {
-                setSearchAnchorEl(event.currentTarget);
+                setFilterAnchorEl(event.currentTarget);
               }}
             >
               <FilterListIcon color="primary" />
@@ -319,9 +323,9 @@ function OrderTable({ orderStatusType, setState }) {
       </Toolbar>
       {/* Menu - Filter */}
       <Menu
-        anchorEl={searchAnchorEl}
-        open={openSearch}
-        onClose={handleCloseSearch}
+        anchorEl={filterAnchorEl}
+        open={openFilter}
+        onClose={handleCloseFilter}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right',
@@ -335,7 +339,7 @@ function OrderTable({ orderStatusType, setState }) {
           onClick={() => {
             setFilterOrderStatus('Perlu Dijemput');
             handleGetOrder(null, null, 'Perlu Dijemput');
-            handleCloseSearch();
+            handleCloseFilter();
           }}
           sx={{ bgcolor: filterOrderStatus === 'Perlu Dijemput' ? '#eeeeee' : null }}
         >
@@ -346,7 +350,7 @@ function OrderTable({ orderStatusType, setState }) {
             setFilterOrderStatus('Perlu Dikerjakan');
             handleGetOrder(null, null, 'Perlu Dikerjakan');
 
-            handleCloseSearch();
+            handleCloseFilter();
           }}
           sx={{ bgcolor: filterOrderStatus === 'Perlu Dikerjakan' ? '#eeeeee' : null }}
         >
@@ -356,7 +360,7 @@ function OrderTable({ orderStatusType, setState }) {
           onClick={() => {
             setFilterOrderStatus('Perlu Diantar');
             handleGetOrder(null, null, 'Perlu Diantar');
-            handleCloseSearch();
+            handleCloseFilter();
           }}
           sx={{ bgcolor: filterOrderStatus === 'Perlu Diantar' ? '#eeeeee' : null }}
         >
@@ -461,7 +465,12 @@ function OrderTable({ orderStatusType, setState }) {
                         return (
                           <MenuItem
                             onClick={() => {
-                              handleGetOrder(index + 1);
+                              // handleGetOrder();
+                              handleGetOrder(
+                                index + 1,
+                                null,
+                                orderStatusType === 'Pesanan sedang Berjalan' ? filterOrderStatus : orderStatusType
+                              );
                               handleCloseSelectPage();
                             }}
                             disabled={pageConfig.currentPage === index + 1}
@@ -500,7 +509,12 @@ function OrderTable({ orderStatusType, setState }) {
                         return (
                           <MenuItem
                             onClick={() => {
-                              handleGetOrder(1, item);
+                              // handleGetOrder();
+                              handleGetOrder(
+                                1,
+                                item,
+                                orderStatusType === 'Pesanan sedang Berjalan' ? filterOrderStatus : orderStatusType
+                              );
                               handleCloseSelectDataPerPage();
                             }}
                             disabled={pageConfig.dataPerPage === item}
@@ -529,7 +543,13 @@ function OrderTable({ orderStatusType, setState }) {
                 {/* Prev & Next Pagination */}
                 <IconButton
                   size="small"
-                  onClick={() => handleGetOrder('prev')}
+                  onClick={() =>
+                    handleGetOrder(
+                      'prev',
+                      null,
+                      orderStatusType === 'Pesanan sedang Berjalan' ? filterOrderStatus : orderStatusType
+                    )
+                  }
                   disabled={pageConfig.currentPage === 1}
                   sx={{ color: '#1F305C' }}
                 >
@@ -537,7 +557,13 @@ function OrderTable({ orderStatusType, setState }) {
                 </IconButton>
                 <IconButton
                   size="small"
-                  onClick={() => handleGetOrder('next')}
+                  onClick={() =>
+                    handleGetOrder(
+                      'next',
+                      null,
+                      orderStatusType === 'Pesanan sedang Berjalan' ? filterOrderStatus : orderStatusType
+                    )
+                  }
                   disabled={pageConfig.currentPage === pageConfig.metadata.totalPage}
                   sx={{ color: '#1F305C' }}
                 >

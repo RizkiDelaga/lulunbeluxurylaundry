@@ -53,21 +53,24 @@ function RowItem(props) {
             <div>
               {props.item.nama}
               <div style={{ fontSize: '12px' }}>
-                {props.item.noTelp} || {props.item.email}
+                {props.item.noTelp}
+                {props.item.email ? ` || ${props.item.email}` : null}
               </div>
             </div>
           </Box>
         </TableCell>
 
         <TableCell>
-          {`${('0' + birthDate.getDate()).slice(-2)}/${('0' + birthDate.getMonth()).slice(
-            -2
-          )}/${birthDate.getFullYear()} ${('0' + birthDate.getHours()).slice(-2)}:${(
-            '0' + birthDate.getMinutes()
-          ).slice(-2)}`}
+          {props.item.tglLahir
+            ? `${('0' + birthDate.getDate()).slice(-2)}/${('0' + birthDate.getMonth()).slice(
+                -2
+              )}/${birthDate.getFullYear()} ${('0' + birthDate.getHours()).slice(-2)}:${(
+                '0' + birthDate.getMinutes()
+              ).slice(-2)}`
+            : null}
         </TableCell>
 
-        <TableCell>{props.item.status}</TableCell>
+        <TableCell>{props.item.alamatUser}</TableCell>
         <TableCell>{props.item.totalOrder}</TableCell>
         <TableCell>{props.item.status}</TableCell>
 
@@ -154,7 +157,9 @@ function CustomerTable() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/keuangan/search/where?judul=${searching.value}`,
+        url: `${process.env.REACT_APP_API_KEY}/user/search${
+          searching.label === 'Nama' ? '?nama=' + searching.value : '?noTelp=' + searching.value
+        }`,
       });
       console.log('Response GET Data Finance');
       console.log(res);
@@ -183,7 +188,7 @@ function CustomerTable() {
   };
 
   // Menu - Searching
-  const [searching, setSearching] = React.useState({ label: '', value: '', currentSearch: '' });
+  const [searching, setSearching] = React.useState({ label: 'Nama', value: '', currentSearch: '' });
   const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
   const openSearch = Boolean(searchAnchorEl);
   const handleCloseSearch = () => {
@@ -204,7 +209,7 @@ function CustomerTable() {
       label: 'Tanggal Lahir',
     },
     {
-      id: 'status',
+      id: 'alamatUser',
       label: 'Alamat Utama',
     },
     {
@@ -228,6 +233,7 @@ function CustomerTable() {
         sx={{
           width: '100%',
           display: 'flex',
+          flexWrap: 'wrap',
           justifyContent: 'space-between',
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
@@ -240,17 +246,25 @@ function CustomerTable() {
           <IconButton
             onClick={() => {
               handleGetOrder();
-              setSearching({ label: '', value: '', currentSearch: '' });
+              setSearching({ label: searching.label, value: '', currentSearch: '' });
             }}
           >
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap-reverse',
+            justifyContent: 'center',
+            alignItems: 'center',
+            justifySelf: 'end',
+          }}
+        >
           <Chip
             label={`Search: ${searching.currentSearch}`}
             onDelete={() => {
-              setSearching({ label: '', value: '', currentSearch: '' });
+              setSearching({ label: searching.label, value: '', currentSearch: '' });
               handleGetOrder();
             }}
             sx={{ display: !searching.currentSearch ? 'none' : null }}
@@ -304,10 +318,11 @@ function CustomerTable() {
                 displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
               >
-                <MenuItem value="">
+                {/* <MenuItem value="">
                   <em>Pilih Label</em>
-                </MenuItem>
-                <MenuItem value={'Judul'}>Judul</MenuItem>
+                </MenuItem> */}
+                <MenuItem value={'Nama'}>Nama</MenuItem>
+                <MenuItem value={'No Telp'}>No Telp</MenuItem>
               </Select>
 
               <TextField
@@ -327,7 +342,7 @@ function CustomerTable() {
                 size="medium"
                 variant="contained"
                 onClick={() => {
-                  setSearching({ label: '', value: '', currentSearch: searching.value });
+                  setSearching({ label: searching.label, value: '', currentSearch: searching.value });
 
                   handleCloseSearch();
                   handleSearchOrder();

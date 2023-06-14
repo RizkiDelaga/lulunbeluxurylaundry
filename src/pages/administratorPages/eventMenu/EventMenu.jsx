@@ -139,7 +139,9 @@ function EventTable({ statusType }) {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/${statusType === 'Aktif' ? 'acara' : 'acara/search/active'}?page=${
+        url: `${process.env.REACT_APP_API_KEY}/acara/search${
+          statusType === 'Aktif' ? '/active' : statusType === 'Akan Datang' ? '/coming-soon' : '/done'
+        }?page=${
           !changePage
             ? pageConfig.currentPage
             : changePage === 'prev'
@@ -195,19 +197,19 @@ function EventTable({ statusType }) {
     }
   };
 
-  // Menu - Select Page
-  const [selectPageAnchorEl, setSelectPageAnchorEl] = React.useState(null);
-  const openSelectPage = Boolean(selectPageAnchorEl);
-  const handleCloseSelectPage = () => {
-    setSelectPageAnchorEl(null);
-  };
+  // // Menu - Select Page
+  // const [selectPageAnchorEl, setSelectPageAnchorEl] = React.useState(null);
+  // const openSelectPage = Boolean(selectPageAnchorEl);
+  // const handleCloseSelectPage = () => {
+  //   setSelectPageAnchorEl(null);
+  // };
 
-  // Menu - Select Data Per Page
-  const [selectDataPerPageAnchorEl, setSelectDataPerPageAnchorEl] = React.useState(null);
-  const openSelectDataPerPage = Boolean(selectDataPerPageAnchorEl);
-  const handleCloseSelectDataPerPage = () => {
-    setSelectDataPerPageAnchorEl(null);
-  };
+  // // Menu - Select Data Per Page
+  // const [selectDataPerPageAnchorEl, setSelectDataPerPageAnchorEl] = React.useState(null);
+  // const openSelectDataPerPage = Boolean(selectDataPerPageAnchorEl);
+  // const handleCloseSelectDataPerPage = () => {
+  //   setSelectDataPerPageAnchorEl(null);
+  // };
 
   // Menu - Searching
   const [searching, setSearching] = React.useState({ label: '', value: '', currentSearch: '' });
@@ -259,6 +261,7 @@ function EventTable({ statusType }) {
         sx={{
           width: '100%',
           display: 'flex',
+          flexWrap: 'wrap',
           justifyContent: 'space-between',
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
@@ -266,7 +269,7 @@ function EventTable({ statusType }) {
       >
         <span style={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={{ fontWeight: 'bold' }} color="primary" variant="h5" id="tableTitle" component="div">
-            Daftar Event Aktif
+            Daftar Event {statusType}
           </Typography>
           <IconButton
             onClick={() => {
@@ -277,7 +280,15 @@ function EventTable({ statusType }) {
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap-reverse',
+            justifyContent: 'center',
+            alignItems: 'center',
+            justifySelf: 'end',
+          }}
+        >
           <Chip
             label={`Search: ${searching.currentSearch}`}
             onDelete={() => {
@@ -425,136 +436,6 @@ function EventTable({ statusType }) {
       </Box>
 
       {/* Table Pagination */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'end',
-        }}
-      >
-        {pageConfig.metadata === null || searching.currentSearch ? null : (
-          <Box sx={{ py: 2, px: 1 }}>
-            <Grid container spacing={1}>
-              <Grid
-                item
-                xs={12}
-                sm="auto"
-                sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-              >
-                {/* Change Pages */}
-                <span>Pages:</span>
-                <Button
-                  variant="text"
-                  size="small"
-                  onClick={(e) => {
-                    setSelectPageAnchorEl(e.currentTarget);
-                  }}
-                  sx={{ display: 'flex', fontSize: '16px' }}
-                >
-                  {pageConfig.metadata === null ? null : pageConfig.currentPage}
-                  <ArrowDropDownIcon />
-                </Button>
-                {/* Menu - Select Page */}
-                <Menu
-                  anchorEl={selectPageAnchorEl}
-                  open={openSelectPage}
-                  onClose={handleCloseSelectPage}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                >
-                  {pageConfig.metadata === null
-                    ? null
-                    : Array.from(Array(pageConfig.metadata.totalPage)).map((item, index) => {
-                        return (
-                          <MenuItem
-                            onClick={() => {
-                              handleGetOrder(index + 1);
-                              handleCloseSelectPage();
-                            }}
-                            disabled={pageConfig.currentPage === index + 1}
-                          >
-                            {index + 1}
-                          </MenuItem>
-                        );
-                      })}
-                </Menu>
-
-                {/* Change Data Per Pages */}
-                <div>Rows per page:</div>
-                <Button
-                  variant="text"
-                  size="small"
-                  onClick={(e) => {
-                    setSelectDataPerPageAnchorEl(e.currentTarget);
-                  }}
-                  sx={{ display: 'flex', fontSize: '16px' }}
-                >
-                  {pageConfig.metadata === null ? null : pageConfig.dataPerPage}
-                  <ArrowDropDownIcon />
-                </Button>
-                {/* Menu - Select Data Per Page */}
-                <Menu
-                  anchorEl={selectDataPerPageAnchorEl}
-                  open={openSelectDataPerPage}
-                  onClose={handleCloseSelectDataPerPage}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                >
-                  {pageConfig.metadata === null
-                    ? null
-                    : [10, 20, 50, 100].map((item, index) => {
-                        return (
-                          <MenuItem
-                            onClick={() => {
-                              handleGetOrder(1, item);
-                              handleCloseSelectDataPerPage();
-                            }}
-                            disabled={pageConfig.dataPerPage === item}
-                          >
-                            {item}
-                          </MenuItem>
-                        );
-                      })}
-                </Menu>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm="auto"
-                sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-              >
-                {/* Show Number Of Data */}
-                <span>
-                  {pageConfig.currentPage * pageConfig.dataPerPage - pageConfig.dataPerPage + 1}-
-                  {pageConfig.currentPage === pageConfig.metadata.totalPage &&
-                  pageConfig.currentPage * pageConfig.dataPerPage > pageConfig.metadata.totalCount
-                    ? pageConfig.metadata.totalCount
-                    : pageConfig.currentPage * pageConfig.dataPerPage}{' '}
-                  of {pageConfig.metadata.totalCount}
-                </span>
-                {/* Prev & Next Pagination */}
-                <IconButton
-                  size="small"
-                  onClick={() => handleGetOrder('prev')}
-                  disabled={pageConfig.currentPage === 1}
-                  sx={{ color: '#1F305C' }}
-                >
-                  <ChevronLeftIcon />
-                </IconButton>
-                <IconButton
-                  size="small"
-                  onClick={() => handleGetOrder('next')}
-                  disabled={pageConfig.currentPage === pageConfig.metadata.totalPage}
-                  sx={{ color: '#1F305C' }}
-                >
-                  <ChevronRightIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-          </Box>
-        )}
-      </Box>
     </>
   );
 }
