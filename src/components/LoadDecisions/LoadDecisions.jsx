@@ -59,7 +59,10 @@ function LoadDecisions(props) {
         ) : null
       ) : null}
 
-      <Backdrop sx={{ color: '#1F305C', zIndex: (theme) => theme.zIndex.drawer + 10000 }} open={props.openLoad.isLoad}>
+      <Backdrop
+        sx={{ color: '#1F305C', zIndex: (theme) => theme.zIndex.drawer + 10000 || 100000 }}
+        open={props.openLoad.isLoad}
+      >
         <CircularProgress color="inherit" />
       </Backdrop>
     </>

@@ -19,6 +19,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { getProfileAccountAdmin } from '../../../../redux/actions/getProfileAccount';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 
 function LoginAdmin() {
   const theme = useTheme();
@@ -28,7 +29,11 @@ function LoginAdmin() {
     administratorName: '',
     password: '',
   });
-
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
+  });
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -36,6 +41,8 @@ function LoginAdmin() {
   }, []);
 
   const handleLoginAdmin = async () => {
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
     try {
       const res = await axios({
         method: 'POST',
@@ -47,11 +54,22 @@ function LoginAdmin() {
       });
       console.log('Response POST Login Customer');
       console.log(res);
-      navigate('/Dashboard');
       localStorage.setItem('access_token_admin', res.data.accessToken);
       dispatchGetProfileAccountCustomer(res.data.accessToken);
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Berhasil Login!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
@@ -62,6 +80,7 @@ function LoginAdmin() {
   return (
     <>
       <Box component="main" sx={{ marginX: 3 }}>
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} redirect={'/Dashboard'} />
         <div
           style={{
             display: 'flex',

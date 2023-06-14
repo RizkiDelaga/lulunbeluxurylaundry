@@ -87,10 +87,9 @@ function SidebarAdmin(props) {
   );
 
   React.useEffect(() => {
-    document.title = 'Tentang Kami';
     dispatchGetProfileAccountAdmin();
     dispatchGetGeneralInformation();
-  }, []);
+  }, [sessionStorage.getItem('business_information')]);
 
   const dispatchGetProfileAccountAdmin = async () => {
     return await dispatch(getProfileAccountAdmin());

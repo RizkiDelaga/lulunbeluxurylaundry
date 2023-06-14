@@ -17,6 +17,7 @@ import {
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 
 function ChangePassword() {
   const theme = useTheme();
@@ -31,12 +32,19 @@ function ChangePassword() {
     newPassword: false,
     confirmNewPassword: false,
   });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
+  });
 
   React.useEffect(() => {
     document.title = 'Ubah Password';
   }, []);
 
   const handleUpdatePassword = async () => {
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
     try {
       const res = await axios({
         method: 'PUT',
@@ -51,9 +59,19 @@ function ChangePassword() {
       });
       console.log('Response Update Password');
       console.log(res);
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Ubah Password Berhasil!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
-      // if (error.response.status === 404) {
-      // }
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
       console.log(error);
     }
   };
@@ -67,6 +85,7 @@ function ChangePassword() {
             title: 'Ubah Password',
           }}
         />
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>

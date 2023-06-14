@@ -19,6 +19,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfileAccountCustomer } from '../../../../redux/actions/getProfileAccount';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 
 function LoginCustomer() {
   const theme = useTheme();
@@ -28,6 +29,11 @@ function LoginCustomer() {
     noTelp: '',
     password: '',
   });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
+  });
 
   const dispatch = useDispatch();
 
@@ -35,7 +41,9 @@ function LoginCustomer() {
     document.title = 'Login Pelanggan';
   }, []);
 
-  const loginCustomerHandler = async (data) => {
+  const handleLoginCustomer = async (data) => {
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
     try {
       const res = await axios({
         method: 'POST',
@@ -48,13 +56,24 @@ function LoginCustomer() {
       console.log('Response POST Login Customer');
       console.log(res);
       localStorage.setItem('access_token', res.data.accessToken);
-      // handleGetMyProfile();
 
       dispatchGetProfileAccountCustomer(res.data.accessToken);
 
-      navigate('/AreaPelanggan');
+      // navigate('/AreaPelanggan');
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Berhasil Login!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
@@ -82,6 +101,8 @@ function LoginCustomer() {
 
   return (
     <>
+      <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} redirect={'/AreaPelanggan'} />
+
       <Box component="main" sx={{ marginX: 3 }}>
         <Box
           sx={{
@@ -187,7 +208,7 @@ function LoginCustomer() {
                 variant="contained"
                 size="large"
                 onClick={() => {
-                  loginCustomerHandler(formLoginCustomer);
+                  handleLoginCustomer(formLoginCustomer);
                 }}
                 style={{ width: '100%', fontWeight: 'bold' }}
               >
