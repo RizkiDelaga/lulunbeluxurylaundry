@@ -472,7 +472,7 @@ function CreateNewEvents() {
                               No
                             </TableCell>
                             <TableCell style={{ width: 'fit-content', fontWeight: 'bold', backgroundColor: '#eeeeee' }}>
-                              Instruksi
+                              Reward / Benefit
                             </TableCell>
                             <TableCell style={{ width: 0, fontWeight: 'bold', backgroundColor: '#eeeeee' }}></TableCell>
                           </TableRow>
@@ -650,7 +650,7 @@ function CreateNewEvents() {
                               No
                             </TableCell>
                             <TableCell style={{ width: 'fit-content', fontWeight: 'bold', backgroundColor: '#eeeeee' }}>
-                              Instruksi
+                              Kriteria
                             </TableCell>
                             <TableCell style={{ width: 0, fontWeight: 'bold', backgroundColor: '#eeeeee' }}></TableCell>
                           </TableRow>

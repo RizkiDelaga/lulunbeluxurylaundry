@@ -44,18 +44,6 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                   src={profileCustomer.profilePic}
                   sx={{ width: '120px', height: '120px', borderRadius: 1 }}
                 />
-
-                {/* <Box
-                  component="img"
-                  sx={{
-                    width: '120px',
-                    height: '120px',
-                    objectFit: 'cover',
-                    borderRadius: '8px',
-                  }}
-                  alt=""
-                  src={profileCustomer.profilePic}
-                /> */}
               </Grid>
               <Grid item xs={12} sm>
                 <Box
@@ -124,7 +112,7 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                         console.log('Bulan: ' + value.$M);
                         console.log('Tahun: ' + value.$y);
                       }}
-                      renderInput={(params) => <TextField {...params} />}
+                      renderInput={(params) => <TextField {...params} required />}
                       slotProps={{
                         textField: {
                           error: false,
@@ -155,7 +143,7 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                         console.log('Menit: ' + value.$m);
                         console.log('Detik: ' + value.$s);
                       }}
-                      renderInput={(params) => <TextField {...params} />}
+                      renderInput={(params) => <TextField {...params} required />}
                       slotProps={{
                         textField: {
                           error: false,
@@ -397,9 +385,8 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
           <Grid item xs={12} md={6}>
             <div>Alamat Pengantaran</div>
             <FormControl fullWidth sx={{ mt: '8px' }}>
-              <InputLabel id="select-delivery-address-label">Alamat Pengantaran *</InputLabel>
+              <InputLabel id="select-delivery-address-label">Alamat Pengantaran</InputLabel>
               <Select
-                required
                 labelId="select-delivery-address-label"
                 id="select-delivery-address"
                 // value={state.address.deliveryAddress}
@@ -603,40 +590,43 @@ function CreateNewOrder() {
 
           {/* Main Content */}
           <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-            <Box className="gap-16">
-              <div style={{ width: '100%', textAlign: 'center' }}>
-                <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Formulir Pemesanan Laundry</h2>
-              </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log('click');
+                handleCreateOrder();
+              }}
+            >
+              <Box className="gap-16">
+                <div style={{ width: '100%', textAlign: 'center' }}>
+                  <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Formulir Pemesanan Laundry</h2>
+                </div>
 
-              {!listServiceType && !listPaymentMethod ? null : (
-                <OrderInformationForm
-                  state={formOrder}
-                  setState={setFormOrder}
-                  listServiceType={listServiceType}
-                  listPaymentMethod={listPaymentMethod}
-                />
-              )}
-              {!listCustomerAddress ? null : (
-                <LaundryShuttle state={formOrder} setState={setFormOrder} listAddress={listCustomerAddress} />
-              )}
+                {!listServiceType && !listPaymentMethod ? null : (
+                  <OrderInformationForm
+                    state={formOrder}
+                    setState={setFormOrder}
+                    listServiceType={listServiceType}
+                    listPaymentMethod={listPaymentMethod}
+                  />
+                )}
+                {!listCustomerAddress ? null : (
+                  <LaundryShuttle state={formOrder} setState={setFormOrder} listAddress={listCustomerAddress} />
+                )}
 
-              <Button
-                variant="contained"
-                size="large"
-                style={{ width: '100%', fontWeight: 'bold' }}
-                onClick={() => handleCreateOrder()}
-              >
-                Buat pesanan
-              </Button>
+                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
+                  Buat pesanan
+                </Button>
 
-              {formOrder.discount}
-              {formOrder.customerInformation}
-              {formOrder.paymentMethod}
-              {formOrder.serviceType.name}
-              {formOrder.address.deliveryAddress}
-              {formOrder.address.pickupAddress}
-              <br />
-            </Box>
+                {formOrder.discount}
+                {formOrder.customerInformation}
+                {formOrder.paymentMethod}
+                {formOrder.serviceType.name}
+                {formOrder.address.deliveryAddress}
+                {formOrder.address.pickupAddress}
+                <br />
+              </Box>
+            </form>
           </Paper>
         </div>
       </Box>
