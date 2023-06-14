@@ -81,24 +81,6 @@ function LoginCustomer() {
     return await dispatch(getProfileAccountCustomer(access_token));
   };
 
-  // const handleGetMyProfile = async () => {
-  //   try {
-  //     const res = await axios({
-  //       method: 'GET',
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-  //       },
-  //       url: `${process.env.REACT_APP_API_KEY}/user`,
-  //     });
-  //     console.log('Response GET My Profile');
-  //     console.log(res);
-
-  //     localStorage.setItem('my_profile_account', JSON.stringify(res.data.data));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   return (
     <>
       <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} redirect={'/AreaPelanggan'} />

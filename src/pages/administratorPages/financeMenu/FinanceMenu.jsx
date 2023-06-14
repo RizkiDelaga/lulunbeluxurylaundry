@@ -56,6 +56,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { getComparator, stableSort } from '../../../utils/tableUtils';
+import LoadDecisions from '../../../components/LoadDecisions/LoadDecisions';
+import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 
 function FinanceStats({ dataset }) {
   const theme = useTheme();
@@ -125,9 +127,13 @@ function FinanceStats({ dataset }) {
         : 'laporanTahunan'
     ].map((item) => item.Pemasukan)
   );
-
-  const labels = ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'];
-
+  const listMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const labels =
+    dataset.reportType === 'Minggu'
+      ? dataset.laporanMingguan.map((item) => item.Tanggal)
+      : dataset.reportType === 'Bulan'
+      ? ['Minggu-1', 'Minggu-2', 'Minggu-3', 'Minggu-4', 'Minggu-5'].map((item) => item)
+      : listMonth.map((item) => item);
   let chartData = {
     labels,
     datasets: [
@@ -321,7 +327,7 @@ function RowItem(props) {
           {`${('0' + date.getDate()).slice(-2)}/${('0' + date.getMonth()).slice(-2)}/${date.getFullYear()} ${(
             '0' + date.getHours()
           ).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`}
-          <div style={{ fontSize: '12px' }}>oleh Admin Name Namefull</div>
+          <div style={{ fontSize: '12px' }}>{props.item.createdBy ? `oleh ${props.item.createdBy}` : null}</div>
         </TableCell>
         <TableCell>{props.item.catatan}</TableCell>
         <TableCell>
@@ -336,21 +342,16 @@ function RowItem(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={openTableCell} timeout="auto" unmountOnExit>
             <Box sx={{ px: 2, py: 1 }}>
-              <div style={{ marginBottom: '16px' }}>
-                <h6>Detail Lengkap</h6>
-              </div>
-
-              <Grid container>
-                <Grid item xs={6}>
-                  <div>Lorem ipsum dolor sit amet. 1</div>
-                </Grid>
-                <Grid item xs={6}>
-                  <div>Lorem ipsum dolor sit amet. 2</div>
-                </Grid>
-              </Grid>
-              <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-                <Button variant="contained">Lihat Detail</Button>
-              </Box>
+              <strong>Foto Bukti : </strong>
+              {props.item.gambar ? (
+                <>
+                  <a href={props.item.gambar} target="_blank" rel="noreferrer">
+                    {props.item.gambar}
+                  </a>
+                </>
+              ) : (
+                ' -'
+              )}
             </Box>
           </Collapse>
         </TableCell>
@@ -460,7 +461,7 @@ function FinancialHistoryTable() {
   };
 
   // Menu - Searching
-  const [searching, setSearching] = React.useState({ label: '', value: '', currentSearch: '' });
+  const [searching, setSearching] = React.useState({ label: 'Judul', value: '', currentSearch: '' });
   const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
   const openSearch = Boolean(searchAnchorEl);
   const handleCloseSearch = () => {
@@ -486,7 +487,7 @@ function FinancialHistoryTable() {
     },
     {
       id: 'judul',
-      label: 'Judul',
+      label: searching.label,
     },
     {
       id: 'tanggal',
@@ -509,6 +510,7 @@ function FinancialHistoryTable() {
         sx={{
           width: '100%',
           display: 'flex',
+          flexWrap: 'wrap',
           justifyContent: 'space-between',
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
@@ -521,17 +523,25 @@ function FinancialHistoryTable() {
           <IconButton
             onClick={() => {
               handleGetFinance();
-              setSearching({ label: '', value: '', currentSearch: '' });
+              setSearching({ label: searching.label, value: '', currentSearch: '' });
             }}
           >
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap-reverse',
+            justifyContent: 'center',
+            alignItems: 'center',
+            justifySelf: 'end',
+          }}
+        >
           <Chip
             label={`Search: ${searching.currentSearch}`}
             onDelete={() => {
-              setSearching({ label: '', value: '', currentSearch: '' });
+              setSearching({ label: searching.label, value: '', currentSearch: '' });
               handleGetFinance();
             }}
             sx={{ display: !searching.currentSearch ? 'none' : null }}
@@ -582,13 +592,12 @@ function FinancialHistoryTable() {
                 onChange={(e) => {
                   setSearching({ ...searching, label: e.target.value });
                 }}
-                displayEmpty
+                defaultValue="Judul"
                 inputProps={{ 'aria-label': 'Without label' }}
               >
-                <MenuItem value="">
-                  <em>Pilih Label</em>
+                <MenuItem value={'Judul'} selected>
+                  Judul
                 </MenuItem>
-                <MenuItem value={'Judul'}>Judul</MenuItem>
               </Select>
 
               <TextField
@@ -608,7 +617,7 @@ function FinancialHistoryTable() {
                 size="medium"
                 variant="contained"
                 onClick={() => {
-                  setSearching({ label: '', value: '', currentSearch: searching.value });
+                  setSearching({ label: searching.label, value: '', currentSearch: searching.value });
 
                   handleCloseSearch();
                   handleSearchFinance();
@@ -815,6 +824,11 @@ function FinanceMenu() {
   const [dateReport, setDateReport] = useState(dayjs());
   const [financeReport, setFinanceReport] = useState([]);
   const [reportType, setReportType] = useState('Minggu');
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
+  });
 
   React.useEffect(() => {
     document.title = 'Menu Keuangan';
@@ -822,7 +836,7 @@ function FinanceMenu() {
   }, []);
 
   const handleGetFinanceReport = async (firstLoad) => {
-    const sevenDayBefore = new Date(dateReport);
+    const sevenDayBefore = new Date(firstLoad ? dayjs() : dateReport);
     sevenDayBefore.setDate(sevenDayBefore.getDate() - 6);
 
     const customDate = new Date(dateReport);
@@ -845,6 +859,8 @@ function FinanceMenu() {
             .padStart(2, '0')}T00:00:00.000Z`
     );
 
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
     try {
       const res = await axios({
         method: 'POST',
@@ -852,19 +868,31 @@ function FinanceMenu() {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
         url: `${process.env.REACT_APP_API_KEY}/keuangan/${
-          reportType === 'Minggu' ? 'week' : reportType === 'Bulan' ? 'month' : 'year'
+          firstLoad ? 'week' : reportType === 'Minggu' ? 'week' : reportType === 'Bulan' ? 'month' : 'year'
         }/report`,
         data: { tanggal: startDateReport },
       });
 
       console.log('Response POST Data Finance Report');
       console.log(res);
-      setFinanceReport({ ...res.data.data, reportType: reportType });
+      setFinanceReport({ ...res.data.data, reportType: firstLoad ? 'Minggu' : reportType });
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          // message: 'Berhasil Login!',
+          // statusType: 'success',
+        });
+      }
     } catch (error) {
       if (error.response.status === 404) {
         setFinanceReport([]);
       }
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        // message: error.response.data.message,
+        // statusType: 'error',
+      });
     }
   };
 
@@ -888,6 +916,7 @@ function FinanceMenu() {
             },
           ]}
         />
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
@@ -997,6 +1026,18 @@ function FinanceMenu() {
               >
                 Lihat Laporan
               </Button>
+              <IconButton
+                size="small"
+                onClick={async () => {
+                  // const refreshDate = await new Date();
+                  setReportType('Minggu');
+                  setDateReport(dayjs());
+                  handleGetFinanceReport(true);
+                }}
+                sx={{ color: '#1F305C' }}
+              >
+                <EventRepeatIcon />
+              </IconButton>
             </Grid>
           </Grid>
 
@@ -1004,7 +1045,7 @@ function FinanceMenu() {
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          {/* <FinancialHistoryTable /> */}
+          <FinancialHistoryTable />
         </Paper>
       </div>
     </>

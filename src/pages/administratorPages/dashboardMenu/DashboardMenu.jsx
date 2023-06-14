@@ -61,7 +61,8 @@ function RowItem(props) {
             <div>
               {props.item.nama}
               <div style={{ fontSize: '12px' }}>
-                {props.item.noTelp} || {props.item.email}
+                {props.item.noTelp}
+                {props.item.email ? ` || ${props.item.email}` : null}
               </div>
             </div>
           </Box>
@@ -248,6 +249,7 @@ function AdminTable({ setState }) {
         sx={{
           width: '100%',
           display: 'flex',
+          flexWrap: 'wrap',
           justifyContent: 'space-between',
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
@@ -260,13 +262,21 @@ function AdminTable({ setState }) {
           <IconButton
             onClick={() => {
               handleGetAdmin();
-              setSearching({ label: '', value: '', currentSearch: '' });
+              setSearching({ label: searching.label, value: '', currentSearch: '' });
             }}
           >
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap-reverse',
+            justifyContent: 'center',
+            alignItems: 'center',
+            justifySelf: 'end',
+          }}
+        >
           <Chip
             label={`Search: ${searching.currentSearch}`}
             onDelete={() => {

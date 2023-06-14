@@ -36,8 +36,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import SearchIcon from '@mui/icons-material/Search';
 import { getComparator, stableSort } from '../../../utils/tableUtils';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import SearchIcon from '@mui/icons-material/Search';
 
 function RowItem(props) {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ function RowItem(props) {
 
   const dateStart = new Date(props.item.tglMulai);
   const dateEnd = new Date(props.item.tenggatWaktu);
-  const lastUpdate = new Date(props.item.updatedAt);
+  const lastUpdate = new Date(props.item.statusUpdatedAt);
 
   return (
     <React.Fragment>
@@ -85,13 +86,13 @@ function RowItem(props) {
         <TableCell>
           {props.item.status}
           <div style={{ fontSize: '12px' }}>
-            pada{' '}
-            {`${('0' + lastUpdate.getDate()).slice(-2)}/${('0' + lastUpdate.getMonth()).slice(
+            pada
+            {` ${('0' + lastUpdate.getDate()).slice(-2)}/${('0' + lastUpdate.getMonth()).slice(
               -2
             )}/${lastUpdate.getFullYear()} ${('0' + lastUpdate.getHours()).slice(-2)}:${(
               '0' + lastUpdate.getMinutes()
-            ).slice(-2)}`}{' '}
-            oleh {props.item.updatedBy}
+            ).slice(-2)}`}
+            {props.item.updatedBy ? ` oleh ${props.item.updatedBy}` : null}
           </div>
         </TableCell>
 
@@ -158,7 +159,7 @@ function OrderTable({ setState }) {
   };
 
   React.useEffect(() => {
-    handleGetOrder();
+    handleGetOrder(null, null, 'Perlu Dikerjakan');
   }, []);
 
   const [listOrder, setListOrder] = React.useState([]);
@@ -169,14 +170,14 @@ function OrderTable({ setState }) {
   });
 
   // Handle API Get All Data Finance
-  const handleGetOrder = async (changePage, maxDataPerPage) => {
+  const handleGetOrder = async (changePage, maxDataPerPage, status) => {
     try {
       const res = await axios({
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/pemesanan?page=${
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/where/status?page=${
           !changePage
             ? pageConfig.currentPage
             : changePage === 'prev'
@@ -184,7 +185,7 @@ function OrderTable({ setState }) {
             : changePage === 'next'
             ? pageConfig.currentPage + 1
             : changePage
-        }&perPage=${maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage}`,
+        }&perPage=${maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage}&status=${status}`,
       });
 
       setPageConfig({
@@ -228,7 +229,7 @@ function OrderTable({ setState }) {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/keuangan/search/where?judul=${searching.value}`,
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/search/where?nomorPesanan=${searching.value}`,
       });
       console.log('Response GET Data Finance');
       console.log(res);
@@ -257,11 +258,19 @@ function OrderTable({ setState }) {
   };
 
   // Menu - Searching
-  const [searching, setSearching] = React.useState({ label: '', value: '', currentSearch: '' });
+  const [searching, setSearching] = React.useState({ label: 'No Pemesanan', value: '', currentSearch: '' });
   const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
   const openSearch = Boolean(searchAnchorEl);
   const handleCloseSearch = () => {
     setSearchAnchorEl(null);
+  };
+
+  // Menu - Filter
+  const [filterOrderStatus, setFilterOrderStatus] = React.useState('Perlu Dikerjakan');
+  const [filterAnchorEl, setFilterAnchorEl] = React.useState(null);
+  const openFilter = Boolean(filterAnchorEl);
+  const handleCloseFilter = () => {
+    setFilterAnchorEl(null);
   };
 
   const headCells = [
@@ -302,6 +311,7 @@ function OrderTable({ setState }) {
         sx={{
           width: '100%',
           display: 'flex',
+          flexWrap: 'wrap',
           justifyContent: 'space-between',
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
@@ -313,30 +323,47 @@ function OrderTable({ setState }) {
           </Typography>
           <IconButton
             onClick={() => {
-              handleGetOrder();
-              setSearching({ label: '', value: '', currentSearch: '' });
+              handleGetOrder(null, null, filterOrderStatus);
             }}
           >
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap-reverse',
+            justifyContent: 'center',
+            alignItems: 'center',
+            justifySelf: 'end',
+          }}
+        >
           <Chip
             label={`Search: ${searching.currentSearch}`}
             onDelete={() => {
-              setSearching({ label: '', value: '', currentSearch: '' });
-              handleGetOrder();
+              setSearching({ label: searching.label, value: '', currentSearch: '' });
+              handleGetOrder(null, null, filterOrderStatus);
             }}
             sx={{ display: !searching.currentSearch ? 'none' : null }}
           />
-          <Tooltip title="Filter list">
+          <Tooltip title="Search list">
             <IconButton
               onClick={(event) => {
                 setSearchAnchorEl(event.currentTarget);
               }}
             >
-              {/* <FilterListIcon color="primary" /> */}
               <SearchIcon color="primary" />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Filter list">
+            <IconButton
+              onClick={(event) => {
+                setFilterAnchorEl(event.currentTarget);
+              }}
+            >
+              {/* <FilterListIcon color="primary" /> */}
+              <FilterListIcon color="primary" />
             </IconButton>
           </Tooltip>
         </div>
@@ -375,13 +402,12 @@ function OrderTable({ setState }) {
                 onChange={(e) => {
                   setSearching({ ...searching, label: e.target.value });
                 }}
-                displayEmpty
+                defaultValue="Judul"
                 inputProps={{ 'aria-label': 'Without label' }}
               >
-                <MenuItem value="">
-                  <em>Pilih Label</em>
+                <MenuItem value={'No Pemesanan'} selected>
+                  No Pemesanan
                 </MenuItem>
-                <MenuItem value={'Judul'}>Judul</MenuItem>
               </Select>
 
               <TextField
@@ -401,9 +427,10 @@ function OrderTable({ setState }) {
                 size="medium"
                 variant="contained"
                 onClick={() => {
-                  setSearching({ label: '', value: '', currentSearch: searching.value });
+                  setSearching({ label: searching.label, value: '', currentSearch: searching.value });
 
                   handleCloseSearch();
+
                   handleSearchOrder();
                 }}
               >
@@ -412,6 +439,53 @@ function OrderTable({ setState }) {
             </Grid>
           </Grid>
         </Box>
+      </Menu>
+
+      {/* Menu - Filter */}
+      <Menu
+        anchorEl={filterAnchorEl}
+        open={openFilter}
+        onClose={handleCloseFilter}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            setFilterOrderStatus('Perlu Dijemput');
+            handleGetOrder(null, null, 'Perlu Dijemput');
+            handleCloseFilter();
+          }}
+          sx={{ bgcolor: filterOrderStatus === 'Perlu Dijemput' ? '#eeeeee' : null }}
+        >
+          Perlu Dijemput
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setFilterOrderStatus('Perlu Dikerjakan');
+            handleGetOrder(null, null, 'Perlu Dikerjakan');
+
+            handleCloseFilter();
+          }}
+          sx={{ bgcolor: filterOrderStatus === 'Perlu Dikerjakan' ? '#eeeeee' : null }}
+        >
+          Perlu Dikerjakan
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setFilterOrderStatus('Perlu Diantar');
+            handleGetOrder(null, null, 'Perlu Diantar');
+            handleCloseFilter();
+          }}
+          sx={{ bgcolor: filterOrderStatus === 'Perlu Diantar' ? '#eeeeee' : null }}
+        >
+          Perlu Diantar
+        </MenuItem>
       </Menu>
 
       {/* Table Section */}
@@ -474,7 +548,7 @@ function OrderTable({ setState }) {
           justifyContent: 'end',
         }}
       >
-        {pageConfig.metadata === null || searching.currentSearch ? null : (
+        {pageConfig.metadata === null ? null : (
           <Box sx={{ py: 2, px: 1 }}>
             <Grid container spacing={1}>
               <Grid
@@ -511,7 +585,8 @@ function OrderTable({ setState }) {
                         return (
                           <MenuItem
                             onClick={() => {
-                              handleGetOrder(index + 1);
+                              // handleGetOrder();
+                              handleGetOrder(index + 1, null, filterOrderStatus);
                               handleCloseSelectPage();
                             }}
                             disabled={pageConfig.currentPage === index + 1}
@@ -550,7 +625,8 @@ function OrderTable({ setState }) {
                         return (
                           <MenuItem
                             onClick={() => {
-                              handleGetOrder(1, item);
+                              // handleGetOrder();
+                              handleGetOrder(1, item, filterOrderStatus);
                               handleCloseSelectDataPerPage();
                             }}
                             disabled={pageConfig.dataPerPage === item}
@@ -579,7 +655,7 @@ function OrderTable({ setState }) {
                 {/* Prev & Next Pagination */}
                 <IconButton
                   size="small"
-                  onClick={() => handleGetOrder('prev')}
+                  onClick={() => handleGetOrder('prev', null, filterOrderStatus)}
                   disabled={pageConfig.currentPage === 1}
                   sx={{ color: '#1F305C' }}
                 >
@@ -587,7 +663,7 @@ function OrderTable({ setState }) {
                 </IconButton>
                 <IconButton
                   size="small"
-                  onClick={() => handleGetOrder('next')}
+                  onClick={() => handleGetOrder('next', null, filterOrderStatus)}
                   disabled={pageConfig.currentPage === pageConfig.metadata.totalPage}
                   sx={{ color: '#1F305C' }}
                 >
@@ -686,6 +762,7 @@ function OrderMenu() {
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
           <OrderTable setState={setOrderStats} />
         </Paper>
+
         <Grid container spacing={2}>
           <Grid item xs={6} sm={4} md={4} lg={4}>
             <InformationCard

@@ -24,6 +24,7 @@ import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import axios from 'axios';
 import StarIcon from '@mui/icons-material/Star';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 
 const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMethod }) => {
   const theme = useTheme();
@@ -478,6 +479,11 @@ function CreateNewOrder() {
   const [listCustomerAddress, setListCustomerAddress] = React.useState([]);
   const [listServiceType, setListServiceType] = React.useState([]);
   const [listPaymentMethod, setListPaymentMethod] = React.useState([]);
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
+  });
 
   React.useEffect(() => {
     document.title = 'Buat Pesanan Baru';
@@ -532,6 +538,8 @@ function CreateNewOrder() {
   };
 
   const handleCreateOrder = async () => {
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
     try {
       const res = await axios({
         method: 'POST',
@@ -550,9 +558,22 @@ function CreateNewOrder() {
       });
       console.log('Response GET Data Service Type');
       console.log(res);
-      setListCustomerAddress(res.data.data);
+
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Pesanan Berhasil di Buat!',
+          statusType: 'success',
+        });
+      }
+      // setListCustomerAddress(res.data.data);
     } catch (error) {
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
@@ -578,6 +599,7 @@ function CreateNewOrder() {
               title: 'Buat Pesanan Baru',
             }}
           />
+          <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
 
           {/* Main Content */}
           <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
