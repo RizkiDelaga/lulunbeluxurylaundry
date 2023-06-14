@@ -18,6 +18,8 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
+import { getGeneralInformation } from '../../../../redux/actions/getBusinessInformationAction';
+import { useDispatch, useSelector } from 'react-redux';
 
 function CustomerRegistration() {
   const theme = useTheme();
@@ -35,9 +37,19 @@ function CustomerRegistration() {
     statusType: '',
   });
 
+  const dispatch = useDispatch();
+  const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
+    (state) => state.getGeneralInformation
+  );
+
   React.useEffect(() => {
     document.title = 'Registrasi Pelanggan Baru';
+    dispatchGetGeneralInformation();
   }, []);
+
+  const dispatchGetGeneralInformation = async () => {
+    return await dispatch(getGeneralInformation());
+  };
 
   const handleCreateCustomer = async () => {
     setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
@@ -92,7 +104,7 @@ function CustomerRegistration() {
             },
           }}
         >
-          <img src={'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'} alt="logo" height={80} />
+          {loadingGetGeneralInformation ? null : <img src={dataGetGeneralInformation.logo} alt="logo" height={80} />}
 
           <br />
 

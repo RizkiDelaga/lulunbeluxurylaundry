@@ -71,130 +71,150 @@ function ChangePasswordOnForgotPassword() {
             elevation={3}
             sx={{ padding: '16px', backgroundColor: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '800px' }}
           >
-            <Box className="gap-16">
-              <div style={{ width: '100%', textAlign: 'center', paddingTop: '8px', paddingBottom: '8px' }}>
-                <h2 style={{ margin: 0 }}>Buat Password Baru</h2>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  width: '100%',
-                  paddingBottom: '8px',
-                }}
-              >
-                <div
-                  className="centerXY"
-                  style={{ width: '180px', height: '180px', backgroundColor: '#eeeeee', borderRadius: '16px' }}
-                >
-                  <LockResetIcon color="primary" sx={{ fontSize: 80 }} />
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log('click');
+                navigate('/Login');
+              }}
+            >
+              <Box className="gap-16">
+                <div style={{ width: '100%', textAlign: 'center', paddingTop: '8px', paddingBottom: '8px' }}>
+                  <h2 style={{ margin: 0 }}>Buat Password Baru</h2>
                 </div>
-              </div>
-              <Grid container>
-                <Grid item xs={12} sm={12} md={3} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
-                  Password Baru
-                </Grid>
-                <Grid
-                  item
-                  xs
-                  lg
-                  sx={{
+                <div
+                  style={{
                     display: 'flex',
-                    [theme.breakpoints.down('md')]: {
-                      paddingTop: '8px !important',
-                    },
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    width: '100%',
+                    paddingBottom: '8px',
                   }}
                 >
-                  <FormControl
-                    variant="outlined"
-                    onChange={(e) => {
-                      setFormChangePassword({ ...formChangePassword, newPassword: e.target.value });
-                    }}
-                    sx={{ width: '100%' }}
+                  <div
+                    className="centerXY"
+                    style={{ width: '180px', height: '180px', backgroundColor: '#eeeeee', borderRadius: '16px' }}
                   >
-                    <InputLabel htmlFor="new-password">Password Baru *</InputLabel>
-                    <OutlinedInput
-                      required
-                      label="Password Baru"
-                      id="new-password"
-                      type={showPassword.newPassword ? 'text' : 'password'}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowPassword({ ...showPassword, newPassword: !showPassword.newPassword })}
-                            edge="end"
-                            color="primary"
-                          >
-                            {showPassword.newPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
+                    <LockResetIcon color="primary" sx={{ fontSize: 80 }} />
+                  </div>
+                </div>
+                <Grid container>
+                  <Grid item xs={12} sm={12} md={3} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
+                    Password Baru
+                  </Grid>
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <FormControl
+                      variant="outlined"
+                      onChange={(e) => {
+                        setFormChangePassword({ ...formChangePassword, newPassword: e.target.value });
+                      }}
+                      sx={{ width: '100%' }}
+                    >
+                      <InputLabel htmlFor="new-password">Password Baru *</InputLabel>
+                      <OutlinedInput
+                        required
+                        label="Password Baru"
+                        id="new-password"
+                        type={showPassword.newPassword ? 'text' : 'password'}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                setShowPassword({ ...showPassword, newPassword: !showPassword.newPassword })
+                              }
+                              edge="end"
+                              color="primary"
+                            >
+                              {showPassword.newPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        inputProps={{
+                          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$', // Minimal delapan karakter (Setidaknya satu huruf besar, satu huruf kecil dan satu angka)
+                        }}
+                      />
+                    </FormControl>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid container>
-                <Grid item xs={12} sm={12} md={3} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
-                  Konfirmasi Password Baru
+                <Grid container>
+                  <Grid item xs={12} sm={12} md={3} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
+                    Konfirmasi Password Baru
+                  </Grid>
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <FormControl
+                      variant="outlined"
+                      onChange={(e) => {
+                        setFormChangePassword({ ...formChangePassword, confirmNewPassword: e.target.value });
+                      }}
+                      sx={{ width: '100%' }}
+                    >
+                      <InputLabel htmlFor="confirm-password">Konfirmasi Password Baru *</InputLabel>
+                      <OutlinedInput
+                        required
+                        label="Konfirmasi Password Baru"
+                        id="confirm-password"
+                        type={showPassword.confirmNewPassword ? 'text' : 'password'}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                setShowPassword({
+                                  ...showPassword,
+                                  confirmNewPassword: !showPassword.confirmNewPassword,
+                                })
+                              }
+                              edge="end"
+                              color="primary"
+                            >
+                              {showPassword.confirmNewPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        inputProps={{
+                          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$', // Minimal delapan karakter (Setidaknya satu huruf besar, satu huruf kecil dan satu angka)
+                        }}
+                      />
+                    </FormControl>
+                  </Grid>
                 </Grid>
-                <Grid
-                  item
-                  xs
-                  lg
-                  sx={{
-                    display: 'flex',
-                    [theme.breakpoints.down('md')]: {
-                      paddingTop: '8px !important',
-                    },
-                  }}
+
+                <Button
+                  variant="contained"
+                  size="large"
+                  type="submit"
+                  // onClick={() => {
+                  //   navigate('/Login');
+                  // }}
+                  style={{ width: '100%', fontWeight: 'bold' }}
                 >
-                  <FormControl
-                    variant="outlined"
-                    onChange={(e) => {
-                      setFormChangePassword({ ...formChangePassword, confirmNewPassword: e.target.value });
-                    }}
-                    sx={{ width: '100%' }}
-                  >
-                    <InputLabel htmlFor="confirm-password">Konfirmasi Password Baru *</InputLabel>
-                    <OutlinedInput
-                      required
-                      label="Konfirmasi Password Baru"
-                      id="confirm-password"
-                      type={showPassword.confirmNewPassword ? 'text' : 'password'}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() =>
-                              setShowPassword({ ...showPassword, confirmNewPassword: !showPassword.confirmNewPassword })
-                            }
-                            edge="end"
-                            color="primary"
-                          >
-                            {showPassword.confirmNewPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </Grid>
-              </Grid>
+                  Ubah Password
+                </Button>
 
-              <Button
-                variant="contained"
-                size="large"
-                onClick={() => {
-                  navigate('/Login');
-                }}
-                style={{ width: '100%', fontWeight: 'bold' }}
-              >
-                Ubah Password
-              </Button>
-
-              {formChangePassword.newPassword}
-              <br />
-              {formChangePassword.confirmNewPassword}
-            </Box>
+                {formChangePassword.newPassword}
+                <br />
+                {formChangePassword.confirmNewPassword}
+              </Box>
+            </form>
           </Paper>
         </Box>
       </Box>

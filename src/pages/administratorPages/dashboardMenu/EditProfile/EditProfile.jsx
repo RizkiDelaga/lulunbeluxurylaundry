@@ -126,224 +126,227 @@ function EditProfile() {
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Box className="gap-16">
-            <div style={{ width: '100%', textAlign: 'center' }}>
-              <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Edit Profil</h2>
-            </div>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.log('click');
+              handleUpdateMyProfile();
+            }}
+          >
+            <Box className="gap-16">
+              <div style={{ width: '100%', textAlign: 'center' }}>
+                <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Edit Profil</h2>
+              </div>
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={2} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Nama Lengkap</span>
-              </Grid>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={12} md={2} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
+                  <span>Nama Lengkap</span>
+                </Grid>
 
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <TextField
-                  required
-                  label="Nama"
-                  value={formEditProfile.administratorName}
-                  onChange={(e) => {
-                    setFormEditProfile({ ...formEditProfile, administratorName: e.target.value });
+                <Grid
+                  item
+                  xs
+                  lg
+                  sx={{
+                    display: 'flex',
+                    [theme.breakpoints.down('md')]: {
+                      paddingTop: '8px !important',
+                    },
                   }}
-                  autoComplete="off"
-                  sx={{ width: '100%' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={2} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Kontak</span>
-              </Grid>
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm>
-                    <TextField
-                      type="number"
-                      label="Nomer Telepon"
-                      value={formEditProfile.contact.phoneNumber}
-                      onChange={(e) => {
-                        setFormEditProfile({
-                          ...formEditProfile,
-                          contact: { ...formEditProfile.contact, phoneNumber: e.target.value },
-                        });
-                      }}
-                      autoComplete="off"
-                      onWheel={(e) => e.target.blur()}
-                      sx={{ width: '100%' }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm>
-                    <TextField
-                      required
-                      label="Email"
-                      value={formEditProfile.contact.email}
-                      onChange={(e) => {
-                        setFormEditProfile({
-                          ...formEditProfile,
-                          contact: { ...formEditProfile.contact, email: e.target.value },
-                        });
-                      }}
-                      autoComplete="off"
-                      sx={{ width: '100%' }}
-                    />
-                  </Grid>
+                >
+                  <TextField
+                    label="Nama"
+                    value={formEditProfile.administratorName}
+                    onChange={(e) => {
+                      setFormEditProfile({ ...formEditProfile, administratorName: e.target.value });
+                    }}
+                    autoComplete="off"
+                    disabled="true"
+                    sx={{ width: '100%' }}
+                  />
                 </Grid>
               </Grid>
-            </Grid>
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={2} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Role</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <FormControl fullWidth>
-                  <InputLabel id="select-role-label">Role *</InputLabel>
-                  <Select
-                    required
-                    labelId="select-role-label"
-                    id="select-role"
-                    value={formEditProfile.role}
-                    label="Role"
-                    onChange={(e) => {
-                      setFormEditProfile({
-                        ...formEditProfile,
-                        role: e.target.value,
-                      });
-                    }}
-                  >
-                    {['Basic', 'Master'].map((item) => {
-                      return (
-                        <MenuItem value={item} sx={{ py: '16px' }}>
-                          {item}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-
-                {formEditProfile.role}
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={2} lg={1.4}>
-                <span>Foto Profil</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs="auto">
-                    <Button
-                      variant="contained"
-                      size="small"
-                      component="label"
-                      startIcon={<InsertPhotoIcon />}
-                      sx={{ height: 'fit-content' }}
-                    >
-                      Pilih Foto
-                      <input
-                        type="file"
-                        accept="image/*"
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={12} md={2} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
+                  <span>Kontak</span>
+                </Grid>
+                <Grid
+                  item
+                  xs
+                  lg
+                  sx={{
+                    display: 'flex',
+                    [theme.breakpoints.down('md')]: {
+                      paddingTop: '8px !important',
+                    },
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm>
+                      <TextField
+                        required
+                        type="number"
+                        label="Nomer Telepon"
+                        value={formEditProfile.contact.phoneNumber}
                         onChange={(e) => {
-                          console.log(e.target.files);
                           setFormEditProfile({
                             ...formEditProfile,
-                            profilePicture: {
-                              img: e.target.files[0],
-                              fileName: !e.target.files[0] ? null : e.target.files[0].name,
-                            },
+                            contact: { ...formEditProfile.contact, phoneNumber: e.target.value },
                           });
-                          console.log(formEditProfile.profilePicture.img);
                         }}
-                        hidden
+                        autoComplete="off"
+                        onWheel={(e) => e.target.blur()}
+                        sx={{ width: '100%' }}
                       />
-                    </Button>
-                  </Grid>
-                  <Grid item xs="auto">
-                    {formEditProfile.profilePicture.img ? (
-                      <img
-                        id="output"
-                        src={
-                          formEditProfile.profilePicture.img
-                            ? URL.createObjectURL(formEditProfile.profilePicture.img)
-                            : ''
-                        }
-                        width={70}
-                        alt="Preview"
+                    </Grid>
+                    <Grid item xs={12} sm>
+                      <TextField
+                        label="Email"
+                        value={formEditProfile.contact.email}
+                        onChange={(e) => {
+                          setFormEditProfile({
+                            ...formEditProfile,
+                            contact: { ...formEditProfile.contact, email: e.target.value },
+                          });
+                        }}
+                        autoComplete="off"
+                        sx={{ width: '100%' }}
                       />
-                    ) : null}
-                  </Grid>
-                  <Grid item xs>
-                    {formEditProfile.profilePicture.fileName ? (
-                      <Chip
-                        label={formEditProfile.profilePicture.fileName}
-                        onDelete={() => setFormEditProfile({ ...formEditProfile, profilePicture: {} })}
-                        sx={{ maxWidth: '250px' }}
-                      />
-                    ) : null}
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
 
-            <Button
-              variant="contained"
-              size="large"
-              style={{ width: '100%', fontWeight: 'bold' }}
-              onClick={() => handleUpdateMyProfile()}
-            >
-              Edit Profil
-            </Button>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={12} md={2} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
+                  <span>Role</span>
+                </Grid>
 
-            {formEditProfile.administratorName}
-            <br />
-            {formEditProfile.contact.phoneNumber}
-            <br />
-            {formEditProfile.contact.email}
-            <br />
-            {formEditProfile.role}
-          </Box>
+                <Grid
+                  item
+                  xs
+                  lg
+                  sx={{
+                    display: 'flex',
+                    [theme.breakpoints.down('md')]: {
+                      paddingTop: '8px !important',
+                    },
+                  }}
+                >
+                  <FormControl fullWidth>
+                    <InputLabel id="select-role-label">Role *</InputLabel>
+                    <Select
+                      required
+                      labelId="select-role-label"
+                      id="select-role"
+                      value={formEditProfile.role}
+                      label="Role"
+                      onChange={(e) => {
+                        setFormEditProfile({
+                          ...formEditProfile,
+                          role: e.target.value,
+                        });
+                      }}
+                    >
+                      {['Basic', 'Master'].map((item) => {
+                        return (
+                          <MenuItem value={item} sx={{ py: '16px' }}>
+                            {item}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+
+                  {formEditProfile.role}
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={12} md={2} lg={1.4}>
+                  <span>Foto Profil</span>
+                </Grid>
+
+                <Grid
+                  item
+                  xs
+                  lg
+                  sx={{
+                    display: 'flex',
+                    [theme.breakpoints.down('md')]: {
+                      paddingTop: '8px !important',
+                    },
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs="auto">
+                      <Button
+                        variant="contained"
+                        size="small"
+                        component="label"
+                        startIcon={<InsertPhotoIcon />}
+                        sx={{ height: 'fit-content' }}
+                      >
+                        Pilih Foto
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            console.log(e.target.files);
+                            setFormEditProfile({
+                              ...formEditProfile,
+                              profilePicture: {
+                                img: e.target.files[0],
+                                fileName: !e.target.files[0] ? null : e.target.files[0].name,
+                              },
+                            });
+                            console.log(formEditProfile.profilePicture.img);
+                          }}
+                          hidden
+                        />
+                      </Button>
+                    </Grid>
+                    <Grid item xs="auto">
+                      {formEditProfile.profilePicture.img ? (
+                        <img
+                          id="output"
+                          src={
+                            formEditProfile.profilePicture.img
+                              ? URL.createObjectURL(formEditProfile.profilePicture.img)
+                              : ''
+                          }
+                          width={70}
+                          alt="Preview"
+                        />
+                      ) : null}
+                    </Grid>
+                    <Grid item xs>
+                      {formEditProfile.profilePicture.fileName ? (
+                        <Chip
+                          label={formEditProfile.profilePicture.fileName}
+                          onDelete={() => setFormEditProfile({ ...formEditProfile, profilePicture: {} })}
+                          sx={{ maxWidth: '250px' }}
+                        />
+                      ) : null}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
+                Edit Profil
+              </Button>
+
+              {formEditProfile.administratorName}
+              <br />
+              {formEditProfile.contact.phoneNumber}
+              <br />
+              {formEditProfile.contact.email}
+              <br />
+              {formEditProfile.role}
+            </Box>
+          </form>
         </Paper>
       </div>
     </>

@@ -20,6 +20,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfileAccountCustomer } from '../../../../redux/actions/getProfileAccount';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
+import { getGeneralInformation } from '../../../../redux/actions/getBusinessInformationAction';
 
 function LoginCustomer() {
   const theme = useTheme();
@@ -36,10 +37,18 @@ function LoginCustomer() {
   });
 
   const dispatch = useDispatch();
+  const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
+    (state) => state.getGeneralInformation
+  );
 
   React.useEffect(() => {
     document.title = 'Login Pelanggan';
+    dispatchGetGeneralInformation();
   }, []);
+
+  const dispatchGetGeneralInformation = async () => {
+    return await dispatch(getGeneralInformation());
+  };
 
   const handleLoginCustomer = async (data) => {
     setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
@@ -100,7 +109,7 @@ function LoginCustomer() {
             },
           }}
         >
-          <img src={'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'} alt="logo" height={80} />
+          {loadingGetGeneralInformation ? null : <img src={dataGetGeneralInformation.logo} alt="logo" height={80} />}
 
           <br />
 
@@ -109,97 +118,106 @@ function LoginCustomer() {
             elevation={3}
             sx={{ padding: '16px', backgroundColor: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '800px' }}
           >
-            <Box className="gap-16">
-              <div style={{ width: '100%', textAlign: 'center', paddingTop: '8px', paddingBottom: '8px' }}>
-                <h2 style={{ margin: 0 }}>Login Pelanggan</h2>
-                <div>Masuk ke dalam akun anda</div>
-              </div>
-              <Grid container>
-                <Grid item xs={12} sm={12} md={2.3} lg={2.5} sx={{ display: 'flex', alignItems: 'center' }}>
-                  Nomer Telepon
-                </Grid>
-                <Grid
-                  item
-                  xs
-                  lg
-                  sx={{
-                    display: 'flex',
-                    [theme.breakpoints.down('md')]: {
-                      paddingTop: '8px !important',
-                    },
-                  }}
-                >
-                  <TextField
-                    required
-                    type="number"
-                    label="Nomer Telepon"
-                    value={formLoginCustomer.noTelp}
-                    onChange={(e) => {
-                      setFormLoginCustomer({ ...formLoginCustomer, noTelp: e.target.value });
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log('click');
+                handleLoginCustomer(formLoginCustomer);
+              }}
+            >
+              <Box className="gap-16">
+                <div style={{ width: '100%', textAlign: 'center', paddingTop: '8px', paddingBottom: '8px' }}>
+                  <h2 style={{ margin: 0 }}>Login Pelanggan</h2>
+                  <div>Masuk ke dalam akun anda</div>
+                </div>
+                <Grid container>
+                  <Grid item xs={12} sm={12} md={2.3} lg={2.5} sx={{ display: 'flex', alignItems: 'center' }}>
+                    Nomer Telepon
+                  </Grid>
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
                     }}
-                    autoComplete="off"
-                    sx={{ width: '100%' }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container>
-                <Grid item xs={12} sm={12} md={2.3} lg={2.5} sx={{ display: 'flex', alignItems: 'center' }}>
-                  Password
-                </Grid>
-                <Grid
-                  item
-                  xs
-                  lg
-                  sx={{
-                    display: 'flex',
-                    [theme.breakpoints.down('md')]: {
-                      paddingTop: '8px !important',
-                    },
-                  }}
-                >
-                  <FormControl
-                    variant="outlined"
-                    onChange={(e) => {
-                      setFormLoginCustomer({ ...formLoginCustomer, password: e.target.value });
-                    }}
-                    sx={{ width: '100%' }}
                   >
-                    <InputLabel htmlFor="input-password">Password *</InputLabel>
-                    <OutlinedInput
+                    <TextField
                       required
-                      label="Password"
-                      id="input-password"
-                      type={showPassword ? 'text' : 'password'}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" color="primary">
-                            {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
+                      type="number"
+                      label="Nomer Telepon"
+                      value={formLoginCustomer.noTelp}
+                      onChange={(e) => {
+                        setFormLoginCustomer({ ...formLoginCustomer, noTelp: e.target.value });
+                      }}
+                      autoComplete="off"
+                      sx={{ width: '100%' }}
                     />
-                  </FormControl>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <div style={{ fontSize: '12px', opacity: '0.6', width: '100%', textAlign: 'right' }}>
-                <Link to={'/LupaPassword'} className="disable-link-style">
-                  Lupa Password?
-                </Link>
-              </div>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={() => {
-                  handleLoginCustomer(formLoginCustomer);
-                }}
-                style={{ width: '100%', fontWeight: 'bold' }}
-              >
-                Masuk
-              </Button>
-              {formLoginCustomer.noTelp}
-              <br />
-              {formLoginCustomer.password}
-            </Box>
+                <Grid container>
+                  <Grid item xs={12} sm={12} md={2.3} lg={2.5} sx={{ display: 'flex', alignItems: 'center' }}>
+                    Password
+                  </Grid>
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <FormControl
+                      variant="outlined"
+                      onChange={(e) => {
+                        setFormLoginCustomer({ ...formLoginCustomer, password: e.target.value });
+                      }}
+                      sx={{ width: '100%' }}
+                    >
+                      <InputLabel htmlFor="input-password">Password *</InputLabel>
+                      <OutlinedInput
+                        required
+                        label="Password"
+                        id="input-password"
+                        type={showPassword ? 'text' : 'password'}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" color="primary">
+                              {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <div style={{ fontSize: '12px', opacity: '0.6', width: '100%', textAlign: 'right' }}>
+                  <Link to={'/LupaPassword'} className="disable-link-style">
+                    Lupa Password?
+                  </Link>
+                </div>
+                <Button
+                  variant="contained"
+                  size="large"
+                  type="submit"
+                  // onClick={() => {
+                  //   handleLoginCustomer(formLoginCustomer);
+                  // }}
+                  style={{ width: '100%', fontWeight: 'bold' }}
+                >
+                  Masuk
+                </Button>
+                {formLoginCustomer.noTelp}
+                <br />
+                {formLoginCustomer.password}
+              </Box>
+            </form>
           </Paper>
 
           <br />
