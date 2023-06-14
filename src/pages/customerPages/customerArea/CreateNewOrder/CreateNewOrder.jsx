@@ -1,5 +1,6 @@
 import {
   Autocomplete,
+  Avatar,
   Box,
   Button,
   Chip,
@@ -33,10 +34,17 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         <div className={`dash-card`}>
           <div style={{ fontWeight: 'bold', marginBottom: '16px' }}>Informasi Pelanggan</div>
+
           <Box sx={{ borderRadius: '4px', backgroundColor: '#eeeeee', p: 2, width: '100%' }}>
             <Grid container spacing={1}>
               <Grid item xs={12} sm={'auto'} sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Box
+                <Avatar
+                  alt=""
+                  src={profileCustomer.profilePic}
+                  sx={{ width: '120px', height: '120px', borderRadius: 1 }}
+                />
+
+                {/* <Box
                   component="img"
                   sx={{
                     width: '120px',
@@ -46,7 +54,7 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                   }}
                   alt=""
                   src={profileCustomer.profilePic}
-                />
+                /> */}
               </Grid>
               <Grid item xs={12} sm>
                 <Box

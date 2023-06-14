@@ -71,9 +71,15 @@ function ServiceType() {
   const handleCreateServiceType = async () => {
     const formData = new FormData();
     formData.append('layanan', formServiceType.serviceTypeName);
-    formData.append('hari', formServiceType.serviceDuration.days);
-    formData.append('jam', formServiceType.serviceDuration.hours);
-    formData.append('menit', formServiceType.serviceDuration.minutes);
+    if (formServiceType.serviceDuration.days) {
+      formData.append('hari', formServiceType.serviceDuration.days);
+    }
+    if (formServiceType.serviceDuration.hours) {
+      formData.append('jam', formServiceType.serviceDuration.hours);
+    }
+    if (formServiceType.serviceDuration.minutes) {
+      formData.append('menit', formServiceType.serviceDuration.minutes);
+    }
     formData.append('gambar', formServiceType.photo.img);
     formData.append('deskripsi', formServiceType.description);
 
@@ -122,9 +128,15 @@ function ServiceType() {
   const handleUpdateServiceType = async () => {
     const formData = new FormData();
     formData.append('layanan', formServiceType.serviceTypeName);
-    formData.append('hari', formServiceType.serviceDuration.days);
-    formData.append('jam', formServiceType.serviceDuration.hours);
-    formData.append('menit', formServiceType.serviceDuration.minutes);
+    if (formServiceType.serviceDuration.days) {
+      formData.append('hari', formServiceType.serviceDuration.days);
+    }
+    if (formServiceType.serviceDuration.hours) {
+      formData.append('jam', formServiceType.serviceDuration.hours);
+    }
+    if (formServiceType.serviceDuration.minutes) {
+      formData.append('menit', formServiceType.serviceDuration.minutes);
+    }
     formData.append('gambar', formServiceType.photo.img);
     formData.append('deskripsi', formServiceType.description);
 
@@ -467,7 +479,8 @@ function ServiceType() {
                         </TableCell>
                         <TableCell>
                           <span>
-                            {item.hari ? `${item.hari} Hari` : null} {item.jam ? ` ${item.jam} Jam` : null}
+                            {item.hari ? `${item.hari} Hari` : null} {item.jam ? ` ${item.jam} Jam` : null}{' '}
+                            {item.menit ? ` ${item.menit} Menit` : null}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -515,7 +528,7 @@ function ServiceType() {
                                     serviceDuration: {
                                       days: item.hari,
                                       hours: item.jam,
-                                      minutes: null,
+                                      minutes: item.menit,
                                     },
                                     description: item.deskripsi,
                                     photo: { img: null, fileName: item.gambar },
