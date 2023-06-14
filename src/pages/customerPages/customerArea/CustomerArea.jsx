@@ -41,9 +41,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import SearchIcon from '@mui/icons-material/Search';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfileAccountCustomer } from '../../../redux/actions/getProfileAccount';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 function RowItem(props) {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ function RowItem(props) {
 
   const dateStart = new Date(props.item.tglMulai);
   const dateEnd = new Date(props.item.tenggatWaktu);
-  const lastUpdate = new Date(props.item.updatedAt);
+  const lastUpdate = new Date(props.item.statusUpdatedAt);
 
   return (
     <React.Fragment>
@@ -79,7 +79,6 @@ function RowItem(props) {
         </TableCell>
         <TableCell>{props.item.mPembayaran}</TableCell>
         <TableCell>
-          {}
           {props.item.status === 'Perlu Disetujui'
             ? 'Menunggu Persetujuan'
             : props.item.status === 'Perlu Dijemput'
@@ -92,6 +91,8 @@ function RowItem(props) {
             ? 'Pesanan Selesai'
             : props.item.status === 'Dibatalkan'
             ? 'Pesanan Di Batalkan'
+            : props.item.status === 'Ditolak'
+            ? 'Pesanan Di Tolak'
             : null}
           <div style={{ fontSize: '12px' }}>
             pada{' '}
@@ -151,7 +152,7 @@ function RowItem(props) {
   );
 }
 
-function OrderTable() {
+function OrderTable({ orderStatusType, setState }) {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -163,8 +164,8 @@ function OrderTable() {
   };
 
   React.useEffect(() => {
-    handleGetOrder();
-  }, []);
+    handleGetOrder(null, null, orderStatusType === 'Pesanan sedang Berjalan' ? 'Perlu Dikerjakan' : orderStatusType);
+  }, [orderStatusType]);
 
   const [listFinance, setListFinance] = React.useState([]);
   const [pageConfig, setPageConfig] = React.useState({
@@ -174,7 +175,7 @@ function OrderTable() {
   });
 
   // Handle API Get All Data Finance
-  const handleGetOrder = async (changePage, maxDataPerPage) => {
+  const handleGetOrder = async (changePage, maxDataPerPage, status) => {
     try {
       const res = await axios({
         method: 'GET',
@@ -189,7 +190,7 @@ function OrderTable() {
             : changePage === 'next'
             ? pageConfig.currentPage + 1
             : changePage
-        }&perPage=${maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage}`,
+        }&perPage=${maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage}&status=${status}`,
       });
 
       setPageConfig({
@@ -204,30 +205,19 @@ function OrderTable() {
           : changePage,
         dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
-      setListFinance(res.data.data);
-    } catch (error) {
-      if (error.response.status === 404) {
-        setListFinance([]);
-      }
-      console.log(error);
-    }
-  };
 
-  // Handle API Search Finance
-  const handleSearchOrder = async () => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
-        },
-        url: `${process.env.REACT_APP_API_KEY}/keuangan/search/where?judul=${searching.value}`,
+      setState({
+        needApproval: res.data.otherData.perluDisetujui,
+        needsToBePickedUp: res.data.otherData.perluDijemput,
+        needsToBeDone: res.data.otherData.perluDikerjakan,
+        needsToBeDelivered: res.data.otherData.perluDiantar,
+        completed: res.data.otherData.completed,
+        cancelled: res.data.otherData.cancelled,
+        declined: res.data.otherData.declined,
       });
+
       console.log('Response GET Data Finance');
       console.log(res);
-
       setListFinance(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -251,8 +241,8 @@ function OrderTable() {
     setSelectDataPerPageAnchorEl(null);
   };
 
-  // Menu - Searching
-  const [searching, setSearching] = React.useState({ label: '', value: '', currentSearch: '' });
+  // Menu - Filter
+  const [filterOrderStatus, setFilterOrderStatus] = React.useState('Perlu Dikerjakan');
   const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
   const openSearch = Boolean(searchAnchorEl);
   const handleCloseSearch = () => {
@@ -338,34 +328,24 @@ function OrderTable() {
           <IconButton
             onClick={() => {
               handleGetOrder();
-              setSearching({ label: '', value: '', currentSearch: '' });
             }}
           >
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
-        <div>
-          <Chip
-            label={`Search: ${searching.currentSearch}`}
-            onDelete={() => {
-              setSearching({ label: '', value: '', currentSearch: '' });
-              handleGetOrder();
-            }}
-            sx={{ display: !searching.currentSearch ? 'none' : null }}
-          />
-          <Tooltip title="Filter list">
+        {orderStatusType !== 'Pesanan sedang Berjalan' ? null : (
+          <div>
             <IconButton
               onClick={(event) => {
                 setSearchAnchorEl(event.currentTarget);
               }}
             >
-              {/* <FilterListIcon color="primary" /> */}
-              <SearchIcon color="primary" />
+              <FilterListIcon color="primary" />
             </IconButton>
-          </Tooltip>
-        </div>
+          </div>
+        )}
       </Toolbar>
-      {/* Menu - Searching */}
+      {/* Menu - Filter */}
       <Menu
         anchorEl={searchAnchorEl}
         open={openSearch}
@@ -379,63 +359,37 @@ function OrderTable() {
           horizontal: 'right',
         }}
       >
-        <Box sx={{ py: 1, px: 2, display: 'flex', gap: 1 }}>
-          <Grid container spacing={1}>
-            <Grid
-              item
-              xs
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1,
-                [theme.breakpoints.up('sm')]: {
-                  flexDirection: 'row',
-                },
-              }}
-            >
-              <Select
-                value={searching.label}
-                size="small"
-                onChange={(e) => {
-                  setSearching({ ...searching, label: e.target.value });
-                }}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
-              >
-                <MenuItem value="">
-                  <em>Pilih Label</em>
-                </MenuItem>
-                <MenuItem value={'Judul'}>Judul</MenuItem>
-              </Select>
+        <MenuItem
+          onClick={() => {
+            setFilterOrderStatus('Perlu Dijemput');
+            handleGetOrder(null, null, 'Perlu Dijemput');
+            handleCloseSearch();
+          }}
+          sx={{ bgcolor: filterOrderStatus === 'Perlu Dijemput' ? '#eeeeee' : null }}
+        >
+          Segera Di Jemput
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setFilterOrderStatus('Perlu Dikerjakan');
+            handleGetOrder(null, null, 'Perlu Dikerjakan');
 
-              <TextField
-                required
-                label="Kata Pencarian"
-                value={searching.value}
-                onChange={(e) => {
-                  setSearching({ ...searching, value: e.target.value });
-                }}
-                size="small"
-                autoComplete="off"
-                sx={{ width: '100%' }}
-              />
-            </Grid>
-            <Grid item xs="auto" sx={{ display: 'flex', alignItems: 'center' }}>
-              <Button
-                size="medium"
-                variant="contained"
-                onClick={() => {
-                  setSearching({ label: '', value: '', currentSearch: searching.value });
-
-                  handleCloseSearch();
-                  handleSearchOrder();
-                }}
-              >
-                Cari
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
+            handleCloseSearch();
+          }}
+          sx={{ bgcolor: filterOrderStatus === 'Perlu Dikerjakan' ? '#eeeeee' : null }}
+        >
+          Sedang Di Kerjakan
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setFilterOrderStatus('Perlu Diantar');
+            handleGetOrder(null, null, 'Perlu Diantar');
+            handleCloseSearch();
+          }}
+          sx={{ bgcolor: filterOrderStatus === 'Perlu Diantar' ? '#eeeeee' : null }}
+        >
+          Segera Di Antar
+        </MenuItem>
       </Menu>
 
       {/* Table Section */}
@@ -498,7 +452,7 @@ function OrderTable() {
           justifyContent: 'end',
         }}
       >
-        {pageConfig.metadata === null || searching.currentSearch ? null : (
+        {pageConfig.metadata === null ? null : (
           <Box sx={{ py: 2, px: 1 }}>
             <Grid container spacing={1}>
               <Grid
@@ -631,6 +585,15 @@ function CustomerArea() {
   const navigate = useNavigate();
   const [buttonStatusOrder, setButtonStatusOrder] = useState('Pesanan sedang Berjalan');
   // const myProfile = JSON.parse(localStorage.getItem('my_profile_account'));
+  const [myOrderStats, setMyOrderStats] = React.useState({
+    needApproval: null,
+    needsToBePickedUp: null,
+    needsToBeDone: null,
+    needsToBeDelivered: null,
+    completed: null,
+    cancelled: null,
+    declined: null,
+  });
 
   const dispatch = useDispatch();
   const { isLoading: loadingGetProfileAccountCustomer, data: dataGetProfileAccountCustomer } = useSelector(
@@ -687,13 +650,7 @@ function CustomerArea() {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
               <Avatar src={dataGetProfileAccountCustomer.profilePic} sx={{ width: 60, height: 60 }} />
-              {/* <img
-                src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
-                width={60}
-                height={60}
-                alt=""
-                style={{ borderRadius: '50%', objectFit: 'cover' }}
-              /> */}
+
               <span style={{ fontSize: '24px' }}>Hey, {dataGetProfileAccountCustomer.nama}</span>
             </div>
             <Button
@@ -733,7 +690,7 @@ function CustomerArea() {
               <Box
                 onClick={() => {
                   setButtonStatusOrder(
-                    buttonStatusOrder === 'Menunggu Persetujuan' ? 'Pesanan sedang Berjalan' : 'Menunggu Persetujuan'
+                    buttonStatusOrder === 'Perlu Disetujui' ? 'Pesanan sedang Berjalan' : 'Perlu Disetujui'
                   );
                 }}
                 sx={{
@@ -741,7 +698,7 @@ function CustomerArea() {
                   height: '100%',
                   borderRadius: '4px !important',
                   padding: 0,
-                  backgroundColor: buttonStatusOrder === 'Menunggu Persetujuan' ? '#ffffff80' : '#ffffff',
+                  backgroundColor: buttonStatusOrder === 'Perlu Disetujui' ? '#ffffff80' : '#ffffff',
                   '&:hover': {
                     backgroundColor: '#ffffff80 !important',
                   },
@@ -749,7 +706,7 @@ function CustomerArea() {
               >
                 <InformationCard
                   title="Menunggu Persetujuan"
-                  content={{ normalText: '19' }}
+                  content={{ normalText: myOrderStats.needApproval }}
                   inheritColor={true}
                   // navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
@@ -777,7 +734,10 @@ function CustomerArea() {
               >
                 <InformationCard
                   title="Pesanan sedang Berjalan"
-                  content={{ normalText: '19' }}
+                  content={{
+                    normalText:
+                      myOrderStats.needsToBePickedUp + myOrderStats.needsToBeDone + myOrderStats.needsToBeDelivered,
+                  }}
                   inheritColor={true}
                   // navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
@@ -787,16 +747,14 @@ function CustomerArea() {
             <Grid item xs={6} md={4} lg={2.4}>
               <Box
                 onClick={() => {
-                  setButtonStatusOrder(
-                    buttonStatusOrder === 'Pesanan Selesai' ? 'Pesanan sedang Berjalan' : 'Pesanan Selesai'
-                  );
+                  setButtonStatusOrder(buttonStatusOrder === 'Selesai' ? 'Pesanan sedang Berjalan' : 'Selesai');
                 }}
                 sx={{
                   width: '100%',
                   height: '100%',
                   borderRadius: '4px !important',
                   padding: 0,
-                  backgroundColor: buttonStatusOrder === 'Pesanan Selesai' ? '#ffffff80' : '#ffffff',
+                  backgroundColor: buttonStatusOrder === 'Selesai' ? '#ffffff80' : '#ffffff',
                   '&:hover': {
                     backgroundColor: '#ffffff80 !important',
                   },
@@ -804,7 +762,7 @@ function CustomerArea() {
               >
                 <InformationCard
                   title="Pesanan Selesai"
-                  content={{ normalText: '19' }}
+                  content={{ normalText: myOrderStats.completed }}
                   inheritColor={true}
                   // navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
@@ -814,16 +772,14 @@ function CustomerArea() {
             <Grid item xs={6} md={4} lg={2.4}>
               <Box
                 onClick={() => {
-                  setButtonStatusOrder(
-                    buttonStatusOrder === 'Pesanan Batal' ? 'Pesanan sedang Berjalan' : 'Pesanan Batal'
-                  );
+                  setButtonStatusOrder(buttonStatusOrder === 'Dibatalkan' ? 'Pesanan sedang Berjalan' : 'Dibatalkan');
                 }}
                 sx={{
                   width: '100%',
                   height: '100%',
                   borderRadius: '4px !important',
                   padding: 0,
-                  backgroundColor: buttonStatusOrder === 'Pesanan Batal' ? '#ffffff80' : '#ffffff',
+                  backgroundColor: buttonStatusOrder === 'Dibatalkan' ? '#ffffff80' : '#ffffff',
                   '&:hover': {
                     backgroundColor: '#ffffff80 !important',
                   },
@@ -831,7 +787,7 @@ function CustomerArea() {
               >
                 <InformationCard
                   title="Pesanan Batal"
-                  content={{ normalText: '19' }}
+                  content={{ normalText: myOrderStats.cancelled }}
                   inheritColor={true}
                   // navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
@@ -841,16 +797,14 @@ function CustomerArea() {
             <Grid item xs={6} md={4} lg={2.4}>
               <Box
                 onClick={() => {
-                  setButtonStatusOrder(
-                    buttonStatusOrder === 'Pesanan di Tolak' ? 'Pesanan sedang Berjalan' : 'Pesanan di Tolak'
-                  );
+                  setButtonStatusOrder(buttonStatusOrder === 'Ditolak' ? 'Pesanan sedang Berjalan' : 'Ditolak');
                 }}
                 sx={{
                   width: '100%',
                   height: '100%',
                   borderRadius: '4px !important',
                   padding: 0,
-                  backgroundColor: buttonStatusOrder === 'Pesanan di Tolak' ? '#ffffff80' : '#ffffff',
+                  backgroundColor: buttonStatusOrder === 'Ditolak' ? '#ffffff80' : '#ffffff',
                   '&:hover': {
                     backgroundColor: '#ffffff80 !important',
                   },
@@ -858,7 +812,7 @@ function CustomerArea() {
               >
                 <InformationCard
                   title="Pesanan di Tolak"
-                  content={{ normalText: '19' }}
+                  content={{ normalText: myOrderStats.declined }}
                   inheritColor={true}
                   // navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
@@ -868,7 +822,7 @@ function CustomerArea() {
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <OrderTable />
+          <OrderTable orderStatusType={buttonStatusOrder} setState={setMyOrderStats} />
         </Paper>
       </Box>
     </>

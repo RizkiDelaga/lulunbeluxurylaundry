@@ -11,6 +11,7 @@ function DigitalReceipt() {
   const navigate = useNavigate();
   let { noPesanan } = useParams();
   const [detailOrder, setDetailOrder] = useState();
+  const [ratingReview, setRatingReview] = useState();
 
   const dispatch = useDispatch();
   const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
@@ -40,9 +41,31 @@ function DigitalReceipt() {
       console.log('Response GET Data Finance');
       console.log(res);
       setDetailOrder(res.data.data);
+      handleGetRatingReview(res.data.data.id);
     } catch (error) {
       if (error.response.status === 404) {
         setDetailOrder();
+      }
+      console.log(error);
+    }
+  };
+
+  const handleGetRatingReview = async (id) => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/review/pemesanan/${id}`,
+      });
+
+      console.log('Response GET Data Finance');
+      console.log(res);
+      setRatingReview(res.data.data[0]);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setRatingReview();
       }
       console.log(error);
     }
@@ -183,6 +206,8 @@ function DigitalReceipt() {
                     ? 'Pesanan Selesai'
                     : detailOrder.status === 'Dibatalkan'
                     ? 'Pesanan Di Batalkan'
+                    : detailOrder.status === 'Ditolak'
+                    ? 'Pesanan Di Tolak'
                     : null}
                 </div>
               </div>
@@ -195,65 +220,69 @@ function DigitalReceipt() {
               </div>
             </div>
 
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1,
-                maxWidth: '800px',
-                bgcolor: '#eeeeee',
-                borderRadius: 2,
-                p: 2,
-              }}
-            >
-              <h5 style={{ textAlign: 'center' }}>Rating & Review</h5>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm="auto" sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <img
-                    src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
-                    style={{ width: '120px', height: '120px', objectFit: 'cover', borderRadius: 4 }}
-                    alt=""
-                  />
-                </Grid>
+            {!ratingReview ? null : (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 1,
+                  maxWidth: '800px',
+                  bgcolor: '#eeeeee',
+                  borderRadius: 2,
+                  p: 2,
+                }}
+              >
+                <h5 style={{ textAlign: 'center' }}>Rating & Review</h5>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm="auto" sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <img
+                      src={ratingReview.gambar}
+                      style={{ width: '120px', height: '120px', objectFit: 'cover', borderRadius: 4 }}
+                      alt=""
+                    />
+                  </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 1,
-                    [theme.breakpoints.down('sm')]: {
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                    },
-                  }}
-                >
-                  <RatingComponent readOnly={true} ratingValue={5} />
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odio repellendus non maiores facilis enim
-                  cupiditate tenetur possimus nihil voluptatem qui consectetur natus est magni debitis officiis, cumque
-                  laudantium tempora in.
+                  <Grid
+                    item
+                    xs={12}
+                    sm
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 1,
+                      [theme.breakpoints.down('sm')]: {
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                      },
+                    }}
+                  >
+                    <RatingComponent readOnly={true} ratingValue={ratingReview.rating} />
+                    {ratingReview.review}
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Box>
+              </Box>
+            )}
 
             {!detailOrder ? null : (
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  if (localStorage.getItem('access_token')) {
-                    navigate(`/AreaPelanggan/RatingDanReview/${detailOrder.id}/${noPesanan}`);
-                  } else {
-                    navigate('/Login');
-                  }
-                }}
-                disabled={detailOrder.status !== 'Selesai'}
-                style={{ fontWeight: 'bold' }}
-              >
-                Rating & Review
-              </Button>
+              <>
+                {ratingReview ? null : (
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      if (localStorage.getItem('access_token')) {
+                        navigate(`/AreaPelanggan/RatingDanReview/${detailOrder.id}/${noPesanan}`);
+                      } else {
+                        navigate('/Login');
+                      }
+                    }}
+                    disabled={detailOrder.status !== 'Selesai'}
+                    style={{ fontWeight: 'bold' }}
+                  >
+                    Rating & Review
+                  </Button>
+                )}
+              </>
             )}
           </Paper>
         )}

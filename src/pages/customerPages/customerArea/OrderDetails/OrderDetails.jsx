@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Box, Button, Grid, Paper, useTheme } from '@mui/material';
+import { Avatar, Box, Button, Grid, Paper, useTheme } from '@mui/material';
 import AddressCard from '../../../../components/Card/InformationCard/AddressCard';
 import axios from 'axios';
 import RatingComponent from '../../../../components/Ratings/RatingComponent';
@@ -18,7 +18,6 @@ function OrderDetails() {
     if (!detailOrder) {
       handleGetDetailOrder();
     } else {
-      handleGetRatingReview();
     }
   }, [detailOrder]);
 
@@ -35,6 +34,7 @@ function OrderDetails() {
       console.log('Response GET Data Finance');
       console.log(res);
       setDetailOrder(res.data.data);
+      handleGetRatingReview(res.data.data.id);
     } catch (error) {
       if (error.response.status === 404) {
         setDetailOrder();
@@ -43,19 +43,19 @@ function OrderDetails() {
     }
   };
 
-  const handleGetRatingReview = async () => {
+  const handleGetRatingReview = async (idPesanan) => {
     try {
       const res = await axios({
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/review/${detailOrder.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/review/pemesanan/${idPesanan}`,
       });
 
       console.log('Response GET Data Finance');
       console.log(res);
-      setRatingReview(res.data.data);
+      setRatingReview(res.data.data[0]);
     } catch (error) {
       if (error.response.status === 404) {
         setRatingReview();
@@ -107,16 +107,10 @@ function OrderDetails() {
                         sm={'auto'}
                         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                       >
-                        <Box
-                          component="img"
-                          sx={{
-                            width: '120px',
-                            height: '120px',
-                            objectFit: 'cover',
-                            borderRadius: '8px',
-                          }}
+                        <Avatar
                           alt=""
                           src={detailOrder.User.profilePic}
+                          sx={{ width: '120px', height: '120px', borderRadius: 1 }}
                         />
                       </Grid>
                       <Grid item xs={12} sm>
@@ -269,6 +263,8 @@ function OrderDetails() {
                           ? 'Pesanan Selesai'
                           : detailOrder.status === 'Dibatalkan'
                           ? 'Pesanan Di Batalkan'
+                          : detailOrder.status === 'Ditolak'
+                          ? 'Pesanan Di Tolak'
                           : null}
                       </div>
                     </div>
@@ -331,7 +327,9 @@ function OrderDetails() {
                     {!ratingReview ? 'N/A' : ratingReview.review}
                   </span>
 
-                  {!ratingReview ? null : !ratingReview.gambar ? null : <img src={ratingReview.gambar} alt="" />}
+                  {!ratingReview ? null : !ratingReview.gambar ? null : (
+                    <img src={ratingReview.gambar} width={120} alt="" />
+                  )}
                 </div>
 
                 {!detailOrder ? null : (
@@ -342,7 +340,7 @@ function OrderDetails() {
                       navigate(`/AreaPelanggan/RatingDanReview/${detailOrder.id}/${detailOrder.nomorPesanan}`)
                     }
                     disabled={detailOrder.status !== 'Selesai'}
-                    style={{ width: '100%', fontWeight: 'bold' }}
+                    style={{ width: '100%', fontWeight: 'bold', display: ratingReview ? 'none' : null }}
                   >
                     Rating & Review Sekarang
                   </Button>

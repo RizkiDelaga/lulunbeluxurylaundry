@@ -5,6 +5,7 @@ import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import RatingComponent from '../../../../components/Ratings/RatingComponent';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import axios from 'axios';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 
 function RatingAndReview() {
   const theme = useTheme();
@@ -13,6 +14,11 @@ function RatingAndReview() {
   const [rating, setRating] = useState();
   const [review, setReview] = useState();
   const [photo, setPhoto] = useState({ img: null, fileName: null });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
+  });
 
   React.useEffect(() => {
     document.title = 'Rating & Review Pesanan';
@@ -24,6 +30,8 @@ function RatingAndReview() {
     formData.append('rating', rating);
     formData.append('review', review);
     formData.append('gambar', photo.img);
+
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
 
     try {
       const res = await axios({
@@ -37,9 +45,21 @@ function RatingAndReview() {
       console.log('Response POST Login Customer');
       console.log(res);
 
-      navigate(`/AreaPelanggan/${noPesanan}`);
+      // navigate(`/AreaPelanggan/${noPesanan}`);
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Rating & Review Pesanan Berhasil!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
@@ -63,6 +83,11 @@ function RatingAndReview() {
           currentPage={{
             title: `Rating & Review Pesanan #${noPesanan}`,
           }}
+        />
+        <LoadDecisions
+          setOpenLoad={setOpenLoadDecision}
+          openLoad={openLoadDecision}
+          redirect={`/AreaPelanggan/${noPesanan}`}
         />
 
         <Paper
