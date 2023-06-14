@@ -19,6 +19,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import axios from 'axios';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 
 function EditProfile() {
   const theme = useTheme();
@@ -33,8 +34,12 @@ function EditProfile() {
     profilePicture: { img: null, fileName: null },
     status: '',
   });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
+  });
 
-  
   React.useEffect(() => {
     document.title = 'Edit Profile';
     handleGetMyProfile();
@@ -61,6 +66,7 @@ function EditProfile() {
         profilePicture: { img: null, fileName: res.data.data.profilePic },
         status: res.data.data.status,
       });
+      localStorage.setItem('admin_profile_account', JSON.stringify(res.data.data));
     } catch (error) {
       // if (error.response.status === 404) {
       // }
@@ -76,6 +82,7 @@ function EditProfile() {
     formData.append('email', formEditProfile.contact.email);
     formData.append('profilePic', formEditProfile.profilePicture.img);
     formData.append('status', formEditProfile.status);
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
 
     try {
       const res = await axios({
@@ -89,9 +96,19 @@ function EditProfile() {
       console.log('Response Update');
       console.log(res);
       handleGetMyProfile();
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Edit Profil Berhasil!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
-      // if (error.response.status === 404) {
-      // }
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
       console.log(error);
     }
   };
@@ -105,6 +122,7 @@ function EditProfile() {
             title: 'Edit Profil',
           }}
         />
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>

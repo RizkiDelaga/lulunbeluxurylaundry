@@ -98,7 +98,7 @@ function AddressCard({ designType, data, setUpdateAddress, setUrbanVillage, hand
               }}
               sx={{ width: '100%' }}
             >
-              Edit
+              Update
             </Button>
 
             <Button

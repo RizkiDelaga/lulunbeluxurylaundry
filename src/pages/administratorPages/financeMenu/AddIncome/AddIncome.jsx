@@ -54,19 +54,6 @@ function AddIncome() {
         },
         url: `${process.env.REACT_APP_API_KEY}/keuangan`,
         data: formData,
-        //   {
-        //     adminId: 1,
-        //     tipe: 'Income',
-        //     nominal: data.nominal,
-        //     judul: data.title,
-        //     catatan: data.notes,
-        //     tanggal: dayjs(
-        //       `${formAddIncome.entryDate.$y}-${('0' + (formAddIncome.entryDate.$M + 1)).slice(-2)}-${
-        //         formAddIncome.entryDate.$D
-        //       } ${formAddIncome.entryDate.$H}:${formAddIncome.entryDate.$m}:00`
-        //     ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
-        //     gambar: data.photoEvidence.fileName,
-        //   },
       });
 
       console.log('Response POST');

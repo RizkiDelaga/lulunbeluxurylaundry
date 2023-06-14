@@ -1214,7 +1214,7 @@ function HomePage() {
       {laundryType ? <LaundryTypeSection listLaundryType={laundryType} /> : null}
       {serviceType ? <ServiceTypeSection listServiceType={serviceType} /> : null}
 
-      {!loadingGetGeneralInformation && sessionStorage.getItem('business_information') && !loadingGetHowToOrder ? (
+      {!loadingGetGeneralInformation && !loadingGetHowToOrder ? (
         <OperatingHoursAndHowToOrderSection
           generalInformation={dataGetGeneralInformation}
           listHowToOrder={dataGetHowToOrder}
@@ -1222,10 +1222,12 @@ function HomePage() {
       ) : null}
 
       {event ? <EventSection listEvent={event} /> : null}
-      {!loadingGetReasonWhyChooseUs ? <ReasonSection listReason={dataGetReasonWhyChooseUs} /> : null}
-      {!loadingGetGallery ? <GallerySection listGallery={dataGetGallery} /> : null}
-      {!loadingGetTestimony ? <TestimonySection listTestimony={dataGetTestimony} /> : null}
-      {!loadingGetFAQ ? <FAQSection listFAQ={dataGetFAQ} /> : null}
+      {!loadingGetReasonWhyChooseUs && !dataGetReasonWhyChooseUs ? (
+        <ReasonSection listReason={dataGetReasonWhyChooseUs} />
+      ) : null}
+      {!loadingGetGallery && !dataGetGallery ? <GallerySection listGallery={dataGetGallery} /> : null}
+      {!loadingGetTestimony && !dataGetTestimony ? <TestimonySection listTestimony={dataGetTestimony} /> : null}
+      {!loadingGetFAQ && !dataGetFAQ ? <FAQSection listFAQ={dataGetFAQ} /> : null}
 
       {!loadingGetGeneralInformation && sessionStorage.getItem('business_information') ? (
         <span>

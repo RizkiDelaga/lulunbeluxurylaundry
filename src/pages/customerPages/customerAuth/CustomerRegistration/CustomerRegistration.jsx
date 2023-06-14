@@ -17,6 +17,7 @@ import {
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 
 function CustomerRegistration() {
   const theme = useTheme();
@@ -28,12 +29,19 @@ function CustomerRegistration() {
     password: '',
     confirmPassword: '',
   });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
+  });
 
   React.useEffect(() => {
     document.title = 'Registrasi Pelanggan Baru';
   }, []);
 
   const handleCreateCustomer = async () => {
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
     try {
       const res = await axios({
         method: 'POST',
@@ -41,20 +49,34 @@ function CustomerRegistration() {
         data: {
           nama: formRegisterCustomer.customerName,
           noTelp: formRegisterCustomer.noTelp,
-          email: `rizki${Math.floor(Math.random() * 10000)}@gmail.com`,
+          // email: `rizki${Math.floor(Math.random() * 10000)}@gmail.com`,
           password: formRegisterCustomer.password,
         },
       });
       console.log('Response POST Register Customer');
       console.log(res);
       // navigate('/Login');
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Registrasi Berhasil!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
   return (
     <>
+      <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
+
       <Box component="main" sx={{ marginX: 3 }}>
         <Box
           sx={{

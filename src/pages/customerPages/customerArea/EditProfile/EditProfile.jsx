@@ -23,6 +23,7 @@ import dayjs from 'dayjs';
 import { banyumasAreaList } from '../../../../utils/banyumasAreaList';
 import AddressCard from '../../../../components/Card/InformationCard/AddressCard';
 import axios from 'axios';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 
 function EditProfile() {
   const theme = useTheme();
@@ -54,6 +55,11 @@ function EditProfile() {
     buildingPhoto: { img: null, fileName: null },
     // makeItMainAddress: false,
     isMainAddress: false,
+  });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
   });
 
   React.useEffect(() => {
@@ -99,6 +105,8 @@ function EditProfile() {
     }
     formData.append('profilePic', formEditProfile.profilePicture.img);
 
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
     try {
       const res = await axios({
         method: 'PUT',
@@ -111,8 +119,20 @@ function EditProfile() {
       console.log('Response GET Data My Profile');
       console.log(res);
       handleGetMyProfile();
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Edit Profil Berhasil!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
@@ -147,6 +167,8 @@ function EditProfile() {
     formData.append('gambar', mainAddress.buildingPhoto.img);
     formData.append('status', mainAddress.isMainAddress ? 'Priority' : 'Standard');
 
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
     try {
       const res = await axios({
         method: 'POST',
@@ -177,8 +199,20 @@ function EditProfile() {
       });
       setUrbanVillage();
       handleGetMyAddress();
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Tambah Alamat Berhasil!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
@@ -193,6 +227,8 @@ function EditProfile() {
     formData.append('deskripsi', mainAddress.addressDetails);
     formData.append('gambar', mainAddress.buildingPhoto.img);
     formData.append('status', mainAddress.isMainAddress ? 'Priority' : 'Standard');
+
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
 
     try {
       const res = await axios({
@@ -224,12 +260,26 @@ function EditProfile() {
       });
       setUrbanVillage();
       handleGetMyAddress();
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Update Alamat Berhasil!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
   const handleDeleteAddress = async (id) => {
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
     try {
       const res = await axios({
         method: 'DELETE',
@@ -241,8 +291,20 @@ function EditProfile() {
       console.log('Response DELETE Data My Address');
       console.log(res);
       handleGetMyAddress();
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Hapus Alamat Berhasil!',
+          statusType: 'success',
+        });
+      }
     } catch (error) {
       console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
@@ -267,6 +329,7 @@ function EditProfile() {
             title: 'Edit Profil',
           }}
         />
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
@@ -329,6 +392,7 @@ function EditProfile() {
                       type="number"
                       label="Nomer Telepon"
                       value={formEditProfile.contact.phoneNumber}
+                      disabled="true"
                       onChange={(e) => {
                         setFormEditProfile({
                           ...formEditProfile,

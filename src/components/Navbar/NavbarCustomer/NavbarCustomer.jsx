@@ -192,7 +192,7 @@ function NavbarCustomer(props) {
     dispatchGetExample();
     dispatchGetGeneralInformation();
     dispatchGetProfileAccountCustomer();
-  }, []);
+  }, [localStorage.getItem('my_profile_account')]);
 
   const dispatchGetExample = async () => {
     return await dispatch(getExample());
