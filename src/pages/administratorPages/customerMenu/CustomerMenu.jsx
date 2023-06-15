@@ -96,7 +96,7 @@ function CustomerTable() {
   };
 
   React.useEffect(() => {
-    document.title = 'Menu Pelanggan';
+    // document.title = 'Menu Pelanggan';
     handleGetOrder();
   }, []);
 
@@ -546,9 +546,9 @@ function CustomerTable() {
 function CustomerMenu() {
   const navigate = useNavigate();
 
-  // React.useEffect(() => {
-  //   document.title = 'Menu Pelanggan';
-  // }, []);
+  React.useEffect(() => {
+    document.title = 'Menu Pelanggan';
+  }, []);
 
   return (
     <>

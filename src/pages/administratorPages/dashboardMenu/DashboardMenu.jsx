@@ -83,7 +83,7 @@ function RowItem(props) {
           )}/${dateUpdate.getFullYear()} ${('0' + dateUpdate.getHours()).slice(-2)}:${(
             '0' + dateUpdate.getMinutes()
           ).slice(-2)}`}
-          <div style={{ fontSize: '12px' }}>oleh {props.item.updatedBy}</div>
+          <div style={{ fontSize: '12px' }}>{!props.item.updatedBy ? null : 'oleh ' + props.item.updatedBy}</div>
         </TableCell>
 
         <TableCell>
@@ -96,7 +96,7 @@ function RowItem(props) {
   );
 }
 
-function AdminTable({ setState }) {
+function AdminTable() {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -150,14 +150,6 @@ function AdminTable({ setState }) {
         dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
 
-      setState({
-        activeOrders: res.data.otherData.pesananAktif,
-        ordersCompleted: res.data.otherData.pesananSelesai,
-        eventActive: res.data.otherData.eventAktif,
-        totalCustomers: res.data.otherData.totalPelanggan,
-        averageRating: res.data.otherData.averageRating,
-        totalReviews: res.data.otherData.totalReview,
-      });
       console.log('Response GET Data Finance');
       console.log(res);
       setListAdmin(res.data.data);
@@ -580,11 +572,36 @@ function DashboardMenu() {
   React.useEffect(() => {
     document.title = 'Menu Dashboard';
     dispatchGetProfileAccountAdmin();
+    handleGetBusinessStats();
     handleGetFinanceReport();
   }, []);
 
   const dispatchGetProfileAccountAdmin = async () => {
     return await dispatch(getProfileAccountAdmin());
+  };
+
+  const handleGetBusinessStats = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/admin/statistic/data`,
+      });
+      console.log('Response GET');
+      console.log(res);
+      setBusinessStats({
+        activeOrders: res.data.data.pesananAktif,
+        ordersCompleted: res.data.data.pesananSelesai,
+        eventActive: res.data.data.eventAktif,
+        totalCustomers: res.data.data.totalPelanggan,
+        averageRating: res.data.data.averageRating,
+        totalReviews: res.data.data.totalReview,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleGetFinanceReport = async () => {
@@ -618,7 +635,7 @@ function DashboardMenu() {
       console.log(res);
       setFinanceReport({ ...res.data.data });
       setChartData({
-        labels: ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'],
+        labels: res.data.data.laporanMingguan.map((item) => item.Tanggal),
         datasets: [
           {
             label: 'Pemasukan',
@@ -717,7 +734,7 @@ function DashboardMenu() {
               <Grid item xs={12} lg={6}>
                 {financeReport.length !== 0 && chartData ? (
                   <InformationCard
-                    title="Laporan keuangan mingguan terbaru"
+                    title="Laporan Keuangan Mingguan Terbaru"
                     content={{
                       embedHTML: (
                         <>
@@ -737,7 +754,7 @@ function DashboardMenu() {
               elevation={3}
               sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}
             >
-              <AdminTable setState={setBusinessStats} />
+              <AdminTable />
             </Paper>
           )}
 

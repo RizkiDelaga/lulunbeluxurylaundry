@@ -13,8 +13,8 @@ function AddressCard({ designType, data, setUpdateAddress, setUrbanVillage, hand
       sx={{ borderRadius: '4px', backgroundColor: '#ffffff', p: 2, width: '100%' }}
     >
       <Grid container spacing={1}>
-        <Grid item xs={12} sm={designType === 'card' ? '12' : 'auto'}>
-          {!data.gambar ? null : (
+        {!data.gambar ? null : (
+          <Grid item xs={12} sm={designType === 'card' ? '12' : 'auto'}>
             <Box
               component="img"
               sx={{
@@ -32,10 +32,10 @@ function AddressCard({ designType, data, setUpdateAddress, setUrbanVillage, hand
               alt=""
               src={data.gambar || null}
             />
-          )}
-        </Grid>
+          </Grid>
+        )}
         <Grid item xs={12} sm>
-          {data.status === 'Priority' ? (
+          {data.status === 'Priority' && designType !== 'card' ? (
             <div
               style={{
                 backgroundColor: '#1F305C',
@@ -58,7 +58,8 @@ function AddressCard({ designType, data, setUpdateAddress, setUrbanVillage, hand
               {data.kecamatan}, {data.kelurahan}
             </span>
             <span>
-              RW {data.rw}, RT {data.rt}
+              {!data.rw ? null : 'RW ' + data.rw}
+              {!data.rt ? null : ', RT ' + data.rt}
             </span>
           </div>
 

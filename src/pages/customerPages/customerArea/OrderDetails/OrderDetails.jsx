@@ -33,7 +33,11 @@ function OrderDetails() {
 
       console.log('Response GET Data Finance');
       console.log(res);
-      setDetailOrder(res.data.data);
+      setDetailOrder({
+        ...res.data.data,
+        alamatJemput: JSON.parse(res.data.data.alamatJemput),
+        alamatAntar: res.data.data.alamatAntar ? JSON.parse(res.data.data.alamatAntar) : null,
+      });
       handleGetRatingReview(res.data.data.id);
     } catch (error) {
       if (error.response.status === 404) {
@@ -145,7 +149,7 @@ function OrderDetails() {
                       <>
                         <h6>Alamat Penjemputan</h6>
                         <Box sx={{ border: '1px solid #1F305C', borderRadius: '4px', mt: 1 }}>
-                          <AddressCard designType={'card'} data={'data'} />
+                          <AddressCard designType={'card'} data={detailOrder.alamatJemput} />
                         </Box>
                       </>
                     )}
@@ -153,10 +157,14 @@ function OrderDetails() {
                   <Grid item xs={12} sm={6}>
                     {!detailOrder ? null : (
                       <>
-                        <h6>Alamat Pengantaran</h6>
-                        <Box sx={{ border: '1px solid #1F305C', borderRadius: '4px', mt: 1 }}>
-                          <AddressCard designType={'card'} data={'data'} />
-                        </Box>
+                        {!detailOrder.alamatAntar ? null : (
+                          <>
+                            <h6>Alamat Pengantaran</h6>
+                            <Box sx={{ border: '1px solid #1F305C', borderRadius: '4px', mt: 1 }}>
+                              <AddressCard designType={'card'} data={detailOrder.alamatAntar} />
+                            </Box>
+                          </>
+                        )}
                       </>
                     )}
                   </Grid>

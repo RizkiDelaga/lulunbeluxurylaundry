@@ -54,6 +54,9 @@ function RowItem(props) {
   const dateEnd = new Date(props.item.tenggatWaktu);
   const lastUpdate = new Date(props.item.statusUpdatedAt);
 
+  const pickUpAddress = JSON.parse(props.item.alamatJemput);
+  const deliveryAddress = props.item.alamatAntar ? JSON.parse(props.item.alamatAntar) : null;
+
   return (
     <React.Fragment>
       <TableRow hover>
@@ -78,7 +81,10 @@ function RowItem(props) {
             '0' + dateEnd.getHours()
           ).slice(-2)}:${('0' + dateEnd.getMinutes()).slice(-2)}`}
         </TableCell>
-        <TableCell>{props.item.mPembayaran}</TableCell>
+        <TableCell>
+          {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.item.totalHarga)} (
+          {props.item.statusPembayaran})
+        </TableCell>
         <TableCell>
           {props.item.status === 'Perlu Disetujui'
             ? 'Menunggu Persetujuan'
@@ -126,11 +132,27 @@ function RowItem(props) {
                 <Grid item xs={6}>
                   <div style={{ marginBottom: '10px' }}>
                     <strong>Alamat penjemputan : </strong>
-                    {props.item.alamatJemput}
+                    {pickUpAddress.kecamatan ? `Kecamatan ${pickUpAddress.kecamatan}` : null}
+                    {pickUpAddress.kelurahan ? `, Kelurahan ${pickUpAddress.kelurahan}` : null}
+                    {pickUpAddress.rw ? `, RW ${pickUpAddress.rw}` : null}
+                    {pickUpAddress.rt ? `, RT ${pickUpAddress.rt}` : null}
+                    {pickUpAddress.kategori ? `, ${pickUpAddress.kategori}` : null}
+                    {pickUpAddress.detail ? ` ${pickUpAddress.detail}` : null}
+                    {pickUpAddress.deskripsi ? `, ${pickUpAddress.deskripsi}` : null}
                   </div>
                   <div>
                     <strong>Alamat pengantaran : </strong>
-                    {props.item.alamatAntar}
+                    {!props.item.alamatAntar ? null : (
+                      <>
+                        {deliveryAddress.kecamatan ? `Kecamatan ${deliveryAddress.kecamatan}` : null}
+                        {deliveryAddress.kelurahan ? `, Kelurahan ${deliveryAddress.kelurahan}` : null}
+                        {deliveryAddress.rw ? `, RW ${deliveryAddress.rw}` : null}
+                        {deliveryAddress.rt ? `, RT ${deliveryAddress.rt}` : null}
+                        {deliveryAddress.kategori ? `, ${deliveryAddress.kategori}` : null}
+                        {deliveryAddress.detail ? ` ${deliveryAddress.detail}` : null}
+                        {deliveryAddress.deskripsi ? `, ${deliveryAddress.deskripsi}` : null}
+                      </>
+                    )}
                   </div>
                 </Grid>
                 <Grid item xs={6}>
@@ -153,7 +175,7 @@ function RowItem(props) {
   );
 }
 
-function OrderTable({ orderStatusType, setState }) {
+function OrderTable({ orderStatusType }) {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -207,16 +229,6 @@ function OrderTable({ orderStatusType, setState }) {
         dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
 
-      setState({
-        needApproval: res.data.otherData.perluDisetujui,
-        needsToBePickedUp: res.data.otherData.perluDijemput,
-        needsToBeDone: res.data.otherData.perluDikerjakan,
-        needsToBeDelivered: res.data.otherData.perluDiantar,
-        completed: res.data.otherData.completed,
-        cancelled: res.data.otherData.cancelled,
-        declined: res.data.otherData.declined,
-      });
-
       console.log('Response GET Data Finance');
       console.log(res);
       setListFinance(res.data.data);
@@ -268,7 +280,7 @@ function OrderTable({ orderStatusType, setState }) {
       label: 'Estimasi Selesai',
     },
     {
-      id: 'status',
+      id: 'totalHarga',
       label: 'Total Pembayaran',
     },
     {
@@ -601,10 +613,36 @@ function CustomerArea() {
   React.useEffect(() => {
     document.title = 'Area Pelanggan';
     dispatchGetProfileAccountCustomer();
+    handleGetOrderStats();
   }, []);
 
   const dispatchGetProfileAccountCustomer = async () => {
     return await dispatch(getProfileAccountCustomer());
+  };
+
+  const handleGetOrderStats = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/statistic-data`,
+      });
+      console.log('Response GET');
+      console.log(res);
+      setMyOrderStats({
+        needApproval: res.data.data.perluDisetujui,
+        needsToBePickedUp: res.data.data.perluDijemput,
+        needsToBeDone: res.data.data.perluDikerjakan,
+        needsToBeDelivered: res.data.data.perluDiantar,
+        completed: res.data.data.completed,
+        cancelled: res.data.data.cancelled,
+        declined: res.data.data.declined,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -820,7 +858,7 @@ function CustomerArea() {
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <OrderTable orderStatusType={buttonStatusOrder} setState={setMyOrderStats} />
+          <OrderTable orderStatusType={buttonStatusOrder} />
         </Paper>
       </Box>
     </>

@@ -41,7 +41,11 @@ function RowItem(props) {
           </IconButton>
         </TableCell>
         <TableCell>#{props.item.id}</TableCell>
-        <TableCell>gambar</TableCell>
+        <TableCell>
+          {/* {!props.item.gambar ? null : ( */}
+          <img src={props.item.gambar} height={60} style={{ objectFit: 'contain' }} alt="" />
+          {/* )} */}
+        </TableCell>
         <TableCell>{props.item.nama}</TableCell>
 
         <TableCell>
@@ -72,35 +76,34 @@ function RowItem(props) {
           <Collapse in={openTableCell} timeout="auto" unmountOnExit>
             <Box sx={{ px: 2, py: 1 }}>
               <div style={{ marginBottom: '16px' }}>
-                <h6>Detail Pesanan</h6>
+                <h6>Detail Event</h6>
               </div>
 
               <Grid container>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   <div style={{ marginBottom: '10px' }}>
-                    <strong>Alamat penjemputan : </strong>
-                    {props.item.alamatJemput}
+                    <strong>Deskripsi : </strong>
                   </div>
-                  <div>
-                    <strong>Alamat pengantaran : </strong>
-                    {props.item.alamatAntar}
-                  </div>
+                  {props.item.deskripsi}
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   <div style={{ marginBottom: '10px' }}>
-                    <strong>Total pembayaran : </strong>
-                    {props.item.alamatJemput}
+                    <strong>Reward / Benefit : </strong>
                   </div>
-                  <div>
-                    <strong>Jenis laundry : </strong>
+                  <ol>{!props.item.reward ? null : props.item.reward.map((item) => <li>{item}</li>)}</ol>
+                </Grid>
+                <Grid item xs={4}>
+                  <div style={{ marginBottom: '10px' }}>
+                    <strong>Kriteria : </strong>
                   </div>
+                  <ol>{!props.item.kriteria ? null : props.item.kriteria.map((item) => <li>{item}</li>)}</ol>
                 </Grid>
               </Grid>
-              <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+              {/* <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
                 <Button variant="contained" onClick={() => navigate(`/Pesanan/${props.item.nomorPesanan}`)}>
                   Lihat Detail
                 </Button>
-              </Box>
+              </Box> */}
             </Box>
           </Collapse>
         </TableCell>
@@ -125,11 +128,11 @@ function EventTable({ statusType }) {
   }, []);
 
   const [listFinance, setListFinance] = React.useState([]);
-  const [pageConfig, setPageConfig] = React.useState({
-    currentPage: 1,
-    dataPerPage: 10,
-    metadata: null,
-  });
+  // const [pageConfig, setPageConfig] = React.useState({
+  //   currentPage: 1,
+  //   dataPerPage: 10,
+  //   metadata: null,
+  // });
 
   // Handle API Get All Data Finance
   const handleGetOrder = async (changePage, maxDataPerPage) => {
@@ -141,29 +144,9 @@ function EventTable({ statusType }) {
         },
         url: `${process.env.REACT_APP_API_KEY}/acara/search${
           statusType === 'Aktif' ? '/active' : statusType === 'Akan Datang' ? '/coming-soon' : '/done'
-        }?page=${
-          !changePage
-            ? pageConfig.currentPage
-            : changePage === 'prev'
-            ? pageConfig.currentPage - 1
-            : changePage === 'next'
-            ? pageConfig.currentPage + 1
-            : changePage
-        }&perPage=${maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage}`,
+        }`,
       });
 
-      setPageConfig({
-        ...pageConfig,
-        metadata: res.data.metadata,
-        currentPage: !changePage
-          ? pageConfig.currentPage
-          : changePage === 'prev'
-          ? pageConfig.currentPage - 1
-          : changePage === 'next'
-          ? pageConfig.currentPage + 1
-          : changePage,
-        dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
-      });
       console.log('Response GET Data Finance');
       console.log(res);
       setListFinance(res.data.data);
@@ -196,20 +179,6 @@ function EventTable({ statusType }) {
       console.log(error);
     }
   };
-
-  // // Menu - Select Page
-  // const [selectPageAnchorEl, setSelectPageAnchorEl] = React.useState(null);
-  // const openSelectPage = Boolean(selectPageAnchorEl);
-  // const handleCloseSelectPage = () => {
-  //   setSelectPageAnchorEl(null);
-  // };
-
-  // // Menu - Select Data Per Page
-  // const [selectDataPerPageAnchorEl, setSelectDataPerPageAnchorEl] = React.useState(null);
-  // const openSelectDataPerPage = Boolean(selectDataPerPageAnchorEl);
-  // const handleCloseSelectDataPerPage = () => {
-  //   setSelectDataPerPageAnchorEl(null);
-  // };
 
   // Menu - Searching
   const [searching, setSearching] = React.useState({ label: '', value: '', currentSearch: '' });
@@ -383,7 +352,7 @@ function EventTable({ statusType }) {
       </Menu>
 
       {/* Table Section */}
-      <TableContainer sx={{ maxHeight: pageConfig.dataPerPage !== 10 ? 800 : 'none' }}>
+      <TableContainer sx={{ maxHeight: 800 }}>
         <Table stickyHeader sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
           {/* Table Header */}
           <TableHead>
@@ -434,8 +403,6 @@ function EventTable({ statusType }) {
       >
         <h5>Data tidak ditemukan!</h5>
       </Box>
-
-      {/* Table Pagination */}
     </>
   );
 }
@@ -472,7 +439,7 @@ function EventMenu() {
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <EventTable statusType={'Selesai'} />
+          <EventTable statusType={'Selesai & Nonaktif'} />
         </Paper>
       </div>
     </>
