@@ -1284,7 +1284,7 @@ function HomePage() {
     try {
       const res = await axios({
         method: 'GET',
-        url: `${process.env.REACT_APP_API_KEY}/acara`,
+        url: `${process.env.REACT_APP_API_KEY}/acara/search/active`,
       });
       console.log('Response GET Data Event');
       console.log(res);
@@ -1296,12 +1296,12 @@ function HomePage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '60px 0px' }}>
-      {!loadingGetGeneralInformation && sessionStorage.getItem('business_information') ? (
+      {!loadingGetGeneralInformation && dataGetGeneralInformation ? (
         <HeroSection generalInformation={dataGetGeneralInformation} />
       ) : null}
 
-      {laundryType ? <LaundryTypeSection listLaundryType={laundryType} /> : null}
-      {serviceType ? <ServiceTypeSection listServiceType={serviceType} /> : null}
+      {laundryType.length !== 0 ? <LaundryTypeSection listLaundryType={laundryType} /> : null}
+      {serviceType.length !== 0 ? <ServiceTypeSection listServiceType={serviceType} /> : null}
 
       {!loadingGetGeneralInformation && !loadingGetHowToOrder ? (
         <OperatingHoursAndHowToOrderSection
@@ -1311,14 +1311,16 @@ function HomePage() {
       ) : null}
 
       {event ? <EventSection listEvent={event} /> : null}
-      {!loadingGetReasonWhyChooseUs && !dataGetReasonWhyChooseUs ? (
+      {!loadingGetReasonWhyChooseUs && dataGetReasonWhyChooseUs.length !== 0 ? (
         <ReasonSection listReason={dataGetReasonWhyChooseUs} />
       ) : null}
-      {!loadingGetGallery && !dataGetGallery ? <GallerySection listGallery={dataGetGallery} /> : null}
-      {!loadingGetTestimony && !dataGetTestimony ? <TestimonySection listTestimony={dataGetTestimony} /> : null}
-      {!loadingGetFAQ && !dataGetFAQ ? <FAQSection listFAQ={dataGetFAQ} /> : null}
+      {!loadingGetGallery && dataGetGallery.length !== 0 ? <GallerySection listGallery={dataGetGallery} /> : null}
+      {!loadingGetTestimony && dataGetTestimony.length !== 0 ? (
+        <TestimonySection listTestimony={dataGetTestimony} />
+      ) : null}
+      {!loadingGetFAQ && dataGetFAQ.length !== 0 ? <FAQSection listFAQ={dataGetFAQ} /> : null}
 
-      {!loadingGetGeneralInformation && sessionStorage.getItem('business_information') ? (
+      {!loadingGetGeneralInformation && dataGetGeneralInformation ? (
         <span>
           <ContactAndLocationSection generalInformation={dataGetGeneralInformation} />
           <FooterSection generalInformation={dataGetGeneralInformation} />
@@ -1337,8 +1339,6 @@ function HomePage() {
         {/* {window.pageYOffset} */}
         {position}
       </div>
-
-      <button onClick={() => navigate('/dashboard')}>Navbar & Sidebar Admin</button>
     </div>
   );
 }

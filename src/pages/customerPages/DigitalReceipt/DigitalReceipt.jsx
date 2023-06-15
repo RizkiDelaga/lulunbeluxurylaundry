@@ -19,7 +19,7 @@ function DigitalReceipt() {
   );
 
   React.useEffect(() => {
-    document.title = 'Detail Pesanan';
+    document.title = `Struk Pemesanan #${noPesanan}`;
     dispatchGetGeneralInformation();
     handleGetDetailOrder();
   }, []);
@@ -40,7 +40,11 @@ function DigitalReceipt() {
 
       console.log('Response GET Data Finance');
       console.log(res);
-      setDetailOrder(res.data.data);
+      setDetailOrder({
+        ...res.data.data,
+        alamatJemput: JSON.parse(res.data.data.alamatJemput),
+        alamatAntar: res.data.data.alamatAntar ? JSON.parse(res.data.data.alamatAntar) : null,
+      });
       handleGetRatingReview(res.data.data.id);
     } catch (error) {
       if (error.response.status === 404) {
@@ -115,11 +119,31 @@ function DigitalReceipt() {
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
                 <div>
                   <h6>Alamat Penjemputan</h6>
-                  <div style={{ marginTop: '5px' }}>{detailOrder.alamatJemput}</div>
+                  <div style={{ marginTop: '5px' }}>
+                    {detailOrder.alamatJemput.kecamatan ? `Kecamatan ${detailOrder.alamatJemput.kecamatan}` : null}
+                    {detailOrder.alamatJemput.kelurahan ? `, Kelurahan ${detailOrder.alamatJemput.kelurahan}` : null}
+                    {detailOrder.alamatJemput.rw ? `, RW ${detailOrder.alamatJemput.rw}` : null}
+                    {detailOrder.alamatJemput.rt ? `, RT ${detailOrder.alamatJemput.rt}` : null}
+                    {detailOrder.alamatJemput.kategori ? `, ${detailOrder.alamatJemput.kategori}` : null}
+                    {detailOrder.alamatJemput.detail ? ` ${detailOrder.alamatJemput.detail}` : null}
+                    {detailOrder.alamatJemput.deskripsi ? `, ${detailOrder.alamatJemput.deskripsi}` : null}
+                  </div>
                 </div>
                 <div>
                   <h6>Alamat Pengantaran</h6>
-                  <div style={{ marginTop: '5px' }}>{detailOrder.alamatAntar}</div>
+                  <div style={{ marginTop: '5px' }}>
+                    {!detailOrder.alamatAntar ? null : (
+                      <>
+                        {detailOrder.alamatAntar.kecamatan ? `Kecamatan ${detailOrder.alamatAntar.kecamatan}` : null}
+                        {detailOrder.alamatAntar.kelurahan ? `, Kelurahan ${detailOrder.alamatAntar.kelurahan}` : null}
+                        {detailOrder.alamatAntar.rw ? `, RW ${detailOrder.alamatAntar.rw}` : null}
+                        {detailOrder.alamatAntar.rt ? `, RT ${detailOrder.alamatAntar.rt}` : null}
+                        {detailOrder.alamatAntar.kategori ? `, ${detailOrder.alamatAntar.kategori}` : null}
+                        {detailOrder.alamatAntar.detail ? ` ${detailOrder.alamatAntar.detail}` : null}
+                        {detailOrder.alamatAntar.deskripsi ? `, ${detailOrder.alamatAntar.deskripsi}` : null}
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

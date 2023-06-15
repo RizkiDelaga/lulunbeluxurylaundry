@@ -48,6 +48,9 @@ function RowItem(props) {
   const dateEnd = new Date(props.item.tenggatWaktu);
   const lastUpdate = new Date(props.item.statusUpdatedAt);
 
+  const pickUpAddress = JSON.parse(props.item.alamatJemput);
+  const deliveryAddress = props.item.alamatAntar ? JSON.parse(props.item.alamatAntar) : null;
+
   return (
     <React.Fragment>
       <TableRow hover>
@@ -116,17 +119,36 @@ function RowItem(props) {
                 <Grid item xs={6}>
                   <div style={{ marginBottom: '10px' }}>
                     <strong>Alamat penjemputan : </strong>
-                    {props.item.alamatJemput}
+                    {pickUpAddress.kecamatan ? `Kecamatan ${pickUpAddress.kecamatan}` : null}
+                    {pickUpAddress.kelurahan ? `, Kelurahan ${pickUpAddress.kelurahan}` : null}
+                    {pickUpAddress.rw ? `, RW ${pickUpAddress.rw}` : null}
+                    {pickUpAddress.rt ? `, RT ${pickUpAddress.rt}` : null}
+                    {pickUpAddress.kategori ? `, ${pickUpAddress.kategori}` : null}
+                    {pickUpAddress.detail ? ` ${pickUpAddress.detail}` : null}
+                    {pickUpAddress.deskripsi ? `, ${pickUpAddress.deskripsi}` : null}
                   </div>
                   <div>
                     <strong>Alamat pengantaran : </strong>
-                    {props.item.alamatAntar}
+                    {!props.item.alamatAntar ? null : (
+                      <>
+                        {deliveryAddress.kecamatan ? `Kecamatan ${deliveryAddress.kecamatan}` : null}
+                        {deliveryAddress.kelurahan ? `, Kelurahan ${deliveryAddress.kelurahan}` : null}
+                        {deliveryAddress.rw ? `, RW ${deliveryAddress.rw}` : null}
+                        {deliveryAddress.rt ? `, RT ${deliveryAddress.rt}` : null}
+                        {deliveryAddress.kategori ? `, ${deliveryAddress.kategori}` : null}
+                        {deliveryAddress.detail ? ` ${deliveryAddress.detail}` : null}
+                        {deliveryAddress.deskripsi ? `, ${deliveryAddress.deskripsi}` : null}
+                      </>
+                    )}
                   </div>
                 </Grid>
                 <Grid item xs={6}>
                   <div style={{ marginBottom: '10px' }}>
                     <strong>Total pembayaran : </strong>
-                    {props.item.alamatJemput}
+                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
+                      props.item.totalHarga
+                    )}{' '}
+                    ({props.item.statusPembayaran})
                   </div>
                   <div>
                     <strong>Jenis laundry : </strong>
@@ -147,7 +169,7 @@ function RowItem(props) {
   );
 }
 
-function OrderTable({ setState }) {
+function OrderTable() {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -203,16 +225,6 @@ function OrderTable({ setState }) {
       console.log('Response GET Data Finance');
       console.log(res);
       setListOrder(res.data.data);
-      setState({
-        needApproval: res.data.otherData.perluDisetujui,
-        needsToBePickedUp: res.data.otherData.perluDijemput,
-        needsToBeDone: res.data.otherData.perluDikerjakan,
-        needsToBeDelivered: res.data.otherData.perluDiantar,
-        completed: res.data.otherData.completed,
-        cancelled: res.data.otherData.cancelled,
-        averageRating: res.data.otherData.averageRating,
-        totalReviews: res.data.otherData.totalReview,
-      });
     } catch (error) {
       if (error.response.status === 404) {
         setListOrder([]);
@@ -680,11 +692,6 @@ function OrderTable({ setState }) {
 
 function OrderMenu() {
   const navigate = useNavigate();
-
-  React.useEffect(() => {
-    document.title = 'Menu Pesanan';
-  }, []);
-
   const [orderStats, setOrderStats] = React.useState({
     needApproval: null,
     needsToBePickedUp: null,
@@ -692,9 +699,42 @@ function OrderMenu() {
     needsToBeDelivered: null,
     completed: null,
     cancelled: null,
+    declined: null,
     averageRating: null,
     totalReviews: null,
   });
+
+  React.useEffect(() => {
+    document.title = 'Menu Pesanan';
+    handleGetOrderStats();
+  }, []);
+
+  const handleGetOrderStats = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/admin/statistic-data`,
+      });
+      console.log('Response GET');
+      console.log(res);
+      setOrderStats({
+        needApproval: res.data.data.perluDisetujui,
+        needsToBePickedUp: res.data.data.perluDijemput,
+        needsToBeDone: res.data.data.perluDikerjakan,
+        needsToBeDelivered: res.data.data.perluDiantar,
+        completed: res.data.data.completed,
+        cancelled: res.data.data.cancelled,
+        declined: res.data.data.declined,
+        averageRating: res.data.data.averageRating,
+        totalReviews: res.data.data.totalReview,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -760,7 +800,7 @@ function OrderMenu() {
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <OrderTable setState={setOrderStats} />
+          <OrderTable />
         </Paper>
 
         <Grid container spacing={2}>
