@@ -19,6 +19,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
 import { getProfileAccountAdmin } from '../../../redux/actions/getProfileAccount';
+import { Helmet } from 'react-helmet';
 
 const drawerWidth = 300;
 
@@ -101,6 +102,13 @@ function SidebarAdmin(props) {
 
   return (
     <>
+      <Helmet>
+        {loadingGetGeneralInformation
+          ? null
+          : <link rel="icon" href={dataGetGeneralInformation.logo} /> || (
+              <link rel="apple-touch-icon" href={dataGetGeneralInformation.logo} />
+            )}
+      </Helmet>
       <Drawer variant="permanent" open={props.openSidebar}>
         <DrawerHeader sx={{ border: 'none', display: 'flex', justifyContent: 'center' }}>
           {loadingGetGeneralInformation ? null : props.openSidebar ? (

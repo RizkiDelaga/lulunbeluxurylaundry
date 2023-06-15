@@ -39,6 +39,7 @@ import MuiToggleButton from '@mui/material/ToggleButton';
 import { NavHashLink } from 'react-router-hash-link';
 import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
 import { getProfileAccountCustomer } from '../../../redux/actions/getProfileAccount';
+import { Helmet } from 'react-helmet';
 
 const drawerWidth = 300;
 
@@ -246,6 +247,13 @@ function NavbarCustomer(props) {
 
   return (
     <>
+      <Helmet>
+        {loadingGetGeneralInformation
+          ? null
+          : <link rel="icon" href={dataGetGeneralInformation.logo} /> || (
+              <link rel="apple-touch-icon" href={dataGetGeneralInformation.logo} />
+            )}
+      </Helmet>
       <AppBar position="fixed" open={props.openSidebar} sx={{ backgroundColor: '#ffffff' }}>
         <Toolbar className={`${style['justify-navbar']}`}>
           <div
