@@ -209,7 +209,7 @@ function OrderDetails() {
                       )} ${detailOrder.tglMulai.slice(11, 16)}`}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <h6>Tenggat Waktu</h6>
+                      <h6>Estimasi Selesai</h6>
                       <span style={{ textAlign: 'end' }}>{`${detailOrder.tenggatWaktu.slice(
                         8,
                         10

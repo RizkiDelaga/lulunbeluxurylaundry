@@ -237,146 +237,149 @@ function Gallery() {
             <div style={{ width: '100%', textAlign: 'center' }}>
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Geleri</h2>
             </div>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.4} lg={1} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Judul</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <TextField
-                  label="Judul"
-                  value={formGallery.title}
-                  onChange={(e) => {
-                    setFormGallery({ ...formGallery, title: e.target.value });
-                  }}
-                  autoComplete="off"
-                  sx={{ width: '100%' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.4} lg={1} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Deskripsi</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <TextField
-                  label="Deskripsi"
-                  multiline
-                  maxRows={4}
-                  value={formGallery.description}
-                  onChange={(e) => {
-                    setFormGallery({ ...formGallery, description: e.target.value });
-                  }}
-                  autoComplete="off"
-                  sx={{ width: '100%' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.4} lg={1}>
-                <span>Foto/Video</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs="auto">
-                    <Button
-                      variant="contained"
-                      size="small"
-                      component="label"
-                      startIcon={<InsertPhotoIcon />}
-                      sx={{ height: 'fit-content' }}
-                    >
-                      Pilih Foto/Video
-                      <input
-                        type="file"
-                        accept="image/*, video/*"
-                        onChange={(e) => {
-                          console.log(e.target.files);
-                          setFormGallery({
-                            ...formGallery,
-                            file: {
-                              img: e.target.files[0],
-                              fileName: !e.target.files[0] ? null : e.target.files[0].name,
-                            },
-                          });
-                          // console.log(image);
-                        }}
-                        hidden
-                      />
-                    </Button>
-                  </Grid>
-                  <Grid item xs="auto">
-                    {formGallery.file.img ? (
-                      <img
-                        id="output"
-                        src={formGallery.file.img ? URL.createObjectURL(formGallery.file.img) : ''}
-                        width={70}
-                        alt="Preview"
-                      />
-                    ) : null}
-                  </Grid>
-                  <Grid item xs>
-                    {formGallery.file.fileName ? (
-                      <Chip
-                        label={formGallery.file.fileName}
-                        onDelete={() => setFormGallery({ ...formGallery, file: { img: null, fileName: null } })}
-                        sx={{ maxWidth: '250px' }}
-                      />
-                    ) : null}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => {
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log('click');
                 if (formGallery.id) {
                   handleUpdateGallery();
                 } else {
                   handleCreateGallery();
                 }
               }}
-              style={{ width: '100%', fontWeight: 'bold' }}
             >
-              {formGallery.id ? 'Simpan' : 'Tambah'}
-            </Button>
+              <div className="gap-16">
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.4} lg={1} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <span>Judul</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <TextField
+                      label="Judul"
+                      value={formGallery.title}
+                      onChange={(e) => {
+                        setFormGallery({ ...formGallery, title: e.target.value });
+                      }}
+                      autoComplete="off"
+                      sx={{ width: '100%' }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.4} lg={1} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <span>Deskripsi</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <TextField
+                      label="Deskripsi"
+                      multiline
+                      maxRows={4}
+                      value={formGallery.description}
+                      onChange={(e) => {
+                        setFormGallery({ ...formGallery, description: e.target.value });
+                      }}
+                      autoComplete="off"
+                      sx={{ width: '100%' }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.4} lg={1}>
+                    <span>Foto/Video*</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <Grid container spacing={2}>
+                      <Grid item xs="auto">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          component="label"
+                          startIcon={<InsertPhotoIcon />}
+                          sx={{ height: 'fit-content' }}
+                        >
+                          Pilih Foto/Video
+                          <input
+                            required
+                            type="file"
+                            accept="image/*, video/*"
+                            onChange={(e) => {
+                              console.log(e.target.files);
+                              setFormGallery({
+                                ...formGallery,
+                                file: {
+                                  img: e.target.files[0],
+                                  fileName: !e.target.files[0] ? null : e.target.files[0].name,
+                                },
+                              });
+                              // console.log(image);
+                            }}
+                            hidden
+                          />
+                        </Button>
+                      </Grid>
+                      <Grid item xs="auto">
+                        {formGallery.file.img ? (
+                          <img
+                            id="output"
+                            src={formGallery.file.img ? URL.createObjectURL(formGallery.file.img) : ''}
+                            width={70}
+                            alt="Preview"
+                          />
+                        ) : null}
+                      </Grid>
+                      <Grid item xs>
+                        {formGallery.file.fileName ? (
+                          <Chip
+                            label={formGallery.file.fileName}
+                            onDelete={() => setFormGallery({ ...formGallery, file: { img: null, fileName: null } })}
+                            sx={{ maxWidth: '250px' }}
+                          />
+                        ) : null}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
+                  {formGallery.id ? 'Simpan' : 'Tambah'}
+                </Button>
+              </div>
+            </form>
 
             <TableContainer sx={{ width: '100%', borderRadius: '4px', backgroundColor: '#eeeeee' }}>
               <Table>

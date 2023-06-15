@@ -175,56 +175,60 @@ function AboutUs() {
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Box className="gap-16">
+          <Box className="gap-16" sx={{ flexDirection: 'column' }}>
             <div style={{ width: '100%', textAlign: 'center' }}>
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Tentang Kami</h2>
             </div>
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={2.6} lg={1.9} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Paragraf Penjelasan</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <TextField
-                  required
-                  label="Paragraf Penjelasan"
-                  multiline
-                  maxRows={4}
-                  value={formAboutUs.explanationParagraph}
-                  onChange={(e) => {
-                    setFormAboutUs({ ...formAboutUs, explanationParagraph: e.target.value });
-                  }}
-                  autoComplete="off"
-                  sx={{ width: '100%' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => {
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log('click');
                 if (formAboutUs.id) {
                   handleUpdateAboutUs();
                 } else {
                   handleCreateAboutUs();
                 }
               }}
-              style={{ width: '100%', fontWeight: 'bold' }}
             >
-              {formAboutUs.id ? 'Simpan' : 'Tambah'}
-            </Button>
+              <div className="gap-16">
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={2.6} lg={1.9} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <span>Paragraf Penjelasan</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <TextField
+                      required
+                      type="text"
+                      label="Paragraf Penjelasan"
+                      multiline
+                      maxRows={4}
+                      value={formAboutUs.explanationParagraph}
+                      onChange={(e) => {
+                        setFormAboutUs({ ...formAboutUs, explanationParagraph: e.target.value });
+                      }}
+                      autoComplete="off"
+                      sx={{ width: '100%' }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Button variant="contained" size="large" type="submit" style={{ width: '100%', fontWeight: 'bold' }}>
+                  {formAboutUs.id ? 'Simpan' : 'Tambah'}
+                </Button>
+              </div>
+            </form>
 
             <TableContainer sx={{ width: '100%', borderRadius: '4px', backgroundColor: '#eeeeee' }}>
               <Table>

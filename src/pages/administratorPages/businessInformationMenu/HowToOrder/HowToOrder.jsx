@@ -88,6 +88,7 @@ function HowToOrder() {
       });
       console.log('Response POST');
       console.log(res);
+
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -124,6 +125,7 @@ function HowToOrder() {
         url: `${process.env.REACT_APP_API_KEY}/carapesan/${data.id}`,
         data: formData,
       });
+
       if (res.status === 200) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -187,158 +189,15 @@ function HowToOrder() {
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Box className="gap-16">
+          <Box className="gap-16" sx={{ flexDirection: 'column' }}>
             <div style={{ width: '100%', textAlign: 'center' }}>
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Cara Pemesanan (Via Online)</h2>
             </div>
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.9} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Judul Langkah</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <TextField
-                  required
-                  label="Judul Langkah"
-                  value={formHowToOrderViaOnline.stepTitle}
-                  onChange={(e) => {
-                    setFormHowToOrderViaOnline({
-                      ...formHowToOrderViaOnline,
-                      stepTitle: e.target.value,
-                    });
-                  }}
-                  autoComplete="off"
-                  sx={{ width: '100%' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.9} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Deskripsi</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <TextField
-                  required
-                  label="Deskripsi"
-                  multiline
-                  maxRows={4}
-                  value={formHowToOrderViaOnline.description}
-                  onChange={(e) => {
-                    setFormHowToOrderViaOnline({
-                      ...formHowToOrderViaOnline,
-                      description: e.target.value,
-                    });
-                  }}
-                  autoComplete="off"
-                  sx={{ width: '100%' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.9} lg={1.4}>
-                <span>Foto</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs="auto">
-                    <Button
-                      variant="contained"
-                      size="small"
-                      component="label"
-                      startIcon={<InsertPhotoIcon />}
-                      sx={{ height: 'fit-content' }}
-                    >
-                      Pilih Foto
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          console.log(e.target.files);
-                          setFormHowToOrderViaOnline({
-                            ...formHowToOrderViaOnline,
-
-                            photo: {
-                              img: e.target.files[0],
-                              fileName: !e.target.files[0] ? null : e.target.files[0].name,
-                            },
-                          });
-                          // console.log(image);
-                        }}
-                        hidden
-                      />
-                    </Button>
-                  </Grid>
-                  <Grid item xs="auto">
-                    {formHowToOrderViaOnline.photo.img ? (
-                      <img
-                        id="output"
-                        src={
-                          formHowToOrderViaOnline.photo.img
-                            ? URL.createObjectURL(formHowToOrderViaOnline.photo.img)
-                            : ''
-                        }
-                        width={70}
-                        alt="Preview"
-                      />
-                    ) : null}
-                  </Grid>
-                  <Grid item xs>
-                    {formHowToOrderViaOnline.photo.fileName ? (
-                      <Chip
-                        label={formHowToOrderViaOnline.photo.fileName}
-                        onDelete={() =>
-                          setFormHowToOrderViaOnline({
-                            ...formHowToOrderViaOnline,
-                            photo: { img: null, fileName: null },
-                          })
-                        }
-                        sx={{ maxWidth: '250px' }}
-                      />
-                    ) : null}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => {
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log('click');
                 if (formHowToOrderViaOnline.id) {
                   handleUpdateHowToOrder(formHowToOrderViaOnline, 'Online');
                 } else {
@@ -351,10 +210,156 @@ function HowToOrder() {
                   photo: { img: null, fileName: null },
                 });
               }}
-              style={{ width: '100%', fontWeight: 'bold' }}
             >
-              {formHowToOrderViaOnline.id ? 'Simpan' : 'Tambah'}
-            </Button>
+              <div className="gap-16">
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.9} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <span>Judul Langkah</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <TextField
+                      required
+                      type="text"
+                      label="Judul Langkah"
+                      value={formHowToOrderViaOnline.stepTitle}
+                      onChange={(e) => {
+                        setFormHowToOrderViaOnline({
+                          ...formHowToOrderViaOnline,
+                          stepTitle: e.target.value,
+                        });
+                      }}
+                      autoComplete="off"
+                      sx={{ width: '100%' }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.9} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <span>Deskripsi</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <TextField
+                      label="Deskripsi"
+                      multiline
+                      maxRows={4}
+                      value={formHowToOrderViaOnline.description}
+                      onChange={(e) => {
+                        setFormHowToOrderViaOnline({
+                          ...formHowToOrderViaOnline,
+                          description: e.target.value,
+                        });
+                      }}
+                      autoComplete="off"
+                      sx={{ width: '100%' }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.9} lg={1.4}>
+                    <span>Foto</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <Grid container spacing={2}>
+                      <Grid item xs="auto">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          component="label"
+                          startIcon={<InsertPhotoIcon />}
+                          sx={{ height: 'fit-content' }}
+                        >
+                          Pilih Foto
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              console.log(e.target.files);
+                              setFormHowToOrderViaOnline({
+                                ...formHowToOrderViaOnline,
+
+                                photo: {
+                                  img: e.target.files[0],
+                                  fileName: !e.target.files[0] ? null : e.target.files[0].name,
+                                },
+                              });
+                              // console.log(image);
+                            }}
+                            hidden
+                          />
+                        </Button>
+                      </Grid>
+                      <Grid item xs="auto">
+                        {formHowToOrderViaOnline.photo.img ? (
+                          <img
+                            id="output"
+                            src={
+                              formHowToOrderViaOnline.photo.img
+                                ? URL.createObjectURL(formHowToOrderViaOnline.photo.img)
+                                : ''
+                            }
+                            width={70}
+                            alt="Preview"
+                          />
+                        ) : null}
+                      </Grid>
+                      <Grid item xs>
+                        {formHowToOrderViaOnline.photo.fileName ? (
+                          <Chip
+                            label={formHowToOrderViaOnline.photo.fileName}
+                            onDelete={() =>
+                              setFormHowToOrderViaOnline({
+                                ...formHowToOrderViaOnline,
+                                photo: { img: null, fileName: null },
+                              })
+                            }
+                            sx={{ maxWidth: '250px' }}
+                          />
+                        ) : null}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
+                  {formHowToOrderViaOnline.id ? 'Simpan' : 'Tambah'}
+                </Button>
+              </div>
+            </form>
 
             <TableListDataHowToOrder
               listHowToOrder={listHowToOrder}
@@ -371,157 +376,15 @@ function HowToOrder() {
           </Box>
         </Paper>
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Box className="gap-16">
+          <Box className="gap-16" sx={{ flexDirection: 'column' }}>
             <div style={{ width: '100%', textAlign: 'center' }}>
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Cara Pemesanan (Via Outlet)</h2>
             </div>
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.9} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Judul Langkah</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <TextField
-                  required
-                  label="Judul Langkah"
-                  value={formHowToOrderViaOutlet.stepTitle}
-                  onChange={(e) => {
-                    setFormHowToOrderViaOutlet({
-                      ...formHowToOrderViaOutlet,
-                      stepTitle: e.target.value,
-                    });
-                  }}
-                  autoComplete="off"
-                  sx={{ width: '100%' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.9} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Deskripsi</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <TextField
-                  required
-                  label="Deskripsi"
-                  multiline
-                  maxRows={4}
-                  value={formHowToOrderViaOutlet.description}
-                  onChange={(e) => {
-                    setFormHowToOrderViaOutlet({
-                      ...formHowToOrderViaOutlet,
-                      description: e.target.value,
-                    });
-                  }}
-                  autoComplete="off"
-                  sx={{ width: '100%' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.9} lg={1.4}>
-                <span>Foto</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs="auto">
-                    <Button
-                      variant="contained"
-                      size="small"
-                      component="label"
-                      startIcon={<InsertPhotoIcon />}
-                      sx={{ height: 'fit-content' }}
-                    >
-                      Pilih Foto
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          console.log(e.target.files);
-                          setFormHowToOrderViaOutlet({
-                            ...formHowToOrderViaOutlet,
-                            photo: {
-                              img: e.target.files[0],
-                              fileName: !e.target.files[0] ? null : e.target.files[0].name,
-                            },
-                          });
-                          // console.log(image);
-                        }}
-                        hidden
-                      />
-                    </Button>
-                  </Grid>
-                  <Grid item xs="auto">
-                    {formHowToOrderViaOutlet.photo.img ? (
-                      <img
-                        id="output"
-                        src={
-                          formHowToOrderViaOutlet.photo.img
-                            ? URL.createObjectURL(formHowToOrderViaOutlet.photo.img)
-                            : ''
-                        }
-                        width={70}
-                        alt="Preview"
-                      />
-                    ) : null}
-                  </Grid>
-                  <Grid item xs>
-                    {formHowToOrderViaOutlet.photo.fileName ? (
-                      <Chip
-                        label={formHowToOrderViaOutlet.photo.fileName}
-                        onDelete={() =>
-                          setFormHowToOrderViaOutlet({
-                            ...formHowToOrderViaOutlet,
-                            photo: { img: null, fileName: null },
-                          })
-                        }
-                        sx={{ maxWidth: '250px' }}
-                      />
-                    ) : null}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => {
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log('click');
                 if (formHowToOrderViaOutlet.id) {
                   handleUpdateHowToOrder(formHowToOrderViaOutlet, 'Outlet');
                 } else {
@@ -534,10 +397,155 @@ function HowToOrder() {
                   photo: { img: null, fileName: null },
                 });
               }}
-              style={{ width: '100%', fontWeight: 'bold' }}
             >
-              {formHowToOrderViaOutlet.id ? 'Simpan' : 'Tambah'}
-            </Button>
+              <div className="gap-16">
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.9} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <span>Judul Langkah</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <TextField
+                      required
+                      type="text"
+                      label="Judul Langkah"
+                      value={formHowToOrderViaOutlet.stepTitle}
+                      onChange={(e) => {
+                        setFormHowToOrderViaOutlet({
+                          ...formHowToOrderViaOutlet,
+                          stepTitle: e.target.value,
+                        });
+                      }}
+                      autoComplete="off"
+                      sx={{ width: '100%' }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.9} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <span>Deskripsi</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <TextField
+                      label="Deskripsi"
+                      multiline
+                      maxRows={4}
+                      value={formHowToOrderViaOutlet.description}
+                      onChange={(e) => {
+                        setFormHowToOrderViaOutlet({
+                          ...formHowToOrderViaOutlet,
+                          description: e.target.value,
+                        });
+                      }}
+                      autoComplete="off"
+                      sx={{ width: '100%' }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.9} lg={1.4}>
+                    <span>Foto</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <Grid container spacing={2}>
+                      <Grid item xs="auto">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          component="label"
+                          startIcon={<InsertPhotoIcon />}
+                          sx={{ height: 'fit-content' }}
+                        >
+                          Pilih Foto
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              console.log(e.target.files);
+                              setFormHowToOrderViaOutlet({
+                                ...formHowToOrderViaOutlet,
+                                photo: {
+                                  img: e.target.files[0],
+                                  fileName: !e.target.files[0] ? null : e.target.files[0].name,
+                                },
+                              });
+                              // console.log(image);
+                            }}
+                            hidden
+                          />
+                        </Button>
+                      </Grid>
+                      <Grid item xs="auto">
+                        {formHowToOrderViaOutlet.photo.img ? (
+                          <img
+                            id="output"
+                            src={
+                              formHowToOrderViaOutlet.photo.img
+                                ? URL.createObjectURL(formHowToOrderViaOutlet.photo.img)
+                                : ''
+                            }
+                            width={70}
+                            alt="Preview"
+                          />
+                        ) : null}
+                      </Grid>
+                      <Grid item xs>
+                        {formHowToOrderViaOutlet.photo.fileName ? (
+                          <Chip
+                            label={formHowToOrderViaOutlet.photo.fileName}
+                            onDelete={() =>
+                              setFormHowToOrderViaOutlet({
+                                ...formHowToOrderViaOutlet,
+                                photo: { img: null, fileName: null },
+                              })
+                            }
+                            sx={{ maxWidth: '250px' }}
+                          />
+                        ) : null}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
+                  {formHowToOrderViaOutlet.id ? 'Simpan' : 'Tambah'}
+                </Button>
+              </div>
+            </form>
 
             <TableListDataHowToOrder
               listHowToOrder={listHowToOrder}

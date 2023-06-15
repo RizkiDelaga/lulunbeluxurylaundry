@@ -265,7 +265,7 @@ function OrderTable({ orderStatusType, setState }) {
     },
     {
       id: 'tenggatWaktu',
-      label: 'Tenggat Waktu',
+      label: 'Estimasi Selesai',
     },
     {
       id: 'status',
