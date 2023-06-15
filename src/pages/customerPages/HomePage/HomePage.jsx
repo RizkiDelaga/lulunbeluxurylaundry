@@ -42,6 +42,7 @@ import FaxIcon from '@mui/icons-material/Fax';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import BuildingView from '../../../assets/images/BuildingView.jpg';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -65,18 +66,43 @@ import {
 import { BigPlayButton, LoadingSpinner, Player } from 'video-react';
 
 function HeroSection({ generalInformation }) {
+  const theme = useTheme();
+  const navigate = useNavigate();
+
   return (
     <span>
-      <Box sx={{ backgroundColor: '#FFFFFF', py: '100px' }}>
+      <Box
+        sx={{
+          backgroundColor: '#FFFFFF',
+          py: '100px',
+          [theme.breakpoints.down('md')]: {
+            py: '50px',
+          },
+        }}
+      >
         <Container>
           <Grid container spacing={3}>
-            <Grid item sm={6} md={5} lg={4}>
-              {generalInformation ? <img src={generalInformation.logo} width="100%" alt="" /> : null}
+            <Grid item xs={12} sm={6} lg={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Box
+                component="img"
+                sx={{
+                  width: '100%',
+                  objectFit: 'cover',
+                  [theme.breakpoints.down('sm')]: {
+                    maxHeight: '280px',
+                    objectPosition: '50% 80%',
+                  },
+                }}
+                alt=""
+                src={BuildingView}
+              />
+
+              {/* <img src={BuildingView} width="100%" alt="" /> */}
             </Grid>
             <Grid
               item
+              xs={12}
               sm={6}
-              md={7}
               lg={8}
               sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px 0px' }}
             >
@@ -88,7 +114,23 @@ function HeroSection({ generalInformation }) {
                 memberikan perawatan sempurna untuk pakaian dan cucian anda. Ayo daftar sekarang juga untuk dapat
                 merasakan pelayanan laundry yang elegan, berkualitas, serta ramah dikantong.
               </span>
-              <Button variant="outlined" className="button-outlined-primary" sx={{ width: 'fit-content' }}>
+              <Button
+                variant="outlined"
+                className="button-outlined-primary"
+                onClick={() => {
+                  if (localStorage.getItem('access_token')) {
+                    const profileAccount = JSON.parse(localStorage.getItem('my_profile_account'));
+                    if (!profileAccount.alamatUser) {
+                      alert('Harap input alamat terlebih dahulu!');
+                    } else {
+                      navigate('/AreaPelanggan/BuatPesananBaru');
+                    }
+                  } else {
+                    navigate('/Login');
+                  }
+                }}
+                sx={{ width: 'fit-content' }}
+              >
                 Bergabung sekarang
               </Button>
             </Grid>
@@ -101,6 +143,8 @@ function HeroSection({ generalInformation }) {
 }
 
 function LaundryTypeSection({ listLaundryType }) {
+  const navigate = useNavigate();
+
   return (
     <Container>
       <h4 className={`${style['section-title']}`} id="PilihanLaundry">
@@ -133,7 +177,22 @@ function LaundryTypeSection({ listLaundryType }) {
                   <span>{item.deskripsi}</span>
                 </Box>
                 <Box sx={{ mx: 2, mb: 2 }}>
-                  <Button variant="contained" sx={{ width: '100%' }}>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      if (localStorage.getItem('access_token')) {
+                        const profileAccount = JSON.parse(localStorage.getItem('my_profile_account'));
+                        if (!profileAccount.alamatUser) {
+                          alert('Harap input alamat terlebih dahulu!');
+                        } else {
+                          navigate('/AreaPelanggan/BuatPesananBaru');
+                        }
+                      } else {
+                        navigate('/Login');
+                      }
+                    }}
+                    sx={{ width: '100%' }}
+                  >
                     Pesan Sekarang
                   </Button>
                 </Box>
@@ -147,6 +206,8 @@ function LaundryTypeSection({ listLaundryType }) {
 }
 
 function ServiceTypeSection({ listServiceType }) {
+  const navigate = useNavigate();
+
   return (
     <Container>
       <h4 className={`${style['section-title']}`} id="JenisLayanan">
@@ -188,7 +249,22 @@ function ServiceTypeSection({ listServiceType }) {
                       </h6>
                       <span>{item.deskripsi}</span>
                     </span>
-                    <Button variant="contained" sx={{ width: '100%' }}>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        if (localStorage.getItem('access_token')) {
+                          const profileAccount = JSON.parse(localStorage.getItem('my_profile_account'));
+                          if (!profileAccount.alamatUser) {
+                            alert('Harap input alamat terlebih dahulu!');
+                          } else {
+                            navigate('/AreaPelanggan/BuatPesananBaru');
+                          }
+                        } else {
+                          navigate('/Login');
+                        }
+                      }}
+                      sx={{ width: '100%' }}
+                    >
                       Pesan sekarang
                     </Button>
                   </Grid>
@@ -341,7 +417,9 @@ function OperatingHoursAndHowToOrderSection({ generalInformation, listHowToOrder
                           <span style={{ fontWeight: 'bold' }}> {step.judul}</span>
                         </StepLabel>
                         <StepContent>
-                          <img src={step.gambar} width={'100%'} style={{ borderRadius: '4px' }} alt="" />
+                          {!step.gambar ? null : (
+                            <img src={step.gambar} width={'100%'} style={{ borderRadius: '4px' }} alt="" />
+                          )}
                           <Typography>{step.deskripsi}</Typography>
                           <Box sx={{ mb: 2 }}>
                             <div>
@@ -368,13 +446,13 @@ function OperatingHoursAndHowToOrderSection({ generalInformation, listHowToOrder
                       </Step>
                     ))}
                 </Stepper>
-                {activeStep === listHowToOrder.filter((element) => element.status === howToOrderType).length && (
+                {activeStep >= listHowToOrder.filter((element) => element.status === howToOrderType).length ? (
                   <Box sx={{ px: 3, py: 1 }}>
                     <Button onClick={() => setActiveStep(0)} sx={{ mt: 1, mr: 1 }}>
                       Reset
                     </Button>
                   </Box>
-                )}
+                ) : null}
               </Box>
             </Grid>
           </Grid>
@@ -413,6 +491,10 @@ function EventSection({ listEvent }) {
             clickable: true,
           }}
           breakpoints={{
+            0: {
+              slidesPerView: 1,
+              spaceBetween: 10,
+            },
             600: {
               slidesPerView: 2,
               spaceBetween: 20,
@@ -427,7 +509,6 @@ function EventSection({ listEvent }) {
             },
           }}
           modules={[Pagination]}
-          // className="mySwiper"
         >
           {listEvent.map((eventItem, index) => {
             return (
@@ -486,19 +567,27 @@ function EventSection({ listEvent }) {
                       }}
                     >
                       <div style={{ padding: '16px' }}>
-                        <h6>Kriteria</h6>
-                        <ol style={{ paddingLeft: '20px', marginTop: '0px' }}>
-                          {eventItem.kriteria.map((kriteriaItem, index) => {
-                            return <li>{kriteriaItem}</li>;
-                          })}
-                        </ol>
+                        {!eventItem.kriteria ? null : (
+                          <>
+                            <h6>Kriteria</h6>
+                            <ol style={{ paddingLeft: '20px', marginTop: '0px' }}>
+                              {eventItem.kriteria.map((kriteriaItem, index) => {
+                                return <li>{kriteriaItem}</li>;
+                              })}
+                            </ol>
+                          </>
+                        )}
 
-                        <h6>Reward</h6>
-                        <ol style={{ paddingLeft: '20px', marginTop: '0px' }}>
-                          {eventItem.reward.map((rewardItem, index) => {
-                            return <li>{rewardItem}</li>;
-                          })}
-                        </ol>
+                        {!eventItem.reward ? null : (
+                          <>
+                            <h6>Reward</h6>
+                            <ol style={{ paddingLeft: '20px', marginTop: '0px' }}>
+                              {eventItem.reward.map((rewardItem, index) => {
+                                return <li>{rewardItem}</li>;
+                              })}
+                            </ol>
+                          </>
+                        )}
                       </div>
                     </Box>
                   ) : null}

@@ -83,6 +83,11 @@ function FrequentlyAskedQuestions() {
           statusType: 'success',
         });
       }
+      setFormFrequentlyAskedQuestions({
+        id: null,
+        question: '',
+        answer: '',
+      });
       getApiHandler();
     } catch (error) {
       setOpenLoadDecision({
@@ -139,6 +144,9 @@ function FrequentlyAskedQuestions() {
       setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
       const res = await axios({
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
         url: `${process.env.REACT_APP_API_KEY}/faq/${id}`,
       });
       if (res.status === 200) {
@@ -185,85 +193,102 @@ function FrequentlyAskedQuestions() {
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <Box className="gap-16">
+          <Box className="gap-16" sx={{ flexDirection: 'column' }}>
             <div style={{ width: '100%', textAlign: 'center' }}>
               <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Pertanyaan Yang Sering Diajukan (FAQ)</h2>
             </div>
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.4} lg={1.1} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Pertanyaan</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <TextField
-                  required
-                  label="Pertanyaan"
-                  value={formFrequentlyAskedQuestions.question}
-                  onChange={(e) => {
-                    setFormFrequentlyAskedQuestions({ ...formFrequentlyAskedQuestions, question: e.target.value });
-                  }}
-                  autoComplete="off"
-                  sx={{ width: '100%' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={1.4} lg={1.1} sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>Jawaban</span>
-              </Grid>
-
-              <Grid
-                item
-                xs
-                lg
-                sx={{
-                  display: 'flex',
-                  [theme.breakpoints.down('md')]: {
-                    paddingTop: '8px !important',
-                  },
-                }}
-              >
-                <TextField
-                  required
-                  label="Jawaban"
-                  multiline
-                  maxRows={4}
-                  value={formFrequentlyAskedQuestions.answer}
-                  onChange={(e) => {
-                    setFormFrequentlyAskedQuestions({ ...formFrequentlyAskedQuestions, answer: e.target.value });
-                  }}
-                  autoComplete="off"
-                  sx={{ width: '100%' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => {
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log('click');
                 if (formFrequentlyAskedQuestions.id) {
                   handleUpdateFAQ();
                 } else {
                   handleCreateFAQ();
                 }
               }}
-              style={{ width: '100%', fontWeight: 'bold' }}
             >
-              {formFrequentlyAskedQuestions.id ? 'Simpan' : 'Tambah'}
-            </Button>
+              <div className="gap-16">
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.4} lg={1.1} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <span>Pertanyaan</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <TextField
+                      required
+                      type="text"
+                      label="Pertanyaan"
+                      value={formFrequentlyAskedQuestions.question}
+                      onChange={(e) => {
+                        setFormFrequentlyAskedQuestions({ ...formFrequentlyAskedQuestions, question: e.target.value });
+                      }}
+                      autoComplete="off"
+                      sx={{ width: '100%' }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={1.4} lg={1.1} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <span>Jawaban</span>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <TextField
+                      required
+                      type="text"
+                      label="Jawaban"
+                      multiline
+                      maxRows={4}
+                      value={formFrequentlyAskedQuestions.answer}
+                      onChange={(e) => {
+                        setFormFrequentlyAskedQuestions({ ...formFrequentlyAskedQuestions, answer: e.target.value });
+                      }}
+                      autoComplete="off"
+                      sx={{ width: '100%' }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Button
+                  variant="contained"
+                  size="large"
+                  type="submit"
+                  // onClick={() => {
+                  //   if (formFrequentlyAskedQuestions.id) {
+                  //     handleUpdateFAQ();
+                  //   } else {
+                  //     handleCreateFAQ();
+                  //   }
+                  // }}
+                  sx={{ width: '100%', fontWeight: 'bold' }}
+                >
+                  {formFrequentlyAskedQuestions.id ? 'Simpan' : 'Tambah'}
+                </Button>
+              </div>
+            </form>
 
             {formFrequentlyAskedQuestions.question}
             <br />
@@ -342,6 +367,7 @@ function FrequentlyAskedQuestions() {
                             <Button
                               variant="outlined"
                               className={`button-outlined-danger`}
+                              type="submit"
                               onClick={() => {
                                 if (item.id === formFrequentlyAskedQuestions.id) {
                                   setFormFrequentlyAskedQuestions({
