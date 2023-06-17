@@ -324,9 +324,10 @@ function RowItem(props) {
         </TableCell>
         <TableCell>{props.item.judul}</TableCell>
         <TableCell>
-          {`${('0' + date.getDate()).slice(-2)}/${('0' + date.getMonth()).slice(-2)}/${date.getFullYear()} ${(
-            '0' + date.getHours()
-          ).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`}
+          {`${date.toISOString().slice(8, 10)}/${date.toISOString().slice(5, 7)}/${date
+            .toISOString()
+            .slice(0, 4)} ${date.toISOString().slice(11, 16)}`}
+
           <div style={{ fontSize: '12px' }}>{props.item.createdBy ? `oleh ${props.item.createdBy}` : null}</div>
         </TableCell>
         <TableCell>{props.item.catatan}</TableCell>

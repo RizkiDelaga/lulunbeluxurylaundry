@@ -24,6 +24,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SearchIcon from '@mui/icons-material/Search';
 import { getComparator, stableSort } from '../../../utils/tableUtils';
+import dayjs from 'dayjs';
 
 function RowItem(props) {
   const navigate = useNavigate();
@@ -46,19 +47,17 @@ function RowItem(props) {
           <img src={props.item.gambar} height={60} style={{ objectFit: 'contain' }} alt="" />
           {/* )} */}
         </TableCell>
-        <TableCell>{props.item.nama}</TableCell>
+        <TableCell>{props.item.nama} </TableCell>
 
         <TableCell>
-          {`${('0' + dateStart.getDate()).slice(-2)}/${('0' + dateStart.getMonth()).slice(
-            -2
-          )}/${dateStart.getFullYear()} ${('0' + dateStart.getHours()).slice(-2)}:${(
-            '0' + dateStart.getMinutes()
-          ).slice(-2)}`}
+          {`${dateStart.toISOString().slice(8, 10)}/${dateStart.toISOString().slice(5, 7)}/${dateStart
+            .toISOString()
+            .slice(0, 4)} ${dateStart.toISOString().slice(11, 16)}`}
         </TableCell>
         <TableCell>
-          {`${('0' + dateEnd.getDate()).slice(-2)}/${('0' + dateEnd.getMonth()).slice(-2)}/${dateEnd.getFullYear()} ${(
-            '0' + dateEnd.getHours()
-          ).slice(-2)}:${('0' + dateEnd.getMinutes()).slice(-2)}`}
+          {`${dateEnd.toISOString().slice(8, 10)}/${dateEnd.toISOString().slice(5, 7)}/${dateEnd
+            .toISOString()
+            .slice(0, 4)} ${dateEnd.toISOString().slice(11, 16)}`}
         </TableCell>
 
         <TableCell>{props.item.status}</TableCell>
