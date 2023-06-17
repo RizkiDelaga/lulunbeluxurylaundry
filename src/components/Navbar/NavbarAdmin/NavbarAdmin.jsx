@@ -35,6 +35,7 @@ import MuiToggleButton from '@mui/material/ToggleButton';
 import { getProfileAccountAdmin } from '../../../redux/actions/getProfileAccount';
 import { getNotificationAdmin } from '../../../redux/actions/getNotificationAction';
 import axios from 'axios';
+import CloseIcon from '@mui/icons-material/Close';
 
 const drawerWidth = 300;
 
@@ -59,20 +60,25 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 // Notification Popup for mobile version
-const MobileNotificationDialog = ({ openNotifDialog, handleClose, loadingData, data, handleCloseNotificationMenu }) => {
+const MobileNotificationDialog = ({
+  openNotifDialog,
+  handleClose,
+  loadingData,
+  data,
+  handleCloseNotificationMenu,
+  handleUpdateReadNotification,
+}) => {
   const theme = useTheme();
   const fullScreenDialog = useMediaQuery(theme.breakpoints.up('xs'));
 
-  const [isVisible, setIsVisible] = useState(true);
   const topDialog = useRef(null);
-  const executeScroll = () => topDialog.current.scrollIntoView();
+  const [notificationStatus, setNotificationStatus] = React.useState('All');
 
-  // useEffect(() => {
-  //   window.addEventListener('scroll', () => {
-  //     console.log('hi', 200);
-  //     setIsVisible(document.scrollY >= 200);
-  //   });
-  // }, []);
+  const ToggleButton = styled(MuiToggleButton)({
+    '&.Mui-selected, &.Mui-selected:hover': {
+      backgroundColor: '#1F305C',
+    },
+  });
 
   return (
     <Dialog
@@ -90,37 +96,67 @@ const MobileNotificationDialog = ({ openNotifDialog, handleClose, loadingData, d
         <DialogTitle style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
           Notifikasi
           <IconButton onClick={handleClose}>
-            <MenuIcon color="primary" />
+            <CloseIcon color="primary" />
           </IconButton>
         </DialogTitle>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginLeft: '16px',
+            marginRight: '16px',
+          }}
+        >
+          <ToggleButtonGroup
+            value={notificationStatus}
+            color="primary"
+            exclusive
+            onChange={(event, value) => {
+              if (value) {
+                setNotificationStatus(value);
+              }
+            }}
+            sx={{
+              width: '100% !important',
+              [theme.breakpoints.down('sm')]: {
+                height: '35px !important',
+              },
+            }}
+          >
+            <ToggleButton
+              value="All"
+              sx={{
+                width: '100%',
+                border: '1px solid #1F305C',
+                fontWeight: 'bold',
+                color: notificationStatus === 'All' ? '#ffffff !important' : '#1F305C',
+              }}
+            >
+              Semua
+            </ToggleButton>
+            <ToggleButton
+              value="Unread"
+              sx={{
+                width: '100%',
+
+                border: '1px solid #1F305C',
+                fontWeight: 'bold',
+                color: notificationStatus === 'Unread' ? '#ffffff !important' : '#1F305C',
+              }}
+            >
+              Belum Dibaca
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </div>
         <NotificationList
+          handleUpdateReadNotification={handleUpdateReadNotification}
+          notificationStatus={notificationStatus}
           loadingData={loadingData}
           data={data}
           handleCloseNotificationMenu={handleCloseNotificationMenu}
         />
       </div>
-
-      {/* Button Up */}
-      <Button
-        color="primary"
-        variant="contained"
-        id="myBtn"
-        style={{
-          display: isVisible ? 'block' : 'none',
-          position: 'fixed',
-          bottom: '50px',
-          left: '50%',
-          transform: 'translate(-50%, 0)',
-          zIndex: '1',
-          borderRadius: '24px',
-        }}
-        onClick={() => {
-          executeScroll();
-        }}
-      >
-        Lihat Notifikasi Teratas
-      </Button>
     </Dialog>
   );
 };
@@ -144,7 +180,9 @@ const NotificationList = ({ loadingData, data, notificationStatus, handleUpdateR
                 <span key={item.id}>
                   <MenuItem
                     onClick={() => {
-                      handleUpdateReadNotification(item.id);
+                      if (!item.dibacaAdmin) {
+                        handleUpdateReadNotification(item.id);
+                      }
                       // navigate(`/Pesanan/${item.id}`);
                     }}
                     className={`${style['list-notification']}`}
@@ -207,7 +245,21 @@ function Navbar(props) {
   React.useEffect(() => {
     dispatchGetNotificationAdmin();
     dispatchGetProfileAccountAdmin();
+    handleGetServiceType();
   }, [localStorage.getItem('admin_profile_account')]);
+
+  const handleGetServiceType = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: `${process.env.REACT_APP_API_KEY}/jenislayanan`,
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const dispatchGetNotificationAdmin = async () => {
     return await dispatch(getNotificationAdmin());
@@ -303,6 +355,7 @@ function Navbar(props) {
             {/* Notification display for mobile size */}
             {loadingGetNotificationAdmin ? null : (
               <MobileNotificationDialog
+                handleUpdateReadNotification={handleUpdateReadNotification}
                 handleClose={() => {
                   setOpenNotification(!openNotification);
                 }}
@@ -414,6 +467,11 @@ function Navbar(props) {
                 data={dataGetNotificationAdmin}
                 handleCloseNotificationMenu={handleCloseNotificationMenu}
               />
+              <div style={{ marginLeft: '16px', marginRight: '16px' }}>
+                <Button variant="contained" sx={{ width: '100%' }}>
+                  Selanjutnya
+                </Button>
+              </div>
             </Menu>
 
             {/* Account Menu */}

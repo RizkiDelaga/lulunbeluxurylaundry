@@ -1310,7 +1310,7 @@ function HomePage() {
         />
       ) : null}
 
-      {event ? <EventSection listEvent={event} /> : null}
+      {event !== 0 ? <EventSection listEvent={event} /> : null}
       {!loadingGetReasonWhyChooseUs && dataGetReasonWhyChooseUs.length !== 0 ? (
         <ReasonSection listReason={dataGetReasonWhyChooseUs} />
       ) : null}

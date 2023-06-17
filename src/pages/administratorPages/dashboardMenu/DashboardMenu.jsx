@@ -69,20 +69,18 @@ function RowItem(props) {
         </TableCell>
 
         <TableCell>
-          {`${('0' + dateCreate.getDate()).slice(-2)}/${('0' + dateCreate.getMonth()).slice(
-            -2
-          )}/${dateCreate.getFullYear()} ${('0' + dateCreate.getHours()).slice(-2)}:${(
-            '0' + dateCreate.getMinutes()
-          ).slice(-2)}`}
+          {`${dateCreate.toISOString().slice(8, 10)}/${dateCreate.toISOString().slice(5, 7)}/${dateCreate
+            .toISOString()
+            .slice(0, 4)} ${dateCreate.toISOString().slice(11, 16)}`}
+
           <div style={{ fontSize: '12px' }}>oleh {props.item.createdBy}</div>
         </TableCell>
 
         <TableCell>
-          {`${('0' + dateUpdate.getDate()).slice(-2)}/${('0' + dateUpdate.getMonth()).slice(
-            -2
-          )}/${dateUpdate.getFullYear()} ${('0' + dateUpdate.getHours()).slice(-2)}:${(
-            '0' + dateUpdate.getMinutes()
-          ).slice(-2)}`}
+          {`${dateUpdate.toISOString().slice(8, 10)}/${dateUpdate.toISOString().slice(5, 7)}/${dateUpdate
+            .toISOString()
+            .slice(0, 4)} ${dateUpdate.toISOString().slice(11, 16)}`}
+
           <div style={{ fontSize: '12px' }}>{!props.item.updatedBy ? null : 'oleh ' + props.item.updatedBy}</div>
         </TableCell>
 

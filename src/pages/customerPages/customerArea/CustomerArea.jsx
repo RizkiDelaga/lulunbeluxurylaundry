@@ -69,17 +69,16 @@ function RowItem(props) {
           <span onClick={() => navigate(`/AreaPelanggan/${props.item.nomorPesanan}`)}>#{props.item.nomorPesanan}</span>
         </TableCell>
         <TableCell>
-          {`${('0' + dateStart.getDate()).slice(-2)}/${('0' + dateStart.getMonth()).slice(
-            -2
-          )}/${dateStart.getFullYear()} ${('0' + dateStart.getHours()).slice(-2)}:${(
-            '0' + dateStart.getMinutes()
-          ).slice(-2)}`}
+          {`${dateStart.toISOString().slice(8, 10)}/${dateStart.toISOString().slice(5, 7)}/${dateStart
+            .toISOString()
+            .slice(0, 4)} ${dateStart.toISOString().slice(11, 16)}`}
+
           <div style={{ fontSize: '12px' }}>oleh {props.item.createdBy}</div>
         </TableCell>
         <TableCell>
-          {`${('0' + dateEnd.getDate()).slice(-2)}/${('0' + dateEnd.getMonth()).slice(-2)}/${dateEnd.getFullYear()} ${(
-            '0' + dateEnd.getHours()
-          ).slice(-2)}:${('0' + dateEnd.getMinutes()).slice(-2)}`}
+          {`${dateEnd.toISOString().slice(8, 10)}/${dateEnd.toISOString().slice(5, 7)}/${dateEnd
+            .toISOString()
+            .slice(0, 4)} ${dateEnd.toISOString().slice(11, 16)}`}
         </TableCell>
         <TableCell>
           {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.item.totalHarga)} (
@@ -103,11 +102,9 @@ function RowItem(props) {
             : null}
           <div style={{ fontSize: '12px' }}>
             pada
-            {` ${('0' + lastUpdate.getDate()).slice(-2)}/${('0' + lastUpdate.getMonth()).slice(
-              -2
-            )}/${lastUpdate.getFullYear()} ${('0' + lastUpdate.getHours()).slice(-2)}:${(
-              '0' + lastUpdate.getMinutes()
-            ).slice(-2)}`}
+            {` ${lastUpdate.toISOString().slice(8, 10)}/${lastUpdate.toISOString().slice(5, 7)}/${lastUpdate
+              .toISOString()
+              .slice(0, 4)} ${lastUpdate.toISOString().slice(11, 16)}`}
             {props.item.updatedBy ? ` oleh ${props.item.updatedBy}` : null}
           </div>
         </TableCell>
