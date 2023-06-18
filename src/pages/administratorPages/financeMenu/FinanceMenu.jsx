@@ -880,8 +880,6 @@ function FinanceMenu() {
       if (res.status === 200) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
-          // message: 'Berhasil Login!',
-          // statusType: 'success',
         });
       }
     } catch (error) {
@@ -891,8 +889,6 @@ function FinanceMenu() {
       console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
-        // message: error.response.data.message,
-        // statusType: 'error',
       });
     }
   };

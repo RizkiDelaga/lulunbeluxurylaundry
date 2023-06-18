@@ -28,12 +28,9 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PasswordIcon from '@mui/icons-material/Password';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { getExample } from '../../../redux/actions/exampleAction';
 import MuiToggleButton from '@mui/material/ToggleButton';
 import { getProfileAccountAdmin } from '../../../redux/actions/getProfileAccount';
-import { getNotificationAdmin } from '../../../redux/actions/getNotificationAction';
 import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -257,6 +254,10 @@ function Navbar(props) {
     handleGetNotification();
   }, [localStorage.getItem('admin_profile_account')]);
 
+  const dispatchGetProfileAccountAdmin = async () => {
+    return await dispatch(getProfileAccountAdmin());
+  };
+
   const handleGetNotification = async (next) => {
     try {
       const res = await axios({
@@ -275,14 +276,9 @@ function Navbar(props) {
         setListNotification(res.data.data);
         setPageConfig({ currentPage: pageConfig.currentPage, metadata: res.data.metadata });
       }
-      localStorage.setItem('listnotif', JSON.stringify([...listNotification, ...res.data.data]));
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const dispatchGetProfileAccountAdmin = async () => {
-    return await dispatch(getProfileAccountAdmin());
   };
 
   const handleUpdateReadNotification = async (id) => {
@@ -415,29 +411,15 @@ function Navbar(props) {
             >
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
                   marginLeft: '16px',
                   marginRight: '6px',
                 }}
               >
                 <h3 style={{ margin: 0 }}>Notifikasi</h3>
-                <IconButton
-                  sx={{ justifyContent: 'right' }}
-                  onClick={(event) => {
-                    setOpenMyAccount(event.currentTarget);
-                  }}
-                >
-                  <MoreVertOutlinedIcon className="color-primary" />
-                </IconButton>
               </div>
 
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
                   marginLeft: '16px',
                   marginRight: '16px',
                 }}
@@ -531,11 +513,9 @@ function Navbar(props) {
               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-              {/* {loadingGetProfileAccountAdmin ? null : ( */}
               <div
                 style={{
                   display: 'flex',
-                  // justifyContent: 'space-between',
                   alignItems: 'center',
                   marginLeft: '16px',
                   marginRight: '16px',
@@ -549,7 +529,6 @@ function Navbar(props) {
                   <div>Role admin : {dataGetProfileAccountAdmin.role}</div>
                 </div>
               </div>
-              {/* )} */}
 
               <MenuItem onClick={() => handleCloseAccountMenu('/Dashboard')}>
                 <ListItemIcon>

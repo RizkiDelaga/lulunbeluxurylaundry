@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -15,31 +15,76 @@ import {
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import LockResetIcon from '@mui/icons-material/LockReset';
+import axios from 'axios';
+import LoadDecisions from '../../../../../components/LoadDecisions/LoadDecisions';
 
 function ChangePasswordOnForgotPassword() {
   const theme = useTheme();
   const navigate = useNavigate();
+  let { phoneNumber, verificationCode } = useParams();
   const [showPassword, setShowPassword] = useState({ newPassword: false, confirmNewPassword: false });
   const [formChangePassword, setFormChangePassword] = useState({
     newPassword: '',
     confirmNewPassword: '',
+  });
+  const [openLoadDecision, setOpenLoadDecision] = useState({
+    isLoad: false,
+    message: '',
+    statusType: '',
   });
 
   React.useEffect(() => {
     document.title = 'Ubah Password';
   }, []);
 
+  const handleChangePasswordOnForgotPassword = async () => {
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
+    try {
+      const res = await axios({
+        method: 'PUT',
+        url: `${process.env.REACT_APP_API_KEY}/user/forget/password`,
+        data: {
+          noTelp: phoneNumber,
+          otp: verificationCode,
+          password: formChangePassword.newPassword,
+        },
+      });
+      console.log('Response POST Login Customer');
+      console.log(res);
+
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Ubah Password Berhasil!',
+          statusType: 'success',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
+    }
+  };
+
   return (
     <>
+      <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} redirect={`/Login`} />
       <Box component="main" sx={{ marginX: 3 }}>
-        <div
-          style={{
+        <Box
+          sx={{
             display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
-            height: '100vh',
+            height: 'calc(100vh - 64px)',
+            [theme.breakpoints.down('md')]: {
+              my: '25px',
+              height: 'fit-content',
+            },
           }}
         >
           {/* Main Content */}
@@ -51,7 +96,11 @@ function ChangePasswordOnForgotPassword() {
               onSubmit={(e) => {
                 e.preventDefault();
                 console.log('click');
-                navigate('/Admin');
+                if (formChangePassword.newPassword !== formChangePassword.confirmNewPassword) {
+                  alert('Password tidak match!');
+                } else {
+                  handleChangePasswordOnForgotPassword();
+                }
               }}
             >
               <Box className="gap-16">
@@ -75,7 +124,7 @@ function ChangePasswordOnForgotPassword() {
                   </div>
                 </div>
                 <Grid container>
-                  <Grid item xs={12} sm={12} md={3} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Grid item xs={12} sm={12} md={3.2} lg={3.4} sx={{ display: 'flex', alignItems: 'center' }}>
                     Password Baru
                   </Grid>
                   <Grid
@@ -123,7 +172,7 @@ function ChangePasswordOnForgotPassword() {
                   </Grid>
                 </Grid>
                 <Grid container>
-                  <Grid item xs={12} sm={12} md={3} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Grid item xs={12} sm={12} md={3.2} lg={3.4} sx={{ display: 'flex', alignItems: 'center' }}>
                     Konfirmasi Password Baru
                   </Grid>
                   <Grid
@@ -166,23 +215,12 @@ function ChangePasswordOnForgotPassword() {
                             </IconButton>
                           </InputAdornment>
                         }
-                        inputProps={{
-                          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$', // Minimal delapan karakter (Setidaknya satu huruf besar, satu huruf kecil dan satu angka)
-                        }}
                       />
                     </FormControl>
                   </Grid>
                 </Grid>
 
-                <Button
-                  variant="contained"
-                  size="large"
-                  type="submit"
-                  // onClick={() => {
-                  //   navigate('/Admin');
-                  // }}
-                  style={{ width: '100%', fontWeight: 'bold' }}
-                >
+                <Button variant="contained" size="large" type="submit" style={{ width: '100%', fontWeight: 'bold' }}>
                   Ubah Password
                 </Button>
 
@@ -192,7 +230,7 @@ function ChangePasswordOnForgotPassword() {
               </Box>
             </form>
           </Paper>
-        </div>
+        </Box>
       </Box>
     </>
   );

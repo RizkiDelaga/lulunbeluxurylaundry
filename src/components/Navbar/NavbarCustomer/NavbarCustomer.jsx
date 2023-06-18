@@ -32,9 +32,8 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PasswordIcon from '@mui/icons-material/Password';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { getExample } from '../../../redux/actions/exampleAction';
+
 import MuiToggleButton from '@mui/material/ToggleButton';
 import { NavHashLink } from 'react-router-hash-link';
 import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
@@ -256,7 +255,6 @@ function NavbarCustomer(props) {
   });
 
   const dispatch = useDispatch();
-  // const { isLoading: loadingGetExample, data: dataGetExample } = useSelector((state) => state.getExample);
   const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
     (state) => state.getGeneralInformation
   );
@@ -265,15 +263,10 @@ function NavbarCustomer(props) {
   );
 
   React.useEffect(() => {
-    // dispatchGetExample();
     dispatchGetGeneralInformation();
     dispatchGetProfileAccountCustomer();
     handleGetNotification();
   }, [localStorage.getItem('my_profile_account')]);
-
-  // const dispatchGetExample = async () => {
-  //   return await dispatch(getExample());
-  // };
 
   const handleGetNotification = async (next) => {
     try {
@@ -293,7 +286,6 @@ function NavbarCustomer(props) {
         setListNotification(res.data.data);
         setPageConfig({ currentPage: pageConfig.currentPage, metadata: res.data.metadata });
       }
-      localStorage.setItem('listnotif', JSON.stringify([...listNotification, ...res.data.data]));
     } catch (error) {
       console.log(error);
     }
@@ -438,7 +430,6 @@ function NavbarCustomer(props) {
                   <ListItemText primary="Lainnya" />
                 </ListItemButton>
               </ListItem>
-              {/* <Button onClick={handleClickAdditionalMenu}>Dashboard</Button> */}
               <Menu
                 anchorEl={anchorEl}
                 open={openAdditionalMenu}
@@ -466,7 +457,6 @@ function NavbarCustomer(props) {
                       <MenuItem
                         onClick={() => {
                           handleCloseAdditionalMenu();
-                          // navigate(additionalMenuList.link);
                         }}
                       >
                         {additionalMenuList.title}
@@ -565,29 +555,15 @@ function NavbarCustomer(props) {
                 >
                   <div
                     style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
                       marginLeft: '16px',
                       marginRight: '6px',
                     }}
                   >
                     <h3 style={{ margin: 0 }}>Notifikasi</h3>
-                    <IconButton
-                      sx={{ justifyContent: 'right' }}
-                      onClick={(event) => {
-                        setOpenMyAccount(event.currentTarget);
-                      }}
-                    >
-                      <MoreVertOutlinedIcon className="color-primary" />
-                    </IconButton>
                   </div>
 
                   <div
                     style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
                       marginLeft: '16px',
                       marginRight: '16px',
                     }}
@@ -681,14 +657,10 @@ function NavbarCustomer(props) {
                   transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                   anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
-                  {/* {loadingGetProfileAccountCustomer ? null : ( */}
                   <div
                     style={{
                       display: 'flex',
-                      // justifyContent: 'space-between',
                       alignItems: 'center',
-                      // marginLeft: '16px',
-                      // marginRight: '16px',
                       margin: '8px 16px',
                     }}
                   >
@@ -699,7 +671,6 @@ function NavbarCustomer(props) {
                       </div>
                     </div>
                   </div>
-                  {/* )} */}
                   <MenuItem onClick={() => handleCloseAccountMenu('/AreaPelanggan')}>
                     <ListItemIcon>
                       <AccountBoxIcon className="color-primary" />

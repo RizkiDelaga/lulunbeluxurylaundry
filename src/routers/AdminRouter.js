@@ -21,9 +21,7 @@ import HowToOrder from '../pages/administratorPages/businessInformationMenu/HowT
 import PaymentMethod from '../pages/administratorPages/businessInformationMenu/PaymentMethod/PaymentMethod';
 import LaundryType from '../pages/administratorPages/businessInformationMenu/LaundryType/LaundryType';
 import LoginAdmin from '../pages/administratorPages/adminAuth/LoginAdmin/LoginAdmin';
-import ForgotPasswordRequest from '../pages/administratorPages/adminAuth/ForgotPasswordRequest/ForgotPasswordRequest';
 import AccountValidation from '../pages/administratorPages/adminAuth/AccountValidation/AccountValidation';
-import ChangePasswordOnForgotPassword from '../pages/administratorPages/adminAuth/ChangePasswordOnForgotPassword/ChangePasswordOnForgotPassword';
 import DashboardMenu from '../pages/administratorPages/dashboardMenu/DashboardMenu';
 import OrderMenu from '../pages/administratorPages/orderMenu/OrderMenu';
 import BusinessInformationMenu from '../pages/administratorPages/businessInformationMenu/BusinessInformationMenu';
@@ -33,6 +31,8 @@ import CustomerMenu from '../pages/administratorPages/customerMenu/CustomerMenu'
 import OrderDetails from '../pages/administratorPages/orderMenu/OrderDetails/OrderDetails';
 import CustomerRatingsAndReviews from '../pages/administratorPages/orderMenu/CustomerRatingsAndReviews/CustomerRatingsAndReviews';
 import OrderList from '../pages/administratorPages/orderMenu/OrderList/OrderList';
+import ForgotPasswordRequest from '../pages/administratorPages/adminAuth/ForgotPassword/ForgotPasswordRequest/ForgotPasswordRequest';
+import ChangePasswordOnForgotPassword from '../pages/administratorPages/adminAuth/ForgotPassword/ChangePasswordOnForgotPassword/ChangePasswordOnForgotPassword';
 
 function AdminRouter() {
 
@@ -56,8 +56,8 @@ function AdminRouter() {
             {/* Admin Authentication Route */}
             <Route path="Admin" element={<LoginAdmin />} />
             <Route path="Admin/LupaPassword" element={<ForgotPasswordRequest />} />
-            <Route path="Admin/ValidasiAkun" element={<AccountValidation />} />
-            <Route path="Admin/UbahPassword" element={<ChangePasswordOnForgotPassword />} />
+            <Route path="Admin/:typeOfUse/ValidasiAkun/:phoneNumber" element={<AccountValidation />} />
+            <Route path="Admin/LupaPassword/UbahPassword/:phoneNumber/:verificationCode" element={<ChangePasswordOnForgotPassword />} />
           </Route>
           
           <Route element={<ProtectedAdminRoute />}>
@@ -70,11 +70,12 @@ function AdminRouter() {
 
             {/* Order Menu Route */}
             <Route path="Pesanan" element={<OrderMenu />} />
+            <Route path="Pesanan/" element={<OrderMenu />} />
             <Route path="Pesanan/:id" element={<OrderDetails />} />
             <Route path="Pesanan/BuatPesananBaru" element={<CreateNewOrder />} />
             <Route path="Pesanan/EditPesanan" element={<HomePage />} />
             <Route path="Pesanan/RatingDanReviewPelanggan" element={<CustomerRatingsAndReviews />} />
-            <Route path="Pesanan/DaftarPesanan" element={<OrderList />} />
+            <Route path="Pesanan/DaftarPesanan/:status" element={<OrderList />} />
 
             {/* Business Information Menu Route */}
             <Route path="InformasiBisnis" element={<BusinessInformationMenu />} />
