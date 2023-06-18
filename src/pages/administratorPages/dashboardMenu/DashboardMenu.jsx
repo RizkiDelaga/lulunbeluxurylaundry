@@ -16,9 +16,6 @@ import {
   useTheme,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { getExample } from '../../../redux/actions/exampleAction';
-// import EnhancedTable from '../../../components/Table/EnhancedTable';
-// import ResponsiveTable from '../../../components/Table/ResponsiveTable';
 import InformationCard from '../../../components/Card/InformationCard/InformationCard';
 import AreaChart from '../../../components/Graph/AreaChart';
 

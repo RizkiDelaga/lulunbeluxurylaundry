@@ -68,7 +68,6 @@ function LoginCustomer() {
 
       dispatchGetProfileAccountCustomer(res.data.accessToken);
 
-      // navigate('/AreaPelanggan');
       if (res.status === 200) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,

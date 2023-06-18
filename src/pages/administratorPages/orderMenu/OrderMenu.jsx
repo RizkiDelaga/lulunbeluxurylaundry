@@ -334,6 +334,7 @@ function OrderTable() {
           <IconButton
             onClick={() => {
               handleGetOrder(null, null, filterOrderStatus);
+              setSearching({ label: searching.label, value: '', currentSearch: '' });
             }}
           >
             <RefreshIcon color="primary" />
@@ -770,28 +771,28 @@ function OrderMenu() {
               <InformationCard
                 title="Perlu Disetujui"
                 content={{ normalText: orderStats.needApproval }}
-                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
+                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan/DaftarPesanan/Perlu Disetujui' }}
               />
             </Grid>
             <Grid item xs={6} md={3} lg={3}>
               <InformationCard
                 title="Perlu Dijemput"
                 content={{ normalText: orderStats.needsToBePickedUp }}
-                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
+                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan/DaftarPesanan/Perlu Dijemput' }}
               />
             </Grid>
             <Grid item xs={6} md={3} lg={3}>
               <InformationCard
                 title="Perlu Dikerjakan"
                 content={{ normalText: orderStats.needsToBeDone }}
-                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
+                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan/DaftarPesanan/Perlu Dikerjakan' }}
               />
             </Grid>
             <Grid item xs={6} md={3} lg={3}>
               <InformationCard
                 title="Perlu Diantar"
                 content={{ normalText: orderStats.needsToBeDelivered }}
-                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
+                navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan/DaftarPesanan/Perlu Diantar' }}
               />
             </Grid>
           </Grid>
@@ -806,14 +807,14 @@ function OrderMenu() {
             <InformationCard
               title="Order Completed"
               content={{ normalText: orderStats.completed }}
-              navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
+              navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan/DaftarPesanan/Selesai' }}
             />
           </Grid>
           <Grid item xs={6} sm={4} md={4} lg={4}>
             <InformationCard
               title="Order Cancelled"
               content={{ normalText: orderStats.cancelled }}
-              navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan' }}
+              navigate={{ text: 'Lihat detail pesanan', url: '/Pesanan/DaftarPesanan/Dibatalkan' }}
             />
           </Grid>
           <Grid item xs={12} sm={4} md={4} lg={4}>

@@ -84,7 +84,7 @@ function EditProfile() {
         customerName: res.data.data.nama,
         contact: {
           phoneNumber: res.data.data.noTelp,
-          email: res.data.data.email,
+          email: res.data.data.email || '',
         },
         birthDate: res.data.data.tglLahir ? dayjs(res.data.data.tglLahir) : dayjs,
         profilePicture: { img: null, fileName: res.data.data.profilePic },
@@ -99,7 +99,9 @@ function EditProfile() {
     const formData = new FormData();
     formData.append('nama', formEditProfile.customerName);
     formData.append('noTelp', formEditProfile.contact.phoneNumber);
-    formData.append('email', formEditProfile.contact.email);
+    if (!formEditProfile.contact.email) {
+      formData.append('email', formEditProfile.contact.email);
+    }
     if (typeof formEditProfile.birthDate !== 'function') {
       formData.append('tglLahir', formEditProfile.birthDate);
     }

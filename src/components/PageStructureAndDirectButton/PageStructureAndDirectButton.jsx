@@ -92,7 +92,13 @@ function PageStructureAndDirectButton(props) {
               : null}
 
             {/* Current Page */}
-            {props.currentPage ? <Typography color="text.primary">{props.currentPage.title}</Typography> : null}
+            {props.currentPage ? (
+              <Typography color="text.primary" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {props.currentPage.title}
+                {props.params ? <strong>: </strong> : null}
+                <em>{props.params ? <Typography color="text.primary">{props.params}</Typography> : null}</em>
+              </Typography>
+            ) : null}
           </Breadcrumbs>
         </Grid>
 

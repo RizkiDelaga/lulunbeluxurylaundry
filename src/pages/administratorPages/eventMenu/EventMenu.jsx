@@ -123,10 +123,10 @@ function EventTable({ statusType }) {
   };
 
   React.useEffect(() => {
-    handleGetOrder();
+    handleGetEvent();
   }, []);
 
-  const [listFinance, setListFinance] = React.useState([]);
+  const [listEvent, setListEvent] = React.useState([]);
   // const [pageConfig, setPageConfig] = React.useState({
   //   currentPage: 1,
   //   dataPerPage: 10,
@@ -134,7 +134,7 @@ function EventTable({ statusType }) {
   // });
 
   // Handle API Get All Data Finance
-  const handleGetOrder = async (changePage, maxDataPerPage) => {
+  const handleGetEvent = async (changePage, maxDataPerPage) => {
     try {
       const res = await axios({
         method: 'GET',
@@ -148,44 +148,46 @@ function EventTable({ statusType }) {
 
       console.log('Response GET Data Finance');
       console.log(res);
-      setListFinance(res.data.data);
+      setListEvent(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
-        setListFinance([]);
+        setListEvent([]);
       }
       console.log(error);
     }
   };
 
-  // Handle API Search Finance
-  const handleSearchOrder = async () => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
-        },
-        url: `${process.env.REACT_APP_API_KEY}/keuangan/search/where?judul=${searching.value}`,
-      });
-      console.log('Response GET Data Finance');
-      console.log(res);
+  // // Handle API Search Finance
+  // const handleSearchEvent = async () => {
+  //   try {
+  //     const res = await axios({
+  //       method: 'GET',
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+  //       },
+  //       url: `${process.env.REACT_APP_API_KEY}/acara/search${
+  //         statusType === 'Aktif' ? '/active' : statusType === 'Akan Datang' ? '/coming-soon' : '/done'
+  //       }?nama=${searching.value}`,
+  //     });
+  //     console.log('Response GET Data Finance');
+  //     console.log(res);
 
-      setListFinance(res.data.data);
-    } catch (error) {
-      if (error.response.status === 404) {
-        setListFinance([]);
-      }
-      console.log(error);
-    }
-  };
+  //     setListEvent(res.data.data);
+  //   } catch (error) {
+  //     if (error.response.status === 404) {
+  //       setListEvent([]);
+  //     }
+  //     console.log(error);
+  //   }
+  // };
 
   // Menu - Searching
-  const [searching, setSearching] = React.useState({ label: '', value: '', currentSearch: '' });
-  const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
-  const openSearch = Boolean(searchAnchorEl);
-  const handleCloseSearch = () => {
-    setSearchAnchorEl(null);
-  };
+  // const [searching, setSearching] = React.useState({ label: 'Nama Event', value: '', currentSearch: '' });
+  // const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
+  // const openSearch = Boolean(searchAnchorEl);
+  // const handleCloseSearch = () => {
+  //   setSearchAnchorEl(null);
+  // };
 
   const headCells = [
     {
@@ -241,14 +243,14 @@ function EventTable({ statusType }) {
           </Typography>
           <IconButton
             onClick={() => {
-              handleGetOrder();
-              setSearching({ label: '', value: '', currentSearch: '' });
+              handleGetEvent();
+              // setSearching({ label: searching.label, value: '', currentSearch: '' });
             }}
           >
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
-        <div
+        {/* <div
           style={{
             display: 'flex',
             flexWrap: 'wrap-reverse',
@@ -260,8 +262,8 @@ function EventTable({ statusType }) {
           <Chip
             label={`Search: ${searching.currentSearch}`}
             onDelete={() => {
-              setSearching({ label: '', value: '', currentSearch: '' });
-              handleGetOrder();
+              setSearching({ label: searching.label, value: '', currentSearch: '' });
+              handleGetEvent();
             }}
             sx={{ display: !searching.currentSearch ? 'none' : null }}
           />
@@ -271,14 +273,13 @@ function EventTable({ statusType }) {
                 setSearchAnchorEl(event.currentTarget);
               }}
             >
-              {/* <FilterListIcon color="primary" /> */}
               <SearchIcon color="primary" />
             </IconButton>
           </Tooltip>
-        </div>
+        </div> */}
       </Toolbar>
       {/* Menu - Searching */}
-      <Menu
+      {/* <Menu
         anchorEl={searchAnchorEl}
         open={openSearch}
         onClose={handleCloseSearch}
@@ -311,13 +312,9 @@ function EventTable({ statusType }) {
                 onChange={(e) => {
                   setSearching({ ...searching, label: e.target.value });
                 }}
-                displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
               >
-                <MenuItem value="">
-                  <em>Pilih Label</em>
-                </MenuItem>
-                <MenuItem value={'Judul'}>Judul</MenuItem>
+                <MenuItem value={'Nama Event'}>Nama Event</MenuItem>
               </Select>
 
               <TextField
@@ -337,10 +334,10 @@ function EventTable({ statusType }) {
                 size="medium"
                 variant="contained"
                 onClick={() => {
-                  setSearching({ label: '', value: '', currentSearch: searching.value });
+                  setSearching({ label: searching.label, value: '', currentSearch: searching.value });
 
                   handleCloseSearch();
-                  handleSearchOrder();
+                  handleSearchEvent();
                 }}
               >
                 Cari
@@ -348,7 +345,7 @@ function EventTable({ statusType }) {
             </Grid>
           </Grid>
         </Box>
-      </Menu>
+      </Menu> */}
 
       {/* Table Section */}
       <TableContainer sx={{ maxHeight: 800 }}>
@@ -381,7 +378,7 @@ function EventTable({ statusType }) {
 
           {/* Table Content */}
           <TableBody>
-            {stableSort(listFinance, getComparator(order, orderBy)).map((item, index) => {
+            {stableSort(listEvent, getComparator(order, orderBy)).map((item, index) => {
               return <RowItem key={item.id} item={item} />;
             })}
           </TableBody>
@@ -397,7 +394,7 @@ function EventTable({ statusType }) {
           borderRadius: 2,
           backgroundColor: '#eeeeee',
           textAlign: 'center',
-          display: listFinance.length ? 'none' : null,
+          display: listEvent.length ? 'none' : null,
         }}
       >
         <h5>Data tidak ditemukan!</h5>
