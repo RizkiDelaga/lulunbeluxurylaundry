@@ -67,6 +67,8 @@ const MobileNotificationDialog = ({
   data,
   handleCloseNotificationMenu,
   handleUpdateReadNotification,
+  pageConfig,
+  handleGetNotification,
 }) => {
   const theme = useTheme();
   const fullScreenDialog = useMediaQuery(theme.breakpoints.up('xs'));
@@ -156,6 +158,13 @@ const MobileNotificationDialog = ({
           data={data}
           handleCloseNotificationMenu={handleCloseNotificationMenu}
         />
+        <div style={{ margin: '16px' }}>
+          {!pageConfig.metadata ? null : pageConfig.currentPage < pageConfig.metadata.totalPage ? (
+            <Button variant="contained" onClick={() => handleGetNotification(true)} sx={{ width: '100%' }}>
+              Tampilkan Lebih Banyak
+            </Button>
+          ) : null}
+        </div>
       </div>
     </Dialog>
   );
@@ -169,7 +178,7 @@ const NotificationList = ({ loadingData, data, notificationStatus, handleUpdateR
   }, []);
 
   return (
-    <div style={{ height: '100%' }}>
+    <div>
       {loadingData
         ? null
         : data
@@ -183,7 +192,6 @@ const NotificationList = ({ loadingData, data, notificationStatus, handleUpdateR
                       if (!item.dibacaAdmin) {
                         handleUpdateReadNotification(item.id);
                       }
-                      // navigate(`/Pesanan/${item.id}`);
                     }}
                     className={`${style['list-notification']}`}
                   >
@@ -233,36 +241,44 @@ function Navbar(props) {
   const navigate = useNavigate();
   const theme = useTheme();
   const [notificationStatus, setNotificationStatus] = React.useState('All');
+  const [listNotification, setListNotification] = React.useState([]);
+  const [pageConfig, setPageConfig] = React.useState({
+    currentPage: 1,
+    metadata: null,
+  });
 
   const dispatch = useDispatch();
-  const { isLoading: loadingGetNotificationAdmin, data: dataGetNotificationAdmin } = useSelector(
-    (state) => state.getNotificationAdmin
-  );
   const { isLoading: loadingGetProfileAccountAdmin, data: dataGetProfileAccountAdmin } = useSelector(
     (state) => state.getProfileAccountAdmin
   );
 
   React.useEffect(() => {
-    dispatchGetNotificationAdmin();
     dispatchGetProfileAccountAdmin();
-    handleGetServiceType();
+    handleGetNotification();
   }, [localStorage.getItem('admin_profile_account')]);
 
-  const handleGetServiceType = async () => {
+  const handleGetNotification = async (next) => {
     try {
       const res = await axios({
         method: 'GET',
-        url: `${process.env.REACT_APP_API_KEY}/jenislayanan`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/notifikasi/all/admin?page=${next ? pageConfig.currentPage + 1 : 1}`,
       });
       console.log('Response GET Data Service Type');
       console.log(res);
+      if (next) {
+        setListNotification([...listNotification, ...res.data.data]);
+        setPageConfig({ currentPage: pageConfig.currentPage + 1, metadata: res.data.metadata });
+      } else {
+        setListNotification(res.data.data);
+        setPageConfig({ currentPage: pageConfig.currentPage, metadata: res.data.metadata });
+      }
+      localStorage.setItem('listnotif', JSON.stringify([...listNotification, ...res.data.data]));
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const dispatchGetNotificationAdmin = async () => {
-    return await dispatch(getNotificationAdmin());
   };
 
   const dispatchGetProfileAccountAdmin = async () => {
@@ -280,7 +296,15 @@ function Navbar(props) {
       });
       console.log('Response GET Data Service Type');
       console.log(res);
-      dispatchGetNotificationAdmin();
+      setListNotification((prevListNotification) => {
+        const updatedList = [...prevListNotification];
+
+        updatedList[updatedList.findIndex((element) => element.id === id)] = {
+          ...updatedList[updatedList.findIndex((element) => element.id === id)],
+          dibacaAdmin: true,
+        };
+        return updatedList;
+      });
     } catch (error) {
       console.log(error);
     }
@@ -342,9 +366,7 @@ function Navbar(props) {
               <Badge
                 color="primary"
                 badgeContent={
-                  loadingGetNotificationAdmin
-                    ? null
-                    : dataGetNotificationAdmin.filter((item) => item.dibacaAdmin === false).length
+                  !listNotification ? null : listNotification.filter((item) => item.dibacaAdmin === false).length
                 }
                 max={999}
               >
@@ -353,16 +375,18 @@ function Navbar(props) {
             </IconButton>
 
             {/* Notification display for mobile size */}
-            {loadingGetNotificationAdmin ? null : (
+            {!listNotification ? null : (
               <MobileNotificationDialog
                 handleUpdateReadNotification={handleUpdateReadNotification}
                 handleClose={() => {
                   setOpenNotification(!openNotification);
                 }}
                 openNotifDialog={openNotification}
-                loadingData={loadingGetNotificationAdmin}
-                data={dataGetNotificationAdmin}
+                loadingData={listNotification ? false : true}
+                data={listNotification}
                 handleCloseNotificationMenu={handleCloseNotificationMenu}
+                pageConfig={pageConfig}
+                handleGetNotification={handleGetNotification}
               />
             )}
 
@@ -463,14 +487,16 @@ function Navbar(props) {
               <NotificationList
                 handleUpdateReadNotification={handleUpdateReadNotification}
                 notificationStatus={notificationStatus}
-                loadingData={loadingGetNotificationAdmin}
-                data={dataGetNotificationAdmin}
+                loadingData={listNotification ? false : true}
+                data={listNotification}
                 handleCloseNotificationMenu={handleCloseNotificationMenu}
               />
-              <div style={{ marginLeft: '16px', marginRight: '16px' }}>
-                <Button variant="contained" sx={{ width: '100%' }}>
-                  Selanjutnya
-                </Button>
+              <div style={{ marginLeft: '16px', marginRight: '16px', marginTop: '16px', marginBottom: '10px' }}>
+                {!pageConfig.metadata ? null : pageConfig.currentPage < pageConfig.metadata.totalPage ? (
+                  <Button variant="contained" onClick={() => handleGetNotification(true)} sx={{ width: '100%' }}>
+                    Tampilkan Lebih Banyak
+                  </Button>
+                ) : null}
               </div>
             </Menu>
 

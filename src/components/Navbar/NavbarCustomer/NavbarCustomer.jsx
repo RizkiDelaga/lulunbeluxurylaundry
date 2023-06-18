@@ -40,6 +40,8 @@ import { NavHashLink } from 'react-router-hash-link';
 import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
 import { getProfileAccountCustomer } from '../../../redux/actions/getProfileAccount';
 import { Helmet } from 'react-helmet';
+import axios from 'axios';
+import CloseIcon from '@mui/icons-material/Close';
 
 const drawerWidth = 300;
 
@@ -64,26 +66,34 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 // Notification Popup for mobile version
-const MobileNotificationDialog = (props) => {
+// Notification Popup for mobile version
+const MobileNotificationDialog = ({
+  openNotifDialog,
+  handleClose,
+  loadingData,
+  data,
+  handleCloseNotificationMenu,
+  handleUpdateReadNotification,
+  pageConfig,
+  handleGetNotification,
+}) => {
   const theme = useTheme();
   const fullScreenDialog = useMediaQuery(theme.breakpoints.up('xs'));
 
-  const [isVisible, setIsVisible] = useState(true);
   const topDialog = useRef(null);
-  const executeScroll = () => topDialog.current.scrollIntoView();
+  const [notificationStatus, setNotificationStatus] = React.useState('All');
 
-  // useEffect(() => {
-  //   window.addEventListener('scroll', () => {
-  //     console.log('hi', 200);
-  //     setIsVisible(document.scrollY >= 200);
-  //   });
-  // }, []);
+  const ToggleButton = styled(MuiToggleButton)({
+    '&.Mui-selected, &.Mui-selected:hover': {
+      backgroundColor: '#1F305C',
+    },
+  });
 
   return (
     <Dialog
       fullScreen={fullScreenDialog}
-      onClose={props.handleClose}
-      open={props.openNotifDialog}
+      onClose={handleClose}
+      open={openNotifDialog}
       sx={{
         zIndex: '10000',
         [theme.breakpoints.up('md')]: {
@@ -94,82 +104,142 @@ const MobileNotificationDialog = (props) => {
       <div ref={topDialog} id="asd">
         <DialogTitle style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
           Notifikasi
-          <IconButton onClick={props.handleClose}>
-            <MenuIcon color="primary" />
+          <IconButton onClick={handleClose}>
+            <CloseIcon color="primary" />
           </IconButton>
         </DialogTitle>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        <NotificationList
-          loadingGetExample={props.loadingGetExample}
-          dataGetExample={props.dataGetExample}
-          handleCloseNotificationMenu={props.handleCloseNotificationMenu}
-        />
-      </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginLeft: '16px',
+            marginRight: '16px',
+          }}
+        >
+          <ToggleButtonGroup
+            value={notificationStatus}
+            color="primary"
+            exclusive
+            onChange={(event, value) => {
+              if (value) {
+                setNotificationStatus(value);
+              }
+            }}
+            sx={{
+              width: '100% !important',
+              [theme.breakpoints.down('sm')]: {
+                height: '35px !important',
+              },
+            }}
+          >
+            <ToggleButton
+              value="All"
+              sx={{
+                width: '100%',
+                border: '1px solid #1F305C',
+                fontWeight: 'bold',
+                color: notificationStatus === 'All' ? '#ffffff !important' : '#1F305C',
+              }}
+            >
+              Semua
+            </ToggleButton>
+            <ToggleButton
+              value="Unread"
+              sx={{
+                width: '100%',
 
-      {/* Button Up */}
-      <Button
-        color="primary"
-        variant="contained"
-        id="myBtn"
-        style={{
-          display: isVisible ? 'block' : 'none',
-          position: 'fixed',
-          bottom: '50px',
-          left: '50%',
-          transform: 'translate(-50%, 0)',
-          zIndex: '1',
-          borderRadius: '24px',
-        }}
-        onClick={() => {
-          executeScroll();
-        }}
-      >
-        Lihat Notifikasi Teratas
-      </Button>
+                border: '1px solid #1F305C',
+                fontWeight: 'bold',
+                color: notificationStatus === 'Unread' ? '#ffffff !important' : '#1F305C',
+              }}
+            >
+              Belum Dibaca
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+        <NotificationList
+          handleUpdateReadNotification={handleUpdateReadNotification}
+          notificationStatus={notificationStatus}
+          loadingData={loadingData}
+          data={data}
+          handleCloseNotificationMenu={handleCloseNotificationMenu}
+        />
+        <div style={{ margin: '16px' }}>
+          {!pageConfig.metadata ? null : pageConfig.currentPage < pageConfig.metadata.totalPage ? (
+            <Button variant="contained" onClick={() => handleGetNotification(true)} sx={{ width: '100%' }}>
+              Tampilkan Lebih Banyak
+            </Button>
+          ) : null}
+        </div>
+      </div>
     </Dialog>
   );
 };
 
-const NotificationList = (props) => {
+const NotificationList = ({ loadingData, data, notificationStatus, handleUpdateReadNotification }) => {
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    document.title = 'Buat Pesanan Baru';
+  }, []);
+
   return (
-    <div style={{ height: '100%' }}>
-      {props.loadingGetExample
+    <div>
+      {loadingData
         ? null
-        : props.dataGetExample.map((data, index) => (
-            <span key={data.id}>
-              <MenuItem
-                onClick={() => {
-                  navigate(`Pesanan/${data.id}`);
-                  // props.setOpenMyAccount(null);
-                }}
-                className={`${style['list-notification']}`}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                  }}
-                >
-                  <div style={{ fontWeight: 'bold' }}>Pesanan #281931290 menunggu persetujuan</div>
-                  <div style={{ fontSize: '14px' }}>
-                    <span style={{ fontWeight: 'bold' }}>Nama Pengguna </span>
-                    melakukan pemesanan dengan nomer pesanan #32672161276.
-                  </div>
-                  <div style={{ fontSize: '12px', textAlign: 'right' }}>23/04/2023 15:52</div>
-                </div>
-                <div>
-                  {data.status ? (
-                    <Badge style={{ width: '20px' }} color="primary" overlap="circular" badgeContent="" />
-                  ) : null}
-                </div>
-              </MenuItem>
-              <Divider />
-            </span>
-          ))}
+        : data
+            .filter((element) => (notificationStatus !== 'All' ? element.dibacaUser === false : true))
+            .map((item, index) => {
+              const parseItem = JSON.parse(item.pesan);
+              return (
+                <span key={item.id}>
+                  <MenuItem
+                    onClick={() => {
+                      if (!item.dibacaUser) {
+                        handleUpdateReadNotification(item.id);
+                      }
+                    }}
+                    className={`${style['list-notification']}`}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                      }}
+                    >
+                      <div style={{ fontWeight: 'bold' }}>{parseItem.header}</div>
+                      <div style={{ fontSize: '14px' }}>{parseItem.deskripsi}</div>
+                      <div style={{ fontSize: '12px', textAlign: 'right' }}>{`${item.updatedAt.slice(
+                        8,
+                        10
+                      )}/${item.updatedAt.slice(5, 7)}/${item.updatedAt.slice(0, 4)} ${item.updatedAt.slice(
+                        11,
+                        16
+                      )}`}</div>
+                    </div>
+                    <div>
+                      {!item.dibacaUser ? (
+                        <div
+                          style={{
+                            backgroundColor: '#1F305C',
+                            borderRadius: '100%',
+                            padding: '5px',
+                            width: '14px',
+                            height: '14px',
+                          }}
+                        >
+                          {' '}
+                        </div>
+                      ) : null}
+                    </div>
+                  </MenuItem>
+                  <Divider />
+                </span>
+              );
+            })}
     </div>
   );
 };
@@ -179,9 +249,14 @@ function NavbarCustomer(props) {
   const theme = useTheme();
 
   const [notificationStatus, setNotificationStatus] = React.useState('All');
+  const [listNotification, setListNotification] = React.useState([]);
+  const [pageConfig, setPageConfig] = React.useState({
+    currentPage: 1,
+    metadata: null,
+  });
 
   const dispatch = useDispatch();
-  const { isLoading: loadingGetExample, data: dataGetExample } = useSelector((state) => state.getExample);
+  // const { isLoading: loadingGetExample, data: dataGetExample } = useSelector((state) => state.getExample);
   const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
     (state) => state.getGeneralInformation
   );
@@ -190,13 +265,63 @@ function NavbarCustomer(props) {
   );
 
   React.useEffect(() => {
-    dispatchGetExample();
+    // dispatchGetExample();
     dispatchGetGeneralInformation();
     dispatchGetProfileAccountCustomer();
+    handleGetNotification();
   }, [localStorage.getItem('my_profile_account')]);
 
-  const dispatchGetExample = async () => {
-    return await dispatch(getExample());
+  // const dispatchGetExample = async () => {
+  //   return await dispatch(getExample());
+  // };
+
+  const handleGetNotification = async (next) => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/notifikasi/all/user?page=${next ? pageConfig.currentPage + 1 : 1}`,
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+      if (next) {
+        setListNotification([...listNotification, ...res.data.data]);
+        setPageConfig({ currentPage: pageConfig.currentPage + 1, metadata: res.data.metadata });
+      } else {
+        setListNotification(res.data.data);
+        setPageConfig({ currentPage: pageConfig.currentPage, metadata: res.data.metadata });
+      }
+      localStorage.setItem('listnotif', JSON.stringify([...listNotification, ...res.data.data]));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUpdateReadNotification = async (id) => {
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/notifikasi/user/${id}`,
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+      setListNotification((prevListNotification) => {
+        const updatedList = [...prevListNotification];
+
+        updatedList[updatedList.findIndex((element) => element.id === id)] = {
+          ...updatedList[updatedList.findIndex((element) => element.id === id)],
+          dibacaUser: true,
+        };
+        return updatedList;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const dispatchGetProfileAccountCustomer = async () => {
@@ -391,7 +516,7 @@ function NavbarCustomer(props) {
                   <Badge
                     color="primary"
                     badgeContent={
-                      loadingGetExample ? null : dataGetExample.filter((item) => item.status === true).length
+                      !listNotification ? null : listNotification.filter((item) => item.dibacaUser === false).length
                     }
                     max={999}
                   >
@@ -400,15 +525,18 @@ function NavbarCustomer(props) {
                 </IconButton>
 
                 {/* Notification display for mobile size */}
-                {loadingGetExample ? null : (
+                {!listNotification ? null : (
                   <MobileNotificationDialog
+                    handleUpdateReadNotification={handleUpdateReadNotification}
                     handleClose={() => {
                       setOpenNotification(!openNotification);
                     }}
                     openNotifDialog={openNotification}
-                    loadingGetExample={loadingGetExample}
-                    dataGetExample={dataGetExample}
+                    loadingData={listNotification ? false : true}
+                    data={listNotification}
                     handleCloseNotificationMenu={handleCloseNotificationMenu}
+                    pageConfig={pageConfig}
+                    handleGetNotification={handleGetNotification}
                   />
                 )}
 
@@ -507,10 +635,19 @@ function NavbarCustomer(props) {
                   </div>
 
                   <NotificationList
-                    loadingGetExample={loadingGetExample}
-                    dataGetExample={dataGetExample}
+                    handleUpdateReadNotification={handleUpdateReadNotification}
+                    notificationStatus={notificationStatus}
+                    loadingData={listNotification ? false : true}
+                    data={listNotification}
                     handleCloseNotificationMenu={handleCloseNotificationMenu}
                   />
+                  <div style={{ marginLeft: '16px', marginRight: '16px', marginTop: '16px', marginBottom: '10px' }}>
+                    {!pageConfig.metadata ? null : pageConfig.currentPage < pageConfig.metadata.totalPage ? (
+                      <Button variant="contained" onClick={() => handleGetNotification(true)} sx={{ width: '100%' }}>
+                        Tampilkan Lebih Banyak
+                      </Button>
+                    ) : null}
+                  </div>
                 </Menu>
 
                 {/* Account Menu */}
