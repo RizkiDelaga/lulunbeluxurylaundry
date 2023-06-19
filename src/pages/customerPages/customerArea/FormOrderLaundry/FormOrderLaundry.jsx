@@ -32,6 +32,7 @@ import axios from 'axios';
 import StarIcon from '@mui/icons-material/Star';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import { adjustTime } from '../../../../utils/timeUtils';
+import LaundryItemTable from '../../../../components/Table/LaundryItemTable';
 
 const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMethod }) => {
   const theme = useTheme();
@@ -714,7 +715,7 @@ function FormOrderLaundry() {
                 }
               }}
             >
-              <Box className="gap-16">
+              <Box className="gap-16" sx={{ flexDirection: 'column', width: '100%' }}>
                 <div style={{ width: '100%', textAlign: 'center' }}>
                   <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Formulir Pemesanan Laundry</h2>
                 </div>
@@ -731,26 +732,26 @@ function FormOrderLaundry() {
                   <LaundryShuttle state={formOrder} setState={setFormOrder} listAddress={listCustomerAddress} />
                 )}
 
-                {formOrder.id ? 'Item Barang' : null}
-
                 <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                   {formOrder.id ? 'Update Pesanan' : 'Buat pesanan'}
                   {/* {id ? 'Edit Pesanan' : 'Buat pesanan'} */}
                 </Button>
 
-                {formOrder.discount}
+                {/* {formOrder.discount}
                 {formOrder.customerInformation}
                 {formOrder.paymentMethod}
                 {formOrder.serviceType.name}
                 {formOrder.address.deliveryAddress}
                 {formOrder.address.pickupAddress}
-                {formOrder.status}
+                {formOrder.status} */}
                 <br />
               </Box>
             </form>
           </Paper>
         </div>
       </Box>
+
+      {formOrder.id ? <LaundryItemTable orderId={id} /> : null}
 
       <Dialog open={openDialog}>
         <DialogTitle>
