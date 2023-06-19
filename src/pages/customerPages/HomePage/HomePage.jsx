@@ -123,7 +123,7 @@ function HeroSection({ generalInformation }) {
                     if (!profileAccount.alamatUser) {
                       alert('Harap input alamat terlebih dahulu!');
                     } else {
-                      navigate('/AreaPelanggan/BuatPesananBaru');
+                      navigate('/AreaPelanggan/FormulirPemesananLaundry');
                     }
                   } else {
                     navigate('/Login');
@@ -185,7 +185,7 @@ function LaundryTypeSection({ listLaundryType }) {
                         if (!profileAccount.alamatUser) {
                           alert('Harap input alamat terlebih dahulu!');
                         } else {
-                          navigate('/AreaPelanggan/BuatPesananBaru');
+                          navigate('/AreaPelanggan/FormulirPemesananLaundry');
                         }
                       } else {
                         navigate('/Login');
@@ -257,7 +257,7 @@ function ServiceTypeSection({ listServiceType }) {
                           if (!profileAccount.alamatUser) {
                             alert('Harap input alamat terlebih dahulu!');
                           } else {
-                            navigate('/AreaPelanggan/BuatPesananBaru');
+                            navigate('/AreaPelanggan/FormulirPemesananLaundry');
                           }
                         } else {
                           navigate('/Login');
@@ -1310,7 +1310,7 @@ function HomePage() {
         />
       ) : null}
 
-      {event !== 0 ? <EventSection listEvent={event} /> : null}
+      {event.length !== 0 ? <EventSection listEvent={event} /> : null}
       {!loadingGetReasonWhyChooseUs && dataGetReasonWhyChooseUs.length !== 0 ? (
         <ReasonSection listReason={dataGetReasonWhyChooseUs} />
       ) : null}

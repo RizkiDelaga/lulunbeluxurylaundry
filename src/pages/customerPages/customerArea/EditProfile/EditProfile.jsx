@@ -579,7 +579,9 @@ function EditProfile() {
               >
                 <Box className="gap-16" sx={{ flexDirection: 'column' }}>
                   <div style={{ width: '100%', textAlign: 'center' }}>
-                    <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Tambah Alamat</h4>
+                    <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>
+                      {mainAddress.id ? 'Update Alamat' : 'Tambah Alamat'}
+                    </h4>
                   </div>
                   {/* <div style={{ fontWeight: 'bold', width: '100%', textAlign: 'center' }}>Alamat Utama</div> */}
 

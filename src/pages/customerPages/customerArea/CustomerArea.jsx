@@ -665,7 +665,7 @@ function CustomerArea() {
               color: 'primary',
               iconType: 'add',
               value: 'Buat pesanan baru',
-              link: '/AreaPelanggan/BuatPesananBaru',
+              link: '/AreaPelanggan/FormulirPemesananLaundry',
             },
           ]}
         />
