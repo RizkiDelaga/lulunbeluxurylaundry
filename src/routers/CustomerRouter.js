@@ -10,12 +10,13 @@ import RatingAndReview from '../pages/customerPages/customerArea/RatingAndReview
 import ChangePassword from '../pages/customerPages/customerArea/ChangePassword/ChangePassword';
 import EditProfile from '../pages/customerPages/customerArea/EditProfile/EditProfile';
 import OrderDetails from '../pages/customerPages/customerArea/OrderDetails/OrderDetails';
-import CreateNewOrder from '../pages/customerPages/customerArea/CreateNewOrder/CreateNewOrder';
+
 import RegisterAccount from '../pages/customerPages/customerAuth/RegisterCustomer/RegisterAccount/RegisterAccount';
 import CompleteRegistration from '../pages/customerPages/customerAuth/RegisterCustomer/CompleteRegistration/CompleteRegistration';
 import ForgotPasswordRequest from '../pages/customerPages/customerAuth/forgotPassword/ForgotPasswordRequest/ForgotPasswordRequest';
 import ChangePasswordOnForgotPassword from '../pages/customerPages/customerAuth/forgotPassword/ChangePasswordOnForgotPassword/ChangePasswordOnForgotPassword';
 import AccountValidation from '../pages/customerPages/customerAuth/AccountValidation/AccountValidation';
+import FormOrderLaundry from '../pages/customerPages/customerArea/FormOrderLaundry/FormOrderLaundry';
 
 function CustomerRouter() {
 
@@ -65,7 +66,9 @@ function CustomerRouter() {
             <Route path="AreaPelanggan/:noPesanan" element={<OrderDetails />} />
             <Route path="AreaPelanggan/EditProfil" element={<EditProfile />} />
             <Route path="AreaPelanggan/UbahPassword" element={<ChangePassword />} />
-            <Route path="AreaPelanggan/BuatPesananBaru" element={<CreateNewOrder />} />
+            <Route path="AreaPelanggan/FormulirPemesananLaundry" element={<FormOrderLaundry />} />
+            <Route path="AreaPelanggan/FormulirPemesananLaundry/:id" element={<FormOrderLaundry />} />
+            {/* FormOrderLaundry */}
             <Route path="AreaPelanggan/RatingDanReview/:idPesanan/:noPesanan" element={<RatingAndReview />} />
           </Route>
         </Routes>

@@ -55,7 +55,7 @@ function ForgotPasswordRequest() {
       <LoadDecisions
         setOpenLoad={setOpenLoadDecision}
         openLoad={openLoadDecision}
-        redirect={`Admin/LupaPassword/ValidasiAkun/${phoneNumber}`}
+        redirect={`/Admin/LupaPassword/ValidasiAkun/${phoneNumber}`}
       />
 
       <Box component="main" sx={{ marginX: 3 }}>

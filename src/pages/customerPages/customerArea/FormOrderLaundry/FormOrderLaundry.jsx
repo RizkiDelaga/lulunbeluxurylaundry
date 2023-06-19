@@ -4,10 +4,16 @@ import {
   Box,
   Button,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogTitle,
   Divider,
   FormControl,
   Grid,
   InputLabel,
+  List,
+  ListItem,
+  ListItemButton,
   MenuItem,
   Paper,
   Select,
@@ -16,7 +22,7 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { LocalizationProvider, MobileDatePicker, MobileTimePicker, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -25,6 +31,7 @@ import PageStructureAndDirectButton from '../../../../components/PageStructureAn
 import axios from 'axios';
 import StarIcon from '@mui/icons-material/Star';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
+import { adjustTime } from '../../../../utils/timeUtils';
 
 const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMethod }) => {
   const theme = useTheme();
@@ -101,7 +108,7 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
                       label="Pilih Tanggal"
-                      value={state.dateOrder}
+                      value={dayjs(state.dateOrder)}
                       onChange={(value) => {
                         setState({
                           ...state,
@@ -132,7 +139,7 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileTimePicker
                       label="Pilih Jam"
-                      value={state.dateOrder}
+                      value={dayjs(state.dateOrder)}
                       onChange={(value) => {
                         setState({
                           ...state,
@@ -446,10 +453,12 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
   );
 };
 
-function CreateNewOrder() {
+function FormOrderLaundry() {
   const theme = useTheme();
+  let { id } = useParams();
   const navigate = useNavigate();
   const [formOrder, setFormOrder] = React.useState({
+    id: id || null,
     dateOrder: dayjs(),
     serviceType: {
       name: '',
@@ -462,6 +471,7 @@ function CreateNewOrder() {
       pickupAddress: '',
       deliveryAddress: '',
     },
+    status: '',
   });
   const [listCustomerAddress, setListCustomerAddress] = React.useState([]);
   const [listServiceType, setListServiceType] = React.useState([]);
@@ -477,6 +487,7 @@ function CreateNewOrder() {
     handleGetServiceType();
     handleGetPaymentMethod();
     handleGetCustomerAddress();
+    handleGetDetailPesanan(id);
   }, []);
 
   const handleGetServiceType = async () => {
@@ -520,6 +531,9 @@ function CreateNewOrder() {
       console.log(res);
       setListCustomerAddress(res.data.data);
     } catch (error) {
+      if (error.response.status === 404) {
+        setOpenDialog(true);
+      }
       console.log(error);
     }
   };
@@ -538,13 +552,19 @@ function CreateNewOrder() {
           namaLayanan: formOrder.serviceType.name,
           jenisLayanan: formOrder.serviceType.duration,
           mPembayaran: formOrder.paymentMethod,
-          tglMulai: formOrder.dateOrder,
+          tglMulai: dayjs(
+            `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
+              formOrder.dateOrder.$H
+            }:${formOrder.dateOrder.$m}:00`
+          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
           alamatJemput: formOrder.address.pickupAddress,
           alamatAntar: formOrder.address.deliveryAddress,
         },
       });
       console.log('Response GET Data Service Type');
       console.log(res);
+      setFormOrder({ ...formOrder, id: res.data.data.id });
+      handleGetDetailPesanan(res.data.data.id);
 
       if (res.status === 201) {
         setOpenLoadDecision({
@@ -563,6 +583,94 @@ function CreateNewOrder() {
       });
     }
   };
+
+  const handleGetDetailPesanan = async (id) => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/${id}`,
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+
+      let newDate = await dayjs(
+        `${res.data.data.tglMulai.slice(0, 4)}-${res.data.data.tglMulai.slice(5, 7)}-${res.data.data.tglMulai.slice(
+          8,
+          10
+        )}T${('0' + adjustTime(res.data.data.tglMulai.slice(11, 13))).slice(-2)}:${res.data.data.tglMulai.slice(
+          14,
+          16
+        )}:00.000Z`
+      );
+
+      setFormOrder({
+        id: res.data.data.id,
+        dateOrder: dayjs(newDate),
+        serviceType: {
+          name: res.data.data.namaLayanan,
+          duration: res.data.data.jenisLayanan,
+        },
+        discount: res.data.data.diskon,
+        paymentMethod: res.data.data.mPembayaran,
+        customerInformation: null,
+        address: {
+          pickupAddress: res.data.data.alamatJemput,
+          deliveryAddress: res.data.data.alamatAntar,
+        },
+        status: res.data.data.status,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUpdateOrder = async () => {
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/${formOrder.id}`,
+        data: {
+          namaLayanan: formOrder.serviceType.name,
+          jenisLayanan: formOrder.serviceType.duration,
+          mPembayaran: formOrder.paymentMethod,
+          tglMulai: dayjs(
+            `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
+              formOrder.dateOrder.$H
+            }:${formOrder.dateOrder.$m}:00`
+          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+          alamatJemput: formOrder.address.pickupAddress,
+          alamatAntar: formOrder.address.deliveryAddress,
+          status: formOrder.status,
+          diskon: formOrder.discount,
+        },
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+      handleGetDetailPesanan(res.data.data.id);
+
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Pesanan Berhasil di Update!',
+          statusType: 'success',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
+    }
+  };
+
+  const [openDialog, setOpenDialog] = React.useState(false);
 
   return (
     <>
@@ -583,10 +691,15 @@ function CreateNewOrder() {
           <PageStructureAndDirectButton
             defaultMenu="Area Pelanggan"
             currentPage={{
-              title: 'Buat Pesanan Baru',
+              title: 'Form Pemesanan Laundry',
             }}
+            // params={id ? 'Edit Pesanan' : null}
           />
-          <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
+          <LoadDecisions
+            setOpenLoad={setOpenLoadDecision}
+            openLoad={openLoadDecision}
+            // redirect={id ? null : `/AreaPelanggan/FormulirPemesananLaundry/${formOrder.id}`}
+          />
 
           {/* Main Content */}
           <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
@@ -594,7 +707,11 @@ function CreateNewOrder() {
               onSubmit={(e) => {
                 e.preventDefault();
                 console.log('click');
-                handleCreateOrder();
+                if (formOrder.id) {
+                  handleUpdateOrder();
+                } else {
+                  handleCreateOrder();
+                }
               }}
             >
               <Box className="gap-16">
@@ -614,8 +731,11 @@ function CreateNewOrder() {
                   <LaundryShuttle state={formOrder} setState={setFormOrder} listAddress={listCustomerAddress} />
                 )}
 
+                {formOrder.id ? 'Item Barang' : null}
+
                 <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
-                  Buat pesanan
+                  {formOrder.id ? 'Update Pesanan' : 'Buat pesanan'}
+                  {/* {id ? 'Edit Pesanan' : 'Buat pesanan'} */}
                 </Button>
 
                 {formOrder.discount}
@@ -624,14 +744,27 @@ function CreateNewOrder() {
                 {formOrder.serviceType.name}
                 {formOrder.address.deliveryAddress}
                 {formOrder.address.pickupAddress}
+                {formOrder.status}
                 <br />
               </Box>
             </form>
           </Paper>
         </div>
       </Box>
+
+      <Dialog open={openDialog}>
+        <DialogTitle>
+          <h4>Lengkapi Profil</h4>
+        </DialogTitle>
+        <Box sx={{ my: 2, mx: 3 }}>Alamat tidak ditemukan! Tambah alamat untuk melakukan pemesanan</Box>
+        <DialogActions>
+          <Button onClick={() => navigate('/AreaPelanggan/EditProfil')} sx={{ fontWeight: 'bold' }}>
+            Tambah Alamat
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
 
-export default CreateNewOrder;
+export default FormOrderLaundry;
