@@ -488,7 +488,7 @@ function FinancialHistoryTable() {
     },
     {
       id: 'judul',
-      label: searching.label,
+      label: 'Judul',
     },
     {
       id: 'tanggal',
