@@ -23,8 +23,12 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SearchIcon from '@mui/icons-material/Search';
 import { getComparator, stableSort } from '../../utils/tableUtils';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditOffIcon from '@mui/icons-material/EditOff';
 
 function RowItem(props) {
+  const theme = useTheme();
   const [openTableCell, setOpenTableCell] = React.useState(false);
 
   return (
@@ -39,18 +43,68 @@ function RowItem(props) {
         <TableCell>{props.item.jenisLaundry}</TableCell>
         <TableCell>{props.item.kuantitas}</TableCell>
 
-        <TableCell>
-          {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.item.harga)}
-        </TableCell>
-        <TableCell>
-          {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.item.jumlah)}
-        </TableCell>
+        {!props.detailPrice ? null : (
+          <>
+            <TableCell>
+              {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.item.harga)}
+            </TableCell>
+            <TableCell>
+              {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.item.jumlah)}
+            </TableCell>
+          </>
+        )}
 
         {props.readOnly ? null : (
           <TableCell>
-            <IconButton size="small" onClick={() => props.deleteLaundryItem(props.item.id)}>
-              <MoreVertIcon color="primary" />
-            </IconButton>
+            <Box
+              sx={{
+                display: 'flex',
+                gap: '10px',
+                [theme.breakpoints.down('md')]: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                },
+              }}
+            >
+              <Button
+                variant="outlined"
+                className={`button-outlined-primary`}
+                onClick={() => {
+                  if (!props.stateValue.id) {
+                    props.handleState({
+                      id: props.item.id,
+                      itemName: props.item.namaBarang,
+                      quantity: props.item.kuantitas,
+                      pricePerUnit: props.item.harga,
+                      laundryType: props.item.jenisLaundry,
+                      notation: props.item.catatan,
+                      photo: { img: null, fileName: props.item.gambar },
+                    });
+                  } else {
+                    props.handleState({
+                      id: null,
+                      itemName: '',
+                      quantity: null,
+                      pricePerUnit: null,
+                      laundryType: null,
+                      notation: '',
+                      photo: { img: null, fileName: null },
+                    });
+                  }
+                }}
+              >
+                {props.stateValue.id === props.item.id ? <EditOffIcon /> : <EditIcon />}
+              </Button>
+              <Button
+                variant="outlined"
+                className={`button-outlined-danger`}
+                onClick={() => props.deleteLaundryItem(props.item.id)}
+                sx={{ width: '100%' }}
+              >
+                <DeleteForeverIcon />
+              </Button>
+            </Box>
           </TableCell>
         )}
       </TableRow>
@@ -62,13 +116,14 @@ function RowItem(props) {
             <Box sx={{ px: 2, py: 1 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  {props.item.catatan}
+                  <strong>Catatan : </strong>
+                  {props.item.catatan ? props.item.catatan : ' -'}
                 </Grid>
                 <Grid item xs={6}>
                   <strong>Foto Bukti : </strong>
                   {props.item.gambar ? (
                     <>
-                      <a href={props.item.gambar} target="_blank" rel="noreferrer">
+                      <a href={props.item.gambar} target="_blank" rel="noreferrer" style={{ wordWrap: 'break-word' }}>
                         {props.item.gambar}
                       </a>
                     </>
@@ -85,7 +140,16 @@ function RowItem(props) {
   );
 }
 
-function LaundryItemTable({ readOnly, listLaundryItem, discount, deleteLaundryItem }) {
+function LaundryItemTable({
+  detailPrice,
+  readOnly,
+  listLaundryItem,
+  discount,
+  deleteLaundryItem,
+  stateValue,
+  handleState,
+  cellColor,
+}) {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -139,16 +203,19 @@ function LaundryItemTable({ readOnly, listLaundryItem, discount, deleteLaundryIt
           <Table stickyHeader sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             {/* Table Header */}
             <TableHead>
-              <TableRow>
-                <TableCell colSpan={1} />
-                <TableCell align="center" colSpan={3} sx={{ fontWeight: 'bold' }}>
-                  Details
-                </TableCell>
-                <TableCell align="center" colSpan={2} sx={{ fontWeight: 'bold' }}>
-                  Price
-                </TableCell>
-                {readOnly ? null : <TableCell colSpan={1} />}
-              </TableRow>
+              {!detailPrice ? null : (
+                <TableRow>
+                  <TableCell colSpan={1} sx={{ backgroundColor: cellColor }} />
+                  <TableCell align="center" colSpan={3} sx={{ fontWeight: 'bold', backgroundColor: cellColor }}>
+                    Details
+                  </TableCell>
+                  <TableCell align="center" colSpan={2} sx={{ fontWeight: 'bold', backgroundColor: cellColor }}>
+                    Price
+                  </TableCell>
+                  {readOnly ? null : <TableCell colSpan={1} sx={{ backgroundColor: cellColor }} />}
+                </TableRow>
+              )}
+
               <TableRow>
                 {headCells
                   .filter((item) => (readOnly ? (item.id === 'action' ? false : true) : true))
@@ -156,7 +223,15 @@ function LaundryItemTable({ readOnly, listLaundryItem, discount, deleteLaundryIt
                     <TableCell
                       key={headCell.id}
                       sortDirection={orderBy === headCell.id ? order : false}
-                      // sx={{ paddingY: 1 }}
+                      sx={{
+                        width: headCell.id !== 'collapse' && headCell.id !== 'action' ? null : 0,
+                        backgroundColor: cellColor,
+                        display: !detailPrice
+                          ? headCell.id === 'harga' || headCell.id === 'jumlah'
+                            ? 'none'
+                            : null
+                          : null,
+                      }}
                     >
                       {headCell.id !== 'collapse' && headCell.id !== 'action' ? (
                         <TableSortLabel
@@ -178,28 +253,44 @@ function LaundryItemTable({ readOnly, listLaundryItem, discount, deleteLaundryIt
             {/* Table Content */}
             <TableBody>
               {stableSort(listLaundryItem, getComparator(order, orderBy)).map((item, index) => {
-                return <RowItem key={item.id} item={item} readOnly={readOnly} deleteLaundryItem={deleteLaundryItem} />;
+                return (
+                  <RowItem
+                    key={item.id}
+                    item={item}
+                    detailPrice={detailPrice}
+                    readOnly={readOnly}
+                    deleteLaundryItem={deleteLaundryItem}
+                    stateValue={stateValue}
+                    handleState={handleState}
+                  />
+                );
               })}
-              <TableRow>
-                <TableCell rowSpan={2} colSpan={4} sx={{ border: 'none' }} />
-                <TableCell align="left" colSpan={1}>
-                  Diskon
-                </TableCell>
-                <TableCell align="right" colSpan={1}>
-                  {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(discount)}
-                </TableCell>
-                {readOnly ? null : <TableCell rowSpan={2} colSpan={1} sx={{ border: 'none' }} />}
-              </TableRow>
-              <TableRow>
-                <TableCell align="left" colSpan={1}>
-                  Total
-                </TableCell>
-                <TableCell align="right" colSpan={1}>
-                  {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
-                    listLaundryItem.reduce((sum, cur) => sum + cur.jumlah, 0)
-                  )}
-                </TableCell>
-              </TableRow>
+              {!detailPrice ? null : (
+                <>
+                  <TableRow>
+                    <TableCell rowSpan={2} colSpan={4} sx={{ border: 'none', backgroundColor: cellColor }} />
+                    <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
+                      Diskon
+                    </TableCell>
+                    <TableCell align="right" colSpan={1} sx={{ backgroundColor: cellColor }}>
+                      {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(discount)}
+                    </TableCell>
+                    {readOnly ? null : (
+                      <TableCell rowSpan={2} colSpan={1} sx={{ border: 'none', backgroundColor: cellColor }} />
+                    )}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
+                      Total
+                    </TableCell>
+                    <TableCell align="right" colSpan={1} sx={{ backgroundColor: cellColor }}>
+                      {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
+                        listLaundryItem.reduce((sum, cur) => sum + cur.jumlah, 0)
+                      )}
+                    </TableCell>
+                  </TableRow>
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

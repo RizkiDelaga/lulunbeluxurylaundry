@@ -346,7 +346,7 @@ function RowItem(props) {
               <strong>Foto Bukti : </strong>
               {props.item.gambar ? (
                 <>
-                  <a href={props.item.gambar} target="_blank" rel="noreferrer">
+                  <a href={props.item.gambar} target="_blank" rel="noreferrer" style={{ wordWrap: 'break-word' }}>
                     {props.item.gambar}
                   </a>
                 </>
@@ -641,7 +641,7 @@ function FinancialHistoryTable() {
                 <TableCell
                   key={headCell.id}
                   sortDirection={orderBy === headCell.id ? order : false}
-                  // sx={{ paddingY: 1 }}
+                  sx={{ width: headCell.id !== 'collapse' && headCell.id !== 'action' ? null : 0 }}
                 >
                   {headCell.id !== 'collapse' && headCell.id !== 'action' ? (
                     <TableSortLabel

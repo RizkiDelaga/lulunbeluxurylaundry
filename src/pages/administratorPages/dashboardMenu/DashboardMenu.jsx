@@ -16,7 +16,6 @@ import {
   useTheme,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import InformationCard from '../../../components/Card/InformationCard/InformationCard';
 import AreaChart from '../../../components/Graph/AreaChart';
 
 import Table from '@mui/material/Table';
@@ -39,6 +38,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import dayjs from 'dayjs';
 import { getProfileAccountAdmin } from '../../../redux/actions/getProfileAccount';
 import { getComparator, stableSort } from '../../../utils/tableUtils';
+import InformationCard from '../../../components/Card/InformationCard';
 
 function RowItem(props) {
   const navigate = useNavigate();
@@ -368,7 +368,7 @@ function AdminTable() {
                 <TableCell
                   key={headCell.id}
                   sortDirection={orderBy === headCell.id ? order : false}
-                  // sx={{ paddingY: 1 }}
+                  sx={{ width: headCell.id !== 'collapse' && headCell.id !== 'action' ? null : 0 }}
                 >
                   {headCell.id !== 'action' ? (
                     <TableSortLabel

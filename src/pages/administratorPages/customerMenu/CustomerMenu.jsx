@@ -365,7 +365,7 @@ function CustomerTable() {
                 <TableCell
                   key={headCell.id}
                   sortDirection={orderBy === headCell.id ? order : false}
-                  // sx={{ paddingY: 1 }}
+                  sx={{ width: headCell.id !== 'collapse' && headCell.id !== 'action' ? null : 0 }}
                 >
                   {headCell.id !== 'action' ? (
                     <TableSortLabel
