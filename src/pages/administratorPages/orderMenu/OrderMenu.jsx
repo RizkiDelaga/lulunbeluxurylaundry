@@ -15,7 +15,7 @@ import {
   TextField,
   useTheme,
 } from '@mui/material';
-import InformationCard from '../../../components/Card/InformationCard/InformationCard';
+// import InformationCard from '../../../components/Card/InformationCard/InformationCard';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -39,6 +39,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { getComparator, stableSort } from '../../../utils/tableUtils';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
+import InformationCard from '../../../components/Card/InformationCard';
 
 function RowItem(props) {
   const navigate = useNavigate();
@@ -509,7 +510,7 @@ function OrderTable() {
                 <TableCell
                   key={headCell.id}
                   sortDirection={orderBy === headCell.id ? order : false}
-                  // sx={{ paddingY: 1 }}
+                  sx={{ width: headCell.id !== 'collapse' && headCell.id !== 'action' ? null : 0 }}
                 >
                   {headCell.id !== 'collapse' && headCell.id !== 'action' ? (
                     <TableSortLabel

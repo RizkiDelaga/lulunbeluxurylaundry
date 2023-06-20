@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import EditIcon from '@mui/icons-material/Edit';
 
-import InformationCard from '../../../components/Card/InformationCard/InformationCard';
+import InformationCard from '../../../components/Card/InformationCard';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -391,7 +391,7 @@ function OrderTable({ orderStatusType }) {
                 <TableCell
                   key={headCell.id}
                   sortDirection={orderBy === headCell.id ? order : false}
-                  // sx={{ paddingY: 1 }}
+                  sx={{ width: headCell.id !== 'collapse' && headCell.id !== 'action' ? null : 0 }}
                 >
                   {headCell.id !== 'collapse' && headCell.id !== 'action' ? (
                     <TableSortLabel

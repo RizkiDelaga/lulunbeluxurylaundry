@@ -1,7 +1,7 @@
 import { Box, Button, Grid, useTheme } from '@mui/material';
 import React from 'react';
 import style from './AddressCard.module.css';
-import { banyumasAreaList } from '../../../utils/banyumasAreaList';
+import { banyumasAreaList } from '../../utils/banyumasAreaList';
 import StarIcon from '@mui/icons-material/Star';
 
 function AddressCard({ designType, data, setUpdateAddress, setUrbanVillage, handleDeleteAddress }) {

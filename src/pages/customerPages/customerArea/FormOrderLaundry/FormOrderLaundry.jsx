@@ -33,6 +33,7 @@ import StarIcon from '@mui/icons-material/Star';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import { adjustTime } from '../../../../utils/timeUtils';
 import LaundryItemTable from '../../../../components/Table/LaundryItemTable';
+import DetailCustomerCard from '../../../../components/Card/DetailCustomerCard';
 
 const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMethod }) => {
   const theme = useTheme();
@@ -44,44 +45,12 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
         <div className={`dash-card`}>
           <div style={{ fontWeight: 'bold', marginBottom: '16px' }}>Informasi Pelanggan</div>
 
-          <Box sx={{ borderRadius: '4px', backgroundColor: '#eeeeee', p: 2, width: '100%' }}>
-            <Grid container spacing={1}>
-              <Grid item xs={12} sm={'auto'} sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Avatar
-                  alt=""
-                  src={profileCustomer.profilePic}
-                  sx={{ width: '120px', height: '120px', borderRadius: 1 }}
-                />
-              </Grid>
-              <Grid item xs={12} sm>
-                <Box
-                  component={'h4'}
-                  sx={{
-                    [theme.breakpoints.down('sm')]: {
-                      textAlign: 'center',
-                    },
-                  }}
-                >
-                  {profileCustomer.nama}
-                </Box>
-                <div>
-                  <strong>Tanggal Lahir :</strong> 05/02/1999
-                </div>
-                <div>
-                  <strong>Kontak :</strong> {profileCustomer.noTelp}
-                  {profileCustomer.email ? ` || ${profileCustomer.email}` : null}
-                </div>
-                <div>
-                  <strong>Alamat Utama :</strong> {profileCustomer.alamatUser}
-                </div>
-              </Grid>
-            </Grid>
-          </Box>
+          <DetailCustomerCard dataUser={profileCustomer} />
 
-          <br />
+          {/* <br />
           <Button variant="outlined" className={`button-outlined-primary`} style={{ width: '100%' }}>
             Cari Pelanggan
-          </Button>
+          </Button> */}
         </div>
       </Grid>
 
@@ -477,6 +446,245 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
   );
 };
 
+const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaundryItem, handleUpdateLaundryItem }) => {
+  const theme = useTheme();
+
+  return (
+    <>
+      <h4>Input Barang</h4>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log('click');
+          if (stateValue.id) {
+            handleUpdateLaundryItem();
+          } else {
+            handleCreateLaundryItem();
+          }
+        }}
+      >
+        <Box className="gap-16">
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={2} lg={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
+              <span>Detail Barang</span>
+            </Grid>
+
+            <Grid
+              item
+              xs
+              lg
+              sx={{
+                display: 'flex',
+                [theme.breakpoints.down('md')]: {
+                  paddingTop: '8px !important',
+                },
+              }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm md lg>
+                  <TextField
+                    required
+                    type="text"
+                    label="Nama Barang"
+                    value={stateValue.itemName}
+                    onChange={(e) => {
+                      handleState({ ...stateValue, itemName: e.target.value });
+                    }}
+                    autoComplete="off"
+                    sx={{ width: '100%' }}
+                  />
+                </Grid>
+                <Grid item xs={5} sm={3} md={2} lg={1.2}>
+                  <TextField
+                    required
+                    type="number"
+                    label="Kuantitas"
+                    value={stateValue.quantity !== null ? stateValue.quantity : ''}
+                    onChange={(e) => {
+                      handleState({ ...stateValue, quantity: e.target.value });
+                    }}
+                    autoComplete="off"
+                    onWheel={(e) => e.target.blur()}
+                    sx={{ width: '100%' }}
+                  />
+                </Grid>
+                {/* <Grid item xs sm={12} md={3} lg={2}>
+                  <TextField
+                    required
+                    type="number"
+                    label="Harga Per Unit"
+                    value={stateValue.pricePerUnit}
+                    onChange={(e) => {
+                      handleState({ ...stateValue, pricePerUnit: e.target.value });
+                    }}
+                    autoComplete="off"
+                    onWheel={(e) => e.target.blur()}
+                    sx={{ width: '100%' }}
+                  />
+                </Grid> */}
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={2} lg={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
+              <span>Jenis Laundry</span>
+            </Grid>
+
+            <Grid
+              item
+              xs
+              lg
+              sx={{
+                display: 'flex',
+                [theme.breakpoints.down('md')]: {
+                  paddingTop: '8px !important',
+                },
+              }}
+            >
+              <FormControl fullWidth>
+                <InputLabel id="select-laundry-type-label">Jenis Laundry *</InputLabel>
+                <Select
+                  required
+                  labelId="select-laundry-type-label"
+                  id="select-laundry-type"
+                  value={stateValue.laundryType}
+                  label="Jenis Laundry"
+                  onChange={(e) => {
+                    handleState({
+                      ...stateValue,
+                      laundryType: e.target.value,
+                    });
+                  }}
+                >
+                  {listLaundryType.map((itemLaundryType) => {
+                    return (
+                      <MenuItem value={itemLaundryType.nama} sx={{ py: '16px', whiteSpace: 'normal' }}>
+                        {itemLaundryType.nama}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+
+              {stateValue.laundryType}
+            </Grid>
+          </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={2} lg={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
+              <span>Catatan</span>
+            </Grid>
+
+            <Grid
+              item
+              xs
+              lg
+              sx={{
+                display: 'flex',
+                [theme.breakpoints.down('md')]: {
+                  paddingTop: '8px !important',
+                },
+              }}
+            >
+              <TextField
+                label="Catatan"
+                multiline
+                maxRows={4}
+                value={stateValue.notation}
+                onChange={(e) => {
+                  handleState({ ...stateValue, notation: e.target.value });
+                }}
+                autoComplete="off"
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={2} lg={1.5} sx={{ display: 'flex', alignItems: '' }}>
+              <span>Foto Barang</span>
+            </Grid>
+
+            <Grid
+              item
+              xs
+              lg
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                [theme.breakpoints.down('md')]: {
+                  paddingTop: '8px !important',
+                },
+              }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs="auto">
+                  <Button
+                    variant="contained"
+                    size="small"
+                    component="label"
+                    startIcon={<InsertPhotoIcon />}
+                    sx={{ height: 'fit-content' }}
+                  >
+                    Pilih Foto
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        console.log(e.target.files);
+                        handleState({
+                          ...stateValue,
+                          photo: {
+                            img: e.target.files[0],
+                            fileName: !e.target.files[0] ? null : e.target.files[0].name,
+                          },
+                        });
+                      }}
+                      hidden
+                    />
+                  </Button>
+                </Grid>
+                <Grid item xs="auto">
+                  {stateValue.photo.img ? (
+                    <img
+                      id="output"
+                      src={stateValue.photo.img ? URL.createObjectURL(stateValue.photo.img) : ''}
+                      width={70}
+                      alt="Preview"
+                    />
+                  ) : null}
+                </Grid>
+                <Grid item xs>
+                  {stateValue.photo.fileName ? (
+                    <Chip
+                      label={stateValue.photo.fileName}
+                      onDelete={() => handleState({ ...stateValue, photo: { img: null, fileName: null } })}
+                      sx={{ maxWidth: '250px' }}
+                    />
+                  ) : null}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <Button variant="outlined" type="submit" className={`button-outlined-primary`}>
+              {stateValue.id ? 'Edit Barang' : 'Tambah Barang'}
+            </Button>
+          </div>
+        </Box>
+      </form>
+
+      {/* {stateValue.itemName}
+      <br />
+      {stateValue.quantity}
+      <br />
+      {stateValue.pricePerUnit}
+      <br />
+      {stateValue.notation}
+      <br /> */}
+    </>
+  );
+};
+
 function FormOrderLaundry() {
   const theme = useTheme();
   let { id } = useParams();
@@ -497,8 +705,18 @@ function FormOrderLaundry() {
     },
     status: '',
   });
+  const [formItem, setFormItem] = React.useState({
+    id: null,
+    itemName: '',
+    quantity: null,
+    pricePerUnit: null,
+    laundryType: '',
+    notation: '',
+    photo: { img: null, fileName: null },
+  });
   const [listCustomerAddress, setListCustomerAddress] = React.useState([]);
   const [listServiceType, setListServiceType] = React.useState([]);
+  const [listLaundryType, setListLaundryType] = React.useState([]);
   const [listPaymentMethod, setListPaymentMethod] = React.useState([]);
   const [listLaundryItem, setListLaundryItem] = React.useState([]);
 
@@ -516,6 +734,7 @@ function FormOrderLaundry() {
     if (id || formOrder.id) {
       handleGetDetailPesanan(id);
       handleGetLaundryItem();
+      handleGetLaundryType();
     }
   }, []);
 
@@ -542,6 +761,20 @@ function FormOrderLaundry() {
       console.log('Response GET Data Service Type');
       console.log(res);
       setListPaymentMethod(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetLaundryType = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: `${process.env.REACT_APP_API_KEY}/jenislaundry`,
+      });
+      console.log('Response GET Data Laundry Type');
+      console.log(res);
+      setListLaundryType(res.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -594,6 +827,8 @@ function FormOrderLaundry() {
       console.log(res);
       setFormOrder({ ...formOrder, id: res.data.data.id });
       handleGetDetailPesanan(res.data.data.id);
+      handleGetLaundryItem();
+      handleGetLaundryType();
 
       if (res.status === 201) {
         setOpenLoadDecision({
@@ -613,11 +848,11 @@ function FormOrderLaundry() {
     }
   };
 
-  const handleGetDetailPesanan = async () => {
+  const handleGetDetailPesanan = async (orderId) => {
     try {
       const res = await axios({
         method: 'GET',
-        url: `${process.env.REACT_APP_API_KEY}/pemesanan/${id || formOrder.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/${orderId || id || formOrder.id}`,
       });
       console.log('Response GET Data Service Type');
       console.log(res);
@@ -722,6 +957,106 @@ function FormOrderLaundry() {
     }
   };
 
+  // Handle API POST Laundry Item
+  const handleCreateLaundryItem = async () => {
+    const formData = new FormData();
+    formData.append('pemesananId', formOrder.id || id);
+    formData.append('namaBarang', formItem.itemName);
+    formData.append('jenisLaundry', formItem.laundryType);
+    formData.append('kuantitas', formItem.quantity);
+    formData.append('harga', formItem.pricePerUnit || 0);
+    formData.append('catatan', formItem.notation);
+    formData.append('gambar', formItem.photo.img || null);
+
+    try {
+      const res = await axios({
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/barang/user`,
+        data: formData,
+      });
+
+      console.log('Response GET Data');
+      console.log(res);
+      handleGetLaundryItem();
+      setFormItem({
+        id: null,
+        itemName: '',
+        quantity: null,
+        pricePerUnit: null,
+        laundryType: null,
+        notation: '',
+        photo: { img: null, fileName: null },
+      });
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Item Berhasil di Tambah!',
+          statusType: 'success',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
+    }
+  };
+
+  // Handle API PUT Laundry Item
+  const handleUpdateLaundryItem = async () => {
+    const formData = new FormData();
+    formData.append('pemesananId', formOrder.id || id);
+    formData.append('namaBarang', formItem.itemName);
+    formData.append('jenisLaundry', formItem.laundryType);
+    formData.append('kuantitas', formItem.quantity);
+    formData.append('harga', formItem.pricePerUnit || 0);
+    formData.append('catatan', formItem.notation);
+    formData.append('gambar', formItem.photo.img || null);
+
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/barang/user/${formItem.id}`,
+        data: formData,
+      });
+
+      console.log('Response GET Data');
+      console.log(res);
+      handleGetLaundryItem();
+      setFormItem({
+        id: null,
+        itemName: '',
+        quantity: null,
+        pricePerUnit: null,
+        laundryType: null,
+        notation: '',
+        photo: { img: null, fileName: null },
+      });
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Item Berhasil di Edit!',
+          statusType: 'success',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
+    }
+  };
+
   // Handle API Delete Laundry Item
   const handleDeleteLaundryItem = async (itemId) => {
     try {
@@ -790,7 +1125,7 @@ function FormOrderLaundry() {
               onSubmit={(e) => {
                 e.preventDefault();
                 console.log('click');
-                if (formOrder.id) {
+                if (formOrder.id || id) {
                   handleUpdateOrder();
                 } else {
                   handleCreateOrder();
@@ -818,27 +1153,40 @@ function FormOrderLaundry() {
                   {formOrder.id ? 'Update Pesanan' : 'Buat pesanan'}
                   {/* {id ? 'Edit Pesanan' : 'Buat pesanan'} */}
                 </Button>
-
-                {/* {formOrder.discount}
-                {formOrder.customerInformation}
-                {formOrder.paymentMethod}
-                {formOrder.serviceType.name}
-                {formOrder.address.deliveryAddress}
-                {formOrder.address.pickupAddress}
-                {formOrder.status} */}
               </Box>
             </form>
           </Paper>
         </div>
         {formOrder.id || id ? (
           <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-            {listLaundryItem.length !== 0 ? (
-              <LaundryItemTable
-                listLaundryItem={listLaundryItem}
-                discount={formOrder.discount}
-                deleteLaundryItem={handleDeleteLaundryItem}
+            <div className={`dash-card gap-16`} style={{ justifyContent: 'center' }}>
+              <InputItem
+                stateValue={formItem}
+                handleState={setFormItem}
+                listLaundryType={listLaundryType}
+                handleCreateLaundryItem={handleCreateLaundryItem}
+                handleUpdateLaundryItem={handleUpdateLaundryItem}
               />
-            ) : null}
+
+              {listLaundryItem.length !== 0 ? (
+                <>
+                  <div style={{ padding: '16px 0' }}>
+                    <h5 style={{ textAlign: 'center' }}>Daftar Barang</h5>
+                  </div>
+                  <Box sx={{ backgroundColor: '#eeeeee', width: '100%' }}>
+                    <LaundryItemTable
+                      detailPrice={true}
+                      listLaundryItem={listLaundryItem}
+                      discount={formOrder.discount}
+                      deleteLaundryItem={handleDeleteLaundryItem}
+                      stateValue={formItem}
+                      handleState={setFormItem}
+                      cellColor={'#eeeeee'}
+                    />
+                  </Box>
+                </>
+              ) : null}
+            </div>
           </Paper>
         ) : null}
       </Box>

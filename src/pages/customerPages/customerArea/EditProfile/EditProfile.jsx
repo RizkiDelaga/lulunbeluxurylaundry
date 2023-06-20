@@ -21,7 +21,7 @@ import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { banyumasAreaList } from '../../../../utils/banyumasAreaList';
-import AddressCard from '../../../../components/Card/InformationCard/AddressCard';
+import AddressCard from '../../../../components/Card/AddressCard';
 import axios from 'axios';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 

@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import { Avatar, Box, Button, Grid, Paper, useTheme } from '@mui/material';
-import AddressCard from '../../../../components/Card/InformationCard/AddressCard';
+import AddressCard from '../../../../components/Card/AddressCard';
 import axios from 'axios';
 import RatingComponent from '../../../../components/Ratings/RatingComponent';
 import LaundryItemTable from '../../../../components/Table/LaundryItemTable';
+import DetailCustomerCard from '../../../../components/Card/DetailCustomerCard';
 
 function OrderDetails() {
   const theme = useTheme();
@@ -127,46 +128,7 @@ function OrderDetails() {
                   <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Informasi Pelanggan</h4>
                 </div>
 
-                {!detailOrder ? null : (
-                  <Box sx={{ borderRadius: '4px', backgroundColor: '#eeeeee', p: 2, width: '100%' }}>
-                    <Grid container spacing={1}>
-                      <Grid
-                        item
-                        xs={12}
-                        sm={'auto'}
-                        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                      >
-                        <Avatar
-                          alt=""
-                          src={detailOrder.User.profilePic}
-                          sx={{ width: '120px', height: '120px', borderRadius: 1 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm>
-                        <Box
-                          component={'h4'}
-                          sx={{
-                            [theme.breakpoints.down('sm')]: {
-                              textAlign: 'center',
-                            },
-                          }}
-                        >
-                          {detailOrder.User.nama}
-                        </Box>
-                        <div>
-                          <strong>Tanggal Lahir :</strong> 05/02/1999
-                        </div>
-                        <div>
-                          <strong>Kontak :</strong> {detailOrder.User.noTelp}
-                          {detailOrder.User.email ? ` || ${detailOrder.User.email}` : null}
-                        </div>
-                        <div>
-                          <strong>Alamat Utama :</strong> {detailOrder.User.alamatUser}
-                        </div>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                )}
+                {!detailOrder ? null : <DetailCustomerCard dataUser={detailOrder.User} />}
 
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
