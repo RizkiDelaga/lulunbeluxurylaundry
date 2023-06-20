@@ -64,7 +64,9 @@ function RegisterNewCustomer() {
   const handleCreateNewCustomer = async () => {
     const formData = new FormData();
     formData.append('nama', formRegisterNewCustomer.customerName);
-    formData.append('email', formRegisterNewCustomer.contact.email);
+    if (!formRegisterNewCustomer.contact.email) {
+      formData.append('email', formRegisterNewCustomer.contact.email);
+    }
     formData.append('noTelp', formRegisterNewCustomer.contact.phoneNumber);
     if (typeof formRegisterNewCustomer.birthDate !== 'function') {
       formData.append('tglLahir', formRegisterNewCustomer.birthDate);

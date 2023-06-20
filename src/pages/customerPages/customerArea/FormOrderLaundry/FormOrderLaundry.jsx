@@ -187,17 +187,18 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                   required
                   labelId="select-service-type-label"
                   id="select-service-type"
-                  // value={state.serviceType.name}
+                  value={state.serviceType.name}
                   label="Jenis Layanan"
                   onChange={(e) => {
+                    const indexValue = listServiceType.findIndex((x) => x.layanan === e.target.value);
                     setState({
                       ...state,
                       serviceType: {
-                        name: listServiceType[e.target.value].layanan,
+                        name: listServiceType[indexValue].layanan,
                         duration: [
-                          listServiceType[e.target.value].hari,
-                          listServiceType[e.target.value].jam,
-                          listServiceType[e.target.value].menit,
+                          listServiceType[indexValue].hari,
+                          listServiceType[indexValue].jam,
+                          listServiceType[indexValue].menit,
                         ],
                       },
                     });
@@ -213,7 +214,7 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                 >
                   {listServiceType.map((item, index) => {
                     return (
-                      <MenuItem value={index} sx={{ py: '16px' }}>
+                      <MenuItem value={item.layanan} sx={{ py: '16px' }}>
                         {item.layanan} (
                         {(item.hari ? item.hari + ' Hari' : '') +
                           (item.hari && item.jam ? ' ' : '') +
@@ -308,6 +309,14 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
 const LaundryShuttle = ({ state, setState, listAddress }) => {
   const theme = useTheme();
   const [isUseProgram, setIsUseProgram] = React.useState(true);
+  const parsePickupAddress = state.address.pickupAddress ? JSON.parse(state.address.pickupAddress) : null;
+  const parseDeliveryAddress = state.address.deliveryAddress ? JSON.parse(state.address.deliveryAddress) : null;
+  const [activePickupAddress, setActivePickupAddress] = React.useState(
+    parsePickupAddress ? parsePickupAddress.id : null
+  );
+  const [activeDeliveryAddress, setActiveDeliveryAddress] = React.useState(
+    parseDeliveryAddress ? parseDeliveryAddress.id : null
+  );
 
   return (
     <div className={`dash-card gap-16`} style={{ width: '100%' }}>
@@ -338,12 +347,17 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
                 required
                 labelId="select-pickup-address-label"
                 id="select-pickup-address"
-                // value={state.address.pickupAddress}
+                value={activePickupAddress}
                 label="Alamat Pengantaran"
                 onChange={(e) => {
+                  // const getIndexValue = listAddress.findIndex((x) => x.id === e.target.value);
+                  setActivePickupAddress(e.target.value);
                   setState({
                     ...state,
-                    address: { ...state.address, pickupAddress: JSON.stringify(listAddress[e.target.value]) },
+                    address: {
+                      ...state.address,
+                      pickupAddress: JSON.stringify(listAddress[listAddress.findIndex((x) => x.id === e.target.value)]),
+                    },
                   });
                 }}
                 MenuProps={{
@@ -357,7 +371,7 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
               >
                 {listAddress.map((item, index) => {
                   return (
-                    <MenuItem value={index} sx={{ py: '16px' }}>
+                    <MenuItem value={item.id} sx={{ py: '16px' }}>
                       <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
                         <img src={item.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
                         <div>
@@ -397,12 +411,18 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
               <Select
                 labelId="select-delivery-address-label"
                 id="select-delivery-address"
-                // value={state.address.deliveryAddress}
+                value={activeDeliveryAddress}
                 label="Alamat Pengantaran"
                 onChange={(e) => {
+                  setActiveDeliveryAddress(e.target.value);
                   setState({
                     ...state,
-                    address: { ...state.address, deliveryAddress: JSON.stringify(listAddress[e.target.value]) },
+                    address: {
+                      ...state.address,
+                      deliveryAddress: JSON.stringify(
+                        listAddress[listAddress.findIndex((x) => x.id === e.target.value)]
+                      ),
+                    },
                   });
                 }}
                 MenuProps={{
@@ -414,9 +434,12 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
                   },
                 }}
               >
+                <MenuItem value="" sx={{ py: '16px' }}>
+                  Tanpa di Antar (Ambil langsung di outlet)
+                </MenuItem>
                 {listAddress.map((item, index) => {
                   return (
-                    <MenuItem value={index} sx={{ py: '16px' }}>
+                    <MenuItem value={item.id} sx={{ py: '16px' }}>
                       <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
                         <img src={item.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
                         <div>
@@ -477,6 +500,8 @@ function FormOrderLaundry() {
   const [listCustomerAddress, setListCustomerAddress] = React.useState([]);
   const [listServiceType, setListServiceType] = React.useState([]);
   const [listPaymentMethod, setListPaymentMethod] = React.useState([]);
+  const [listLaundryItem, setListLaundryItem] = React.useState([]);
+
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
     message: '',
@@ -488,7 +513,10 @@ function FormOrderLaundry() {
     handleGetServiceType();
     handleGetPaymentMethod();
     handleGetCustomerAddress();
-    handleGetDetailPesanan(id);
+    if (id || formOrder.id) {
+      handleGetDetailPesanan(id);
+      handleGetLaundryItem();
+    }
   }, []);
 
   const handleGetServiceType = async () => {
@@ -585,11 +613,11 @@ function FormOrderLaundry() {
     }
   };
 
-  const handleGetDetailPesanan = async (id) => {
+  const handleGetDetailPesanan = async () => {
     try {
       const res = await axios({
         method: 'GET',
-        url: `${process.env.REACT_APP_API_KEY}/pemesanan/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/${id || formOrder.id}`,
       });
       console.log('Response GET Data Service Type');
       console.log(res);
@@ -604,6 +632,7 @@ function FormOrderLaundry() {
         )}:00.000Z`
       );
 
+      console.log('apakah keluar?', res.data.data.alamatJemput);
       setFormOrder({
         id: res.data.data.id,
         dateOrder: dayjs(newDate),
@@ -671,6 +700,59 @@ function FormOrderLaundry() {
     }
   };
 
+  // Handle API Get All Laundry Item
+  const handleGetLaundryItem = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/barang/user/${formOrder.id || id}`,
+      });
+
+      console.log('Response GET Data');
+      console.log(res);
+      setListLaundryItem(res.data.data);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setListLaundryItem([]);
+      }
+      console.log(error);
+    }
+  };
+
+  // Handle API Delete Laundry Item
+  const handleDeleteLaundryItem = async (itemId) => {
+    try {
+      const res = await axios({
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/barang/user/${itemId}`,
+      });
+
+      console.log('Response GET Data');
+      console.log(res);
+      handleGetLaundryItem();
+      if (res.status === 200) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Item Berhasil di Hapus!',
+          statusType: 'success',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
+    }
+  };
+
   const [openDialog, setOpenDialog] = React.useState(false);
 
   return (
@@ -688,7 +770,7 @@ function FormOrderLaundry() {
           },
         }}
       >
-        <div className="gap-24" style={{ marginBottom: '24px' }}>
+        <div className="gap-24">
           <PageStructureAndDirectButton
             defaultMenu="Area Pelanggan"
             currentPage={{
@@ -728,9 +810,9 @@ function FormOrderLaundry() {
                     listPaymentMethod={listPaymentMethod}
                   />
                 )}
-                {!listCustomerAddress ? null : (
+                {listCustomerAddress.length !== 0 ? (
                   <LaundryShuttle state={formOrder} setState={setFormOrder} listAddress={listCustomerAddress} />
-                )}
+                ) : null}
 
                 <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                   {formOrder.id ? 'Update Pesanan' : 'Buat pesanan'}
@@ -744,14 +826,22 @@ function FormOrderLaundry() {
                 {formOrder.address.deliveryAddress}
                 {formOrder.address.pickupAddress}
                 {formOrder.status} */}
-                <br />
               </Box>
             </form>
           </Paper>
         </div>
+        {formOrder.id || id ? (
+          <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
+            {listLaundryItem.length !== 0 ? (
+              <LaundryItemTable
+                listLaundryItem={listLaundryItem}
+                discount={formOrder.discount}
+                deleteLaundryItem={handleDeleteLaundryItem}
+              />
+            ) : null}
+          </Paper>
+        ) : null}
       </Box>
-
-      {formOrder.id ? <LaundryItemTable orderId={id} /> : null}
 
       <Dialog open={openDialog}>
         <DialogTitle>

@@ -440,7 +440,7 @@ function OrderTable({ filterBy }) {
                 <TableCell
                   key={headCell.id}
                   sortDirection={orderBy === headCell.id ? order : false}
-                  sx={{ paddingY: 1 }}
+                  // sx={{ paddingY: 1 }}
                 >
                   {headCell.id !== 'collapse' && headCell.id !== 'action' ? (
                     <TableSortLabel

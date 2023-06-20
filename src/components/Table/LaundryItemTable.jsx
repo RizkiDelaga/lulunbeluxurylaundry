@@ -46,16 +46,18 @@ function RowItem(props) {
           {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.item.jumlah)}
         </TableCell>
 
-        <TableCell>
-          <IconButton size="small">
-            <MoreVertIcon color="primary" />
-          </IconButton>
-        </TableCell>
+        {props.readOnly ? null : (
+          <TableCell>
+            <IconButton size="small" onClick={() => props.deleteLaundryItem(props.item.id)}>
+              <MoreVertIcon color="primary" />
+            </IconButton>
+          </TableCell>
+        )}
       </TableRow>
 
       {/* Collapse Table */}
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={props.readOnly ? 6 : 7}>
           <Collapse in={openTableCell} timeout="auto" unmountOnExit>
             <Box sx={{ px: 2, py: 1 }}>
               <Grid container spacing={2}>
@@ -83,7 +85,7 @@ function RowItem(props) {
   );
 }
 
-function LaundryItemTable({ orderId }) {
+function LaundryItemTable({ readOnly, listLaundryItem, discount, deleteLaundryItem }) {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -95,32 +97,8 @@ function LaundryItemTable({ orderId }) {
   };
 
   React.useEffect(() => {
-    handleGetLaundryItem();
+    // handleGetLaundryItem();
   }, []);
-
-  const [listLaundryItem, setListLaundryItem] = React.useState([]);
-
-  // Handle API Get All Data Finance
-  const handleGetLaundryItem = async () => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        },
-        url: `${process.env.REACT_APP_API_KEY}/barang/user/${orderId}`,
-      });
-
-      console.log('Response GET Data Finance');
-      console.log(res);
-      setListLaundryItem(res.data.data);
-    } catch (error) {
-      if (error.response.status === 404) {
-        setListLaundryItem([]);
-      }
-      console.log(error);
-    }
-  };
 
   const headCells = [
     {
@@ -162,53 +140,70 @@ function LaundryItemTable({ orderId }) {
             {/* Table Header */}
             <TableHead>
               <TableRow>
-                {headCells.map((headCell) => (
-                  <TableCell
-                    key={headCell.id}
-                    sortDirection={orderBy === headCell.id ? order : false}
-                    sx={{ paddingY: 1 }}
-                  >
-                    {headCell.id !== 'collapse' && headCell.id !== 'action' ? (
-                      <TableSortLabel
-                        active={orderBy === headCell.id}
-                        direction={orderBy === headCell.id ? order : 'asc'}
-                        onClick={(event) => {
-                          handleRequestSort(event, headCell.id);
-                        }}
-                        style={{ fontWeight: 'bold' }}
-                      >
-                        {headCell.label}
-                      </TableSortLabel>
-                    ) : null}
-                  </TableCell>
-                ))}
+                <TableCell colSpan={1} />
+                <TableCell align="center" colSpan={3} sx={{ fontWeight: 'bold' }}>
+                  Details
+                </TableCell>
+                <TableCell align="center" colSpan={2} sx={{ fontWeight: 'bold' }}>
+                  Price
+                </TableCell>
+                {readOnly ? null : <TableCell colSpan={1} />}
+              </TableRow>
+              <TableRow>
+                {headCells
+                  .filter((item) => (readOnly ? (item.id === 'action' ? false : true) : true))
+                  .map((headCell) => (
+                    <TableCell
+                      key={headCell.id}
+                      sortDirection={orderBy === headCell.id ? order : false}
+                      // sx={{ paddingY: 1 }}
+                    >
+                      {headCell.id !== 'collapse' && headCell.id !== 'action' ? (
+                        <TableSortLabel
+                          active={orderBy === headCell.id}
+                          direction={orderBy === headCell.id ? order : 'asc'}
+                          onClick={(event) => {
+                            handleRequestSort(event, headCell.id);
+                          }}
+                          style={{ fontWeight: 'bold' }}
+                        >
+                          {headCell.label}
+                        </TableSortLabel>
+                      ) : null}
+                    </TableCell>
+                  ))}
               </TableRow>
             </TableHead>
 
             {/* Table Content */}
             <TableBody>
               {stableSort(listLaundryItem, getComparator(order, orderBy)).map((item, index) => {
-                return <RowItem key={item.id} item={item} />;
+                return <RowItem key={item.id} item={item} readOnly={readOnly} deleteLaundryItem={deleteLaundryItem} />;
               })}
+              <TableRow>
+                <TableCell rowSpan={2} colSpan={4} sx={{ border: 'none' }} />
+                <TableCell align="left" colSpan={1}>
+                  Diskon
+                </TableCell>
+                <TableCell align="right" colSpan={1}>
+                  {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(discount)}
+                </TableCell>
+                {readOnly ? null : <TableCell rowSpan={2} colSpan={1} sx={{ border: 'none' }} />}
+              </TableRow>
+              <TableRow>
+                <TableCell align="left" colSpan={1}>
+                  Total
+                </TableCell>
+                <TableCell align="right" colSpan={1}>
+                  {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
+                    listLaundryItem.reduce((sum, cur) => sum + cur.jumlah, 0)
+                  )}
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
       )}
-
-      {/* 404 Data Not Found Handling */}
-      {/* <Box
-        sx={{
-          mt: 2,
-          py: 1,
-          px: 2,
-          borderRadius: 2,
-          backgroundColor: '#eeeeee',
-          textAlign: 'center',
-          display: listLaundryItem.length ? 'none' : null,
-        }}
-      >
-        <h5>Belum ada Item!</h5>
-      </Box> */}
     </>
   );
 }
