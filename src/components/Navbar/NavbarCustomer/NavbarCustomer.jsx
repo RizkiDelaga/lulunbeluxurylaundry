@@ -474,7 +474,7 @@ function NavbarCustomer(props) {
                   if (!profileAccount.alamatUser) {
                     alert('Harap input alamat terlebih dahulu!');
                   } else {
-                    navigate('/AreaPelanggan/BuatPesananBaru');
+                    navigate('/AreaPelanggan/FormulirPemesananLaundry');
                   }
                 } else {
                   navigate('/Login');

@@ -5,6 +5,7 @@ import { Avatar, Box, Button, Grid, Paper, useTheme } from '@mui/material';
 import AddressCard from '../../../../components/Card/InformationCard/AddressCard';
 import axios from 'axios';
 import RatingComponent from '../../../../components/Ratings/RatingComponent';
+import LaundryItemTable from '../../../../components/Table/LaundryItemTable';
 
 function OrderDetails() {
   const theme = useTheme();
@@ -12,13 +13,14 @@ function OrderDetails() {
   let { noPesanan } = useParams();
   const [detailOrder, setDetailOrder] = useState();
   const [ratingReview, setRatingReview] = useState();
+  const [listLaundryItem, setListLaundryItem] = React.useState([]);
 
   React.useEffect(() => {
     document.title = 'Detail Pesanan';
-    if (!detailOrder) {
-      handleGetDetailOrder();
-    } else {
-    }
+    // if (!detailOrder) {
+    handleGetDetailOrder();
+    // } else {
+    // }
   }, [detailOrder]);
 
   const handleGetDetailOrder = async () => {
@@ -38,10 +40,33 @@ function OrderDetails() {
         alamatJemput: JSON.parse(res.data.data.alamatJemput),
         alamatAntar: res.data.data.alamatAntar ? JSON.parse(res.data.data.alamatAntar) : null,
       });
+      handleGetLaundryItem(res.data.data.id);
       handleGetRatingReview(res.data.data.id);
     } catch (error) {
       if (error.response.status === 404) {
         setDetailOrder();
+      }
+      console.log(error);
+    }
+  };
+
+  // Handle API Get All Laundry Item
+  const handleGetLaundryItem = async (id) => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/barang/user/${id}`,
+      });
+
+      console.log('Response GET Data');
+      console.log(res);
+      setListLaundryItem(res.data.data);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setListLaundryItem([]);
       }
       console.log(error);
     }
@@ -147,10 +172,14 @@ function OrderDetails() {
                   <Grid item xs={12} sm={6}>
                     {!detailOrder ? null : (
                       <>
-                        <h6>Alamat Penjemputan</h6>
-                        <Box sx={{ border: '1px solid #1F305C', borderRadius: '4px', mt: 1 }}>
-                          <AddressCard designType={'card'} data={detailOrder.alamatJemput} />
-                        </Box>
+                        {!detailOrder.alamatJemput ? null : (
+                          <>
+                            <h6>Alamat Penjemputan</h6>
+                            <Box sx={{ border: '1px solid #1F305C', borderRadius: '4px', mt: 1 }}>
+                              <AddressCard designType={'card'} data={detailOrder.alamatJemput} />
+                            </Box>
+                          </>
+                        )}
                       </>
                     )}
                   </Grid>
@@ -179,6 +208,9 @@ function OrderDetails() {
                 <div style={{ width: '100%', textAlign: 'center' }}>
                   <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Informasi Barang</h4>
                 </div>
+                {listLaundryItem.length !== 0 && detailOrder ? (
+                  <LaundryItemTable listLaundryItem={listLaundryItem} discount={detailOrder.diskon} readOnly={true} />
+                ) : null}
               </Box>
             </Paper>
           </Grid>

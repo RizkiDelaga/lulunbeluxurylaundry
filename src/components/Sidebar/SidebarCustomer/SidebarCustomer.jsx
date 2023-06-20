@@ -198,6 +198,7 @@ function SidebarCustomer(props) {
             } else {
               navigate('/Login');
             }
+            props.handleSidebar();
           }}
           sx={{
             mx: 2.5,
