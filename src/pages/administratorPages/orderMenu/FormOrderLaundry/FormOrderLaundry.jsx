@@ -279,10 +279,9 @@ function CustomerTable({ userSelected, setUserSelected }) {
   );
 }
 
-const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMethod }) => {
+const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMethod, handleGetCustomerAddress }) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const profileCustomer = JSON.parse(localStorage.getItem('my_profile_account'));
 
   const [userSelected, setUserSelected] = React.useState({ userId: null, detailUser: null });
   const [openDialogSearchUser, setOpenDialogSearchUser] = React.useState(false);
@@ -309,9 +308,10 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
             variant="outlined"
             onClick={() => {
               setState({ ...state, userId: userSelected.userId, detailUser: userSelected.detailUser });
+              handleGetCustomerAddress(userSelected.userId);
               setOpenDialogSearchUser(false);
             }}
-            disabled={!userSelected}
+            disabled={!userSelected.userId}
             sx={{ fontWeight: 'bold' }}
           >
             Pilih Pelanggan
@@ -321,10 +321,15 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
 
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          <div className={`dash-card`}>
-            <div style={{ fontWeight: 'bold', marginBottom: '16px' }}>Informasi Pelanggan</div>
+          <div
+            className={`dash-card`}
+            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+          >
+            <div>
+              <div style={{ fontWeight: 'bold', marginBottom: '16px' }}>Informasi Pelanggan</div>
 
-            {!state.detailUser ? null : <DetailCustomerCard dataUser={state.detailUser} />}
+              {!state.detailUser ? null : <DetailCustomerCard dataUser={state.detailUser} />}
+            </div>
 
             {/* <br /> */}
             <Button
@@ -333,7 +338,7 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
               onClick={() => setOpenDialogSearchUser(true)}
               sx={{ width: '100%', mt: 2, display: state.id ? 'none' : null }}
             >
-              Pilih Pelanggan
+              Cari Pelanggan
             </Button>
           </div>
         </Grid>
@@ -502,7 +507,7 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                 <TextField
                   type="number"
                   label="Diskon"
-                  value={state.discount}
+                  value={state.discount !== null ? state.discount : ''}
                   onChange={(e) => {
                     setState({ ...state, discount: e.target.value });
                   }}
@@ -571,6 +576,13 @@ const LaundryShuttle = ({ state, setState, listAddress, useShuttleProgram, setUs
   const [activeDeliveryAddress, setActiveDeliveryAddress] = React.useState(
     parseDeliveryAddress ? parseDeliveryAddress.id : null
   );
+
+  // React.useEffect(() => {
+  //   // if (useShuttleProgram) {
+  //   //   setActivePickupAddress(parsePickupAddress ? parsePickupAddress.id : null);
+  //   //   setActiveDeliveryAddress(parseDeliveryAddress ? parseDeliveryAddress.id : null);
+  //   // }
+  // }, [useShuttleProgram]);
 
   return (
     <div className={`dash-card gap-16`} style={{ width: '100%' }}>
@@ -645,8 +657,13 @@ const LaundryShuttle = ({ state, setState, listAddress, useShuttleProgram, setUs
                               Alamat Utama
                             </div>
                           ) : null}
-                          Kecamatan {item.kecamatan}, Kelurahan {item.kelurahan}, RW/{item.rw}, RT/{item.rt},{' '}
-                          {item.kategori} {item.detail}, {item.deskripsi}
+                          {item.kecamatan ? `Kecamatan ${item.kecamatan}` : null}
+                          {item.kelurahan ? `, Kelurahan ${item.kelurahan}` : null}
+                          {item.rw ? `, RW ${item.rw}` : null}
+                          {item.rt ? `, RT ${item.rt}` : null}
+                          {item.kategori ? `, ${item.kategori}` : null}
+                          {item.detail ? ` ${item.detail}` : null}
+                          {item.deskripsi ? `, ${item.deskripsi}` : null}
                         </div>
                       </Box>
                     </MenuItem>
@@ -713,8 +730,13 @@ const LaundryShuttle = ({ state, setState, listAddress, useShuttleProgram, setUs
                               Alamat Utama
                             </div>
                           ) : null}
-                          Kecamatan {item.kecamatan}, Kelurahan {item.kelurahan}, RW/{item.rw}, RT/{item.rt},{' '}
-                          {item.kategori} {item.detail}, {item.deskripsi}
+                          {item.kecamatan ? `Kecamatan ${item.kecamatan}` : null}
+                          {item.kelurahan ? `, Kelurahan ${item.kelurahan}` : null}
+                          {item.rw ? `, RW ${item.rw}` : null}
+                          {item.rt ? `, RT ${item.rt}` : null}
+                          {item.kategori ? `, ${item.kategori}` : null}
+                          {item.detail ? ` ${item.detail}` : null}
+                          {item.deskripsi ? `, ${item.deskripsi}` : null}
                         </div>
                       </Box>
                     </MenuItem>
@@ -974,6 +996,7 @@ function FormOrderLaundry() {
   const navigate = useNavigate();
   const [formOrder, setFormOrder] = React.useState({
     id: id || null,
+    noOrder: null,
     dateOrder: dayjs(),
     serviceType: {
       name: '',
@@ -981,6 +1004,7 @@ function FormOrderLaundry() {
     },
     discount: '',
     paymentMethod: '',
+    paymentStatus: '',
     userId: null,
     detailUser: null,
     address: {
@@ -1015,7 +1039,6 @@ function FormOrderLaundry() {
     document.title = 'Buat Pesanan Baru';
     handleGetServiceType();
     handleGetPaymentMethod();
-    handleGetCustomerAddress();
     if (id || formOrder.id) {
       handleGetDetailPesanan(id);
       handleGetLaundryItem();
@@ -1065,22 +1088,19 @@ function FormOrderLaundry() {
     }
   };
 
-  const handleGetCustomerAddress = async () => {
+  const handleGetCustomerAddress = async (userId) => {
     try {
       const res = await axios({
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/user/address`,
+        url: `${process.env.REACT_APP_API_KEY}/admin/user-address/${userId}`,
       });
       console.log('Response GET Data Service Type');
       console.log(res);
       setListCustomerAddress(res.data.data);
     } catch (error) {
-      if (error.response.status === 404) {
-        setOpenDialog(true);
-      }
       console.log(error);
     }
   };
@@ -1107,6 +1127,7 @@ function FormOrderLaundry() {
       console.log('apakah keluar?', res.data.data.alamatJemput);
       setFormOrder({
         id: res.data.data.id,
+        noOrder: res.data.data.nomorPesanan,
         dateOrder: dayjs(newDate),
         serviceType: {
           name: res.data.data.namaLayanan,
@@ -1114,6 +1135,7 @@ function FormOrderLaundry() {
         },
         discount: res.data.data.diskon,
         paymentMethod: res.data.data.mPembayaran,
+        paymentStatus: res.data.data.statusPembayaran,
         userId: res.data.data.userId,
         detailUser: { ...res.data.data.User },
         address: {
@@ -1122,6 +1144,7 @@ function FormOrderLaundry() {
         },
         status: res.data.data.status,
       });
+      handleGetCustomerAddress(res.data.data.userId);
 
       setUseShuttleProgram(res.data.data.alamatJemput || res.data.data.alamatAntar ? true : false);
     } catch (error) {
@@ -1136,13 +1159,15 @@ function FormOrderLaundry() {
       const res = await axios({
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user`,
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/admin`,
         data: {
+          userId: formOrder.userId,
           namaLayanan: formOrder.serviceType.name,
           jenisLayanan: formOrder.serviceType.duration,
           mPembayaran: formOrder.paymentMethod,
+          statusPembayaran: 'Belum Bayar',
           tglMulai: dayjs(
             `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
               formOrder.dateOrder.$H
@@ -1150,6 +1175,8 @@ function FormOrderLaundry() {
           ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
           alamatJemput: !useShuttleProgram ? null : formOrder.address.pickupAddress,
           alamatAntar: !useShuttleProgram ? null : formOrder.address.deliveryAddress,
+          status: formOrder.address.pickupAddress ? 'Perlu Dijemput' : 'Perlu Dikerjakan',
+          diskon: formOrder.discount || 0,
         },
       });
       console.log('Response GET Data Service Type');
@@ -1184,13 +1211,15 @@ function FormOrderLaundry() {
       const res = await axios({
         method: 'PUT',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/${formOrder.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/admin/${formOrder.id || id}`,
         data: {
+          userId: formOrder.userId,
           namaLayanan: formOrder.serviceType.name,
           jenisLayanan: formOrder.serviceType.duration,
           mPembayaran: formOrder.paymentMethod,
+          statusPembayaran: formOrder.paymentStatus,
           tglMulai: dayjs(
             `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
               formOrder.dateOrder.$H
@@ -1229,9 +1258,9 @@ function FormOrderLaundry() {
       const res = await axios({
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/barang/user/${formOrder.id || id}`,
+        url: `${process.env.REACT_APP_API_KEY}/barang/pemesananId/${formOrder.id || id}`,
       });
 
       console.log('Response GET Data');
@@ -1260,9 +1289,9 @@ function FormOrderLaundry() {
       const res = await axios({
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/barang/user`,
+        url: `${process.env.REACT_APP_API_KEY}/barang`,
         data: formData,
       });
 
@@ -1310,9 +1339,9 @@ function FormOrderLaundry() {
       const res = await axios({
         method: 'PUT',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/barang/user/${formItem.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/barang/${formItem.id}`,
         data: formData,
       });
 
@@ -1351,9 +1380,9 @@ function FormOrderLaundry() {
       const res = await axios({
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/barang/user/${itemId}`,
+        url: `${process.env.REACT_APP_API_KEY}/barang/${itemId}`,
       });
 
       console.log('Response GET Data');
@@ -1375,20 +1404,6 @@ function FormOrderLaundry() {
       });
     }
   };
-
-  const [openDialog, setOpenDialog] = React.useState(false);
-
-  // const handleUseShuttleProgram = () => {
-  //   if (!useShuttleProgram) {
-  //     setFormOrder((state) => ({
-  //       ...state,
-  //       address: {
-  //         pickupAddress: '',
-  //         deliveryAddress: '',
-  //       },
-  //     }));
-  //   }
-  // };
 
   return (
     <>
@@ -1431,6 +1446,7 @@ function FormOrderLaundry() {
                   setState={setFormOrder}
                   listServiceType={listServiceType}
                   listPaymentMethod={listPaymentMethod}
+                  handleGetCustomerAddress={handleGetCustomerAddress}
                 />
               )}
               {listCustomerAddress.length !== 0 ? (
@@ -1443,10 +1459,34 @@ function FormOrderLaundry() {
                 />
               ) : null}
 
-              <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
-                {formOrder.id ? 'Update Pesanan' : 'Buat pesanan'}
-                {/* {id ? 'Edit Pesanan' : 'Buat pesanan'} */}
-              </Button>
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 2,
+                  [theme.breakpoints.down('sm')]: {
+                    flexWrap: 'wrap',
+                  },
+                }}
+              >
+                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
+                  {formOrder.id ? 'Update Pesanan' : 'Buat pesanan'}
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={() => navigate(`/Pesanan/${formOrder.noOrder}`)}
+                  sx={{
+                    width: 'fit-content',
+                    fontWeight: 'bold',
+                    display: formOrder.id ? null : 'none',
+                    [theme.breakpoints.down('sm')]: {
+                      width: '100%',
+                    },
+                  }}
+                >
+                  Selesai
+                </Button>
+              </Box>
             </Box>
           </form>
         </Paper>
@@ -1484,18 +1524,6 @@ function FormOrderLaundry() {
           </Paper>
         ) : null}
       </div>
-
-      <Dialog open={openDialog}>
-        <DialogTitle>
-          <h4>Lengkapi Profil</h4>
-        </DialogTitle>
-        <Box sx={{ my: 2, mx: 3 }}>Alamat tidak ditemukan! Tambah alamat untuk melakukan pemesanan</Box>
-        <DialogActions>
-          <Button onClick={() => navigate('/AreaPelanggan/EditProfil')} sx={{ fontWeight: 'bold' }}>
-            Tambah Alamat
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }
