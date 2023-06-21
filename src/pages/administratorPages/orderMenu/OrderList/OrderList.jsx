@@ -46,7 +46,7 @@ function RowItem(props) {
   const dateEnd = new Date(props.item.tenggatWaktu);
   const lastUpdate = new Date(props.item.statusUpdatedAt);
 
-  const pickUpAddress = JSON.parse(props.item.alamatJemput);
+  const pickUpAddress = props.item.alamatJemput ? JSON.parse(props.item.alamatJemput) : null;
   const deliveryAddress = props.item.alamatAntar ? JSON.parse(props.item.alamatAntar) : null;
 
   return (
@@ -58,7 +58,9 @@ function RowItem(props) {
           </IconButton>
         </TableCell>
         <TableCell>
-          <span onClick={() => navigate(`/Pesanan/${props.item.nomorPesanan}`)}>#{props.item.nomorPesanan}</span>
+          <span onClick={() => navigate(`/Pesanan/${props.item.nomorPesanan}`)} style={{ cursor: 'pointer' }}>
+            #{props.item.nomorPesanan}
+          </span>
         </TableCell>
         <TableCell>
           <Box sx={{ display: 'flex', gap: 1 }}>
@@ -115,13 +117,17 @@ function RowItem(props) {
                 <Grid item xs={6}>
                   <div style={{ marginBottom: '10px' }}>
                     <strong>Alamat penjemputan : </strong>
-                    {pickUpAddress.kecamatan ? `Kecamatan ${pickUpAddress.kecamatan}` : null}
-                    {pickUpAddress.kelurahan ? `, Kelurahan ${pickUpAddress.kelurahan}` : null}
-                    {pickUpAddress.rw ? `, RW ${pickUpAddress.rw}` : null}
-                    {pickUpAddress.rt ? `, RT ${pickUpAddress.rt}` : null}
-                    {pickUpAddress.kategori ? `, ${pickUpAddress.kategori}` : null}
-                    {pickUpAddress.detail ? ` ${pickUpAddress.detail}` : null}
-                    {pickUpAddress.deskripsi ? `, ${pickUpAddress.deskripsi}` : null}
+                    {!props.item.alamatJemput ? null : (
+                      <>
+                        {pickUpAddress.kecamatan ? `Kecamatan ${pickUpAddress.kecamatan}` : null}
+                        {pickUpAddress.kelurahan ? `, Kelurahan ${pickUpAddress.kelurahan}` : null}
+                        {pickUpAddress.rw ? `, RW ${pickUpAddress.rw}` : null}
+                        {pickUpAddress.rt ? `, RT ${pickUpAddress.rt}` : null}
+                        {pickUpAddress.kategori ? `, ${pickUpAddress.kategori}` : null}
+                        {pickUpAddress.detail ? ` ${pickUpAddress.detail}` : null}
+                        {pickUpAddress.deskripsi ? `, ${pickUpAddress.deskripsi}` : null}
+                      </>
+                    )}
                   </div>
                   <div>
                     <strong>Alamat pengantaran : </strong>

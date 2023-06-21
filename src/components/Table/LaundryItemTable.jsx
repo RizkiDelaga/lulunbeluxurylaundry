@@ -268,7 +268,7 @@ function LaundryItemTable({
               {!detailPrice ? null : (
                 <>
                   <TableRow>
-                    <TableCell rowSpan={2} colSpan={4} sx={{ border: 'none', backgroundColor: cellColor }} />
+                    <TableCell rowSpan={3} colSpan={4} sx={{ border: 'none', backgroundColor: cellColor }} />
                     <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
                       Diskon
                     </TableCell>
@@ -276,16 +276,26 @@ function LaundryItemTable({
                       {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(discount)}
                     </TableCell>
                     {readOnly ? null : (
-                      <TableCell rowSpan={2} colSpan={1} sx={{ border: 'none', backgroundColor: cellColor }} />
+                      <TableCell rowSpan={3} colSpan={1} sx={{ border: 'none', backgroundColor: cellColor }} />
                     )}
                   </TableRow>
                   <TableRow>
                     <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
-                      Total
+                      Sub Total
                     </TableCell>
                     <TableCell align="right" colSpan={1} sx={{ backgroundColor: cellColor }}>
                       {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
                         listLaundryItem.reduce((sum, cur) => sum + cur.jumlah, 0)
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
+                      Total Pembayaran
+                    </TableCell>
+                    <TableCell align="right" colSpan={1} sx={{ backgroundColor: cellColor }}>
+                      {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
+                        listLaundryItem.reduce((sum, cur) => sum + cur.jumlah, 0) - discount
                       )}
                     </TableCell>
                   </TableRow>

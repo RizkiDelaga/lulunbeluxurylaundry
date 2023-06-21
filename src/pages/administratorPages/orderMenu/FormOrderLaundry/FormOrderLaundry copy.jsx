@@ -868,7 +868,7 @@ const InputItem = (props) => {
   );
 };
 
-function CreateNewOrder() {
+function FormOrderLaundry() {
   const navigate = useNavigate();
   const [formOrder, setFormOrder] = React.useState({
     dateOrder: dayjs(),
@@ -939,4 +939,4 @@ function CreateNewOrder() {
   );
 }
 
-export default CreateNewOrder;
+export default FormOrderLaundry;

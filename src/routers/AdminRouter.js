@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router';
 import { Outlet } from 'react-router-dom';
 import AdminLayout from '../layouts/AdminLayout/AdminLayout';
 import HomePage from '../pages/customerPages/HomePage/HomePage';
-import CreateNewOrder from '../pages/administratorPages/orderMenu/CreateNewOrder/CreateNewOrder';
 import RegisterNewAdministrator from '../pages/administratorPages/dashboardMenu/RegisterNewAdministrator/RegisterNewAdministrator';
 import EditProfile from '../pages/administratorPages/dashboardMenu/EditProfile/EditProfile';
 import ChangePassword from '../pages/administratorPages/dashboardMenu/ChangePassword/ChangePassword';
@@ -33,6 +32,7 @@ import CustomerRatingsAndReviews from '../pages/administratorPages/orderMenu/Cus
 import OrderList from '../pages/administratorPages/orderMenu/OrderList/OrderList';
 import ForgotPasswordRequest from '../pages/administratorPages/adminAuth/ForgotPassword/ForgotPasswordRequest/ForgotPasswordRequest';
 import ChangePasswordOnForgotPassword from '../pages/administratorPages/adminAuth/ForgotPassword/ChangePasswordOnForgotPassword/ChangePasswordOnForgotPassword';
+import FormOrderLaundry from '../pages/administratorPages/orderMenu/FormOrderLaundry/FormOrderLaundry';
 
 function AdminRouter() {
 
@@ -70,9 +70,9 @@ function AdminRouter() {
 
             {/* Order Menu Route */}
             <Route path="Pesanan" element={<OrderMenu />} />
-            <Route path="Pesanan/" element={<OrderMenu />} />
-            <Route path="Pesanan/:id" element={<OrderDetails />} />
-            <Route path="Pesanan/BuatPesananBaru" element={<CreateNewOrder />} />
+            <Route path="Pesanan/:noPesanan" element={<OrderDetails />} />
+            <Route path="Pesanan/FormulirPemesananLaundry" element={<FormOrderLaundry />} />
+            <Route path="Pesanan/FormulirPemesananLaundry/:id" element={<FormOrderLaundry />} />
             <Route path="Pesanan/EditPesanan" element={<HomePage />} />
             <Route path="Pesanan/RatingDanReviewPelanggan" element={<CustomerRatingsAndReviews />} />
             <Route path="Pesanan/DaftarPesanan/:status" element={<OrderList />} />

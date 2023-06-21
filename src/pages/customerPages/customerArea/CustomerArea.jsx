@@ -66,7 +66,9 @@ function RowItem(props) {
           </IconButton>
         </TableCell>
         <TableCell>
-          <span onClick={() => navigate(`/AreaPelanggan/${props.item.nomorPesanan}`)}>#{props.item.nomorPesanan}</span>
+          <span onClick={() => navigate(`/AreaPelanggan/${props.item.nomorPesanan}`)} style={{ cursor: 'pointer' }}>
+            #{props.item.nomorPesanan}
+          </span>
         </TableCell>
         <TableCell>
           {`${dateStart.toISOString().slice(8, 10)}/${dateStart.toISOString().slice(5, 7)}/${dateStart
