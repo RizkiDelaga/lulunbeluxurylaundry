@@ -118,18 +118,9 @@ function HeroSection({ generalInformation }) {
                 variant="outlined"
                 className="button-outlined-primary"
                 onClick={() => {
-                  if (localStorage.getItem('access_token')) {
-                    const profileAccount = JSON.parse(localStorage.getItem('my_profile_account'));
-                    if (!profileAccount.alamatUser) {
-                      alert('Harap input alamat terlebih dahulu!');
-                    } else {
-                      navigate('/AreaPelanggan/FormulirPemesananLaundry');
-                    }
-                  } else {
-                    navigate('/Login');
-                  }
+                  navigate('/Login');
                 }}
-                sx={{ width: 'fit-content' }}
+                sx={{ width: 'fit-content', display: localStorage.getItem('access_token') ? 'none' : null }}
               >
                 Bergabung sekarang
               </Button>

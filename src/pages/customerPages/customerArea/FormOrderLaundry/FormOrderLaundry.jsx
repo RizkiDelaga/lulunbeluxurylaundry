@@ -200,35 +200,6 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={3.3} lg={3.3} sx={{ display: 'flex', alignItems: 'center' }}>
-              <span>Diskon</span>
-            </Grid>
-
-            <Grid
-              item
-              xs
-              lg
-              sx={{
-                display: 'flex',
-                [theme.breakpoints.down('md')]: {
-                  paddingTop: '8px !important',
-                },
-              }}
-            >
-              <TextField
-                type="number"
-                label="Diskon"
-                value={state.discount}
-                onChange={(e) => {
-                  setState({ ...state, discount: e.target.value });
-                }}
-                autoComplete="off"
-                onWheel={(e) => e.target.blur()}
-                sx={{ width: '100%' }}
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={3.3} lg={3.3} sx={{ display: 'flex', alignItems: 'center' }}>
               <span>Metode Pembayaran</span>
             </Grid>
 
@@ -277,7 +248,6 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
 
 const LaundryShuttle = ({ state, setState, listAddress }) => {
   const theme = useTheme();
-  const [isUseProgram, setIsUseProgram] = React.useState(true);
   const parsePickupAddress = state.address.pickupAddress ? JSON.parse(state.address.pickupAddress) : null;
   const parseDeliveryAddress = state.address.deliveryAddress ? JSON.parse(state.address.deliveryAddress) : null;
   const [activePickupAddress, setActivePickupAddress] = React.useState(
@@ -289,160 +259,143 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
 
   return (
     <div className={`dash-card gap-16`} style={{ width: '100%' }}>
-      <div style={{ fontWeight: 'bold' }}>
-        Program Antar Jemput
-        {/* <Switch
-          onChange={(e) => {
-            setIsUseProgram(e.target.checked);
-            setState({
-              ...state,
-              address: {
-                pickupAddress: '',
-                deliveryAddress: '',
-              },
-            });
-            console.log(e.target.checked);
-          }}
-        /> */}
-      </div>
+      <div style={{ fontWeight: 'bold' }}>Program Antar Jemput</div>
 
-      {isUseProgram ? (
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <div>Alamat Penjemputan</div>
-            <FormControl fullWidth sx={{ mt: '8px' }}>
-              <InputLabel id="select-pickup-address-label">Alamat Penjemputan *</InputLabel>
-              <Select
-                required
-                labelId="select-pickup-address-label"
-                id="select-pickup-address"
-                value={activePickupAddress}
-                label="Alamat Pengantaran"
-                onChange={(e) => {
-                  setActivePickupAddress(e.target.value ? e.target.value : null);
-                  setState({
-                    ...state,
-                    address: {
-                      ...state.address,
-                      pickupAddress: e.target.value
-                        ? JSON.stringify(listAddress[listAddress.findIndex((x) => x.id === e.target.value)])
-                        : null,
-                    },
-                  });
-                }}
-                MenuProps={{
-                  style: { zIndex: 10000 },
-                  PaperProps: {
-                    style: {
-                      maxHeight: 400,
-                    },
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <div>Alamat Penjemputan</div>
+          <FormControl fullWidth sx={{ mt: '8px' }}>
+            <InputLabel id="select-pickup-address-label">Alamat Penjemputan *</InputLabel>
+            <Select
+              required
+              labelId="select-pickup-address-label"
+              id="select-pickup-address"
+              value={activePickupAddress}
+              label="Alamat Pengantaran"
+              onChange={(e) => {
+                setActivePickupAddress(e.target.value ? e.target.value : null);
+                setState({
+                  ...state,
+                  address: {
+                    ...state.address,
+                    pickupAddress: e.target.value
+                      ? JSON.stringify(listAddress[listAddress.findIndex((x) => x.id === e.target.value)])
+                      : null,
                   },
-                }}
-              >
-                {listAddress.map((item, index) => {
-                  return (
-                    <MenuItem value={item.id} sx={{ py: '16px' }}>
-                      <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
-                        <img src={item.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
-                        <div>
-                          {item.status === 'Priority' ? (
-                            <div
-                              style={{
-                                backgroundColor: '#1F305C',
-                                color: 'white',
-                                padding: '4px 12px',
-                                borderRadius: '24px',
-                                width: 'fit-content',
-                                fontSize: '12px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                              }}
-                            >
-                              <StarIcon fontSize="inherit" />
-                              Alamat Utama
-                            </div>
-                          ) : null}
-                          Kecamatan {item.kecamatan}, Kelurahan {item.kelurahan}, RW/{item.rw}, RT/{item.rt},{' '}
-                          {item.kategori} {item.detail}, {item.deskripsi}
-                        </div>
-                      </Box>
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <div>Alamat Pengantaran</div>
-            <FormControl fullWidth sx={{ mt: '8px' }}>
-              <InputLabel id="select-delivery-address-label">Alamat Pengantaran</InputLabel>
-              <Select
-                labelId="select-delivery-address-label"
-                id="select-delivery-address"
-                value={activeDeliveryAddress}
-                label="Alamat Pengantaran"
-                onChange={(e) => {
-                  setActiveDeliveryAddress(e.target.value ? e.target.value : null);
-                  setState({
-                    ...state,
-                    address: {
-                      ...state.address,
-                      deliveryAddress: e.target.value
-                        ? JSON.stringify(listAddress[listAddress.findIndex((x) => x.id === e.target.value)])
-                        : null,
-                    },
-                  });
-                }}
-                MenuProps={{
-                  style: { zIndex: 10000 },
-                  PaperProps: {
-                    style: {
-                      maxHeight: 400,
-                    },
+                });
+              }}
+              MenuProps={{
+                style: { zIndex: 10000 },
+                PaperProps: {
+                  style: {
+                    maxHeight: 400,
                   },
-                }}
-              >
-                <MenuItem value="" sx={{ py: '16px' }}>
-                  Tanpa di Antar (Ambil langsung di outlet)
-                </MenuItem>
-                {listAddress.map((item, index) => {
-                  return (
-                    <MenuItem value={item.id} sx={{ py: '16px' }}>
-                      <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
-                        <img src={item.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
-                        <div>
-                          {item.status === 'Priority' ? (
-                            <div
-                              style={{
-                                backgroundColor: '#1F305C',
-                                color: 'white',
-                                padding: '4px 12px',
-                                borderRadius: '24px',
-                                width: 'fit-content',
-                                fontSize: '12px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                              }}
-                            >
-                              <StarIcon fontSize="inherit" />
-                              Alamat Utama
-                            </div>
-                          ) : null}
-                          Kecamatan {item.kecamatan}, Kelurahan {item.kelurahan}, RW/{item.rw}, RT/{item.rt},{' '}
-                          {item.kategori} {item.detail}, {item.deskripsi}
-                        </div>
-                      </Box>
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Grid>
+                },
+              }}
+            >
+              {listAddress.map((item, index) => {
+                return (
+                  <MenuItem value={item.id} sx={{ py: '16px' }}>
+                    <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
+                      <img src={item.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
+                      <div>
+                        {item.status === 'Priority' ? (
+                          <div
+                            style={{
+                              backgroundColor: '#1F305C',
+                              color: 'white',
+                              padding: '4px 12px',
+                              borderRadius: '24px',
+                              width: 'fit-content',
+                              fontSize: '12px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 1,
+                            }}
+                          >
+                            <StarIcon fontSize="inherit" />
+                            Alamat Utama
+                          </div>
+                        ) : null}
+                        Kecamatan {item.kecamatan}, Kelurahan {item.kelurahan}, RW/{item.rw}, RT/{item.rt},{' '}
+                        {item.kategori} {item.detail}, {item.deskripsi}
+                      </div>
+                    </Box>
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
         </Grid>
-      ) : null}
+
+        <Grid item xs={12} md={6}>
+          <div>Alamat Pengantaran</div>
+          <FormControl fullWidth sx={{ mt: '8px' }}>
+            <InputLabel id="select-delivery-address-label">Alamat Pengantaran</InputLabel>
+            <Select
+              labelId="select-delivery-address-label"
+              id="select-delivery-address"
+              value={activeDeliveryAddress}
+              label="Alamat Pengantaran"
+              onChange={(e) => {
+                setActiveDeliveryAddress(e.target.value ? e.target.value : null);
+                setState({
+                  ...state,
+                  address: {
+                    ...state.address,
+                    deliveryAddress: e.target.value
+                      ? JSON.stringify(listAddress[listAddress.findIndex((x) => x.id === e.target.value)])
+                      : null,
+                  },
+                });
+              }}
+              MenuProps={{
+                style: { zIndex: 10000 },
+                PaperProps: {
+                  style: {
+                    maxHeight: 400,
+                  },
+                },
+              }}
+            >
+              <MenuItem value="" sx={{ py: '16px' }}>
+                Tanpa di Antar (Ambil langsung di outlet)
+              </MenuItem>
+              {listAddress.map((item, index) => {
+                return (
+                  <MenuItem value={item.id} sx={{ py: '16px' }}>
+                    <Box sx={{ display: 'flex', gap: '10px', whiteSpace: 'normal', alignItems: 'center' }}>
+                      <img src={item.gambar} width={100} style={{ objectFit: 'cover' }} alt="" />
+                      <div>
+                        {item.status === 'Priority' ? (
+                          <div
+                            style={{
+                              backgroundColor: '#1F305C',
+                              color: 'white',
+                              padding: '4px 12px',
+                              borderRadius: '24px',
+                              width: 'fit-content',
+                              fontSize: '12px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 1,
+                            }}
+                          >
+                            <StarIcon fontSize="inherit" />
+                            Alamat Utama
+                          </div>
+                        ) : null}
+                        Kecamatan {item.kecamatan}, Kelurahan {item.kelurahan}, RW/{item.rw}, RT/{item.rt},{' '}
+                        {item.kategori} {item.detail}, {item.deskripsi}
+                      </div>
+                    </Box>
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
     </div>
   );
 };
@@ -496,7 +449,7 @@ const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaund
                     sx={{ width: '100%' }}
                   />
                 </Grid>
-                <Grid item xs={5} sm={3} md={2} lg={1.2}>
+                <Grid item xs={12} sm={3} md={2} lg={1.2}>
                   <TextField
                     required
                     type="number"
@@ -510,20 +463,6 @@ const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaund
                     sx={{ width: '100%' }}
                   />
                 </Grid>
-                {/* <Grid item xs sm={12} md={3} lg={2}>
-                  <TextField
-                    required
-                    type="number"
-                    label="Harga Per Unit"
-                    value={stateValue.pricePerUnit}
-                    onChange={(e) => {
-                      handleState({ ...stateValue, pricePerUnit: e.target.value });
-                    }}
-                    autoComplete="off"
-                    onWheel={(e) => e.target.blur()}
-                    sx={{ width: '100%' }}
-                  />
-                </Grid> */}
               </Grid>
             </Grid>
           </Grid>
@@ -728,7 +667,7 @@ function FormOrderLaundry() {
   });
 
   React.useEffect(() => {
-    document.title = 'Buat Pesanan Baru';
+    document.title = 'Form Pemesanan Laundry';
     handleGetServiceType();
     handleGetPaymentMethod();
     handleGetCustomerAddress();
@@ -828,7 +767,7 @@ function FormOrderLaundry() {
       console.log(res);
       setFormOrder({ ...formOrder, id: res.data.data.id });
       handleGetDetailPesanan(res.data.data.id);
-      handleGetLaundryItem();
+      // handleGetLaundryItem();
       handleGetLaundryType();
 
       if (res.status === 201) {

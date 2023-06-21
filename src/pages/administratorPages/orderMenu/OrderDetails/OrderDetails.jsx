@@ -18,10 +18,7 @@ function OrderDetails() {
 
   React.useEffect(() => {
     document.title = `Detail Pesanan #${noPesanan}`;
-    // if (!detailOrder) {
     handleGetDetailOrder();
-    // } else {
-    // }
   }, []);
 
   const handleGetDetailOrder = async () => {
@@ -38,7 +35,7 @@ function OrderDetails() {
       console.log(res);
       setDetailOrder({
         ...res.data.data,
-        alamatJemput: JSON.parse(res.data.data.alamatJemput),
+        alamatJemput: res.data.data.alamatJemput ? JSON.parse(res.data.data.alamatJemput) : null,
         alamatAntar: res.data.data.alamatAntar ? JSON.parse(res.data.data.alamatAntar) : null,
       });
       handleGetLaundryItem(res.data.data.id);
@@ -107,7 +104,7 @@ function OrderDetails() {
               color: 'primary',
               iconType: 'edit',
               value: 'Edit Pesanan',
-              link: detailOrder ? `/Pesanan/FormulirPemesananLaundry/${detailOrder.id}` : null,
+              link: detailOrder ? `/Pesanan/FormulirPemesananLaundry/${detailOrder.id}` : false,
             },
           ]}
         />
@@ -254,21 +251,7 @@ function OrderDetails() {
                     >
                       <h6>Status Pesanan</h6>
                       <div style={{ backgroundColor: '#ffffff', padding: '4px 24px', borderRadius: '8px' }}>
-                        {detailOrder.status === 'Perlu Disetujui'
-                          ? 'Menunggu Persetujuan'
-                          : detailOrder.status === 'Perlu Dijemput'
-                          ? 'Pesanan Akan Segera Di Jemput'
-                          : detailOrder.status === 'Perlu Dikerjakan'
-                          ? 'Pesanan Sedang Di Kerjakan'
-                          : detailOrder.status === 'Perlu Diantar'
-                          ? 'Pesanan Akan Segera Di Antar'
-                          : detailOrder.status === 'Selesai'
-                          ? 'Pesanan Selesai'
-                          : detailOrder.status === 'Dibatalkan'
-                          ? 'Pesanan Di Batalkan'
-                          : detailOrder.status === 'Ditolak'
-                          ? 'Pesanan Di Tolak'
-                          : null}
+                        {detailOrder.status}
                       </div>
                     </div>
                     <div style={{ fontSize: '12px', marginTop: '5px' }}>
@@ -334,20 +317,6 @@ function OrderDetails() {
                     <img src={ratingReview.gambar} width={120} alt="" />
                   )}
                 </div>
-
-                {/* {!detailOrder ? null : (
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() =>
-                      navigate(`/AreaPelanggan/RatingDanReview/${detailOrder.id}/${detailOrder.nomorPesanan}`)
-                    }
-                    disabled={detailOrder.status !== 'Selesai'}
-                    style={{ width: '100%', fontWeight: 'bold', display: ratingReview ? 'none' : null }}
-                  >
-                    Rating & Review Sekarang
-                  </Button>
-                )} */}
               </Box>
             </Paper>
           </Grid>
