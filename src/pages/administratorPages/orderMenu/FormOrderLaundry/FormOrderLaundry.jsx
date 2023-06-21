@@ -10,15 +10,24 @@ import {
   Divider,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
-  List,
-  ListItem,
-  ListItemButton,
+  Menu,
   MenuItem,
   Paper,
   Select,
   Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
   TextField,
+  Toolbar,
+  Tooltip,
+  Typography,
   useTheme,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -29,255 +38,531 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import axios from 'axios';
-import StarIcon from '@mui/icons-material/Star';
-import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import { adjustTime } from '../../../../utils/timeUtils';
+import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import LaundryItemTable from '../../../../components/Table/LaundryItemTable';
 import DetailCustomerCard from '../../../../components/Card/DetailCustomerCard';
+import StarIcon from '@mui/icons-material/Star';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import SearchIcon from '@mui/icons-material/Search';
+import { getComparator, stableSort } from '../../../../utils/tableUtils';
+import RefreshIcon from '@mui/icons-material/Refresh';
+
+function RowItem(props) {
+  const navigate = useNavigate();
+
+  const birthDate = new Date(props.item.tglLahir);
+  // React.useEffect(() => {}, [props.userSelected]);
+
+  return (
+    <React.Fragment>
+      <TableRow
+        onClick={() => {
+          if (props.userSelected.userId === props.item.id) {
+            props.setUserSelected({ userId: null, detailUser: null });
+          } else {
+            props.setUserSelected({ userId: props.item.id, detailUser: props.item });
+          }
+        }}
+        sx={{ backgroundColor: props.userSelected.userId === props.item.id ? '#d2d2d2' : '#eeeeee' }}
+      >
+        <TableCell>#{props.item.id}</TableCell>
+        <TableCell>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Avatar src={props.item.profilePic} />
+            <div>
+              {props.item.nama}
+              <div style={{ fontSize: '12px' }}>
+                {props.item.noTelp}
+                {props.item.email ? ` || ${props.item.email}` : null}
+              </div>
+            </div>
+          </Box>
+        </TableCell>
+
+        <TableCell>
+          {props.item.tglLahir
+            ? `${('0' + birthDate.getDate()).slice(-2)}/${('0' + birthDate.getMonth()).slice(
+                -2
+              )}/${birthDate.getFullYear()} ${('0' + birthDate.getHours()).slice(-2)}:${(
+                '0' + birthDate.getMinutes()
+              ).slice(-2)}`
+            : null}
+        </TableCell>
+
+        <TableCell>{props.item.alamatUser}</TableCell>
+        <TableCell>{props.item.totalOrder}</TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+}
+
+function CustomerTable({ userSelected, setUserSelected }) {
+  const theme = useTheme();
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('');
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  React.useEffect(() => {
+    // document.title = 'Menu Pelanggan';
+    handleGetOrder();
+  }, []);
+
+  const [listCustomer, setListCustomer] = React.useState([]);
+  const [pageConfig, setPageConfig] = React.useState({
+    currentPage: 1,
+    dataPerPage: 10,
+    metadata: null,
+  });
+
+  // Handle API Get All Data Finance
+  const handleGetOrder = async (changePage, maxDataPerPage) => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/admin/user/all?page=${
+          !changePage
+            ? pageConfig.currentPage
+            : changePage === 'prev'
+            ? pageConfig.currentPage - 1
+            : changePage === 'next'
+            ? pageConfig.currentPage + 1
+            : changePage
+        }&perPage=${maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage}`,
+      });
+
+      setPageConfig({
+        ...pageConfig,
+        metadata: res.data.metadata,
+        currentPage: !changePage
+          ? pageConfig.currentPage
+          : changePage === 'prev'
+          ? pageConfig.currentPage - 1
+          : changePage === 'next'
+          ? pageConfig.currentPage + 1
+          : changePage,
+        dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
+      });
+      console.log('Response GET Data Finance');
+      console.log(res);
+      setListCustomer(res.data.data);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setListCustomer([]);
+      }
+      console.log(error);
+    }
+  };
+
+  const headCells = [
+    {
+      id: 'id',
+      label: 'ID Pelanggan',
+    },
+    {
+      id: 'nama',
+      label: 'Nama',
+    },
+    {
+      id: 'tglLahir',
+      label: 'Tanggal Lahir',
+    },
+    {
+      id: 'alamatUser',
+      label: 'Alamat Utama',
+    },
+    {
+      id: 'totalOrder',
+      label: 'Total Pesanan',
+    },
+  ];
+
+  return (
+    <>
+      {/* Table Title */}
+      <Toolbar
+        sx={{
+          backgroundColor: '#eeeeee',
+          width: '100%',
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+        }}
+      >
+        <span style={{ display: 'flex', alignItems: 'center' }}>
+          <Typography sx={{ fontWeight: 'bold' }} color="primary" variant="h5" id="tableTitle" component="div">
+            Daftar Pelanggan
+          </Typography>
+          <IconButton
+            onClick={() => {
+              handleGetOrder();
+            }}
+          >
+            <RefreshIcon color="primary" />
+          </IconButton>
+        </span>
+      </Toolbar>
+
+      {/* Table Section */}
+      <TableContainer sx={{ maxHeight: 600 }}>
+        <Table stickyHeader sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+          {/* Table Header */}
+          <TableHead>
+            <TableRow>
+              {headCells.map((headCell) => (
+                <TableCell
+                  key={headCell.id}
+                  sortDirection={orderBy === headCell.id ? order : false}
+                  sx={{
+                    width: headCell.id !== 'collapse' && headCell.id !== 'action' ? null : 0,
+                    backgroundColor: '#eeeeee',
+                  }}
+                >
+                  {headCell.id !== 'action' ? (
+                    <TableSortLabel
+                      active={orderBy === headCell.id}
+                      direction={orderBy === headCell.id ? order : 'asc'}
+                      onClick={(event) => {
+                        handleRequestSort(event, headCell.id);
+                      }}
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      {headCell.label}
+                    </TableSortLabel>
+                  ) : null}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+
+          {/* Table Content */}
+          <TableBody>
+            {stableSort(listCustomer, getComparator(order, orderBy)).map((item, index) => {
+              return (
+                // <span>
+                <RowItem key={item.id} item={item} userSelected={userSelected} setUserSelected={setUserSelected} />
+                // </span>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* 404 Data Not Found Handling */}
+      <Box
+        sx={{
+          mt: 2,
+          py: 1,
+          px: 2,
+          borderRadius: 2,
+          backgroundColor: '#eeeeee',
+          textAlign: 'center',
+          display: listCustomer.length ? 'none' : null,
+        }}
+      >
+        <h5>Data tidak ditemukan!</h5>
+      </Box>
+    </>
+  );
+}
 
 const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMethod }) => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const profileCustomer = JSON.parse(localStorage.getItem('my_profile_account'));
 
+  const [userSelected, setUserSelected] = React.useState({ userId: null, detailUser: null });
+  const [openDialogSearchUser, setOpenDialogSearchUser] = React.useState(false);
+
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-        <div className={`dash-card`}>
-          <div style={{ fontWeight: 'bold', marginBottom: '16px' }}>Informasi Pelanggan</div>
+    <>
+      <Dialog
+        onClose={() => setOpenDialogSearchUser(false)}
+        open={openDialogSearchUser}
+        maxWidth={850}
+        sx={{ zIndex: 10000 }}
+      >
+        <DialogTitle>
+          <h4>Cari Pelanggan</h4>
+        </DialogTitle>
+        <Box sx={{ my: 2, mx: 3 }}>
+          <CustomerTable userSelected={userSelected} setUserSelected={setUserSelected} />
+        </Box>
+        <DialogActions sx={{ my: 2, mx: 3, p: 0 }}>
+          <Button onClick={() => setOpenDialogSearchUser(false)} sx={{ fontWeight: 'bold' }}>
+            Kembali
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setState({ ...state, userId: userSelected.userId, detailUser: userSelected.detailUser });
+              setOpenDialogSearchUser(false);
+            }}
+            disabled={!userSelected}
+            sx={{ fontWeight: 'bold' }}
+          >
+            Pilih Pelanggan
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-          <DetailCustomerCard dataUser={profileCustomer} />
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+          <div className={`dash-card`}>
+            <div style={{ fontWeight: 'bold', marginBottom: '16px' }}>Informasi Pelanggan</div>
 
-          {/* <br />
-          <Button variant="outlined" className={`button-outlined-primary`} style={{ width: '100%' }}>
-            Cari Pelanggan
-          </Button> */}
-        </div>
-      </Grid>
+            {!state.detailUser ? null : <DetailCustomerCard dataUser={state.detailUser} />}
 
-      <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-        <div className={`dash-card gap-16`}>
-          <div style={{ fontWeight: 'bold' }}>Input Detail Pesanan</div>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={3.3} lg={3.3} sx={{ display: 'flex', alignItems: 'center' }}>
-              <span>Tanggal Pemesanan</span>
-            </Grid>
-
-            <Grid
-              item
-              xs
-              lg
-              sx={{
-                display: 'flex',
-                [theme.breakpoints.down('md')]: {
-                  paddingTop: '8px !important',
-                },
-              }}
+            {/* <br /> */}
+            <Button
+              variant="outlined"
+              className={`button-outlined-primary`}
+              onClick={() => setOpenDialogSearchUser(true)}
+              sx={{ width: '100%', mt: 2, display: state.id ? 'none' : null }}
             >
-              <Grid container>
-                <Grid xs={6} sx={{ paddingRight: '8px' }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <MobileDatePicker
-                      label="Pilih Tanggal"
-                      value={dayjs(state.dateOrder)}
-                      onChange={(value) => {
-                        setState({
-                          ...state,
-                          dateOrder: value,
-                        });
+              Pilih Pelanggan
+            </Button>
+          </div>
+        </Grid>
 
-                        console.log('Tanggal: ' + value.$D);
-                        console.log('Bulan: ' + value.$M);
-                        console.log('Tahun: ' + value.$y);
-                      }}
-                      renderInput={(params) => <TextField {...params} required />}
-                      slotProps={{
-                        textField: {
-                          error: false,
-                          // helperText: 'MM / DD / YYYY',
-                        },
-                      }}
-                      sx={{
-                        width: '100%',
-                        '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
-                          zIndex: 100000,
-                        },
-                      }}
-                    />
-                  </LocalizationProvider>
-                </Grid>
-                <Grid xs={6} sx={{ paddingLeft: '8px' }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <MobileTimePicker
-                      label="Pilih Jam"
-                      value={dayjs(state.dateOrder)}
-                      onChange={(value) => {
-                        setState({
-                          ...state,
-                          dateOrder: value,
-                        });
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+          <div className={`dash-card gap-16`}>
+            <div style={{ fontWeight: 'bold' }}>Input Detail Pesanan</div>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12} md={3.3} lg={3.3} sx={{ display: 'flex', alignItems: 'center' }}>
+                <span>Tanggal Pemesanan</span>
+              </Grid>
 
-                        console.log('Jam: ' + value.$H);
-                        console.log('Menit: ' + value.$m);
-                        console.log('Detik: ' + value.$s);
-                      }}
-                      renderInput={(params) => <TextField {...params} required />}
-                      slotProps={{
-                        textField: {
-                          error: false,
-                          helperText: ('0' + state.dateOrder.$H).slice(-2) + ':' + ('0' + state.dateOrder.$m).slice(-2),
-                        },
-                      }}
-                      sx={{ width: '100%' }}
-                    />
-                  </LocalizationProvider>
+              <Grid
+                item
+                xs
+                lg
+                sx={{
+                  display: 'flex',
+                  [theme.breakpoints.down('md')]: {
+                    paddingTop: '8px !important',
+                  },
+                }}
+              >
+                <Grid container>
+                  <Grid xs={6} sx={{ paddingRight: '8px' }}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <MobileDatePicker
+                        label="Pilih Tanggal"
+                        value={dayjs(state.dateOrder)}
+                        onChange={(value) => {
+                          setState({
+                            ...state,
+                            dateOrder: value,
+                          });
+
+                          console.log('Tanggal: ' + value.$D);
+                          console.log('Bulan: ' + value.$M);
+                          console.log('Tahun: ' + value.$y);
+                        }}
+                        renderInput={(params) => <TextField {...params} required />}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            // helperText: 'MM / DD / YYYY',
+                          },
+                        }}
+                        sx={{
+                          width: '100%',
+                          '& .MuiDialog-root .MuiModal-root .css-3dah0e-MuiModal-root-MuiDialog-root': {
+                            zIndex: 100000,
+                          },
+                        }}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+                  <Grid xs={6} sx={{ paddingLeft: '8px' }}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <MobileTimePicker
+                        label="Pilih Jam"
+                        value={dayjs(state.dateOrder)}
+                        onChange={(value) => {
+                          setState({
+                            ...state,
+                            dateOrder: value,
+                          });
+
+                          console.log('Jam: ' + value.$H);
+                          console.log('Menit: ' + value.$m);
+                          console.log('Detik: ' + value.$s);
+                        }}
+                        renderInput={(params) => <TextField {...params} required />}
+                        slotProps={{
+                          textField: {
+                            error: false,
+                            helperText:
+                              ('0' + state.dateOrder.$H).slice(-2) + ':' + ('0' + state.dateOrder.$m).slice(-2),
+                          },
+                        }}
+                        sx={{ width: '100%' }}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={3.3} lg={3.3} sx={{ display: 'flex', alignItems: 'center' }}>
-              <span>Jenis Layanan</span>
-            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12} md={3.3} lg={3.3} sx={{ display: 'flex', alignItems: 'center' }}>
+                <span>Jenis Layanan</span>
+              </Grid>
 
-            <Grid
-              item
-              xs
-              lg
-              sx={{
-                display: 'flex',
-                [theme.breakpoints.down('md')]: {
-                  paddingTop: '8px !important',
-                },
-              }}
-            >
-              <FormControl fullWidth>
-                <InputLabel id="select-service-type-label">Jenis Layanan *</InputLabel>
-                <Select
-                  required
-                  labelId="select-service-type-label"
-                  id="select-service-type"
-                  value={state.serviceType.name}
-                  label="Jenis Layanan"
-                  onChange={(e) => {
-                    const indexValue = listServiceType.findIndex((x) => x.layanan === e.target.value);
-                    setState({
-                      ...state,
-                      serviceType: {
-                        name: listServiceType[indexValue].layanan,
-                        duration: [
-                          listServiceType[indexValue].hari,
-                          listServiceType[indexValue].jam,
-                          listServiceType[indexValue].menit,
-                        ],
-                      },
-                    });
-                  }}
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxWidth: 500,
-                        maxHeight: 400,
-                      },
-                    },
-                  }}
-                >
-                  {listServiceType.map((item, index) => {
-                    return (
-                      <MenuItem value={item.layanan} sx={{ py: '16px' }}>
-                        {item.layanan} (
-                        {(item.hari ? item.hari + ' Hari' : '') +
-                          (item.hari && item.jam ? ' ' : '') +
-                          (item.jam ? item.jam + ' Jam' : '') +
-                          (item.jam && item.menit ? ' ' : '') +
-                          (item.menit ? item.menit + ' Menit' : '')}
-                        )
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={3.3} lg={3.3} sx={{ display: 'flex', alignItems: 'center' }}>
-              <span>Diskon</span>
-            </Grid>
-
-            <Grid
-              item
-              xs
-              lg
-              sx={{
-                display: 'flex',
-                [theme.breakpoints.down('md')]: {
-                  paddingTop: '8px !important',
-                },
-              }}
-            >
-              <TextField
-                type="number"
-                label="Diskon"
-                value={state.discount}
-                onChange={(e) => {
-                  setState({ ...state, discount: e.target.value });
+              <Grid
+                item
+                xs
+                lg
+                sx={{
+                  display: 'flex',
+                  [theme.breakpoints.down('md')]: {
+                    paddingTop: '8px !important',
+                  },
                 }}
-                autoComplete="off"
-                onWheel={(e) => e.target.blur()}
-                sx={{ width: '100%' }}
-              />
+              >
+                <FormControl fullWidth>
+                  <InputLabel id="select-service-type-label">Jenis Layanan *</InputLabel>
+                  <Select
+                    required
+                    labelId="select-service-type-label"
+                    id="select-service-type"
+                    value={state.serviceType.name}
+                    label="Jenis Layanan"
+                    onChange={(e) => {
+                      const indexValue = listServiceType.findIndex((x) => x.layanan === e.target.value);
+                      setState({
+                        ...state,
+                        serviceType: {
+                          name: listServiceType[indexValue].layanan,
+                          duration: [
+                            listServiceType[indexValue].hari,
+                            listServiceType[indexValue].jam,
+                            listServiceType[indexValue].menit,
+                          ],
+                        },
+                      });
+                    }}
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxWidth: 500,
+                          maxHeight: 400,
+                        },
+                      },
+                    }}
+                  >
+                    {listServiceType.map((item, index) => {
+                      return (
+                        <MenuItem value={item.layanan} sx={{ py: '16px' }}>
+                          {item.layanan} (
+                          {(item.hari ? item.hari + ' Hari' : '') +
+                            (item.hari && item.jam ? ' ' : '') +
+                            (item.jam ? item.jam + ' Jam' : '') +
+                            (item.jam && item.menit ? ' ' : '') +
+                            (item.menit ? item.menit + ' Menit' : '')}
+                          )
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={3.3} lg={3.3} sx={{ display: 'flex', alignItems: 'center' }}>
-              <span>Metode Pembayaran</span>
-            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12} md={3.3} lg={3.3} sx={{ display: 'flex', alignItems: 'center' }}>
+                <span>Diskon</span>
+              </Grid>
 
-            <Grid
-              item
-              xs
-              lg
-              sx={{
-                display: 'flex',
-                [theme.breakpoints.down('md')]: {
-                  paddingTop: '8px !important',
-                },
-              }}
-            >
-              <FormControl fullWidth>
-                <InputLabel id="select-payment-method-label">Metode Pembayaran *</InputLabel>
-                <Select
-                  required
-                  labelId="select-payment-method-label"
-                  id="select-payment-method"
-                  value={state.paymentMethod}
-                  label="Metode Pembayaran"
+              <Grid
+                item
+                xs
+                lg
+                sx={{
+                  display: 'flex',
+                  [theme.breakpoints.down('md')]: {
+                    paddingTop: '8px !important',
+                  },
+                }}
+              >
+                <TextField
+                  type="number"
+                  label="Diskon"
+                  value={state.discount}
                   onChange={(e) => {
-                    setState({
-                      ...state,
-                      paymentMethod: e.target.value,
-                    });
+                    setState({ ...state, discount: e.target.value });
                   }}
-                >
-                  {listPaymentMethod.map((item) => {
-                    return (
-                      <MenuItem value={item.nama} sx={{ py: '16px' }}>
-                        {item.nama}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
+                  autoComplete="off"
+                  onWheel={(e) => e.target.blur()}
+                  sx={{ width: '100%' }}
+                />
+              </Grid>
             </Grid>
-          </Grid>
-        </div>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12} md={3.3} lg={3.3} sx={{ display: 'flex', alignItems: 'center' }}>
+                <span>Metode Pembayaran</span>
+              </Grid>
+
+              <Grid
+                item
+                xs
+                lg
+                sx={{
+                  display: 'flex',
+                  [theme.breakpoints.down('md')]: {
+                    paddingTop: '8px !important',
+                  },
+                }}
+              >
+                <FormControl fullWidth>
+                  <InputLabel id="select-payment-method-label">Metode Pembayaran *</InputLabel>
+                  <Select
+                    required
+                    labelId="select-payment-method-label"
+                    id="select-payment-method"
+                    value={state.paymentMethod}
+                    label="Metode Pembayaran"
+                    onChange={(e) => {
+                      setState({
+                        ...state,
+                        paymentMethod: e.target.value,
+                      });
+                    }}
+                  >
+                    {listPaymentMethod.map((item) => {
+                      return (
+                        <MenuItem value={item.nama} sx={{ py: '16px' }}>
+                          {item.nama}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </div>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 
-const LaundryShuttle = ({ state, setState, listAddress }) => {
+const LaundryShuttle = ({ state, setState, listAddress, useShuttleProgram, setUseShuttleProgram }) => {
   const theme = useTheme();
-  const [isUseProgram, setIsUseProgram] = React.useState(true);
   const parsePickupAddress = state.address.pickupAddress ? JSON.parse(state.address.pickupAddress) : null;
   const parseDeliveryAddress = state.address.deliveryAddress ? JSON.parse(state.address.deliveryAddress) : null;
   const [activePickupAddress, setActivePickupAddress] = React.useState(
@@ -291,29 +576,23 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
     <div className={`dash-card gap-16`} style={{ width: '100%' }}>
       <div style={{ fontWeight: 'bold' }}>
         Program Antar Jemput
-        {/* <Switch
+        <Switch
+          checked={useShuttleProgram}
           onChange={(e) => {
-            setIsUseProgram(e.target.checked);
-            setState({
-              ...state,
-              address: {
-                pickupAddress: '',
-                deliveryAddress: '',
-              },
-            });
+            setUseShuttleProgram(e.target.checked);
+
             console.log(e.target.checked);
           }}
-        /> */}
+        />
       </div>
 
-      {isUseProgram ? (
+      {useShuttleProgram ? (
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <div>Alamat Penjemputan</div>
             <FormControl fullWidth sx={{ mt: '8px' }}>
-              <InputLabel id="select-pickup-address-label">Alamat Penjemputan *</InputLabel>
+              <InputLabel id="select-pickup-address-label">Alamat Penjemputan</InputLabel>
               <Select
-                required
                 labelId="select-pickup-address-label"
                 id="select-pickup-address"
                 value={activePickupAddress}
@@ -339,6 +618,9 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
                   },
                 }}
               >
+                <MenuItem value="" sx={{ py: '16px' }}>
+                  Tanpa di Jemput
+                </MenuItem>
                 {listAddress.map((item, index) => {
                   return (
                     <MenuItem value={item.id} sx={{ py: '16px' }}>
@@ -405,7 +687,7 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
                 }}
               >
                 <MenuItem value="" sx={{ py: '16px' }}>
-                  Tanpa di Antar (Ambil langsung di outlet)
+                  Tanpa di Antar
                 </MenuItem>
                 {listAddress.map((item, index) => {
                   return (
@@ -510,12 +792,12 @@ const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaund
                     sx={{ width: '100%' }}
                   />
                 </Grid>
-                {/* <Grid item xs sm={12} md={3} lg={2}>
+                <Grid item xs sm={12} md={3} lg={2}>
                   <TextField
                     required
                     type="number"
                     label="Harga Per Unit"
-                    value={stateValue.pricePerUnit}
+                    value={stateValue.pricePerUnit !== null ? stateValue.pricePerUnit : ''}
                     onChange={(e) => {
                       handleState({ ...stateValue, pricePerUnit: e.target.value });
                     }}
@@ -523,7 +805,7 @@ const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaund
                     onWheel={(e) => e.target.blur()}
                     sx={{ width: '100%' }}
                   />
-                </Grid> */}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -700,6 +982,7 @@ function FormOrderLaundry() {
     discount: '',
     paymentMethod: '',
     userId: null,
+    detailUser: null,
     address: {
       pickupAddress: '',
       deliveryAddress: '',
@@ -726,6 +1009,7 @@ function FormOrderLaundry() {
     message: '',
     statusType: '',
   });
+  const [useShuttleProgram, setUseShuttleProgram] = React.useState(false);
 
   React.useEffect(() => {
     document.title = 'Buat Pesanan Baru';
@@ -801,54 +1085,6 @@ function FormOrderLaundry() {
     }
   };
 
-  const handleCreateOrder = async () => {
-    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
-
-    try {
-      const res = await axios({
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        },
-        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user`,
-        data: {
-          namaLayanan: formOrder.serviceType.name,
-          jenisLayanan: formOrder.serviceType.duration,
-          mPembayaran: formOrder.paymentMethod,
-          tglMulai: dayjs(
-            `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
-              formOrder.dateOrder.$H
-            }:${formOrder.dateOrder.$m}:00`
-          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
-          alamatJemput: formOrder.address.pickupAddress,
-          alamatAntar: formOrder.address.deliveryAddress,
-        },
-      });
-      console.log('Response GET Data Service Type');
-      console.log(res);
-      setFormOrder({ ...formOrder, id: res.data.data.id });
-      handleGetDetailPesanan(res.data.data.id);
-      handleGetLaundryItem();
-      handleGetLaundryType();
-
-      if (res.status === 201) {
-        setOpenLoadDecision({
-          ...openLoadDecision.isLoad,
-          message: 'Pesanan Berhasil di Buat!',
-          statusType: 'success',
-        });
-      }
-      // setListCustomerAddress(res.data.data);
-    } catch (error) {
-      console.log(error);
-      setOpenLoadDecision({
-        ...openLoadDecision.isLoad,
-        message: error.response.data.message,
-        statusType: 'error',
-      });
-    }
-  };
-
   const handleGetDetailPesanan = async (orderId) => {
     try {
       const res = await axios({
@@ -879,14 +1115,65 @@ function FormOrderLaundry() {
         discount: res.data.data.diskon,
         paymentMethod: res.data.data.mPembayaran,
         userId: res.data.data.userId,
+        detailUser: { ...res.data.data.User },
         address: {
           pickupAddress: res.data.data.alamatJemput,
           deliveryAddress: res.data.data.alamatAntar,
         },
         status: res.data.data.status,
       });
+
+      setUseShuttleProgram(res.data.data.alamatJemput || res.data.data.alamatAntar ? true : false);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleCreateOrder = async () => {
+    setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
+
+    try {
+      const res = await axios({
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user`,
+        data: {
+          namaLayanan: formOrder.serviceType.name,
+          jenisLayanan: formOrder.serviceType.duration,
+          mPembayaran: formOrder.paymentMethod,
+          tglMulai: dayjs(
+            `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
+              formOrder.dateOrder.$H
+            }:${formOrder.dateOrder.$m}:00`
+          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+          alamatJemput: !useShuttleProgram ? null : formOrder.address.pickupAddress,
+          alamatAntar: !useShuttleProgram ? null : formOrder.address.deliveryAddress,
+        },
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+      setFormOrder({ ...formOrder, id: res.data.data.id });
+      handleGetDetailPesanan(res.data.data.id);
+      // handleGetLaundryItem();
+      handleGetLaundryType();
+
+      if (res.status === 201) {
+        setOpenLoadDecision({
+          ...openLoadDecision.isLoad,
+          message: 'Pesanan Berhasil di Buat!',
+          statusType: 'success',
+        });
+      }
+      // setListCustomerAddress(res.data.data);
+    } catch (error) {
+      console.log(error);
+      setOpenLoadDecision({
+        ...openLoadDecision.isLoad,
+        message: error.response.data.message,
+        statusType: 'error',
+      });
     }
   };
 
@@ -909,8 +1196,8 @@ function FormOrderLaundry() {
               formOrder.dateOrder.$H
             }:${formOrder.dateOrder.$m}:00`
           ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
-          alamatJemput: formOrder.address.pickupAddress,
-          alamatAntar: formOrder.address.deliveryAddress,
+          alamatJemput: !useShuttleProgram ? null : formOrder.address.pickupAddress,
+          alamatAntar: !useShuttleProgram ? null : formOrder.address.deliveryAddress,
           status: formOrder.status,
           diskon: formOrder.discount,
         },
@@ -1091,73 +1378,79 @@ function FormOrderLaundry() {
 
   const [openDialog, setOpenDialog] = React.useState(false);
 
+  // const handleUseShuttleProgram = () => {
+  //   if (!useShuttleProgram) {
+  //     setFormOrder((state) => ({
+  //       ...state,
+  //       address: {
+  //         pickupAddress: '',
+  //         deliveryAddress: '',
+  //       },
+  //     }));
+  //   }
+  // };
+
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '25px',
-          my: '25px',
-          mx: '75px',
-          [theme.breakpoints.down('md')]: {
-            mx: '8px',
-          },
-        }}
-      >
-        <div className="gap-24">
-          <PageStructureAndDirectButton
-            defaultMenu="Area Pelanggan"
-            currentPage={{
-              title: 'Form Pemesanan Laundry',
+      <div className="gap-24" style={{ marginBottom: '24px' }}>
+        <PageStructureAndDirectButton
+          defaultMenu="Pesanan"
+          currentPage={{
+            title: 'Form Pemesanan Laundry',
+          }}
+        />
+
+        <LoadDecisions
+          setOpenLoad={setOpenLoadDecision}
+          openLoad={openLoadDecision}
+          // redirect={id ? null : `/AreaPelanggan/FormulirPemesananLaundry/${formOrder.id}`}
+        />
+
+        {/* Main Content */}
+        <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.log('click');
+              // handleUseShuttleProgram();
+              if (formOrder.id || id) {
+                handleUpdateOrder();
+              } else {
+                handleCreateOrder();
+              }
             }}
-            // params={id ? 'Edit Pesanan' : null}
-          />
-          <LoadDecisions
-            setOpenLoad={setOpenLoadDecision}
-            openLoad={openLoadDecision}
-            // redirect={id ? null : `/AreaPelanggan/FormulirPemesananLaundry/${formOrder.id}`}
-          />
+          >
+            <Box className="gap-16" sx={{ flexDirection: 'column', width: '100%' }}>
+              <div style={{ width: '100%', textAlign: 'center' }}>
+                <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Formulir Pemesanan Laundry</h2>
+              </div>
 
-          {/* Main Content */}
-          <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                console.log('click');
-                if (formOrder.id || id) {
-                  handleUpdateOrder();
-                } else {
-                  handleCreateOrder();
-                }
-              }}
-            >
-              <Box className="gap-16" sx={{ flexDirection: 'column', width: '100%' }}>
-                <div style={{ width: '100%', textAlign: 'center' }}>
-                  <h2 style={{ marginTop: '8px', marginBottom: '8px' }}>Formulir Pemesanan Laundry</h2>
-                </div>
+              {!listServiceType && !listPaymentMethod ? null : (
+                <OrderInformationForm
+                  state={formOrder}
+                  setState={setFormOrder}
+                  listServiceType={listServiceType}
+                  listPaymentMethod={listPaymentMethod}
+                />
+              )}
+              {listCustomerAddress.length !== 0 ? (
+                <LaundryShuttle
+                  state={formOrder}
+                  setState={setFormOrder}
+                  useShuttleProgram={useShuttleProgram}
+                  setUseShuttleProgram={setUseShuttleProgram}
+                  listAddress={listCustomerAddress}
+                />
+              ) : null}
 
-                {!listServiceType && !listPaymentMethod ? null : (
-                  <OrderInformationForm
-                    state={formOrder}
-                    setState={setFormOrder}
-                    listServiceType={listServiceType}
-                    listPaymentMethod={listPaymentMethod}
-                  />
-                )}
-                {listCustomerAddress.length !== 0 ? (
-                  <LaundryShuttle state={formOrder} setState={setFormOrder} listAddress={listCustomerAddress} />
-                ) : null}
+              <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
+                {formOrder.id ? 'Update Pesanan' : 'Buat pesanan'}
+                {/* {id ? 'Edit Pesanan' : 'Buat pesanan'} */}
+              </Button>
+            </Box>
+          </form>
+        </Paper>
 
-                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
-                  {formOrder.id ? 'Update Pesanan' : 'Buat pesanan'}
-                  {/* {id ? 'Edit Pesanan' : 'Buat pesanan'} */}
-                </Button>
-              </Box>
-            </form>
-          </Paper>
-        </div>
         {formOrder.id || id ? (
           <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
             <div className={`dash-card gap-16`} style={{ justifyContent: 'center' }}>
@@ -1190,7 +1483,7 @@ function FormOrderLaundry() {
             </div>
           </Paper>
         ) : null}
-      </Box>
+      </div>
 
       <Dialog open={openDialog}>
         <DialogTitle>

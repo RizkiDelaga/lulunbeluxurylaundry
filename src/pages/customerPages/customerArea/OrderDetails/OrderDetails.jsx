@@ -22,7 +22,7 @@ function OrderDetails() {
     handleGetDetailOrder();
     // } else {
     // }
-  }, [detailOrder]);
+  }, []);
 
   const handleGetDetailOrder = async () => {
     try {
