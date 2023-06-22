@@ -1,8 +1,4 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import {
-  Autocomplete,
   Box,
   Button,
   Chip,
@@ -16,20 +12,24 @@ import {
   TextField,
   useTheme,
 } from '@mui/material';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import AddressCard from '../../../../components/Card/AddressCard';
+import { banyumasAreaList } from '../../../../utils/banyumasAreaList';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
-import { banyumasAreaList } from '../../../../utils/banyumasAreaList';
-import AddressCard from '../../../../components/Card/AddressCard';
-import axios from 'axios';
+import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 
-function EditProfile() {
+function EditCustomerInformation() {
   const theme = useTheme();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [urbanVillage, setUrbanVillage] = useState();
-  const [formEditProfile, setFormEditProfile] = useState({
+  const [formEditCustomerInformation, setFormEditCustomerInformation] = useState({
     customerName: '',
     contact: {
       phoneNumber: '',
@@ -38,7 +38,7 @@ function EditProfile() {
     birthDate: dayjs,
     profilePicture: { img: null, fileName: null },
   });
-  const [listMyAddress, setListMyAddress] = useState([]);
+  const [listCustomerAddress, setListCustomerAddress] = useState([]);
   const [mainAddress, setMainAddress] = useState({
     id: null,
     region: {
@@ -53,7 +53,6 @@ function EditProfile() {
     },
     addressDetails: '',
     buildingPhoto: { img: null, fileName: null },
-    // makeItMainAddress: false,
     isMainAddress: false,
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
@@ -63,24 +62,24 @@ function EditProfile() {
   });
 
   React.useEffect(() => {
-    document.title = 'Edit Profil';
-    handleGetMyProfile();
-    handleGetMyAddress();
+    document.title = 'Edit Profil Pelanggan';
+    handleGetCustomerProfile();
+    handleGetCustomerAddress();
   }, []);
 
-  const handleGetMyProfile = async () => {
+  const handleGetCustomerProfile = async () => {
     try {
       const res = await axios({
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/user`,
+        url: `${process.env.REACT_APP_API_KEY}/admin/user/${id}`,
       });
       console.log('Response GET Data My Profile');
       console.log(res);
 
-      setFormEditProfile({
+      setFormEditCustomerInformation({
         customerName: res.data.data.nama,
         contact: {
           phoneNumber: res.data.data.noTelp,
@@ -89,21 +88,21 @@ function EditProfile() {
         birthDate: res.data.data.tglLahir ? dayjs(res.data.data.tglLahir) : dayjs,
         profilePicture: { img: null, fileName: res.data.data.profilePic },
       });
-      localStorage.setItem('my_profile_account', JSON.stringify(res.data.data));
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleUpdateMyProfile = async () => {
+  const handleUpdateCustomerProfile = async () => {
     const formData = new FormData();
-    formData.append('nama', formEditProfile.customerName);
-    formData.append('noTelp', formEditProfile.contact.phoneNumber);
-    formData.append('email', formEditProfile.contact.email);
-    if (typeof formEditProfile.birthDate !== 'function') {
-      formData.append('tglLahir', formEditProfile.birthDate);
+    formData.append('nama', formEditCustomerInformation.customerName);
+    formData.append('noTelp', formEditCustomerInformation.contact.phoneNumber);
+
+    formData.append('email', formEditCustomerInformation.contact.email);
+    if (typeof formEditCustomerInformation.birthDate !== 'function') {
+      formData.append('tglLahir', formEditCustomerInformation.birthDate);
     }
-    formData.append('profilePic', formEditProfile.profilePicture.img);
+    formData.append('profilePic', formEditCustomerInformation.profilePicture.img);
 
     setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
 
@@ -111,18 +110,18 @@ function EditProfile() {
       const res = await axios({
         method: 'PUT',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/user`,
+        url: `${process.env.REACT_APP_API_KEY}/admin/user/${id}`,
         data: formData,
       });
-      console.log('Response GET Data My Profile');
+
       console.log(res);
-      handleGetMyProfile();
+      handleGetCustomerProfile();
       if (res.status === 200) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
-          message: 'Edit Profil Berhasil!',
+          message: 'Edit Berhasil!',
           statusType: 'success',
         });
       }
@@ -136,20 +135,20 @@ function EditProfile() {
     }
   };
 
-  const handleGetMyAddress = async () => {
+  const handleGetCustomerAddress = async () => {
     try {
       const res = await axios({
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/user/address`,
+        url: `${process.env.REACT_APP_API_KEY}/admin/user-address/${id}`,
       });
       console.log('Response GET Data My Address');
       console.log(res);
-      // setFormEditProfile(res.data.data);
-      setListMyAddress(res.data.data);
-      handleGetMyProfile();
+
+      setListCustomerAddress(res.data.data);
+      handleGetCustomerProfile();
     } catch (error) {
       console.log(error);
     }
@@ -173,9 +172,9 @@ function EditProfile() {
       const res = await axios({
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/user/address`,
+        url: `${process.env.REACT_APP_API_KEY}/admin/user-address/${id}`,
         data: formData,
       });
       console.log('Response POST Data My Address');
@@ -198,7 +197,7 @@ function EditProfile() {
         isMainAddress: false,
       });
       setUrbanVillage();
-      handleGetMyAddress();
+      handleGetCustomerAddress();
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -234,9 +233,9 @@ function EditProfile() {
       const res = await axios({
         method: 'PUT',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/user/address/${mainAddress.id}`,
+        url: `${process.env.REACT_APP_API_KEY}/admin/user-address/${id}/${mainAddress.id}`,
         data: formData,
       });
       console.log('Response PUT Data My Address');
@@ -255,15 +254,14 @@ function EditProfile() {
         },
         addressDetails: '',
         buildingPhoto: { img: null, fileName: null },
-        // makeItMainAddress: false,
         isMainAddress: false,
       });
       setUrbanVillage();
-      handleGetMyAddress();
+      handleGetCustomerAddress();
       if (res.status === 200) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
-          message: 'Update Alamat Berhasil!',
+          message: 'Update Alamat Pelanggan Berhasil!',
           statusType: 'success',
         });
       }
@@ -277,20 +275,20 @@ function EditProfile() {
     }
   };
 
-  const handleDeleteAddress = async (id) => {
+  const handleDeleteAddress = async (addressId) => {
     setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
 
     try {
       const res = await axios({
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/user/address/${id}`,
+        url: `${process.env.REACT_APP_API_KEY}/admin/user-address/${id}/${addressId}`,
       });
       console.log('Response DELETE Data My Address');
       console.log(res);
-      handleGetMyAddress();
+      handleGetCustomerAddress();
       if (res.status === 200) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -310,23 +308,11 @@ function EditProfile() {
 
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '25px',
-          my: '25px',
-          mx: '75px',
-          [theme.breakpoints.down('md')]: {
-            mx: '8px',
-          },
-        }}
-      >
+      <div className="gap-24" style={{ marginBottom: '24px' }}>
         <PageStructureAndDirectButton
           defaultMenu="Area Pelanggan"
           currentPage={{
-            title: 'Edit Profil',
+            title: 'Edit Profil Pelanggan',
           }}
         />
         <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
@@ -337,7 +323,7 @@ function EditProfile() {
             onSubmit={(e) => {
               e.preventDefault();
               console.log('click');
-              handleUpdateMyProfile();
+              handleUpdateCustomerProfile();
             }}
           >
             <Box className="gap-16">
@@ -365,10 +351,10 @@ function EditProfile() {
                     required
                     type="text"
                     label="Nama Langkap"
-                    value={formEditProfile.customerName}
+                    value={formEditCustomerInformation.customerName}
                     onChange={(e) => {
-                      setFormEditProfile({
-                        ...formEditProfile,
+                      setFormEditCustomerInformation({
+                        ...formEditCustomerInformation,
                         customerName: e.target.value,
                       });
                     }}
@@ -399,12 +385,12 @@ function EditProfile() {
                         required
                         type="number"
                         label="Nomer Telepon"
-                        value={formEditProfile.contact.phoneNumber}
+                        value={formEditCustomerInformation.contact.phoneNumber}
                         disabled="true"
                         onChange={(e) => {
-                          setFormEditProfile({
-                            ...formEditProfile,
-                            contact: { ...formEditProfile.contact, phoneNumber: e.target.value },
+                          setFormEditCustomerInformation({
+                            ...formEditCustomerInformation,
+                            contact: { ...formEditCustomerInformation.contact, phoneNumber: e.target.value },
                           });
                         }}
                         autoComplete="off"
@@ -416,11 +402,11 @@ function EditProfile() {
                       <TextField
                         label="Email"
                         type="text"
-                        value={formEditProfile.contact.email}
+                        value={formEditCustomerInformation.contact.email}
                         onChange={(e) => {
-                          setFormEditProfile({
-                            ...formEditProfile,
-                            contact: { ...formEditProfile.contact, email: e.target.value },
+                          setFormEditCustomerInformation({
+                            ...formEditCustomerInformation,
+                            contact: { ...formEditCustomerInformation.contact, email: e.target.value },
                           });
                         }}
                         autoComplete="off"
@@ -450,11 +436,11 @@ function EditProfile() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
                       label="Pilih Tanggal"
-                      value={formEditProfile.birthDate}
+                      value={formEditCustomerInformation.birthDate}
                       onChange={(value) => {
-                        setFormEditProfile({ ...formEditProfile, birthDate: value });
+                        setFormEditCustomerInformation({ ...formEditCustomerInformation, birthDate: value });
 
-                        console.log(formEditProfile.birthDate);
+                        console.log(formEditCustomerInformation.birthDate);
                         console.log('Tanggal: ' + value.$D);
                         console.log('Bulan: ' + value.$M);
                         console.log('Tahun: ' + value.$y);
@@ -508,8 +494,8 @@ function EditProfile() {
                           accept="image/*"
                           onChange={(e) => {
                             console.log(e.target.files);
-                            setFormEditProfile({
-                              ...formEditProfile,
+                            setFormEditCustomerInformation({
+                              ...formEditCustomerInformation,
                               profilePicture: {
                                 img: e.target.files[0],
                                 fileName: !e.target.files[0] ? null : e.target.files[0].name,
@@ -522,12 +508,12 @@ function EditProfile() {
                       </Button>
                     </Grid>
                     <Grid item xs="auto">
-                      {formEditProfile.profilePicture.img ? (
+                      {formEditCustomerInformation.profilePicture.img ? (
                         <img
                           id="output"
                           src={
-                            formEditProfile.profilePicture.img
-                              ? URL.createObjectURL(formEditProfile.profilePicture.img)
+                            formEditCustomerInformation.profilePicture.img
+                              ? URL.createObjectURL(formEditCustomerInformation.profilePicture.img)
                               : ''
                           }
                           width={70}
@@ -536,11 +522,14 @@ function EditProfile() {
                       ) : null}
                     </Grid>
                     <Grid item xs>
-                      {formEditProfile.profilePicture.fileName ? (
+                      {formEditCustomerInformation.profilePicture.fileName ? (
                         <Chip
-                          label={formEditProfile.profilePicture.fileName}
+                          label={formEditCustomerInformation.profilePicture.fileName}
                           onDelete={() =>
-                            setFormEditProfile({ ...formEditProfile, profilePicture: { img: null, fileName: null } })
+                            setFormEditCustomerInformation({
+                              ...formEditCustomerInformation,
+                              profilePicture: { img: null, fileName: null },
+                            })
                           }
                           sx={{ maxWidth: '250px' }}
                         />
@@ -950,9 +939,9 @@ function EditProfile() {
                   </div>
 
                   <div>
-                    {formEditProfile.customerName}
+                    {formEditCustomerInformation.customerName}
                     <br />
-                    {formEditProfile.contact.phoneNumber + ' ' + formEditProfile.contact.email}
+                    {formEditCustomerInformation.contact.phoneNumber + ' ' + formEditCustomerInformation.contact.email}
                     <br />
                     {mainAddress.region.subDistrict +
                       ' ' +
@@ -968,9 +957,9 @@ function EditProfile() {
                     <br />
                     {mainAddress.addressDetails}
                     {/* {mainAddress.makeItMainAddress} */}
-                    {`${formEditProfile.birthDate.$D}
-              ${formEditProfile.birthDate.$M}
-              ${formEditProfile.birthDate.$y}`}
+                    {`${formEditCustomerInformation.birthDate.$D}
+              ${formEditCustomerInformation.birthDate.$M}
+              ${formEditCustomerInformation.birthDate.$y}`}
                   </div>
 
                   <br />
@@ -983,7 +972,7 @@ function EditProfile() {
               <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Alamat Pelanggan</h4>
             </div>
             <div className="gap-10">
-              {listMyAddress.map((item) => {
+              {listCustomerAddress.map((item) => {
                 return (
                   <AddressCard
                     data={item}
@@ -996,9 +985,9 @@ function EditProfile() {
             </div>
           </Grid>
         </Grid>
-      </Box>
+      </div>
     </>
   );
 }
 
-export default EditProfile;
+export default EditCustomerInformation;

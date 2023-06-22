@@ -33,6 +33,10 @@ import OrderList from '../pages/administratorPages/orderMenu/OrderList/OrderList
 import ForgotPasswordRequest from '../pages/administratorPages/adminAuth/ForgotPassword/ForgotPasswordRequest/ForgotPasswordRequest';
 import ChangePasswordOnForgotPassword from '../pages/administratorPages/adminAuth/ForgotPassword/ChangePasswordOnForgotPassword/ChangePasswordOnForgotPassword';
 import FormOrderLaundry from '../pages/administratorPages/orderMenu/FormOrderLaundry/FormOrderLaundry';
+import EditCustomerInformation from '../pages/administratorPages/customerMenu/EditCustomerInformation/EditCustomerInformation';
+import EditIncome from '../pages/administratorPages/financeMenu/EditIncome/EditIncome';
+import EditExpenses from '../pages/administratorPages/financeMenu/EditExpenses/EditExpenses';
+import EditEvents from '../pages/administratorPages/eventMenu/EditEvents/EditEvents';
 
 function AdminRouter() {
 
@@ -66,7 +70,7 @@ function AdminRouter() {
             <Route path="Dashboard/EditProfil" element={<EditProfile />} />
             <Route path="Dashboard/UbahPassword" element={<ChangePassword />} />
             <Route path="Dashboard/RegistrasiAdministratorBaru" element={<RegisterNewAdministrator />} />
-            <Route path="Dashboard/EditAdministrator" element={<EditAdministrators />} />
+            <Route path="Dashboard/EditAdministrator/:id" element={<EditAdministrators />} />
 
             {/* Order Menu Route */}
             <Route path="Pesanan" element={<OrderMenu />} />
@@ -92,19 +96,19 @@ function AdminRouter() {
             {/* Events Menu Route */}
             <Route path="Event" element={<EventMenu />} />
             <Route path="Event/BuatEventBaru" element={<CreateNewEvents />} />
-            <Route path="Event/EditEvent" element={<HomePage />} />
+            <Route path="Event/EditEvent/:id" element={<EditEvents />} />
             
             {/* Finance Menu Route */}
             <Route path="Keuangan" element={<FinanceMenu />} />
             <Route path="Keuangan/InputPemasukan" element={<AddIncome />} />
-            <Route path="Keuangan/EditPemasukan" element={<HomePage />} />
+            <Route path="Keuangan/EditPemasukan/:id" element={<EditIncome />} />
             <Route path="Keuangan/InputPengeluaran" element={<AddExpenses />} />
-            <Route path="Keuangan/Edit Pengeluaran" element={<HomePage />} />
+            <Route path="Keuangan/EditPengeluaran/:id" element={<EditExpenses />} />
             
             {/* Customer Menu Route */}
             <Route path="Pelanggan" element={<CustomerMenu />} />
             <Route path="Pelanggan/RegistrasiPelangganBaru" element={<RegisterNewCustomer />} />
-            <Route path="Pelanggan/EditInformasiPelanggan/:id" element={<HomePage />} />
+            <Route path="Pelanggan/EditInformasiPelanggan/:id" element={<EditCustomerInformation />} />
           </Route>
         </Routes>
   );
