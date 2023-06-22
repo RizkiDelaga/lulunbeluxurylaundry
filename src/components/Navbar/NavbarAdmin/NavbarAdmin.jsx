@@ -238,6 +238,7 @@ function Navbar(props) {
   const navigate = useNavigate();
   const theme = useTheme();
   const [notificationStatus, setNotificationStatus] = React.useState('All');
+  const [unreadNotif, setUnreadNotif] = React.useState();
   const [listNotification, setListNotification] = React.useState([]);
   const [pageConfig, setPageConfig] = React.useState({
     currentPage: 1,
@@ -269,6 +270,7 @@ function Navbar(props) {
       });
       console.log('Response GET Data Service Type');
       console.log(res);
+      setUnreadNotif(res.data.otherData.unreadNotif);
       if (next) {
         setListNotification([...listNotification, ...res.data.data]);
         setPageConfig({ currentPage: pageConfig.currentPage + 1, metadata: res.data.metadata });
@@ -362,7 +364,8 @@ function Navbar(props) {
               <Badge
                 color="primary"
                 badgeContent={
-                  !listNotification ? null : listNotification.filter((item) => item.dibacaAdmin === false).length
+                  unreadNotif
+                  // !listNotification ? null : listNotification.filter((item) => item.dibacaAdmin === false).length
                 }
                 max={999}
               >

@@ -18,8 +18,6 @@ import {
   TextField,
   useTheme,
 } from '@mui/material';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import axios from 'axios';
 import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
@@ -34,11 +32,9 @@ function RegisterNewAdministrator() {
       email: '',
     },
     role: null,
-    // password: '',
-    // confirmPassword: '',
     profilePicture: { img: null, fileName: null },
   });
-  // const [showPassword, setShowPassword] = useState({ password: false, confirmPassword: false });
+
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
     message: '',
@@ -182,7 +178,6 @@ function RegisterNewAdministrator() {
                       </Grid>
                       <Grid item xs={12} sm>
                         <TextField
-                          required
                           type="email"
                           label="Email"
                           value={formRegisterNewAdministrator.contact.email}
@@ -244,106 +239,6 @@ function RegisterNewAdministrator() {
                     {formRegisterNewAdministrator.role}
                   </Grid>
                 </Grid>
-                {/* <Grid container spacing={2}>
-                  <Grid item xs={12} sm={12} md={2.6} lg={1.9} sx={{ display: 'flex', alignItems: 'center' }}>
-                    <span>Password</span>
-                  </Grid>
-
-                  <Grid
-                    item
-                    xs
-                    lg
-                    sx={{
-                      display: 'flex',
-                      [theme.breakpoints.down('md')]: {
-                        paddingTop: '8px !important',
-                      },
-                    }}
-                  >
-                    <FormControl
-                      variant="outlined"
-                      onChange={(e) => {
-                        setFormRegisterNewAdministrator({ ...formRegisterNewAdministrator, password: e.target.value });
-                      }}
-                      sx={{ width: '100%' }}
-                    >
-                      <InputLabel htmlFor="input-password">Password *</InputLabel>
-                      <OutlinedInput
-                        required
-                        label="Password"
-                        helperText="Some important text"
-                        id="input-password"
-                        type={showPassword.password ? 'text' : 'password'}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              onClick={() => setShowPassword({ ...showPassword, password: !showPassword.password })}
-                              edge="end"
-                              color="primary"
-                            >
-                              {showPassword.password ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        inputProps={{
-                          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$', // Minimal delapan karakter (Setidaknya satu huruf besar, satu huruf kecil dan satu angka)
-                        }}
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={12} md={2.6} lg={1.9} sx={{ display: 'flex', alignItems: 'center' }}>
-                    <span>Konfirmasi Password</span>
-                  </Grid>
-
-                  <Grid
-                    item
-                    xs
-                    lg
-                    sx={{
-                      display: 'flex',
-                      [theme.breakpoints.down('md')]: {
-                        paddingTop: '8px !important',
-                      },
-                    }}
-                  >
-                    <FormControl
-                      variant="outlined"
-                      onChange={(e) => {
-                        setFormRegisterNewAdministrator({
-                          ...formRegisterNewAdministrator,
-                          confirmPassword: e.target.value,
-                        });
-                      }}
-                      sx={{ width: '100%' }}
-                    >
-                      <InputLabel htmlFor="confirm-password">Konfirmasi Password *</InputLabel>
-                      <OutlinedInput
-                        label="Konfirmasi Password"
-                        required
-                        id="confirm-password"
-                        type={showPassword.confirmPassword ? 'text' : 'password'}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              onClick={() =>
-                                setShowPassword({ ...showPassword, confirmPassword: !showPassword.confirmPassword })
-                              }
-                              edge="end"
-                              color="primary"
-                            >
-                              {showPassword.confirmPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        inputProps={{
-                          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$', // Minimal delapan karakter (Setidaknya satu huruf besar, satu huruf kecil dan satu angka)
-                        }}
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid> */}
 
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={12} md={2.6} lg={1.9}>
