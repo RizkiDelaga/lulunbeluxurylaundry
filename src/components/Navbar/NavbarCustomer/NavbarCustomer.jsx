@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Fab,
   IconButton,
   List,
   ListItem,
@@ -41,6 +42,7 @@ import { getProfileAccountCustomer } from '../../../redux/actions/getProfileAcco
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 const drawerWidth = 300;
 
@@ -364,6 +366,12 @@ function NavbarCustomer(props) {
 
   return (
     <>
+      <a href={`https://wa.me/${dataGetGeneralInformation.telegram}`} target="_blank" rel="noreferrer">
+        <Fab color="primary" sx={{ position: 'fixed', bottom: '50px', right: '25px' }}>
+          <WhatsAppIcon />
+        </Fab>
+      </a>
+
       <Helmet>
         {loadingGetGeneralInformation
           ? null

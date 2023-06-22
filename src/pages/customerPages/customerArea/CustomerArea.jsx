@@ -178,7 +178,7 @@ function RowItem(props) {
   );
 }
 
-function OrderTable({ orderStatusType }) {
+function OrderTable({ orderStatusType, myOrderStats }) {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -358,7 +358,7 @@ function OrderTable({ orderStatusType }) {
           }}
           sx={{ bgcolor: filterOrderStatus === 'Perlu Dijemput' ? '#eeeeee' : null }}
         >
-          Segera Di Jemput
+          Segera Di Jemput ({myOrderStats.needsToBePickedUp})
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -369,7 +369,7 @@ function OrderTable({ orderStatusType }) {
           }}
           sx={{ bgcolor: filterOrderStatus === 'Perlu Dikerjakan' ? '#eeeeee' : null }}
         >
-          Sedang Di Kerjakan
+          Sedang Di Kerjakan ({myOrderStats.needsToBeDone})
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -379,7 +379,7 @@ function OrderTable({ orderStatusType }) {
           }}
           sx={{ bgcolor: filterOrderStatus === 'Perlu Diantar' ? '#eeeeee' : null }}
         >
-          Segera Di Antar
+          Segera Di Antar ({myOrderStats.needsToBeDelivered})
         </MenuItem>
       </Menu>
 
@@ -861,7 +861,7 @@ function CustomerArea() {
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <OrderTable orderStatusType={buttonStatusOrder} />
+          <OrderTable orderStatusType={buttonStatusOrder} myOrderStats={myOrderStats} />
         </Paper>
       </Box>
     </>

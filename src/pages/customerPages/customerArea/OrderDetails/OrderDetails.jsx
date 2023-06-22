@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Avatar, Box, Button, Grid, Paper, useTheme } from '@mui/material';
+import { Avatar, Box, Button, Grid, Menu, MenuItem, Paper, useTheme } from '@mui/material';
 import AddressCard from '../../../../components/Card/AddressCard';
 import axios from 'axios';
 import RatingComponent from '../../../../components/Ratings/RatingComponent';
@@ -38,7 +38,7 @@ function OrderDetails() {
       console.log(res);
       setDetailOrder({
         ...res.data.data,
-        alamatJemput: JSON.parse(res.data.data.alamatJemput),
+        alamatJemput: res.data.data.alamatJemput ? JSON.parse(res.data.data.alamatJemput) : null,
         alamatAntar: res.data.data.alamatAntar ? JSON.parse(res.data.data.alamatAntar) : null,
       });
       handleGetLaundryItem(res.data.data.id);
@@ -94,6 +94,41 @@ function OrderDetails() {
     }
   };
 
+  const handleUpdateOrderStatus = async (orderId, statusValue) => {
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/${orderId}`,
+        data: {
+          namaLayanan: detailOrder.namaLayanan,
+          jenisLayanan: detailOrder.jenisLayanan,
+          mPembayaran: detailOrder.mPembayaran,
+          tglMulai: detailOrder.tglMulai,
+          alamatJemput: detailOrder.alamatJemput ? JSON.stringify(detailOrder.alamatJemput) : null,
+          alamatAntar: detailOrder.alamatAntar ? JSON.stringify(detailOrder.alamatAntar) : null,
+          status: statusValue,
+          diskon: detailOrder.diskon,
+        },
+      });
+
+      console.log('Response GET Data Finance');
+      console.log(res);
+      handleGetDetailOrder();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Menu - Order Status
+  const [orderStatusAnchorEl, setOrderStatusAnchorEl] = React.useState(null);
+  const openOrderStatus = Boolean(orderStatusAnchorEl);
+  const handleCloseOrderStatus = () => {
+    setOrderStatusAnchorEl(null);
+  };
+
   return (
     <>
       <Box
@@ -114,6 +149,20 @@ function OrderDetails() {
           currentPage={{
             title: `Detail Pesanan #${noPesanan}`,
           }}
+          directButton={
+            detailOrder
+              ? detailOrder.status !== 'Perlu Disetujui'
+                ? false
+                : [
+                    {
+                      color: 'primary',
+                      iconType: 'edit',
+                      value: 'Edit Pesanan',
+                      link: detailOrder ? `/AreaPelanggan/FormulirPemesananLaundry/${detailOrder.id}` : false,
+                    },
+                  ]
+              : false
+          }
         />
 
         {/* Main Content */}
@@ -288,6 +337,49 @@ function OrderDetails() {
                 >
                   Struk Digital
                 </Button>
+
+                {!detailOrder ? null : (
+                  <>
+                    <Button
+                      disabled={detailOrder.status !== 'Perlu Disetujui' ? true : false}
+                      variant="outlined"
+                      size="large"
+                      onClick={(event) => {
+                        setOrderStatusAnchorEl(event.currentTarget);
+                      }}
+                      sx={{ width: '100%', fontWeight: 'bold' }}
+                    >
+                      Ubah Status Pesanan
+                    </Button>
+                    {/* Menu - Order Status */}
+                    <Menu
+                      anchorEl={orderStatusAnchorEl}
+                      open={openOrderStatus}
+                      onClose={handleCloseOrderStatus}
+                      MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                        sx: { width: orderStatusAnchorEl && orderStatusAnchorEl.offsetWidth },
+                      }}
+                    >
+                      {['Batalkan Pesanan'].map((item) => (
+                        <MenuItem
+                          onClick={() => {
+                            handleUpdateOrderStatus(detailOrder.id, 'Dibatalkan');
+
+                            handleCloseOrderStatus();
+                          }}
+                          sx={{ bgcolor: detailOrder.status === item ? '#eeeeee' : null }}
+                        >
+                          {item}{' '}
+                          {(item === 'Selesai' && detailOrder.statusPembayaran === 'Belum Bayar') ||
+                          (item === 'Dibatalkan' && detailOrder.statusPembayaran === 'Sudah Bayar')
+                            ? `(${detailOrder.statusPembayaran})`
+                            : null}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </>
+                )}
               </Box>
             </Paper>
             <Paper

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
-import { Box, Button, Grid, Paper, useTheme } from '@mui/material';
+import { Alert, Box, Button, Grid, Menu, MenuItem, Paper, useTheme } from '@mui/material';
 import axios from 'axios';
 import DetailCustomerCard from '../../../../components/Card/DetailCustomerCard';
 import AddressCard from '../../../../components/Card/AddressCard';
 import LaundryItemTable from '../../../../components/Table/LaundryItemTable';
 import RatingComponent from '../../../../components/Ratings/RatingComponent';
+import SendIcon from '@mui/icons-material/Send';
 
 function OrderDetails() {
   const theme = useTheme();
@@ -48,15 +49,14 @@ function OrderDetails() {
     }
   };
 
-  // Handle API Get All Laundry Item
   const handleGetLaundryItem = async (orderId) => {
     try {
       const res = await axios({
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
         },
-        url: `${process.env.REACT_APP_API_KEY}/barang/user/${orderId}`,
+        url: `${process.env.REACT_APP_API_KEY}/barang/pemesananId/${orderId}`,
       });
 
       console.log('Response GET Data');
@@ -91,22 +91,97 @@ function OrderDetails() {
     }
   };
 
+  const handleUpdateOrderStatus = async (orderId, statusValue) => {
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/admin/status/${orderId}`,
+        data: { status: statusValue },
+      });
+
+      console.log('Response GET Data Finance');
+      console.log(res);
+      if (statusValue !== 'Diterima') {
+        handleGetDetailOrder();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUpdatePaymentStatus = async (orderId, statusValue) => {
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/admin/payment-status/${orderId}`,
+        data: { statusPembayaran: statusValue },
+      });
+
+      console.log('Response GET Data Finance');
+      console.log(res);
+
+      handleGetDetailOrder();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Menu - Order Status
+  const [orderStatusAnchorEl, setOrderStatusAnchorEl] = React.useState(null);
+  const openOrderStatus = Boolean(orderStatusAnchorEl);
+  const handleCloseOrderStatus = () => {
+    setOrderStatusAnchorEl(null);
+  };
+
+  // Menu - Payment Status
+  const [paymentStatusAnchorEl, setPaymentStatusAnchorEl] = React.useState(null);
+  const openPaymentStatus = Boolean(paymentStatusAnchorEl);
+  const handleClosePaymentStatus = () => {
+    setPaymentStatusAnchorEl(null);
+  };
+
+  // const [openAlert, setOpenAlert] = useState(false);
+
   return (
     <>
+      {/* {!openAlert ? null : (
+        <Alert
+          variant="filled"
+          severity="warning"
+          sx={{ position: 'fixed', top: 88, left: '50%', transform: 'translate(-50%, 0)' }}
+        >
+          Status Pembayaran Pada Pesanan ini Belum Bayar
+        </Alert>
+      )} */}
+
       <div className="gap-24" style={{ marginBottom: '24px' }}>
         <PageStructureAndDirectButton
           defaultMenu="Pesanan"
           currentPage={{
             title: 'Detail Pesanan',
           }}
-          directButton={[
-            {
-              color: 'primary',
-              iconType: 'edit',
-              value: 'Edit Pesanan',
-              link: detailOrder ? `/Pesanan/FormulirPemesananLaundry/${detailOrder.id}` : false,
-            },
-          ]}
+          directButton={
+            detailOrder
+              ? detailOrder.status === 'Selesai' ||
+                detailOrder.status === 'Dibatalkan' ||
+                detailOrder.status === 'Ditolak'
+                ? false
+                : [
+                    {
+                      color: 'primary',
+                      iconType: 'edit',
+                      value: 'Edit Pesanan',
+                      link: detailOrder ? `/Pesanan/FormulirPemesananLaundry/${detailOrder.id}` : false,
+                    },
+                  ]
+              : false
+          }
         />
 
         {/* Main Content */}
@@ -264,14 +339,113 @@ function OrderDetails() {
                   </div>
                 )}
 
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => navigate(`/StrukPemesanan/${noPesanan}`)}
-                  sx={{ width: '100%', fontWeight: 'bold' }}
-                >
-                  Struk Digital
-                </Button>
+                <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => navigate(`/StrukPemesanan/${noPesanan}`)}
+                    sx={{ width: '100%', fontWeight: 'bold' }}
+                  >
+                    Struk Digital
+                  </Button>
+
+                  {!detailOrder ? null : (
+                    <a href={`https://wa.me/${detailOrder.User.noTelp}`} target="_blank" rel="noreferrer">
+                      <Button variant="outlined" size="large" sx={{ width: 'fit-content', fontWeight: 'bold' }}>
+                        <SendIcon />
+                      </Button>
+                    </a>
+                  )}
+                </Box>
+                {!detailOrder ? null : (
+                  <>
+                    <Button
+                      disabled={detailOrder.status === 'Selesai' || detailOrder.status === 'Ditolak' ? true : false}
+                      variant="outlined"
+                      size="large"
+                      onClick={(event) => {
+                        setOrderStatusAnchorEl(event.currentTarget);
+                      }}
+                      sx={{ width: '100%', fontWeight: 'bold' }}
+                    >
+                      Ubah Status Pesanan
+                    </Button>
+                    {/* Menu - Order Status */}
+                    <Menu
+                      anchorEl={orderStatusAnchorEl}
+                      open={openOrderStatus}
+                      onClose={handleCloseOrderStatus}
+                      MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                        sx: { width: orderStatusAnchorEl && orderStatusAnchorEl.offsetWidth }, // <-- The line that does all
+                      }}
+                    >
+                      {(detailOrder.status === 'Perlu Disetujui'
+                        ? ['Diterima', 'Ditolak']
+                        : detailOrder.status === 'Ditolak' || detailOrder.status === 'Selesai'
+                        ? []
+                        : ['Perlu Dijemput', 'Perlu Dikerjakan', 'Perlu Diantar', 'Selesai', 'Dibatalkan']
+                      ).map((item) => (
+                        <MenuItem
+                          disabled={
+                            (item === 'Selesai' && detailOrder.statusPembayaran === 'Belum Bayar') ||
+                            (item === 'Dibatalkan' && detailOrder.statusPembayaran === 'Sudah Bayar')
+                              ? true
+                              : false
+                          }
+                          onClick={() => {
+                            handleUpdateOrderStatus(detailOrder.id, item);
+                            if (item === 'Diterima') {
+                              handleUpdateOrderStatus(detailOrder.id, 'Perlu Dijemput');
+                            }
+                            handleCloseOrderStatus();
+                          }}
+                          sx={{ bgcolor: detailOrder.status === item ? '#eeeeee' : null }}
+                        >
+                          {item}{' '}
+                          {(item === 'Selesai' && detailOrder.statusPembayaran === 'Belum Bayar') ||
+                          (item === 'Dibatalkan' && detailOrder.statusPembayaran === 'Sudah Bayar')
+                            ? `(${detailOrder.statusPembayaran})`
+                            : null}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+
+                    <Button
+                      disabled={detailOrder.status === 'Selesai' || detailOrder.status === 'Dibatalkan' ? true : false}
+                      variant="outlined"
+                      size="large"
+                      onClick={(event) => {
+                        setPaymentStatusAnchorEl(event.currentTarget);
+                      }}
+                      sx={{ width: '100%', fontWeight: 'bold' }}
+                    >
+                      Ubah Status Pembayaran
+                    </Button>
+                    {/* Menu - Payment Status */}
+                    <Menu
+                      anchorEl={paymentStatusAnchorEl}
+                      open={openPaymentStatus}
+                      onClose={handleClosePaymentStatus}
+                      MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                        sx: { width: paymentStatusAnchorEl && paymentStatusAnchorEl.offsetWidth }, // <-- The line that does all
+                      }}
+                    >
+                      {['Belum Bayar', 'Sudah Bayar'].map((item) => (
+                        <MenuItem
+                          onClick={() => {
+                            handleUpdatePaymentStatus(detailOrder.id, item);
+                            handleClosePaymentStatus();
+                          }}
+                          sx={{ bgcolor: detailOrder.statusPembayaran === item ? '#eeeeee' : null }}
+                        >
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </>
+                )}
               </Box>
             </Paper>
             <Paper
