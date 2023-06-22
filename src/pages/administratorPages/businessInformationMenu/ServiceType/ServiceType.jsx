@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageStructureAndDirectButton from '../../../../components/PageStructureAndDirectButton/PageStructureAndDirectButton';
 import {
+  Alert,
   Box,
   Button,
   Chip,
@@ -210,6 +211,8 @@ function ServiceType() {
     }
   };
 
+  const [openAlert, setOpenAlert] = useState(false);
+
   return (
     <>
       <div className="gap-24" style={{ marginBottom: '24px' }}>
@@ -232,10 +235,18 @@ function ServiceType() {
               onSubmit={(e) => {
                 e.preventDefault();
                 console.log('click');
-                if (formServiceType.id) {
-                  handleUpdateServiceType();
+                if (
+                  formServiceType.serviceDuration.days ||
+                  formServiceType.serviceDuration.hours ||
+                  formServiceType.serviceDuration.minutes
+                ) {
+                  if (formServiceType.id) {
+                    handleUpdateServiceType();
+                  } else {
+                    handleCreateServiceType();
+                  }
                 } else {
-                  handleCreateServiceType();
+                  setOpenAlert(true);
                 }
               }}
             >
@@ -292,6 +303,7 @@ function ServiceType() {
                             formServiceType.serviceDuration.days !== null ? formServiceType.serviceDuration.days : ''
                           }
                           onChange={(e) => {
+                            setOpenAlert(false);
                             setFormServiceType({
                               ...formServiceType,
                               serviceDuration: { ...formServiceType.serviceDuration, days: e.target.value },
@@ -310,6 +322,7 @@ function ServiceType() {
                             formServiceType.serviceDuration.hours !== null ? formServiceType.serviceDuration.hours : ''
                           }
                           onChange={(e) => {
+                            setOpenAlert(false);
                             setFormServiceType({
                               ...formServiceType,
                               serviceDuration: { ...formServiceType.serviceDuration, hours: e.target.value },
@@ -329,8 +342,8 @@ function ServiceType() {
                               ? formServiceType.serviceDuration.minutes
                               : ''
                           }
-                          focused={formServiceType.serviceDuration.minutes !== null}
                           onChange={(e) => {
+                            setOpenAlert(false);
                             setFormServiceType({
                               ...formServiceType,
                               serviceDuration: { ...formServiceType.serviceDuration, minutes: e.target.value },
@@ -340,6 +353,14 @@ function ServiceType() {
                           onWheel={(e) => e.target.blur()}
                           sx={{ width: '100%' }}
                         />
+                      </Grid>
+                      <Grid item xs={12}>
+                        {!openAlert ? null : (
+                          <Alert variant="outlined" severity="warning" color="warning">
+                            Durasi Layanan Kosong! Harap isi minimal salah satu di antara pilihan inputan Hari, Jam atau
+                            Menit
+                          </Alert>
+                        )}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -531,9 +552,9 @@ function ServiceType() {
                                     id: item.id,
                                     serviceTypeName: item.layanan,
                                     serviceDuration: {
-                                      days: item.hari,
-                                      hours: item.jam,
-                                      minutes: item.menit,
+                                      days: item.hari !== 0 ? item.hari : '',
+                                      hours: item.jam !== 0 ? item.jam : '',
+                                      minutes: item.menit !== 0 ? item.menit : '',
                                     },
                                     description: item.deskripsi,
                                     photo: { img: null, fileName: item.gambar },

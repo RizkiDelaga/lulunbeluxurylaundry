@@ -116,11 +116,11 @@ function DigitalReceipt() {
                 <h6>Nama Pelanggan</h6>
                 <span style={{ textAlign: 'end' }}>{detailOrder.User.nama}</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
-                <div>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <h6>Alamat Penjemputan</h6>
                   {!detailOrder.alamatJemput ? null : (
                     <>
-                      <h6>Alamat Penjemputan</h6>
                       <div style={{ marginTop: '5px' }}>
                         {detailOrder.alamatJemput.kecamatan ? `Kecamatan ${detailOrder.alamatJemput.kecamatan}` : null}
                         {detailOrder.alamatJemput.kelurahan
@@ -134,11 +134,11 @@ function DigitalReceipt() {
                       </div>
                     </>
                   )}
-                </div>
-                <div>
+                </Grid>
+                <Grid item xs={6}>
+                  <h6>Alamat Pengantaran</h6>
                   {!detailOrder.alamatAntar ? null : (
                     <>
-                      <h6>Alamat Pengantaran</h6>
                       <div style={{ marginTop: '5px' }}>
                         {detailOrder.alamatAntar.kecamatan ? `Kecamatan ${detailOrder.alamatAntar.kecamatan}` : null}
                         {detailOrder.alamatAntar.kelurahan ? `, Kelurahan ${detailOrder.alamatAntar.kelurahan}` : null}
@@ -150,8 +150,8 @@ function DigitalReceipt() {
                       </div>
                     </>
                   )}
-                </div>
-              </div>
+                </Grid>
+              </Grid>
             </div>
 
             {/*  */}
