@@ -836,7 +836,13 @@ function FormOrderLaundry() {
         status: res.data.data.status,
       });
 
-      setOpenDialog({ status: res.data.data.status !== 'Perlu Disetujui' ? true : false, type: 'handle status' });
+      const profileCustomer = JSON.parse(localStorage.getItem('my_profile_account'));
+
+      if (res.data.data.userId !== profileCustomer.id) {
+        setOpenDialog({ status: true, type: 'handle user' });
+      } else {
+        setOpenDialog({ status: res.data.data.status !== 'Perlu Disetujui' ? true : false, type: 'handle status' });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -1122,7 +1128,7 @@ function FormOrderLaundry() {
                       if (listLaundryItem.reduce((sum, cur) => sum + cur.kuantitas, 0) < 3) {
                         setOpenAlert(true);
                       } else {
-                        navigate(`/Pesanan/${formOrder.noOrder}`);
+                        navigate(`/AreaPelanggan/${formOrder.noOrder}`);
                       }
                     }}
                     sx={{
@@ -1187,11 +1193,19 @@ function FormOrderLaundry() {
 
       <Dialog open={openDialog.status}>
         <DialogTitle>
-          <h4>{openDialog.type === 'handle address' ? 'Lengkapi Profil' : 'Pesanan Tidak Dapat Di Edit'}</h4>
+          <h4>
+            {openDialog.type === 'handle address'
+              ? 'Lengkapi Profil'
+              : openDialog.type === 'handle user'
+              ? 'Pesanan Tidak Dapat Di Edit'
+              : 'Pesanan Tidak Dapat Di Edit'}
+          </h4>
         </DialogTitle>
         <Box sx={{ my: 2, mx: 3 }}>
           {openDialog.type === 'handle address'
             ? 'Alamat tidak ditemukan! Tambah alamat untuk melakukan pemesanan'
+            : openDialog.type === 'handle user'
+            ? 'Oops!.. Sepertinya anda tersesat! Pesanan ini bukan milikmu'
             : 'Status pesanan sudah tidak memungkinkan untuk dapat dilakukan perubahan'}
         </Box>
         <DialogActions>
@@ -1200,12 +1214,18 @@ function FormOrderLaundry() {
               navigate(
                 openDialog.type === 'handle address'
                   ? `/AreaPelanggan/EditProfil`
+                  : openDialog.type === 'handle user'
+                  ? '/AreaPelanggan'
                   : `/AreaPelanggan/${formOrder.noOrder}`
               )
             }
             sx={{ fontWeight: 'bold' }}
           >
-            {openDialog.type === 'handle address' ? 'Tambah Alamat' : 'Kembali'}
+            {openDialog.type === 'handle address'
+              ? 'Tambah Alamat'
+              : openDialog.type === 'handle user'
+              ? 'Kembali'
+              : 'Kembali'}
           </Button>
         </DialogActions>
       </Dialog>

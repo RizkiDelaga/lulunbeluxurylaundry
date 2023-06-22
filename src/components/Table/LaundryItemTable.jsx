@@ -71,7 +71,7 @@ function RowItem(props) {
                 variant="outlined"
                 className={`button-outlined-primary`}
                 onClick={() => {
-                  if (!props.stateValue.id) {
+                  if (props.stateValue.id !== props.item.id) {
                     props.handleState({
                       id: props.item.id,
                       itemName: props.item.namaBarang,
@@ -272,7 +272,7 @@ function LaundryItemTable({
                     <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
                       Diskon
                     </TableCell>
-                    <TableCell align="right" colSpan={1} sx={{ backgroundColor: cellColor }}>
+                    <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
                       {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(discount)}
                     </TableCell>
                     {readOnly ? null : (
@@ -283,7 +283,7 @@ function LaundryItemTable({
                     <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
                       Sub Total
                     </TableCell>
-                    <TableCell align="right" colSpan={1} sx={{ backgroundColor: cellColor }}>
+                    <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
                       {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
                         listLaundryItem.reduce((sum, cur) => sum + cur.jumlah, 0)
                       )}
@@ -293,7 +293,7 @@ function LaundryItemTable({
                     <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
                       Total Pembayaran
                     </TableCell>
-                    <TableCell align="right" colSpan={1} sx={{ backgroundColor: cellColor }}>
+                    <TableCell align="left" colSpan={1} sx={{ backgroundColor: cellColor }}>
                       {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
                         listLaundryItem.reduce((sum, cur) => sum + cur.jumlah, 0) - discount
                       )}
