@@ -104,7 +104,7 @@ function AdminRouter() {
             {/* Customer Menu Route */}
             <Route path="Pelanggan" element={<CustomerMenu />} />
             <Route path="Pelanggan/RegistrasiPelangganBaru" element={<RegisterNewCustomer />} />
-            <Route path="Pelanggan/EditInformasiPelanggan" element={<HomePage />} />
+            <Route path="Pelanggan/EditInformasiPelanggan/:id" element={<HomePage />} />
           </Route>
         </Routes>
   );
