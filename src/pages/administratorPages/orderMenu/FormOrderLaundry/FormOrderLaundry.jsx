@@ -100,7 +100,7 @@ function RowItem(props) {
   );
 }
 
-function CustomerTable({ userSelected, setUserSelected }) {
+function CustomerTable({ userSelected, setUserSelected, listCustomer }) {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -113,57 +113,8 @@ function CustomerTable({ userSelected, setUserSelected }) {
 
   React.useEffect(() => {
     // document.title = 'Menu Pelanggan';
-    handleGetOrder();
+    // handleGetOrder();
   }, []);
-
-  const [listCustomer, setListCustomer] = React.useState([]);
-  const [pageConfig, setPageConfig] = React.useState({
-    currentPage: 1,
-    dataPerPage: 10,
-    metadata: null,
-  });
-
-  // Handle API Get All Data Finance
-  const handleGetOrder = async (changePage, maxDataPerPage) => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
-        },
-        url: `${process.env.REACT_APP_API_KEY}/admin/user/all?page=${
-          !changePage
-            ? pageConfig.currentPage
-            : changePage === 'prev'
-            ? pageConfig.currentPage - 1
-            : changePage === 'next'
-            ? pageConfig.currentPage + 1
-            : changePage
-        }&perPage=${maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage}`,
-      });
-
-      setPageConfig({
-        ...pageConfig,
-        metadata: res.data.metadata,
-        currentPage: !changePage
-          ? pageConfig.currentPage
-          : changePage === 'prev'
-          ? pageConfig.currentPage - 1
-          : changePage === 'next'
-          ? pageConfig.currentPage + 1
-          : changePage,
-        dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
-      });
-      console.log('Response GET Data Finance');
-      console.log(res);
-      setListCustomer(res.data.data);
-    } catch (error) {
-      if (error.response.status === 404) {
-        setListCustomer([]);
-      }
-      console.log(error);
-    }
-  };
 
   const headCells = [
     {
@@ -206,13 +157,6 @@ function CustomerTable({ userSelected, setUserSelected }) {
           <Typography sx={{ fontWeight: 'bold' }} color="primary" variant="h5" id="tableTitle" component="div">
             Daftar Pelanggan
           </Typography>
-          <IconButton
-            onClick={() => {
-              handleGetOrder();
-            }}
-          >
-            <RefreshIcon color="primary" />
-          </IconButton>
         </span>
       </Toolbar>
 
@@ -264,10 +208,10 @@ function CustomerTable({ userSelected, setUserSelected }) {
       {/* 404 Data Not Found Handling */}
       <Box
         sx={{
-          mt: 2,
+          // mt: 2,
           py: 1,
           px: 2,
-          borderRadius: 2,
+          // borderRadius: 2,
           backgroundColor: '#eeeeee',
           textAlign: 'center',
           display: listCustomer.length ? 'none' : null,
@@ -286,6 +230,33 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
   const [userSelected, setUserSelected] = React.useState({ userId: null, detailUser: null });
   const [openDialogSearchUser, setOpenDialogSearchUser] = React.useState(false);
 
+  const [searchCustomerKey, setSearchCustomerKey] = React.useState({ name: '', phoneNumer: '' });
+  const [listCustomer, setListCustomer] = React.useState([]);
+
+  // Handle API Get All Data Finance
+  const handleGetCustomerSearch = async () => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/user/search?${
+          searchCustomerKey.name ? 'nama=' + searchCustomerKey.name + '&' : ''
+        }${searchCustomerKey.phoneNumer ? 'noTelp=' + searchCustomerKey.phoneNumer : ''}`,
+      });
+
+      console.log('Response GET Data Finance');
+      console.log(res);
+      setListCustomer(res.data.data);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setListCustomer([]);
+      }
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Dialog
@@ -298,7 +269,67 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
           <h4>Cari Pelanggan</h4>
         </DialogTitle>
         <Box sx={{ my: 2, mx: 3 }}>
-          <CustomerTable userSelected={userSelected} setUserSelected={setUserSelected} />
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={2.4} lg={1.9} sx={{ display: 'flex', alignItems: 'center' }}>
+              <span>Cari Pelanggan *</span>
+            </Grid>
+            <Grid
+              item
+              xs
+              lg
+              sx={{
+                display: 'flex',
+                [theme.breakpoints.down('md')]: {
+                  paddingTop: '8px !important',
+                },
+              }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm>
+                  <TextField
+                    type="text"
+                    label="Nama Pelanggan"
+                    value={searchCustomerKey.name}
+                    onChange={(e) => {
+                      setSearchCustomerKey({ ...searchCustomerKey, name: e.target.value });
+                    }}
+                    autoComplete="off"
+                    sx={{ width: '100%' }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm>
+                  <TextField
+                    type="number"
+                    label="Nomer Telepon"
+                    value={searchCustomerKey.phoneNumer !== null ? searchCustomerKey.phoneNumer : ''}
+                    onChange={(e) => {
+                      setSearchCustomerKey({
+                        ...searchCustomerKey,
+                        phoneNumer: e.target.value,
+                      });
+                    }}
+                    autoComplete="off"
+                    onWheel={(e) => e.target.blur()}
+                    sx={{ width: '100%' }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm="auto" sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => handleGetCustomerSearch()}
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    Cari
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <br />
+
+          <CustomerTable userSelected={userSelected} setUserSelected={setUserSelected} listCustomer={listCustomer} />
         </Box>
         <DialogActions sx={{ my: 2, mx: 3, p: 0 }}>
           <Button onClick={() => setOpenDialogSearchUser(false)} sx={{ fontWeight: 'bold' }}>
