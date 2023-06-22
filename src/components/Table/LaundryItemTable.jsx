@@ -120,7 +120,7 @@ function RowItem(props) {
                   {props.item.catatan ? props.item.catatan : ' -'}
                 </Grid>
                 <Grid item xs={6}>
-                  <strong>Foto Bukti : </strong>
+                  <strong>Foto : </strong>
                   {props.item.gambar ? (
                     <>
                       <a href={props.item.gambar} target="_blank" rel="noreferrer" style={{ wordWrap: 'break-word' }}>

@@ -1,4 +1,5 @@
 import {
+  Alert,
   Autocomplete,
   Avatar,
   Box,
@@ -400,7 +401,14 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
   );
 };
 
-const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaundryItem, handleUpdateLaundryItem }) => {
+const InputItem = ({
+  stateValue,
+  handleState,
+  listLaundryType,
+  handleCreateLaundryItem,
+  handleUpdateLaundryItem,
+  setOpenAlert,
+}) => {
   const theme = useTheme();
 
   return (
@@ -411,6 +419,7 @@ const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaund
         onSubmit={(e) => {
           e.preventDefault();
           console.log('click');
+          setOpenAlert(false);
           if (stateValue.id) {
             handleUpdateLaundryItem();
           } else {
@@ -631,6 +640,7 @@ function FormOrderLaundry() {
   const navigate = useNavigate();
   const [formOrder, setFormOrder] = React.useState({
     id: id || null,
+    noOrder: null,
     dateOrder: dayjs(),
     serviceType: {
       name: '',
@@ -734,7 +744,7 @@ function FormOrderLaundry() {
       setListCustomerAddress(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
-        setOpenDialog(true);
+        setOpenDialog({ status: true, type: 'handle address' });
       }
       console.log(error);
     }
@@ -810,6 +820,7 @@ function FormOrderLaundry() {
       console.log('apakah keluar?', res.data.data.alamatJemput);
       setFormOrder({
         id: res.data.data.id,
+        noOrder: res.data.data.nomorPesanan,
         dateOrder: dayjs(newDate),
         serviceType: {
           name: res.data.data.namaLayanan,
@@ -824,6 +835,8 @@ function FormOrderLaundry() {
         },
         status: res.data.data.status,
       });
+
+      setOpenDialog({ status: res.data.data.status !== 'Perlu Disetujui' ? true : false, type: 'handle status' });
     } catch (error) {
       console.log(error);
     }
@@ -1028,7 +1041,8 @@ function FormOrderLaundry() {
     }
   };
 
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialog, setOpenDialog] = React.useState({ status: false, type: '' });
+  const [openAlert, setOpenAlert] = useState(false);
 
   return (
     <>
@@ -1089,10 +1103,50 @@ function FormOrderLaundry() {
                   <LaundryShuttle state={formOrder} setState={setFormOrder} listAddress={listCustomerAddress} />
                 ) : null}
 
-                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
-                  {formOrder.id ? 'Update Pesanan' : 'Buat pesanan'}
-                  {/* {id ? 'Edit Pesanan' : 'Buat pesanan'} */}
-                </Button>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 2,
+                    [theme.breakpoints.down('sm')]: {
+                      flexWrap: 'wrap',
+                    },
+                  }}
+                >
+                  <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
+                    {formOrder.id ? 'Update Pesanan' : 'Buat pesanan'}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    onClick={() => {
+                      if (listLaundryItem.reduce((sum, cur) => sum + cur.kuantitas, 0) < 3) {
+                        setOpenAlert(true);
+                      } else {
+                        navigate(`/Pesanan/${formOrder.noOrder}`);
+                      }
+                    }}
+                    sx={{
+                      width: 'fit-content',
+                      fontWeight: 'bold',
+                      display: formOrder.id ? null : 'none',
+                      [theme.breakpoints.down('sm')]: {
+                        width: '100%',
+                      },
+                    }}
+                  >
+                    Selesai
+                  </Button>
+
+                  {!openAlert ? null : (
+                    <Alert
+                      variant="filled"
+                      severity="warning"
+                      sx={{ position: 'fixed', top: 88, left: '50%', transform: 'translate(-50%, 0)' }}
+                    >
+                      Minimum barang yang wajib diinputkan adalah 3 item
+                    </Alert>
+                  )}
+                </Box>
               </Box>
             </form>
           </Paper>
@@ -1106,6 +1160,7 @@ function FormOrderLaundry() {
                 listLaundryType={listLaundryType}
                 handleCreateLaundryItem={handleCreateLaundryItem}
                 handleUpdateLaundryItem={handleUpdateLaundryItem}
+                setOpenAlert={setOpenAlert}
               />
 
               {listLaundryItem.length !== 0 ? (
@@ -1115,7 +1170,6 @@ function FormOrderLaundry() {
                   </div>
                   <Box sx={{ backgroundColor: '#eeeeee', width: '100%' }}>
                     <LaundryItemTable
-                      detailPrice={true}
                       listLaundryItem={listLaundryItem}
                       discount={formOrder.discount}
                       deleteLaundryItem={handleDeleteLaundryItem}
@@ -1131,14 +1185,27 @@ function FormOrderLaundry() {
         ) : null}
       </Box>
 
-      <Dialog open={openDialog}>
+      <Dialog open={openDialog.status}>
         <DialogTitle>
-          <h4>Lengkapi Profil</h4>
+          <h4>{openDialog.type === 'handle address' ? 'Lengkapi Profil' : 'Pesanan Tidak Dapat Di Edit'}</h4>
         </DialogTitle>
-        <Box sx={{ my: 2, mx: 3 }}>Alamat tidak ditemukan! Tambah alamat untuk melakukan pemesanan</Box>
+        <Box sx={{ my: 2, mx: 3 }}>
+          {openDialog.type === 'handle address'
+            ? 'Alamat tidak ditemukan! Tambah alamat untuk melakukan pemesanan'
+            : 'Status pesanan sudah tidak memungkinkan untuk dapat dilakukan perubahan'}
+        </Box>
         <DialogActions>
-          <Button onClick={() => navigate('/AreaPelanggan/EditProfil')} sx={{ fontWeight: 'bold' }}>
-            Tambah Alamat
+          <Button
+            onClick={() =>
+              navigate(
+                openDialog.type === 'handle address'
+                  ? `/AreaPelanggan/EditProfil`
+                  : `/AreaPelanggan/${formOrder.noOrder}`
+              )
+            }
+            sx={{ fontWeight: 'bold' }}
+          >
+            {openDialog.type === 'handle address' ? 'Tambah Alamat' : 'Kembali'}
           </Button>
         </DialogActions>
       </Dialog>
