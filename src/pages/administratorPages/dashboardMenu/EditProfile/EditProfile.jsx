@@ -79,7 +79,7 @@ function EditProfile() {
     formData.append('role', formEditProfile.role);
     formData.append('nama', formEditProfile.administratorName);
     formData.append('noTelp', formEditProfile.contact.phoneNumber);
-    formData.append('email', formEditProfile.contact.email);
+    formData.append('email', formEditProfile.contact.email || '');
     formData.append('profilePic', formEditProfile.profilePicture.img);
     formData.append('status', formEditProfile.status);
     setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
@@ -218,50 +218,52 @@ function EditProfile() {
                 </Grid>
               </Grid>
 
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={12} md={2} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
-                  <span>Role</span>
-                </Grid>
+              {formEditProfile.role !== 'Master' ? null : (
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={2} lg={1.4} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <span>Role</span>
+                  </Grid>
 
-                <Grid
-                  item
-                  xs
-                  lg
-                  sx={{
-                    display: 'flex',
-                    [theme.breakpoints.down('md')]: {
-                      paddingTop: '8px !important',
-                    },
-                  }}
-                >
-                  <FormControl fullWidth>
-                    <InputLabel id="select-role-label">Role *</InputLabel>
-                    <Select
-                      required
-                      labelId="select-role-label"
-                      id="select-role"
-                      value={formEditProfile.role}
-                      label="Role"
-                      onChange={(e) => {
-                        setFormEditProfile({
-                          ...formEditProfile,
-                          role: e.target.value,
-                        });
-                      }}
-                    >
-                      {['Basic', 'Master'].map((item) => {
-                        return (
-                          <MenuItem value={item} sx={{ py: '16px' }}>
-                            {item}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
+                  <Grid
+                    item
+                    xs
+                    lg
+                    sx={{
+                      display: 'flex',
+                      [theme.breakpoints.down('md')]: {
+                        paddingTop: '8px !important',
+                      },
+                    }}
+                  >
+                    <FormControl fullWidth>
+                      <InputLabel id="select-role-label">Role *</InputLabel>
+                      <Select
+                        required
+                        labelId="select-role-label"
+                        id="select-role"
+                        value={formEditProfile.role}
+                        label="Role"
+                        onChange={(e) => {
+                          setFormEditProfile({
+                            ...formEditProfile,
+                            role: e.target.value,
+                          });
+                        }}
+                      >
+                        {['Basic', 'Master'].map((item) => {
+                          return (
+                            <MenuItem value={item} sx={{ py: '16px' }}>
+                              {item}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
 
-                  {formEditProfile.role}
+                    {formEditProfile.role}
+                  </Grid>
                 </Grid>
-              </Grid>
+              )}
 
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={12} md={2} lg={1.4}>

@@ -75,7 +75,7 @@ function EditAdministrators() {
     formData.append('role', formEditAdministrator.role);
     formData.append('nama', formEditAdministrator.administratorName);
     formData.append('noTelp', formEditAdministrator.contact.phoneNumber);
-    formData.append('email', formEditAdministrator.contact.email);
+    formData.append('email', formEditAdministrator.contact.email || '');
     formData.append('profilePic', formEditAdministrator.profilePicture.img || null);
     formData.append('status', formEditAdministrator.accountStatus);
 
@@ -203,7 +203,6 @@ function EditAdministrators() {
                       </Grid>
                       <Grid item xs={12} sm>
                         <TextField
-                          required
                           type="email"
                           label="Email"
                           value={formEditAdministrator.contact.email}

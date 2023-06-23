@@ -19,12 +19,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import axios from 'axios';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import SearchIcon from '@mui/icons-material/Search';
 import { getComparator, stableSort } from '../../../utils/tableUtils';
-import dayjs from 'dayjs';
 
 function RowItem(props) {
   const navigate = useNavigate();
@@ -32,6 +27,24 @@ function RowItem(props) {
 
   const dateStart = new Date(props.item.tglMulai);
   const dateEnd = new Date(props.item.tglSelesai);
+
+  const handleUpdateEventStatus = async (eventId) => {
+    try {
+      const res = await axios({
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/acara/update-status/${eventId}`,
+      });
+
+      console.log('Response GET Data Finance');
+      console.log(res);
+      props.setLoadEvent(props.loadEvent + 1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // Menu - Action
   const [actionAnchorEl, setActionAnchorEl] = React.useState(null);
@@ -101,6 +114,14 @@ function RowItem(props) {
           >
             Edit Event
           </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleUpdateEventStatus(props.item.id);
+              handleCloseAction();
+            }}
+          >
+            {props.item.status === 'Nonaktif' ? 'Aktifkan Event' : 'Nonaktifkan Event'}
+          </MenuItem>
         </Menu>
       </TableRow>
 
@@ -133,11 +154,6 @@ function RowItem(props) {
                   <ol>{!props.item.kriteria ? null : props.item.kriteria.map((item) => <li>{item}</li>)}</ol>
                 </Grid>
               </Grid>
-              {/* <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-                <Button variant="contained" onClick={() => navigate(`/Pesanan/${props.item.nomorPesanan}`)}>
-                  Lihat Detail
-                </Button>
-              </Box> */}
             </Box>
           </Collapse>
         </TableCell>
@@ -146,7 +162,7 @@ function RowItem(props) {
   );
 }
 
-function EventTable({ statusType }) {
+function EventTable({ statusType, loadEvent, setLoadEvent }) {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -159,17 +175,12 @@ function EventTable({ statusType }) {
 
   React.useEffect(() => {
     handleGetEvent();
-  }, []);
+  }, [loadEvent]);
 
   const [listEvent, setListEvent] = React.useState([]);
-  // const [pageConfig, setPageConfig] = React.useState({
-  //   currentPage: 1,
-  //   dataPerPage: 10,
-  //   metadata: null,
-  // });
 
   // Handle API Get All Data Finance
-  const handleGetEvent = async (changePage, maxDataPerPage) => {
+  const handleGetEvent = async () => {
     try {
       const res = await axios({
         method: 'GET',
@@ -191,38 +202,6 @@ function EventTable({ statusType }) {
       console.log(error);
     }
   };
-
-  // // Handle API Search Finance
-  // const handleSearchEvent = async () => {
-  //   try {
-  //     const res = await axios({
-  //       method: 'GET',
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
-  //       },
-  //       url: `${process.env.REACT_APP_API_KEY}/acara/search${
-  //         statusType === 'Aktif' ? '/active' : statusType === 'Akan Datang' ? '/coming-soon' : '/done'
-  //       }?nama=${searching.value}`,
-  //     });
-  //     console.log('Response GET Data Finance');
-  //     console.log(res);
-
-  //     setListEvent(res.data.data);
-  //   } catch (error) {
-  //     if (error.response.status === 404) {
-  //       setListEvent([]);
-  //     }
-  //     console.log(error);
-  //   }
-  // };
-
-  // Menu - Searching
-  // const [searching, setSearching] = React.useState({ label: 'Nama Event', value: '', currentSearch: '' });
-  // const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
-  // const openSearch = Boolean(searchAnchorEl);
-  // const handleCloseSearch = () => {
-  //   setSearchAnchorEl(null);
-  // };
 
   const headCells = [
     {
@@ -279,108 +258,12 @@ function EventTable({ statusType }) {
           <IconButton
             onClick={() => {
               handleGetEvent();
-              // setSearching({ label: searching.label, value: '', currentSearch: '' });
             }}
           >
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
-        {/* <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap-reverse',
-            justifyContent: 'center',
-            alignItems: 'center',
-            justifySelf: 'end',
-          }}
-        >
-          <Chip
-            label={`Search: ${searching.currentSearch}`}
-            onDelete={() => {
-              setSearching({ label: searching.label, value: '', currentSearch: '' });
-              handleGetEvent();
-            }}
-            sx={{ display: !searching.currentSearch ? 'none' : null }}
-          />
-          <Tooltip title="Filter list">
-            <IconButton
-              onClick={(event) => {
-                setSearchAnchorEl(event.currentTarget);
-              }}
-            >
-              <SearchIcon color="primary" />
-            </IconButton>
-          </Tooltip>
-        </div> */}
       </Toolbar>
-      {/* Menu - Searching */}
-      {/* <Menu
-        anchorEl={searchAnchorEl}
-        open={openSearch}
-        onClose={handleCloseSearch}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <Box sx={{ py: 1, px: 2, display: 'flex', gap: 1 }}>
-          <Grid container spacing={1}>
-            <Grid
-              item
-              xs
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1,
-                [theme.breakpoints.up('sm')]: {
-                  flexDirection: 'row',
-                },
-              }}
-            >
-              <Select
-                value={searching.label}
-                size="small"
-                onChange={(e) => {
-                  setSearching({ ...searching, label: e.target.value });
-                }}
-                inputProps={{ 'aria-label': 'Without label' }}
-              >
-                <MenuItem value={'Nama Event'}>Nama Event</MenuItem>
-              </Select>
-
-              <TextField
-                required
-                label="Kata Pencarian"
-                value={searching.value}
-                onChange={(e) => {
-                  setSearching({ ...searching, value: e.target.value });
-                }}
-                size="small"
-                autoComplete="off"
-                sx={{ width: '100%' }}
-              />
-            </Grid>
-            <Grid item xs="auto" sx={{ display: 'flex', alignItems: 'center' }}>
-              <Button
-                size="medium"
-                variant="contained"
-                onClick={() => {
-                  setSearching({ label: searching.label, value: '', currentSearch: searching.value });
-
-                  handleCloseSearch();
-                  handleSearchEvent();
-                }}
-              >
-                Cari
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Menu> */}
 
       {/* Table Section */}
       <TableContainer sx={{ maxHeight: 800 }}>
@@ -414,7 +297,7 @@ function EventTable({ statusType }) {
           {/* Table Content */}
           <TableBody>
             {stableSort(listEvent, getComparator(order, orderBy)).map((item, index) => {
-              return <RowItem key={item.id} item={item} />;
+              return <RowItem key={item.id} item={item} loadEvent={loadEvent} setLoadEvent={setLoadEvent} />;
             })}
           </TableBody>
         </Table>
@@ -440,10 +323,11 @@ function EventTable({ statusType }) {
 
 function EventMenu() {
   const navigate = useNavigate();
+  const [loadEvent, setLoadEvent] = useState(0);
 
   React.useEffect(() => {
     document.title = 'Menu Event';
-  }, []);
+  }, [loadEvent]);
 
   return (
     <>
@@ -462,15 +346,15 @@ function EventMenu() {
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <EventTable statusType={'Aktif'} />
+          <EventTable statusType={'Aktif'} loadEvent={loadEvent} setLoadEvent={setLoadEvent} />
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <EventTable statusType={'Akan Datang'} />
+          <EventTable statusType={'Akan Datang'} loadEvent={loadEvent} setLoadEvent={setLoadEvent} />
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <EventTable statusType={'Selesai & Nonaktif'} />
+          <EventTable statusType={'Selesai & Nonaktif'} loadEvent={loadEvent} setLoadEvent={setLoadEvent} />
         </Paper>
       </div>
     </>
