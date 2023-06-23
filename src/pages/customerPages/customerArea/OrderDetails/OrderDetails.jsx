@@ -8,6 +8,7 @@ import RatingComponent from '../../../../components/Ratings/RatingComponent';
 import LaundryItemTable from '../../../../components/Table/LaundryItemTable';
 import DetailCustomerCard from '../../../../components/Card/DetailCustomerCard';
 import { Link } from 'react-router-dom';
+import { adjustTimePlus } from '../../../../utils/timeUtils';
 
 function OrderDetails() {
   const theme = useTheme();
@@ -16,6 +17,7 @@ function OrderDetails() {
   const [detailOrder, setDetailOrder] = useState();
   const [ratingReview, setRatingReview] = useState();
   const [listLaundryItem, setListLaundryItem] = React.useState([]);
+  const [statusUpdatedAt, setStatusUpdatedAt] = React.useState();
 
   React.useEffect(() => {
     document.title = 'Detail Pesanan';
@@ -44,6 +46,14 @@ function OrderDetails() {
       });
       handleGetLaundryItem(res.data.data.id);
       handleGetRatingReview(res.data.data.id);
+      setStatusUpdatedAt(
+        `${res.data.data.statusUpdatedAt.slice(0, 4)}-${res.data.data.statusUpdatedAt.slice(
+          5,
+          7
+        )}-${res.data.data.statusUpdatedAt.slice(8, 10)}T${(
+          '0' + adjustTimePlus(parseInt(res.data.data.statusUpdatedAt.slice(11, 13)))
+        ).slice(-2)}:${res.data.data.statusUpdatedAt.slice(14, 16)}:00.000Z`
+      );
     } catch (error) {
       if (error.response.status === 404) {
         setDetailOrder();
@@ -340,10 +350,10 @@ function OrderDetails() {
                     </div>
                     <div style={{ fontSize: '12px', marginTop: '5px' }}>
                       Status diubah pada{' '}
-                      {`${detailOrder.updatedAt.slice(8, 10)}/${detailOrder.updatedAt.slice(
-                        5,
-                        7
-                      )}/${detailOrder.updatedAt.slice(0, 4)} ${detailOrder.updatedAt.slice(11, 16)}`}
+                      {`${statusUpdatedAt.slice(8, 10)}/${statusUpdatedAt.slice(5, 7)}/${statusUpdatedAt.slice(
+                        0,
+                        4
+                      )} ${statusUpdatedAt.slice(11, 16)}`}
                     </div>
                   </div>
                 )}

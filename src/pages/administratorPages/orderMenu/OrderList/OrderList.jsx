@@ -37,14 +37,22 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SearchIcon from '@mui/icons-material/Search';
 import { getComparator, stableSort } from '../../../../utils/tableUtils';
+import dayjs from 'dayjs';
+import { adjustTime, adjustTimePlus } from '../../../../utils/timeUtils';
 
 function RowItem(props) {
   const navigate = useNavigate();
   const [openTableCell, setOpenTableCell] = React.useState(false);
 
+  let statusUpdatedAt = `${props.item.statusUpdatedAt.slice(0, 4)}-${props.item.statusUpdatedAt.slice(
+    5,
+    7
+  )}-${props.item.statusUpdatedAt.slice(8, 10)}T${(
+    '0' + adjustTimePlus(parseInt(props.item.statusUpdatedAt.slice(11, 13)))
+  ).slice(-2)}:${props.item.statusUpdatedAt.slice(14, 16)}:00.000Z`;
+
   const dateStart = new Date(props.item.tglMulai);
   const dateEnd = new Date(props.item.tenggatWaktu);
-  const lastUpdate = new Date(props.item.statusUpdatedAt);
 
   const pickUpAddress = props.item.alamatJemput ? JSON.parse(props.item.alamatJemput) : null;
   const deliveryAddress = props.item.alamatAntar ? JSON.parse(props.item.alamatAntar) : null;
@@ -97,10 +105,11 @@ function RowItem(props) {
           {props.item.status}
           <div style={{ fontSize: '12px' }}>
             pada
-            {` ${lastUpdate.toISOString().slice(8, 10)}/${lastUpdate.toISOString().slice(5, 7)}/${lastUpdate
-              .toISOString()
-              .slice(0, 4)} ${lastUpdate.toISOString().slice(11, 16)}`}
-            {props.item.updatedBy ? ` oleh ${props.item.updatedBy}` : null}
+            {` ${statusUpdatedAt.slice(8, 10)}/${statusUpdatedAt.slice(5, 7)}/${statusUpdatedAt.slice(
+              0,
+              4
+            )} ${statusUpdatedAt.slice(11, 16)}`}
+            {/* {props.item.updatedBy ? ` oleh ${props.item.updatedBy}` : null} */}
           </div>
         </TableCell>
 

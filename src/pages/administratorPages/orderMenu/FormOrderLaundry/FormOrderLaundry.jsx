@@ -431,10 +431,18 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                         label="Pilih Jam"
                         value={dayjs(state.dateOrder)}
                         onChange={(value) => {
+                          let date = dayjs(value).toISOString();
+                          const newDate = `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8, 10)}T${date
+                            .slice(11, 13)
+                            .slice(-2)}:${date.slice(14, 16)}:00.000Z`;
+
                           setState({
                             ...state,
-                            dateOrder: value,
+                            dateOrder: newDate,
                           });
+
+                          console.log(dayjs(value).toISOString());
+                          console.log(newDate);
 
                           console.log('Jam: ' + value.$H);
                           console.log('Menit: ' + value.$m);
@@ -1145,21 +1153,21 @@ function FormOrderLaundry() {
       console.log('Response GET Data Service Type');
       console.log(res);
 
-      let newDate = await dayjs(
-        `${res.data.data.tglMulai.slice(0, 4)}-${res.data.data.tglMulai.slice(5, 7)}-${res.data.data.tglMulai.slice(
-          8,
-          10
-        )}T${('0' + adjustTime(res.data.data.tglMulai.slice(11, 13))).slice(-2)}:${res.data.data.tglMulai.slice(
-          14,
-          16
-        )}:00.000Z`
-      );
+      // let newDate = await dayjs(
+      //   `${res.data.data.tglMulai.slice(0, 4)}-${res.data.data.tglMulai.slice(5, 7)}-${res.data.data.tglMulai.slice(
+      //     8,
+      //     10
+      //   )}T${('0' + adjustTime(res.data.data.tglMulai.slice(11, 13))).slice(-2)}:${res.data.data.tglMulai.slice(
+      //     14,
+      //     16
+      //   )}:00.000Z`
+      // );
 
       console.log('apakah keluar?', res.data.data.alamatJemput);
       setFormOrder({
         id: res.data.data.id,
         noOrder: res.data.data.nomorPesanan,
-        dateOrder: dayjs(newDate),
+        dateOrder: dayjs(res.data.data.tglMulai),
         serviceType: {
           name: res.data.data.namaLayanan,
           duration: res.data.data.jenisLayanan,
@@ -1199,11 +1207,12 @@ function FormOrderLaundry() {
           jenisLayanan: formOrder.serviceType.duration,
           mPembayaran: formOrder.paymentMethod,
           statusPembayaran: 'Belum Bayar',
-          tglMulai: dayjs(
-            `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
-              formOrder.dateOrder.$H
-            }:${formOrder.dateOrder.$m}:00`
-          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+          tglMulai: formOrder.dateOrder,
+          // tglMulai: dayjs(
+          //   `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
+          //     formOrder.dateOrder.$H
+          //   }:${formOrder.dateOrder.$m}:00`
+          // ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
           alamatJemput: !useShuttleProgram ? null : formOrder.address.pickupAddress,
           alamatAntar: !useShuttleProgram ? null : formOrder.address.deliveryAddress,
           status: formOrder.address.pickupAddress ? 'Perlu Dijemput' : 'Perlu Dikerjakan',
@@ -1251,11 +1260,12 @@ function FormOrderLaundry() {
           jenisLayanan: formOrder.serviceType.duration,
           mPembayaran: formOrder.paymentMethod,
           statusPembayaran: formOrder.paymentStatus,
-          tglMulai: dayjs(
-            `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
-              formOrder.dateOrder.$H
-            }:${formOrder.dateOrder.$m}:00`
-          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+          tglMulai: formOrder.dateOrder,
+          // tglMulai: dayjs(
+          //   `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
+          //     formOrder.dateOrder.$H
+          //   }:${formOrder.dateOrder.$m}:00`
+          // ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
           alamatJemput: !useShuttleProgram ? null : formOrder.address.pickupAddress,
           alamatAntar: !useShuttleProgram ? null : formOrder.address.deliveryAddress,
           status: formOrder.status,

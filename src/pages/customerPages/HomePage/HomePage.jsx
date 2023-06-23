@@ -43,6 +43,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import BuildingView from '../../../assets/images/BuildingView.jpg';
+import DefaultImage from '../../../assets/images/DefaultImage.png';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -159,7 +160,7 @@ function LaundryTypeSection({ listLaundryType }) {
                 >
                   <h5>{item.nama}</h5>
                   <img
-                    src={item.gambar || 'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'}
+                    src={item.gambar || DefaultImage}
                     width={100}
                     height={100}
                     style={{ borderRadius: '16px', objectFit: 'cover', backgroundColor: '#EEEEEE' }}
@@ -212,7 +213,7 @@ function ServiceTypeSection({ listServiceType }) {
                 <Grid container sx={{ p: 2, height: '100%', display: 'flex', gap: '20px 0px' }}>
                   <Grid item xs="auto" sm="auto" md="auto" lg="auto" sx={{ display: 'flex', justifyContent: 'center' }}>
                     <img
-                      src={item.gamber || 'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'}
+                      src={item.gamber || DefaultImage}
                       width={100}
                       height={100}
                       style={{
@@ -511,7 +512,7 @@ function EventSection({ listEvent }) {
                 >
                   <div>
                     <img
-                      src={eventItem.gambar || 'https://katapopuler.com/wp-content/uploads/2020/11/dummy.png'}
+                      src={eventItem.gambar || DefaultImage}
                       width="100%"
                       height={320}
                       alt=""
