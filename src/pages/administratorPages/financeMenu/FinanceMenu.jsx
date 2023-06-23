@@ -276,9 +276,17 @@ function FinanceStats({ dataset }) {
 }
 
 function RowItem(props) {
+  const navigate = useNavigate();
   const [openTableCell, setOpenTableCell] = React.useState(false);
 
   const date = new Date(props.item.tanggal);
+
+  // Menu - Action
+  const [actionAnchorEl, setActionAnchorEl] = React.useState(null);
+  const openAction = Boolean(actionAnchorEl);
+  const handleCloseAction = () => {
+    setActionAnchorEl(null);
+  };
 
   return (
     <React.Fragment>
@@ -331,11 +339,47 @@ function RowItem(props) {
           <div style={{ fontSize: '12px' }}>{props.item.createdBy ? `oleh ${props.item.createdBy}` : null}</div>
         </TableCell>
         <TableCell>{props.item.catatan}</TableCell>
+
         <TableCell>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            onClick={(event) => {
+              setActionAnchorEl(event.currentTarget);
+            }}
+          >
             <MoreVertIcon color="primary" />
           </IconButton>
         </TableCell>
+        {/* Menu - Action */}
+        <Menu
+          anchorEl={actionAnchorEl}
+          open={openAction}
+          onClose={handleCloseAction}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              navigate(
+                `/Keuangan/${props.item.tipe === 'Pengeluaran' ? 'EditPengeluaran' : 'EditPemasukan'}/${props.item.id}`
+              );
+              handleCloseAction();
+            }}
+          >
+            Edit{' '}
+            {props.item.tipe === 'Pengeluaran'
+              ? 'Pengeluaran'
+              : props.item.tipe === 'Pemasukan'
+              ? 'Pemasukan'
+              : 'Transaksi Pemesanan'}
+          </MenuItem>
+        </Menu>
       </TableRow>
 
       {/* Collapse Table */}

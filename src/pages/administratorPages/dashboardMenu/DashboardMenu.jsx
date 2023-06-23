@@ -46,6 +46,13 @@ function RowItem(props) {
   const dateCreate = new Date(props.item.createdAt);
   const dateUpdate = new Date(props.item.updatedAt);
 
+  // Menu - Action
+  const [actionAnchorEl, setActionAnchorEl] = React.useState(null);
+  const openAction = Boolean(actionAnchorEl);
+  const handleCloseAction = () => {
+    setActionAnchorEl(null);
+  };
+
   return (
     <React.Fragment>
       <TableRow hover>
@@ -82,10 +89,38 @@ function RowItem(props) {
         </TableCell>
 
         <TableCell>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            onClick={(event) => {
+              setActionAnchorEl(event.currentTarget);
+            }}
+          >
             <MoreVertIcon color="primary" />
           </IconButton>
         </TableCell>
+        {/* Menu - Action */}
+        <Menu
+          anchorEl={actionAnchorEl}
+          open={openAction}
+          onClose={handleCloseAction}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              navigate(`/Dashboard/EditAdministrator/${props.item.id}`);
+              handleCloseAction();
+            }}
+          >
+            Edit Administrator
+          </MenuItem>
+        </Menu>
       </TableRow>
     </React.Fragment>
   );

@@ -33,6 +33,13 @@ function RowItem(props) {
   const dateStart = new Date(props.item.tglMulai);
   const dateEnd = new Date(props.item.tglSelesai);
 
+  // Menu - Action
+  const [actionAnchorEl, setActionAnchorEl] = React.useState(null);
+  const openAction = Boolean(actionAnchorEl);
+  const handleCloseAction = () => {
+    setActionAnchorEl(null);
+  };
+
   return (
     <React.Fragment>
       <TableRow hover>
@@ -63,10 +70,38 @@ function RowItem(props) {
         <TableCell>{props.item.status}</TableCell>
 
         <TableCell>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            onClick={(event) => {
+              setActionAnchorEl(event.currentTarget);
+            }}
+          >
             <MoreVertIcon color="primary" />
           </IconButton>
         </TableCell>
+        {/* Menu - Action */}
+        <Menu
+          anchorEl={actionAnchorEl}
+          open={openAction}
+          onClose={handleCloseAction}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              navigate(`/Event/EditEvent/${props.item.id}`);
+              handleCloseAction();
+            }}
+          >
+            Edit Event
+          </MenuItem>
+        </Menu>
       </TableRow>
 
       {/* Collapse Table */}

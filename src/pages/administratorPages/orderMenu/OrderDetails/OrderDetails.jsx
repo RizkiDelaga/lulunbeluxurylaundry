@@ -150,15 +150,6 @@ function OrderDetails() {
 
   return (
     <>
-      {/* {!openAlert ? null : (
-        <Alert
-          variant="filled"
-          severity="warning"
-          sx={{ position: 'fixed', top: 88, left: '50%', transform: 'translate(-50%, 0)' }}
-        >
-          Status Pembayaran Pada Pesanan ini Belum Bayar
-        </Alert>
-      )} */}
 
       <div className="gap-24" style={{ marginBottom: '24px' }}>
         <PageStructureAndDirectButton
