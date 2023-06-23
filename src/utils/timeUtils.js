@@ -16,3 +16,16 @@ export function adjustTime(hour) {
   
     return adjustedHour;
   }
+
+  export function adjustTimePlus(hour) {
+  // Add the timezone offset of 7
+  let adjustedHour = hour + 7;
+
+  // Check if the adjusted hour is more than or equal to 24
+  if (adjustedHour >= 24) {
+    // Subtract 24 hours to adjust for the change in the day
+    adjustedHour -= 24;
+  }
+
+  return adjustedHour;
+  }

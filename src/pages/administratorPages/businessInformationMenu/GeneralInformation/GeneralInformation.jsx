@@ -102,7 +102,7 @@ function GeneralInformation() {
           phoneNumber: res.data.data[0].noTelp,
           fax: res.data.data[0].fax,
           whatsApp: '',
-          telegram: '',
+          telegram: res.data.data[0].telegram,
           email: res.data.data[0].email,
         },
         socialMedia: {
@@ -139,6 +139,7 @@ function GeneralInformation() {
     formData.append('lokasi', formGeneralInformation.location.location);
     formData.append('koordinat', formGeneralInformation.location.googleMapsEmbed);
     formData.append('noTelp', formGeneralInformation.contact.phoneNumber);
+    formData.append('telegram', formGeneralInformation.contact.telegram);
     formData.append('email', formGeneralInformation.contact.email);
     formData.append('fax', formGeneralInformation.contact.fax);
     formData.append('instagram', formGeneralInformation.socialMedia.instagram);

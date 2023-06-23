@@ -94,11 +94,9 @@ function EditEvents() {
         dateEnd: dayjs(newDateEnd),
         description: res.data.data.deskripsi,
         poster: { img: null, fileName: res.data.data.gambar },
-        // totalReward: res.data.data.kriteria.length,
-        // totalCriteria: res.data.data.kriteria.length,
       });
       console.log('Reward: ', res.data.data.reward);
-      // { id: null, rewardText: '', currentIndex: null }
+
       const newReward = await [...res.data.data.reward].map((item, index) => {
         return { id: index, rewardText: item };
       });
@@ -134,10 +132,10 @@ function EditEvents() {
       ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
     );
     listCriteria.forEach((element, index) => {
-      formData.append(`kriteria[${index}]`, element.criteriaText);
+      formData.append(`kriteria[${index}]`, element.criteriaText || '');
     });
     listReward.forEach((element, index) => {
-      formData.append(`reward[${index}]`, listReward.length !== 0 ? element.rewardText : null);
+      formData.append(`reward[${index}]`, element.rewardText || '');
     });
 
     try {
