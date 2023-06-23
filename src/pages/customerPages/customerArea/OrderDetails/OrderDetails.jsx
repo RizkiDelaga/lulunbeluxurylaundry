@@ -7,6 +7,7 @@ import axios from 'axios';
 import RatingComponent from '../../../../components/Ratings/RatingComponent';
 import LaundryItemTable from '../../../../components/Table/LaundryItemTable';
 import DetailCustomerCard from '../../../../components/Card/DetailCustomerCard';
+import { Link } from 'react-router-dom';
 
 function OrderDetails() {
   const theme = useTheme();
@@ -281,6 +282,24 @@ function OrderDetails() {
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <h6>Metode Pembayaran</h6>
                       <span style={{ textAlign: 'end' }}>{detailOrder.mPembayaran}</span>
+                    </div>
+                    <div
+                      style={{
+                        display: detailOrder.statusPembayaran === 'Belum Bayar' ? 'flex' : 'none',
+                        justifyContent: 'center',
+                        paddingTop: '4px',
+                      }}
+                    >
+                      <span style={{ cursor: 'pointer', fontSize: '14px' }}>
+                        <Link
+                          to={`/CaraPembayaran`}
+                          className="disable-link-style"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Cara Pembayaran?
+                        </Link>
+                      </span>
                     </div>
                   </div>
                 )}

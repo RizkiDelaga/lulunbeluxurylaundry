@@ -1,4 +1,8 @@
 export const banyumasAreaList = [{
+        subDistrict: 'Daerah Lainnya',
+        urbanVillage: ['Luar Banyumas', 'Dalam Banyumas'
+        ]
+    }, {
         subDistrict: 'Ajibarang',
         urbanVillage: ['Ajibarang Kulon',
             'Ajibarang Wetan',

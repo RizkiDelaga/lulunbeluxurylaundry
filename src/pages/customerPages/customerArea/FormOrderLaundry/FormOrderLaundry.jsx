@@ -35,9 +35,11 @@ import LoadDecisions from '../../../../components/LoadDecisions/LoadDecisions';
 import { adjustTime } from '../../../../utils/timeUtils';
 import LaundryItemTable from '../../../../components/Table/LaundryItemTable';
 import DetailCustomerCard from '../../../../components/Card/DetailCustomerCard';
+import { Link } from 'react-router-dom';
 
 const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMethod }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const profileCustomer = JSON.parse(localStorage.getItem('my_profile_account'));
 
   return (
@@ -210,6 +212,7 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
               lg
               sx={{
                 display: 'flex',
+                flexDirection: 'column',
                 [theme.breakpoints.down('md')]: {
                   paddingTop: '8px !important',
                 },
@@ -239,6 +242,13 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                   })}
                 </Select>
               </FormControl>
+              <div style={{ display: 'flex', justifyContent: 'left', paddingTop: '4px' }}>
+                <span style={{ cursor: 'pointer', fontSize: '14px' }}>
+                  <Link to={`/CaraPembayaran`} className="disable-link-style" target="_blank" rel="noopener noreferrer">
+                    Cara Pembayaran?
+                  </Link>
+                </span>
+              </div>
             </Grid>
           </Grid>
         </div>
@@ -318,8 +328,13 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
                             Alamat Utama
                           </div>
                         ) : null}
-                        Kecamatan {item.kecamatan}, Kelurahan {item.kelurahan}, RW/{item.rw}, RT/{item.rt},{' '}
-                        {item.kategori} {item.detail}, {item.deskripsi}
+                        {item.kecamatan ? `Kecamatan ${item.kecamatan}` : null}
+                        {item.kelurahan ? `, Kelurahan ${item.kelurahan}` : null}
+                        {item.rw ? `, RW ${item.rw}` : null}
+                        {item.rt ? `, RT ${item.rt}` : null}
+                        {item.kategori ? `, ${item.kategori}` : null}
+                        {item.detail ? ` ${item.detail}` : null}
+                        {item.deskripsi ? `, ${item.deskripsi}` : null}
                       </div>
                     </Box>
                   </MenuItem>
@@ -386,8 +401,13 @@ const LaundryShuttle = ({ state, setState, listAddress }) => {
                             Alamat Utama
                           </div>
                         ) : null}
-                        Kecamatan {item.kecamatan}, Kelurahan {item.kelurahan}, RW/{item.rw}, RT/{item.rt},{' '}
-                        {item.kategori} {item.detail}, {item.deskripsi}
+                        {item.kecamatan ? `Kecamatan ${item.kecamatan}` : null}
+                        {item.kelurahan ? `, Kelurahan ${item.kelurahan}` : null}
+                        {item.rw ? `, RW ${item.rw}` : null}
+                        {item.rt ? `, RT ${item.rt}` : null}
+                        {item.kategori ? `, ${item.kategori}` : null}
+                        {item.detail ? ` ${item.detail}` : null}
+                        {item.deskripsi ? `, ${item.deskripsi}` : null}
                       </div>
                     </Box>
                   </MenuItem>

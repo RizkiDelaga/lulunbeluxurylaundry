@@ -150,7 +150,6 @@ function OrderDetails() {
 
   return (
     <>
-
       <div className="gap-24" style={{ marginBottom: '24px' }}>
         <PageStructureAndDirectButton
           defaultMenu="Pesanan"

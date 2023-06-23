@@ -68,7 +68,6 @@ function CustomerRouter() {
             <Route path="AreaPelanggan/UbahPassword" element={<ChangePassword />} />
             <Route path="AreaPelanggan/FormulirPemesananLaundry" element={<FormOrderLaundry />} />
             <Route path="AreaPelanggan/FormulirPemesananLaundry/:id" element={<FormOrderLaundry />} />
-            {/* FormOrderLaundry */}
             <Route path="AreaPelanggan/RatingDanReview/:idPesanan/:noPesanan" element={<RatingAndReview />} />
           </Route>
         </Routes>
