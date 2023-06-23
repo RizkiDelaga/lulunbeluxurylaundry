@@ -639,7 +639,7 @@ const LaundryShuttle = ({ state, setState, listAddress, useShuttleProgram, setUs
                 labelId="select-pickup-address-label"
                 id="select-pickup-address"
                 value={activePickupAddress}
-                label="Alamat Pengantaran"
+                label="Alamat Penjemputan"
                 onChange={(e) => {
                   setActivePickupAddress(e.target.value ? e.target.value : null);
                   setState({

@@ -52,6 +52,13 @@ function RowItem(props) {
   const pickUpAddress = props.item.alamatJemput ? JSON.parse(props.item.alamatJemput) : null;
   const deliveryAddress = props.item.alamatAntar ? JSON.parse(props.item.alamatAntar) : null;
 
+  // Menu - Action
+  const [actionAnchorEl, setActionAnchorEl] = React.useState(null);
+  const openAction = Boolean(actionAnchorEl);
+  const handleCloseAction = () => {
+    setActionAnchorEl(null);
+  };
+
   return (
     <React.Fragment>
       <TableRow hover>
@@ -101,10 +108,38 @@ function RowItem(props) {
         </TableCell>
 
         <TableCell>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            onClick={(event) => {
+              setActionAnchorEl(event.currentTarget);
+            }}
+          >
             <MoreVertIcon color="primary" />
           </IconButton>
         </TableCell>
+        {/* Menu - Action */}
+        <Menu
+          anchorEl={actionAnchorEl}
+          open={openAction}
+          onClose={handleCloseAction}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              navigate(`/Pesanan/FormulirPemesananLaundry/${props.item.id}`);
+              handleCloseAction();
+            }}
+          >
+            Edit Pesanan
+          </MenuItem>
+        </Menu>
       </TableRow>
 
       {/* Collapse Table */}
