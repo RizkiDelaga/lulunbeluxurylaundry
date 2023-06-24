@@ -264,8 +264,7 @@ function OrderTable({ filterBy }) {
           : changePage,
         dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
+
       setListOrder(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -285,8 +284,6 @@ function OrderTable({ filterBy }) {
         },
         url: `${process.env.REACT_APP_API_KEY}/pemesanan/search/where?nomorPesanan=${searching.value}`,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
 
       setListOrder(res.data.data);
     } catch (error) {
@@ -612,7 +609,6 @@ function OrderTable({ filterBy }) {
                         return (
                           <MenuItem
                             onClick={() => {
-                              // handleGetOrder();
                               handleGetOrder(1, item);
                               handleCloseSelectDataPerPage();
                             }}

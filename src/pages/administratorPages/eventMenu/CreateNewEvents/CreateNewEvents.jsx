@@ -78,8 +78,6 @@ function CreateNewEvents() {
         url: `${process.env.REACT_APP_API_KEY}/acara`,
         data: formData,
       });
-      console.log('Response POST');
-      console.log(res);
       setFormCreateNewEvents({
         id: null,
         eventName: '',
@@ -129,7 +127,6 @@ function CreateNewEvents() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 handleCreateEvents();
               }}
             >
@@ -192,10 +189,6 @@ function CreateNewEvents() {
                                 ...formCreateNewEvents,
                                 dateStart: value,
                               });
-
-                              console.log('Tanggal: ' + value.$D);
-                              console.log('Bulan: ' + value.$M);
-                              console.log('Tahun: ' + value.$y);
                             }}
                             renderInput={(params) => <TextField {...params} />}
                             slotProps={{
@@ -228,10 +221,6 @@ function CreateNewEvents() {
                                 ...formCreateNewEvents,
                                 dateStart: dayjs(newDate),
                               });
-
-                              console.log('Jam: ' + value.$H);
-                              console.log('Menit: ' + value.$m);
-                              console.log('Detik: ' + value.$s);
                             }}
                             renderInput={(params) => <TextField {...params} />}
                             slotProps={{
@@ -277,10 +266,6 @@ function CreateNewEvents() {
                                 ...formCreateNewEvents,
                                 dateEnd: value,
                               });
-
-                              console.log('Tanggal: ' + value.$D);
-                              console.log('Bulan: ' + value.$M);
-                              console.log('Tahun: ' + value.$y);
                             }}
                             renderInput={(params) => <TextField {...params} />}
                             slotProps={{
@@ -313,10 +298,6 @@ function CreateNewEvents() {
                                 ...formCreateNewEvents,
                                 dateEnd: dayjs(newDate),
                               });
-
-                              console.log('Jam: ' + value.$H);
-                              console.log('Menit: ' + value.$m);
-                              console.log('Detik: ' + value.$s);
                             }}
                             renderInput={(params) => <TextField {...params} />}
                             slotProps={{
@@ -411,9 +392,6 @@ function CreateNewEvents() {
                           variant="outlined"
                           className="button-outlined-primary"
                           onClick={() => {
-                            console.log(reward);
-                            console.log(listReward);
-
                             if (reward.rewardText) {
                               if (reward.id) {
                                 listReward.splice(reward.currentIndex, 1);
@@ -436,10 +414,6 @@ function CreateNewEvents() {
                             }
 
                             setReward({ id: null, rewardText: '', currentIndex: null });
-
-                            console.log('Is Null:');
-                            console.log(reward.id === null);
-                            console.log(listReward.length + 1);
                           }}
                           sx={{ width: 'fit-content' }}
                         >
@@ -497,11 +471,7 @@ function CreateNewEvents() {
                                           variant="outlined"
                                           className={`button-outlined-primary`}
                                           onClick={() => {
-                                            console.log(item.id);
-
                                             if (reward.id === item.id) {
-                                              console.log(reward.id);
-
                                               setReward({
                                                 id: null,
                                                 rewardText: '',
@@ -524,9 +494,7 @@ function CreateNewEvents() {
                                           onClick={() => {
                                             listReward.splice(index, 1);
                                             setListReward((dataList) => [...dataList]);
-                                            console.log(reward.id);
-                                            console.log(item.id);
-                                            console.log(listReward);
+
                                             if (reward.id === item.id) {
                                               setReward({
                                                 id: null,
@@ -534,9 +502,6 @@ function CreateNewEvents() {
                                                 currentIndex: null,
                                               });
                                             }
-                                            console.log(reward.id);
-                                            console.log(item.id);
-                                            console.log(listReward);
                                           }}
                                           sx={{ width: '100%' }}
                                         >
@@ -596,9 +561,6 @@ function CreateNewEvents() {
                           variant="outlined"
                           className="button-outlined-primary"
                           onClick={() => {
-                            console.log(criteria);
-                            console.log(listCriteria);
-
                             if (criteria.criteriaText) {
                               if (criteria.id) {
                                 listCriteria.splice(criteria.currentIndex, 1);
@@ -621,10 +583,6 @@ function CreateNewEvents() {
                             }
 
                             setCriteria({ id: null, criteriaText: '', currentIndex: null });
-
-                            console.log('Is Null:');
-                            console.log(criteria.id === null);
-                            console.log(listCriteria.length + 1);
                           }}
                           sx={{ width: 'fit-content' }}
                         >
@@ -682,11 +640,7 @@ function CreateNewEvents() {
                                           variant="outlined"
                                           className={`button-outlined-primary`}
                                           onClick={() => {
-                                            console.log(item.id);
-
                                             if (criteria.id === item.id) {
-                                              console.log(criteria.id);
-
                                               setCriteria({
                                                 id: null,
                                                 criteriaText: '',
@@ -709,9 +663,7 @@ function CreateNewEvents() {
                                           onClick={() => {
                                             listCriteria.splice(index, 1);
                                             setListCriteria([...listCriteria]);
-                                            console.log(criteria.id);
-                                            console.log(item.id);
-                                            console.log(listCriteria);
+
                                             if (criteria.id === item.id) {
                                               setCriteria({
                                                 id: null,
@@ -719,9 +671,6 @@ function CreateNewEvents() {
                                                 currentIndex: null,
                                               });
                                             }
-                                            console.log(criteria.id);
-                                            console.log(item.id);
-                                            console.log(listCriteria);
                                           }}
                                           sx={{ width: '100%' }}
                                         >
@@ -770,7 +719,6 @@ function CreateNewEvents() {
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormCreateNewEvents({
                                 ...formCreateNewEvents,
                                 poster: {
@@ -778,7 +726,6 @@ function CreateNewEvents() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              // console.log(image);
                             }}
                             hidden
                           />
@@ -811,32 +758,11 @@ function CreateNewEvents() {
                   </Grid>
                 </Grid>
 
-                <Button
-                  variant="contained"
-                  size="large"
-                  type="submit"
-                  // onClick={() => {
-                  //   handleCreateEvents();
-                  // }}
-                  sx={{ width: '100%', fontWeight: 'bold' }}
-                >
+                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                   Buat Event
                 </Button>
               </div>
             </form>
-
-            {formCreateNewEvents.eventName}
-            <br />
-            {formCreateNewEvents.description}
-            <br />
-            <br />
-            {`${formCreateNewEvents.dateStart.$D} ${formCreateNewEvents.dateStart.$M} ${formCreateNewEvents.dateStart.$y}`}
-            <br />
-            {`${formCreateNewEvents.dateStart.$H} ${formCreateNewEvents.dateStart.$m}`}
-            <br />
-            {`${formCreateNewEvents.dateEnd.$D} ${formCreateNewEvents.dateEnd.$M} ${formCreateNewEvents.dateEnd.$y}`}
-            <br />
-            {`${formCreateNewEvents.dateEnd.$H} ${formCreateNewEvents.dateEnd.$m}`}
           </Box>
         </Paper>
       </div>

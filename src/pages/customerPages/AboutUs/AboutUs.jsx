@@ -30,8 +30,7 @@ function AboutUs() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/about`,
       });
-      console.log('Response GET Data About Us');
-      console.log(res);
+
       setAboutUs(res.data.data);
     } catch (error) {
       console.log(error);

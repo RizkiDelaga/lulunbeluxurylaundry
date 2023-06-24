@@ -52,8 +52,6 @@ function PaymentMethod() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/metodepembayaran`,
       });
-      console.log('Response GET');
-      console.log(res);
       setListPaymentMethod(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -82,8 +80,6 @@ function PaymentMethod() {
         url: `${process.env.REACT_APP_API_KEY}/metodepembayaran`,
         data: formData,
       });
-      console.log('Response POST');
-      console.log(res);
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -142,8 +138,6 @@ function PaymentMethod() {
         iD_Or_Number: '',
         paymentLogo: { img: null, fileName: null },
       });
-      console.log('Response DELETE');
-      console.log(res);
       getApiHandler();
     } catch (error) {
       setOpenLoadDecision({
@@ -173,7 +167,6 @@ function PaymentMethod() {
         });
       }
       getApiHandler();
-      console.log(res);
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -208,7 +201,6 @@ function PaymentMethod() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (formPaymentMethod.id) {
                   handleUpdatePaymentMethod();
                 } else {
@@ -312,9 +304,7 @@ function PaymentMethod() {
                           maxRows={4}
                           value={instruction.instructionText}
                           onChange={(e) => {
-                            console.log(listInstructions.length);
                             setInstruction({
-                              // ...instructionText,
                               ...instruction,
                               instructionText: e.target.value,
                             });
@@ -326,9 +316,6 @@ function PaymentMethod() {
                           variant="outlined"
                           className="button-outlined-primary"
                           onClick={() => {
-                            console.log(instruction);
-                            console.log(listInstructions);
-
                             if (instruction.instructionText) {
                               if (instruction.id) {
                                 listInstructions.splice(instruction.currentIndex, 1);
@@ -351,10 +338,6 @@ function PaymentMethod() {
                             }
 
                             setInstruction({ id: null, instructionText: '', currentIndex: null });
-
-                            console.log('Is Null:');
-                            console.log(instruction.id === null);
-                            console.log(listInstructions.length + 1);
                           }}
                           sx={{ width: 'fit-content' }}
                         >
@@ -414,11 +397,7 @@ function PaymentMethod() {
                                               variant="outlined"
                                               className={`button-outlined-primary`}
                                               onClick={() => {
-                                                console.log(item.id);
-
                                                 if (instruction.id === item.id) {
-                                                  console.log(instruction.id);
-
                                                   setInstruction({
                                                     id: null,
                                                     instructionText: '',
@@ -440,7 +419,6 @@ function PaymentMethod() {
                                               className={`button-outlined-danger`}
                                               onClick={() => {
                                                 listInstructions.splice(index, 1);
-                                                console.log(instruction.id);
                                                 setListInstructions([...listInstructions]);
                                                 if (instruction.id === index + 1) {
                                                   setInstruction({
@@ -498,7 +476,6 @@ function PaymentMethod() {
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormPaymentMethod({
                                 ...formPaymentMethod,
                                 paymentLogo: {
@@ -506,7 +483,6 @@ function PaymentMethod() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              // console.log(image);
                             }}
                             hidden
                           />
@@ -541,19 +517,7 @@ function PaymentMethod() {
                   </Grid>
                 </Grid>
 
-                <Button
-                  variant="contained"
-                  size="large"
-                  type="submit"
-                  // onClick={() => {
-                  //   if (formPaymentMethod.id) {
-                  //     handleUpdatePaymentMethod();
-                  //   } else {
-                  //     handleCreatePaymentMethod();
-                  //   }
-                  // }}
-                  sx={{ width: '100%', fontWeight: 'bold' }}
-                >
+                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                   {formPaymentMethod.id ? 'Simpan' : 'Tambah'}
                 </Button>
               </div>
@@ -635,7 +599,6 @@ function PaymentMethod() {
                                 } else {
                                   if (item.instruksi) {
                                     item.instruksi.map((itemInstruksi, index) => {
-                                      console.log(itemInstruksi);
                                       setListInstructions((list) => [
                                         ...list,
                                         { id: index + 1, instructionText: itemInstruksi },
@@ -685,13 +648,6 @@ function PaymentMethod() {
                 </TableBody>
               </Table>
             </TableContainer>
-
-            {formPaymentMethod.paymentName}
-            <br />
-            {formPaymentMethod.iD_Or_Number}
-            <br />
-            {formPaymentMethod.instructions}
-            <br />
           </Box>
         </Paper>
       </div>

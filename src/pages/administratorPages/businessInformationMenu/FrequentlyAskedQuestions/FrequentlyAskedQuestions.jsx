@@ -49,8 +49,6 @@ function FrequentlyAskedQuestions() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/faq`,
       });
-      console.log('Response GET');
-      console.log(res);
       setListFaq(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -74,8 +72,6 @@ function FrequentlyAskedQuestions() {
           jawaban: formFrequentlyAskedQuestions.answer,
         },
       });
-      console.log('Response POST');
-      console.log(res);
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -126,8 +122,6 @@ function FrequentlyAskedQuestions() {
         question: '',
         answer: '',
       });
-      console.log('Response DELETE');
-      console.log(res);
       getApiHandler();
     } catch (error) {
       setOpenLoadDecision({
@@ -162,7 +156,6 @@ function FrequentlyAskedQuestions() {
         answer: '',
       });
       getApiHandler();
-      console.log(res);
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -201,7 +194,6 @@ function FrequentlyAskedQuestions() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (formFrequentlyAskedQuestions.id) {
                   handleUpdateFAQ();
                 } else {
@@ -272,28 +264,11 @@ function FrequentlyAskedQuestions() {
                   </Grid>
                 </Grid>
 
-                <Button
-                  variant="contained"
-                  size="large"
-                  type="submit"
-                  // onClick={() => {
-                  //   if (formFrequentlyAskedQuestions.id) {
-                  //     handleUpdateFAQ();
-                  //   } else {
-                  //     handleCreateFAQ();
-                  //   }
-                  // }}
-                  sx={{ width: '100%', fontWeight: 'bold' }}
-                >
+                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                   {formFrequentlyAskedQuestions.id ? 'Simpan' : 'Tambah'}
                 </Button>
               </div>
             </form>
-
-            {formFrequentlyAskedQuestions.question}
-            <br />
-            {formFrequentlyAskedQuestions.answer}
-            <br />
 
             <TableContainer sx={{ width: '100%', borderRadius: '4px', backgroundColor: '#eeeeee' }}>
               <Table>

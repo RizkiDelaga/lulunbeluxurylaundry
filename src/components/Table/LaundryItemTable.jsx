@@ -160,10 +160,6 @@ function LaundryItemTable({
     setOrderBy(property);
   };
 
-  React.useEffect(() => {
-    // handleGetLaundryItem();
-  }, []);
-
   const headCells = [
     {
       id: 'collapse',

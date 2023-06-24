@@ -54,8 +54,6 @@ function EditProfile() {
         },
         url: `${process.env.REACT_APP_API_KEY}/admin/my/profile`,
       });
-      console.log('Response GET');
-      console.log(res);
       setFormEditProfile({
         administratorName: res.data.data.nama,
         contact: {
@@ -68,8 +66,6 @@ function EditProfile() {
       });
       localStorage.setItem('admin_profile_account', JSON.stringify(res.data.data));
     } catch (error) {
-      // if (error.response.status === 404) {
-      // }
       console.log(error);
     }
   };
@@ -93,8 +89,6 @@ function EditProfile() {
         url: `${process.env.REACT_APP_API_KEY}/admin`,
         data: formData,
       });
-      console.log('Response Update');
-      console.log(res);
       handleGetMyProfile();
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -129,7 +123,6 @@ function EditProfile() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('click');
               handleUpdateMyProfile();
             }}
           >
@@ -259,8 +252,6 @@ function EditProfile() {
                         })}
                       </Select>
                     </FormControl>
-
-                    {formEditProfile.role}
                   </Grid>
                 </Grid>
               )}
@@ -295,7 +286,6 @@ function EditProfile() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => {
-                            console.log(e.target.files);
                             setFormEditProfile({
                               ...formEditProfile,
                               profilePicture: {
@@ -303,7 +293,6 @@ function EditProfile() {
                                 fileName: !e.target.files[0] ? null : e.target.files[0].name,
                               },
                             });
-                            console.log(formEditProfile.profilePicture.img);
                           }}
                           hidden
                         />
@@ -339,14 +328,6 @@ function EditProfile() {
               <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                 Edit Profil
               </Button>
-
-              {formEditProfile.administratorName}
-              <br />
-              {formEditProfile.contact.phoneNumber}
-              <br />
-              {formEditProfile.contact.email}
-              <br />
-              {formEditProfile.role}
             </Box>
           </form>
         </Paper>

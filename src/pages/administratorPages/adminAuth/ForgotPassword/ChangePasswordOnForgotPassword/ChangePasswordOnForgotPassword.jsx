@@ -18,7 +18,6 @@ import LockResetIcon from '@mui/icons-material/LockReset';
 import axios from 'axios';
 import LoadDecisions from '../../../../../components/LoadDecisions/LoadDecisions';
 
-
 function ChangePasswordOnForgotPassword() {
   const theme = useTheme();
   let { phoneNumber, verificationCode } = useParams();
@@ -51,8 +50,6 @@ function ChangePasswordOnForgotPassword() {
           password: formChangePassword.newPassword,
         },
       });
-      console.log('Response POST Login Customer');
-      console.log(res);
 
       if (res.status === 201) {
         setOpenLoadDecision({
@@ -93,7 +90,6 @@ function ChangePasswordOnForgotPassword() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (formChangePassword.newPassword !== formChangePassword.confirmNewPassword) {
                   alert('Password tidak match!');
                 } else {
@@ -221,10 +217,6 @@ function ChangePasswordOnForgotPassword() {
                 <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                   Ubah Password
                 </Button>
-
-                {formChangePassword.newPassword}
-                <br />
-                {formChangePassword.confirmNewPassword}
               </Box>
             </form>
           </Paper>

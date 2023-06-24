@@ -55,7 +55,6 @@ function RowItem(props) {
   const navigate = useNavigate();
 
   const birthDate = new Date(props.item.tglLahir);
-  // React.useEffect(() => {}, [props.userSelected]);
 
   return (
     <React.Fragment>
@@ -110,11 +109,6 @@ function CustomerTable({ userSelected, setUserSelected, listCustomer }) {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-
-  React.useEffect(() => {
-    // document.title = 'Menu Pelanggan';
-    // handleGetOrder();
-  }, []);
 
   const headCells = [
     {
@@ -196,9 +190,7 @@ function CustomerTable({ userSelected, setUserSelected, listCustomer }) {
           <TableBody>
             {stableSort(listCustomer, getComparator(order, orderBy)).map((item, index) => {
               return (
-                // <span>
                 <RowItem key={item.id} item={item} userSelected={userSelected} setUserSelected={setUserSelected} />
-                // </span>
               );
             })}
           </TableBody>
@@ -208,10 +200,8 @@ function CustomerTable({ userSelected, setUserSelected, listCustomer }) {
       {/* 404 Data Not Found Handling */}
       <Box
         sx={{
-          // mt: 2,
           py: 1,
           px: 2,
-          // borderRadius: 2,
           backgroundColor: '#eeeeee',
           textAlign: 'center',
           display: listCustomer.length ? 'none' : null,
@@ -246,8 +236,6 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
         }${searchCustomerKey.phoneNumer ? 'noTelp=' + searchCustomerKey.phoneNumer : ''}`,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       setListCustomer(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -362,7 +350,6 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
               {!state.detailUser ? null : <DetailCustomerCard dataUser={state.detailUser} />}
             </div>
 
-            {/* <br /> */}
             <Button
               variant="outlined"
               className={`button-outlined-primary`}
@@ -404,10 +391,6 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                             ...state,
                             dateOrder: value,
                           });
-
-                          console.log('Tanggal: ' + value.$D);
-                          console.log('Bulan: ' + value.$M);
-                          console.log('Tahun: ' + value.$y);
                         }}
                         renderInput={(params) => <TextField {...params} required />}
                         slotProps={{
@@ -440,13 +423,6 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                             ...state,
                             dateOrder: dayjs(newDate),
                           });
-
-                          console.log(dayjs(value).toISOString());
-                          console.log(newDate);
-
-                          console.log('Jam: ' + value.$H);
-                          console.log('Menit: ' + value.$m);
-                          console.log('Detik: ' + value.$s);
                         }}
                         renderInput={(params) => <TextField {...params} required />}
                         slotProps={{
@@ -616,13 +592,6 @@ const LaundryShuttle = ({ state, setState, listAddress, useShuttleProgram, setUs
     parseDeliveryAddress ? parseDeliveryAddress.id : null
   );
 
-  // React.useEffect(() => {
-  //   // if (useShuttleProgram) {
-  //   //   setActivePickupAddress(parsePickupAddress ? parsePickupAddress.id : null);
-  //   //   setActiveDeliveryAddress(parseDeliveryAddress ? parseDeliveryAddress.id : null);
-  //   // }
-  // }, [useShuttleProgram]);
-
   return (
     <div className={`dash-card gap-16`} style={{ width: '100%' }}>
       <div style={{ fontWeight: 'bold' }}>
@@ -631,8 +600,6 @@ const LaundryShuttle = ({ state, setState, listAddress, useShuttleProgram, setUs
           checked={useShuttleProgram}
           onChange={(e) => {
             setUseShuttleProgram(e.target.checked);
-
-            console.log(e.target.checked);
           }}
         />
       </div>
@@ -800,7 +767,7 @@ const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaund
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log('click');
+
           if (stateValue.id) {
             handleUpdateLaundryItem();
           } else {
@@ -910,8 +877,6 @@ const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaund
                   })}
                 </Select>
               </FormControl>
-
-              {stateValue.laundryType}
             </Grid>
           </Grid>
           <Grid container spacing={2}>
@@ -974,7 +939,6 @@ const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaund
                       type="file"
                       accept="image/*"
                       onChange={(e) => {
-                        console.log(e.target.files);
                         handleState({
                           ...stateValue,
                           photo: {
@@ -1016,15 +980,6 @@ const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaund
           </div>
         </Box>
       </form>
-
-      {/* {stateValue.itemName}
-      <br />
-      {stateValue.quantity}
-      <br />
-      {stateValue.pricePerUnit}
-      <br />
-      {stateValue.notation}
-      <br /> */}
     </>
   );
 };
@@ -1091,8 +1046,7 @@ function FormOrderLaundry() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/jenislayanan`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       setListServiceType(res.data.data);
     } catch (error) {
       console.log(error);
@@ -1105,8 +1059,7 @@ function FormOrderLaundry() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/metodepembayaran`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       setListPaymentMethod(res.data.data);
     } catch (error) {
       console.log(error);
@@ -1119,8 +1072,7 @@ function FormOrderLaundry() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/jenislaundry`,
       });
-      console.log('Response GET Data Laundry Type');
-      console.log(res);
+
       setListLaundryType(res.data.data);
     } catch (error) {
       console.log(error);
@@ -1136,8 +1088,7 @@ function FormOrderLaundry() {
         },
         url: `${process.env.REACT_APP_API_KEY}/admin/user-address/${userId}`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       setListCustomerAddress(res.data.data);
     } catch (error) {
       console.log(error);
@@ -1150,10 +1101,7 @@ function FormOrderLaundry() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/pemesanan/${orderId || id || formOrder.id}`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
 
-      console.log('apakah keluar?', res.data.data.alamatJemput);
       setFormOrder({
         id: res.data.data.id,
         noOrder: res.data.data.nomorPesanan,
@@ -1204,11 +1152,9 @@ function FormOrderLaundry() {
           diskon: formOrder.discount || 0,
         },
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       setFormOrder({ ...formOrder, id: res.data.data.id });
       handleGetDetailPesanan(res.data.data.id);
-      // handleGetLaundryItem();
       handleGetLaundryType();
 
       if (res.status === 201) {
@@ -1218,7 +1164,6 @@ function FormOrderLaundry() {
           statusType: 'success',
         });
       }
-      // setListCustomerAddress(res.data.data);
     } catch (error) {
       console.log(error);
       setOpenLoadDecision({
@@ -1246,19 +1191,13 @@ function FormOrderLaundry() {
           mPembayaran: formOrder.paymentMethod,
           statusPembayaran: formOrder.paymentStatus,
           tglMulai: formOrder.dateOrder,
-          // tglMulai: dayjs(
-          //   `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
-          //     formOrder.dateOrder.$H
-          //   }:${formOrder.dateOrder.$m}:00`
-          // ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
           alamatJemput: !useShuttleProgram ? null : formOrder.address.pickupAddress,
           alamatAntar: !useShuttleProgram ? null : formOrder.address.deliveryAddress,
           status: formOrder.status,
           diskon: formOrder.discount,
         },
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       handleGetDetailPesanan(res.data.data.id);
 
       if (res.status === 200) {
@@ -1289,8 +1228,6 @@ function FormOrderLaundry() {
         url: `${process.env.REACT_APP_API_KEY}/barang/pemesananId/${formOrder.id || id}`,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       setListLaundryItem(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -1321,8 +1258,6 @@ function FormOrderLaundry() {
         data: formData,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       handleGetLaundryItem();
       setFormItem({
         id: null,
@@ -1371,8 +1306,6 @@ function FormOrderLaundry() {
         data: formData,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       handleGetLaundryItem();
       setFormItem({
         id: null,
@@ -1411,8 +1344,6 @@ function FormOrderLaundry() {
         url: `${process.env.REACT_APP_API_KEY}/barang/${itemId}`,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       handleGetLaundryItem();
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -1441,19 +1372,14 @@ function FormOrderLaundry() {
           }}
         />
 
-        <LoadDecisions
-          setOpenLoad={setOpenLoadDecision}
-          openLoad={openLoadDecision}
-          // redirect={id ? null : `/AreaPelanggan/FormulirPemesananLaundry/${formOrder.id}`}
-        />
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('click');
-              // handleUseShuttleProgram();
+
               if (formOrder.id || id) {
                 handleUpdateOrder();
               } else {

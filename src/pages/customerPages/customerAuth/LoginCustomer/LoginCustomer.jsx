@@ -62,8 +62,7 @@ function LoginCustomer() {
           password: data.password,
         },
       });
-      console.log('Response POST Login Customer');
-      console.log(res);
+
       localStorage.setItem('access_token', res.data.accessToken);
 
       dispatchGetProfileAccountCustomer(res.data.accessToken);
@@ -120,7 +119,7 @@ function LoginCustomer() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
+
                 handleLoginCustomer(formLoginCustomer);
               }}
             >
@@ -201,20 +200,9 @@ function LoginCustomer() {
                     Lupa Password?
                   </Link>
                 </div>
-                <Button
-                  variant="contained"
-                  size="large"
-                  type="submit"
-                  // onClick={() => {
-                  //   handleLoginCustomer(formLoginCustomer);
-                  // }}
-                  style={{ width: '100%', fontWeight: 'bold' }}
-                >
+                <Button variant="contained" size="large" type="submit" style={{ width: '100%', fontWeight: 'bold' }}>
                   Masuk
                 </Button>
-                {formLoginCustomer.noTelp}
-                <br />
-                {formLoginCustomer.password}
               </Box>
             </form>
           </Paper>

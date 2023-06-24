@@ -50,8 +50,6 @@ function LaundryType() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/jenislaundry`,
       });
-      console.log('Response GET');
-      console.log(res);
       setListLaundryType(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -77,8 +75,6 @@ function LaundryType() {
         url: `${process.env.REACT_APP_API_KEY}/jenislaundry`,
         data: formData,
       });
-      console.log('Response POST');
-      console.log(res);
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -133,8 +129,6 @@ function LaundryType() {
         description: '',
         photo: { img: null, fileName: null },
       });
-      console.log('Response DELETE');
-      console.log(res);
       handleGetLaundryType();
     } catch (error) {
       setOpenLoadDecision({
@@ -164,7 +158,6 @@ function LaundryType() {
         });
       }
       handleGetLaundryType();
-      console.log(res);
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -196,7 +189,6 @@ function LaundryType() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (formLaundryType.id) {
                   handleUpdateLaundryType();
                 } else {
@@ -301,7 +293,6 @@ function LaundryType() {
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormLaundryType({
                                 ...formLaundryType,
                                 photo: {
@@ -309,7 +300,6 @@ function LaundryType() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              // console.log(image);
                             }}
                             hidden
                           />
@@ -448,11 +438,6 @@ function LaundryType() {
                 </TableBody>
               </Table>
             </TableContainer>
-
-            {formLaundryType.laundryTypeName}
-            <br />
-            {formLaundryType.description}
-            <br />
           </Box>
         </Paper>
       </div>

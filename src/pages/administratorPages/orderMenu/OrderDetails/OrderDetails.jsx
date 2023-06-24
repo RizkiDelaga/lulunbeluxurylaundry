@@ -33,8 +33,6 @@ function OrderDetails() {
         url: `${process.env.REACT_APP_API_KEY}/pemesanan/nomor/${noPesanan}`,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       setDetailOrder({
         ...res.data.data,
         alamatJemput: res.data.data.alamatJemput ? JSON.parse(res.data.data.alamatJemput) : null,
@@ -60,8 +58,6 @@ function OrderDetails() {
         url: `${process.env.REACT_APP_API_KEY}/barang/pemesananId/${orderId}`,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       setListLaundryItem(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -81,8 +77,6 @@ function OrderDetails() {
         url: `${process.env.REACT_APP_API_KEY}/review/pemesanan/${orderId}`,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       setRatingReview(res.data.data[0]);
     } catch (error) {
       if (error.response.status === 404) {
@@ -103,8 +97,6 @@ function OrderDetails() {
         data: { status: statusValue },
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       if (statusValue !== 'Diterima') {
         handleGetDetailOrder();
       }
@@ -128,9 +120,6 @@ function OrderDetails() {
         data: { statusPembayaran: statusValue },
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
-
       handleGetDetailOrder();
     } catch (error) {
       console.log(error);
@@ -150,8 +139,6 @@ function OrderDetails() {
   const handleClosePaymentStatus = () => {
     setPaymentStatusAnchorEl(null);
   };
-
-  // const [openAlert, setOpenAlert] = useState(false);
 
   return (
     <>

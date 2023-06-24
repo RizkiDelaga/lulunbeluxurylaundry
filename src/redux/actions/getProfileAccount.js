@@ -19,8 +19,6 @@ export const getProfileAccountAdmin = (access_token_admin) => {
                 },
                 url: `${process.env.REACT_APP_API_KEY}/admin/my/profile`
             }).then((res) => {
-                console.log("data.. ", res);
-                console.log("data.. ", res.data);
                 localStorage.setItem('admin_profile_account', JSON.stringify(res.data.data));
 
                 dispatch({
@@ -58,8 +56,6 @@ export const getProfileAccountCustomer = (access_token) => {
                 },
                 url: `${process.env.REACT_APP_API_KEY}/user`
             }).then((res) => {
-                console.log("data.. ", res);
-                console.log("data.. ", res.data);
                 localStorage.setItem('my_profile_account', JSON.stringify(res.data.data));
 
                 dispatch({

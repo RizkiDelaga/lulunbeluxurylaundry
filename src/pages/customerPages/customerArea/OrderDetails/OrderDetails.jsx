@@ -20,10 +20,7 @@ function OrderDetails() {
 
   React.useEffect(() => {
     document.title = 'Detail Pesanan';
-    // if (!detailOrder) {
     handleGetDetailOrder();
-    // } else {
-    // }
   }, []);
 
   const handleGetDetailOrder = async () => {
@@ -36,8 +33,6 @@ function OrderDetails() {
         url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/nomor/${noPesanan}`,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       setDetailOrder({
         ...res.data.data,
         alamatJemput: res.data.data.alamatJemput ? JSON.parse(res.data.data.alamatJemput) : null,
@@ -64,8 +59,6 @@ function OrderDetails() {
         url: `${process.env.REACT_APP_API_KEY}/barang/user/${id}`,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       setListLaundryItem(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -85,8 +78,6 @@ function OrderDetails() {
         url: `${process.env.REACT_APP_API_KEY}/review/pemesanan/${idPesanan}`,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       setRatingReview(res.data.data[0]);
     } catch (error) {
       if (error.response.status === 404) {
@@ -116,8 +107,6 @@ function OrderDetails() {
         },
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       handleGetDetailOrder();
     } catch (error) {
       console.log(error);

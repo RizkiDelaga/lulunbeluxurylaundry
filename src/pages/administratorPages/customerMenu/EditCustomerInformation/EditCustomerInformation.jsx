@@ -76,8 +76,6 @@ function EditCustomerInformation() {
         },
         url: `${process.env.REACT_APP_API_KEY}/admin/user/${id}`,
       });
-      console.log('Response GET Data My Profile');
-      console.log(res);
 
       setFormEditCustomerInformation({
         customerName: res.data.data.nama,
@@ -116,7 +114,6 @@ function EditCustomerInformation() {
         data: formData,
       });
 
-      console.log(res);
       handleGetCustomerProfile();
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -144,8 +141,6 @@ function EditCustomerInformation() {
         },
         url: `${process.env.REACT_APP_API_KEY}/admin/user-address/${id}`,
       });
-      console.log('Response GET Data My Address');
-      console.log(res);
 
       setListCustomerAddress(res.data.data);
       handleGetCustomerProfile();
@@ -177,8 +172,6 @@ function EditCustomerInformation() {
         url: `${process.env.REACT_APP_API_KEY}/admin/user-address/${id}`,
         data: formData,
       });
-      console.log('Response POST Data My Address');
-      console.log(res);
       setMainAddress({
         id: null,
         region: {
@@ -193,7 +186,6 @@ function EditCustomerInformation() {
         },
         addressDetails: '',
         buildingPhoto: { img: null, fileName: null },
-        // makeItMainAddress: false,
         isMainAddress: false,
       });
       setUrbanVillage();
@@ -238,8 +230,6 @@ function EditCustomerInformation() {
         url: `${process.env.REACT_APP_API_KEY}/admin/user-address/${id}/${mainAddress.id}`,
         data: formData,
       });
-      console.log('Response PUT Data My Address');
-      console.log(res);
       setMainAddress({
         id: null,
         region: {
@@ -286,8 +276,6 @@ function EditCustomerInformation() {
         },
         url: `${process.env.REACT_APP_API_KEY}/admin/user-address/${id}/${addressId}`,
       });
-      console.log('Response DELETE Data My Address');
-      console.log(res);
       handleGetCustomerAddress();
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -322,7 +310,6 @@ function EditCustomerInformation() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('click');
               handleUpdateCustomerProfile();
             }}
           >
@@ -439,11 +426,6 @@ function EditCustomerInformation() {
                       value={formEditCustomerInformation.birthDate}
                       onChange={(value) => {
                         setFormEditCustomerInformation({ ...formEditCustomerInformation, birthDate: value });
-
-                        console.log(formEditCustomerInformation.birthDate);
-                        console.log('Tanggal: ' + value.$D);
-                        console.log('Bulan: ' + value.$M);
-                        console.log('Tahun: ' + value.$y);
                       }}
                       renderInput={(params) => <TextField {...params} />}
                       slotProps={{
@@ -493,7 +475,6 @@ function EditCustomerInformation() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => {
-                            console.log(e.target.files);
                             setFormEditCustomerInformation({
                               ...formEditCustomerInformation,
                               profilePicture: {
@@ -501,7 +482,6 @@ function EditCustomerInformation() {
                                 fileName: !e.target.files[0] ? null : e.target.files[0].name,
                               },
                             });
-                            // console.log(image);
                           }}
                           hidden
                         />
@@ -557,7 +537,6 @@ function EditCustomerInformation() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  console.log('click');
                   if (mainAddress.id) {
                     handleUpdateAddress();
                   } else {
@@ -571,7 +550,6 @@ function EditCustomerInformation() {
                       {mainAddress.id ? 'Update Alamat' : 'Tambah Alamat'}
                     </h4>
                   </div>
-                  {/* <div style={{ fontWeight: 'bold', width: '100%', textAlign: 'center' }}>Alamat Utama</div> */}
 
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={12} md={3} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -624,8 +602,6 @@ function EditCustomerInformation() {
                                 : null}
                             </Select>
                           </FormControl>
-
-                          {mainAddress.region.subDistrict || null}
                         </Grid>
                         <Grid item xs={12} md={6}>
                           <FormControl disabled={urbanVillage ? false : true} fullWidth>
@@ -654,8 +630,6 @@ function EditCustomerInformation() {
                                 : null}
                             </Select>
                           </FormControl>
-
-                          {mainAddress.region.urbanVillage || null}
                         </Grid>
                         <Grid item xs={12} md={6}>
                           <TextField
@@ -734,8 +708,6 @@ function EditCustomerInformation() {
                               })}
                             </Select>
                           </FormControl>
-
-                          {mainAddress.buildingDetails.buildingType}
                         </Grid>
                         <Grid item xs={12} sm>
                           <TextField
@@ -823,7 +795,6 @@ function EditCustomerInformation() {
                               type="file"
                               accept="image/*"
                               onChange={(e) => {
-                                console.log(e.target.files);
                                 setMainAddress({
                                   ...mainAddress,
                                   buildingPhoto: {
@@ -831,7 +802,6 @@ function EditCustomerInformation() {
                                     fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                   },
                                 });
-                                // console.log(image);
                               }}
                               hidden
                             />
@@ -888,26 +858,13 @@ function EditCustomerInformation() {
                         checked={mainAddress.isMainAddress}
                         onChange={(e) => {
                           setMainAddress({ ...mainAddress, isMainAddress: e.target.checked });
-                          console.log(e.target.checked);
                         }}
                       />
                     </Grid>
                   </Grid>
 
                   <div style={{ display: 'flex', gap: 4, justifyContent: 'space-between' }}>
-                    <Button
-                      variant="contained"
-                      size="large"
-                      type="submit"
-                      sx={{ width: '100%', fontWeight: 'bold' }}
-                      // onClick={() => {
-                      //   if (mainAddress.id) {
-                      //     handleUpdateAddress();
-                      //   } else {
-                      //     handleCreateAddress();
-                      //   }
-                      // }}
-                    >
+                    <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                       {mainAddress.id ? 'Update Alamat' : 'Tambah Alamat'}
                     </Button>
                     {mainAddress.id ? (
@@ -930,7 +887,6 @@ function EditCustomerInformation() {
                             },
                             addressDetails: '',
                             buildingPhoto: { img: null, fileName: null },
-                            // makeItMainAddress: false,
                             isMainAddress: false,
                           });
                           setUrbanVillage();
@@ -940,32 +896,6 @@ function EditCustomerInformation() {
                       </Button>
                     ) : null}
                   </div>
-
-                  <div>
-                    {formEditCustomerInformation.customerName}
-                    <br />
-                    {formEditCustomerInformation.contact.phoneNumber + ' ' + formEditCustomerInformation.contact.email}
-                    <br />
-                    {mainAddress.region.subDistrict +
-                      ' ' +
-                      mainAddress.region.urbanVillage +
-                      ' ' +
-                      mainAddress.region.hamlet +
-                      ' ' +
-                      mainAddress.region.neighbourhood}
-                    <br />
-                    {mainAddress.buildingDetails.buildingType +
-                      ' ' +
-                      mainAddress.buildingDetails.buildingName_Or_Number}
-                    <br />
-                    {mainAddress.addressDetails}
-                    {/* {mainAddress.makeItMainAddress} */}
-                    {`${formEditCustomerInformation.birthDate.$D}
-              ${formEditCustomerInformation.birthDate.$M}
-              ${formEditCustomerInformation.birthDate.$y}`}
-                  </div>
-
-                  <br />
                 </Box>
               </form>
             </Paper>

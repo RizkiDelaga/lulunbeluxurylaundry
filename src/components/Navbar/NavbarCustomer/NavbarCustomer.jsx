@@ -282,8 +282,6 @@ function NavbarCustomer(props) {
         },
         url: `${process.env.REACT_APP_API_KEY}/notifikasi/all/user?page=${next ? pageConfig.currentPage + 1 : 1}`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
       setUnreadNotif(res.data.otherData.unreadNotif);
       if (next) {
         setListNotification([...listNotification, ...res.data.data]);
@@ -306,8 +304,6 @@ function NavbarCustomer(props) {
         },
         url: `${process.env.REACT_APP_API_KEY}/notifikasi/user/${id}`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
       setListNotification((prevListNotification) => {
         const updatedList = [...prevListNotification];
 
@@ -514,7 +510,6 @@ function NavbarCustomer(props) {
                     color="primary"
                     badgeContent={
                       unreadNotif
-                      // !listNotification ? null : listNotification.filter((item) => item.dibacaUser === false).length
                     }
                     max={999}
                   >

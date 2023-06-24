@@ -94,8 +94,6 @@ function Gallery() {
           ? pageConfig.currentPage + 1
           : changePage,
       });
-      console.log('Response GET');
-      console.log(res);
       setListGallery(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -121,8 +119,6 @@ function Gallery() {
         url: `${process.env.REACT_APP_API_KEY}/galeri`,
         data: formData,
       });
-      console.log('Response POST');
-      console.log(res);
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -177,8 +173,6 @@ function Gallery() {
         description: '',
         file: { img: null, fileName: null },
       });
-      console.log('Response DELETE');
-      console.log(res);
       handleGetGallery();
     } catch (error) {
       setOpenLoadDecision({
@@ -208,7 +202,6 @@ function Gallery() {
         });
       }
       handleGetGallery();
-      console.log(res);
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -240,7 +233,6 @@ function Gallery() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (formGallery.id) {
                   handleUpdateGallery();
                 } else {
@@ -338,7 +330,6 @@ function Gallery() {
                             type="file"
                             accept="image/*, video/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormGallery({
                                 ...formGallery,
                                 file: {
@@ -346,7 +337,6 @@ function Gallery() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              // console.log(image);
                             }}
                             hidden
                           />
@@ -461,7 +451,6 @@ function Gallery() {
                               </Button>
                             </DialogActions>
                           </Dialog>
-                          {/* <span>{item.media ? <img src={item.media} width={60} alt={item.media} /> : null}</span> */}
                         </TableCell>
                         <TableCell>
                           <span>{item.judul}</span>
@@ -576,11 +565,6 @@ function Gallery() {
                 </Button>
               </div>
             )}
-
-            {formGallery.title}
-            <br />
-            {formGallery.description}
-            <br />
           </Box>
         </Paper>
       </div>

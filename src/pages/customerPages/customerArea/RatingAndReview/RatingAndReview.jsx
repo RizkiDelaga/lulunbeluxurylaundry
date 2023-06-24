@@ -42,10 +42,7 @@ function RatingAndReview() {
         url: `${process.env.REACT_APP_API_KEY}/review`,
         data: formData,
       });
-      console.log('Response POST Login Customer');
-      console.log(res);
 
-      // navigate(`/AreaPelanggan/${noPesanan}`);
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -153,12 +150,10 @@ function RatingAndReview() {
               type="file"
               accept="image/*"
               onChange={(e) => {
-                console.log(e.target.files);
                 setPhoto({
                   img: e.target.files[0],
                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                 });
-                // console.log(image);
               }}
               hidden
             />

@@ -39,8 +39,6 @@ function RowItem(props) {
         url: `${process.env.REACT_APP_API_KEY}/acara/update-status/${eventId}`,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       props.setLoadEvent(props.loadEvent + 1);
     } catch (error) {
       console.log(error);
@@ -197,8 +195,6 @@ function EventTable({ statusType, loadEvent, setLoadEvent }) {
         }`,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       setListEvent(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {

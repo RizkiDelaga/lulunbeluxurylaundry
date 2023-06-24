@@ -28,7 +28,6 @@ function DashboardAdminLayout() {
           paddingX: '24px',
           marginLeft: openSidebar ? '300px' : '64.2px',
           [theme.breakpoints.down('md')]: {
-            // paddingTop: `calc(64px + 16px)`,
             paddingX: '8px',
             marginLeft: '0 !important',
           },

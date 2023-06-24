@@ -94,9 +94,6 @@ function RegisterNewCustomer() {
         data: formData,
       });
 
-      console.log('Response POST');
-      console.log(res);
-
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -130,7 +127,6 @@ function RegisterNewCustomer() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('click');
               handleCreateNewCustomer();
             }}
           >
@@ -245,11 +241,6 @@ function RegisterNewCustomer() {
                       value={formRegisterNewCustomer.birthDate}
                       onChange={(value) => {
                         setFormRegisterNewCustomer({ ...formRegisterNewCustomer, birthDate: value });
-
-                        console.log(formRegisterNewCustomer.birthDate);
-                        console.log('Tanggal: ' + value.$D);
-                        console.log('Bulan: ' + value.$M);
-                        console.log('Tahun: ' + value.$y);
                       }}
                       renderInput={(params) => <TextField {...params} />}
                       slotProps={{
@@ -299,7 +290,6 @@ function RegisterNewCustomer() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => {
-                            console.log(e.target.files);
                             setFormRegisterNewCustomer({
                               ...formRegisterNewCustomer,
                               profilePicture: {
@@ -307,7 +297,6 @@ function RegisterNewCustomer() {
                                 fileName: !e.target.files[0] ? null : e.target.files[0].name,
                               },
                             });
-                            // console.log(image);
                           }}
                           hidden
                         />
@@ -395,8 +384,6 @@ function RegisterNewCustomer() {
                             : null}
                         </Select>
                       </FormControl>
-
-                      {mainAddress.region.subDistrict || null}
                     </Grid>
                     <Grid item xs={12} sm={6} md>
                       <FormControl disabled={urbanVillage ? false : true} fullWidth>
@@ -425,8 +412,6 @@ function RegisterNewCustomer() {
                             : null}
                         </Select>
                       </FormControl>
-
-                      {mainAddress.region.urbanVillage || null}
                     </Grid>
                     <Grid item xs={12} sm={6} md>
                       <TextField
@@ -505,8 +490,6 @@ function RegisterNewCustomer() {
                           })}
                         </Select>
                       </FormControl>
-
-                      {mainAddress.buildingDetails.buildingType}
                     </Grid>
                     <Grid item xs={12} sm>
                       <TextField
@@ -593,7 +576,6 @@ function RegisterNewCustomer() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => {
-                            console.log(e.target.files);
                             setMainAddress({
                               ...mainAddress,
                               buildingPhoto: {
@@ -601,7 +583,6 @@ function RegisterNewCustomer() {
                                 fileName: !e.target.files[0] ? null : e.target.files[0].name,
                               },
                             });
-                            // console.log(image);
                           }}
                           hidden
                         />
@@ -638,28 +619,6 @@ function RegisterNewCustomer() {
               <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                 Registrasi Pelanggan
               </Button>
-
-              {formRegisterNewCustomer.customerName}
-              <br />
-              {formRegisterNewCustomer.contact.phoneNumber + ' ' + formRegisterNewCustomer.contact.email}
-              <br />
-              {mainAddress.region.subDistrict +
-                ' ' +
-                mainAddress.region.urbanVillage +
-                ' ' +
-                mainAddress.region.hamlet +
-                ' ' +
-                mainAddress.region.neighbourhood}
-              <br />
-              {mainAddress.buildingDetails.buildingType + ' ' + mainAddress.buildingDetails.buildingName_Or_Number}
-              <br />
-              {mainAddress.addressDetails}
-              {mainAddress.makeItMainAddress}
-              {`${formRegisterNewCustomer.birthDate.$D}
-              ${formRegisterNewCustomer.birthDate.$M}
-              ${formRegisterNewCustomer.birthDate.$y}`}
-
-              <br />
             </Box>
           </form>
         </Paper>

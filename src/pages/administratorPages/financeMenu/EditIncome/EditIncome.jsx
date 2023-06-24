@@ -42,8 +42,6 @@ function EditIncome() {
         url: `${process.env.REACT_APP_API_KEY}/keuangan/${id}`,
       });
 
-      console.log('Response POST');
-      console.log(res);
       setFormEditIncome({
         title: res.data.data.judul,
         nominal: res.data.data.nominal,
@@ -76,8 +74,6 @@ function EditIncome() {
         data: formData,
       });
 
-      console.log('Response POST');
-      console.log(res);
       setFormEditIncome({
         title: '',
         nominal: null,
@@ -120,7 +116,7 @@ function EditIncome() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('click');
+
               handleUpdateIncome();
             }}
           >
@@ -222,10 +218,6 @@ function EditIncome() {
                               ...formEditIncome,
                               entryDate: value,
                             });
-
-                            console.log('Tanggal: ' + value.$D);
-                            console.log('Bulan: ' + value.$M);
-                            console.log('Tahun: ' + value.$y);
                           }}
                           renderInput={(params) => <TextField {...params} required />}
                           slotProps={{
@@ -258,10 +250,6 @@ function EditIncome() {
                               ...formEditIncome,
                               entryDate: dayjs(newDate),
                             });
-
-                            console.log('Jam: ' + value.$H);
-                            console.log('Menit: ' + value.$m);
-                            console.log('Detik: ' + value.$s);
                           }}
                           renderInput={(params) => <TextField {...params} required />}
                           slotProps={{
@@ -344,7 +332,6 @@ function EditIncome() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => {
-                            console.log(e.target.files);
                             setFormEditIncome({
                               ...formEditIncome,
                               photoEvidence: {
@@ -352,7 +339,6 @@ function EditIncome() {
                                 fileName: !e.target.files[0] ? null : e.target.files[0].name,
                               },
                             });
-                            // console.log(image);
                           }}
                           hidden
                         />
@@ -390,16 +376,6 @@ function EditIncome() {
               <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                 Edit Pemasukan
               </Button>
-
-              {formEditIncome.title}
-              <br />
-              {formEditIncome.nominal}
-              <br />
-              {formEditIncome.notes}
-              {`${formEditIncome.entryDate.$D} ${formEditIncome.entryDate.$M} ${formEditIncome.entryDate.$y}`}
-              <br />
-              {`${formEditIncome.entryDate.$H} ${formEditIncome.entryDate.$m}`}
-              <br />
             </Box>
           </form>
         </Paper>

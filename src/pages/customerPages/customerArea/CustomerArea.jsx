@@ -272,8 +272,6 @@ function OrderTable({ orderStatusType, myOrderStats }) {
         dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       setListFinance(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -520,7 +518,6 @@ function OrderTable({ orderStatusType, myOrderStats }) {
                         return (
                           <MenuItem
                             onClick={() => {
-                              // handleGetOrder();
                               handleGetOrder(
                                 index + 1,
                                 null,
@@ -564,7 +561,6 @@ function OrderTable({ orderStatusType, myOrderStats }) {
                         return (
                           <MenuItem
                             onClick={() => {
-                              // handleGetOrder();
                               handleGetOrder(
                                 1,
                                 item,
@@ -637,7 +633,6 @@ function CustomerArea() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [buttonStatusOrder, setButtonStatusOrder] = useState('Pesanan sedang Berjalan');
-  // const myProfile = JSON.parse(localStorage.getItem('my_profile_account'));
   const [myOrderStats, setMyOrderStats] = React.useState({
     needApproval: null,
     needsToBePickedUp: null,
@@ -672,8 +667,7 @@ function CustomerArea() {
         },
         url: `${process.env.REACT_APP_API_KEY}/pemesanan/user/statistic-data`,
       });
-      console.log('Response GET');
-      console.log(res);
+
       setMyOrderStats({
         needApproval: res.data.data.perluDisetujui,
         needsToBePickedUp: res.data.data.perluDijemput,
@@ -703,7 +697,6 @@ function CustomerArea() {
           },
         }}
       >
-        {/* <PageStructureAndDirectButton defaultMenu="Area Pelanggan" /> */}
         <PageStructureAndDirectButton
           defaultMenu="Area Pelanggan"
           directButton={[
@@ -787,7 +780,6 @@ function CustomerArea() {
                   title="Menunggu Persetujuan"
                   content={{ normalText: myOrderStats.needApproval }}
                   inheritColor={true}
-                  // navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
               </Box>
             </Grid>
@@ -818,7 +810,6 @@ function CustomerArea() {
                       myOrderStats.needsToBePickedUp + myOrderStats.needsToBeDone + myOrderStats.needsToBeDelivered,
                   }}
                   inheritColor={true}
-                  // navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
               </Box>
             </Grid>
@@ -843,7 +834,6 @@ function CustomerArea() {
                   title="Pesanan Selesai"
                   content={{ normalText: myOrderStats.completed }}
                   inheritColor={true}
-                  // navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
               </Box>
             </Grid>
@@ -868,7 +858,6 @@ function CustomerArea() {
                   title="Pesanan Batal"
                   content={{ normalText: myOrderStats.cancelled }}
                   inheritColor={true}
-                  // navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
               </Box>
             </Grid>
@@ -893,7 +882,6 @@ function CustomerArea() {
                   title="Pesanan di Tolak"
                   content={{ normalText: myOrderStats.declined }}
                   inheritColor={true}
-                  // navigate={{ text: 'Lihat daftar pesanan', url: '/Pesanan' }}
                 />
               </Box>
             </Grid>

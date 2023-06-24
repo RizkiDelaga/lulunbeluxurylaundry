@@ -54,8 +54,6 @@ function ReasonsWhyChooseUs() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/alasan`,
       });
-      console.log('Response GET');
-      console.log(res);
       setListReasonsWhyChooseUs(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -80,8 +78,6 @@ function ReasonsWhyChooseUs() {
         url: `${process.env.REACT_APP_API_KEY}/alasan`,
         data: formData,
       });
-      console.log('Response POST');
-      console.log(res);
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -135,8 +131,6 @@ function ReasonsWhyChooseUs() {
         description: '',
         photo: { img: null, fileName: null },
       });
-      console.log('Response DELETE');
-      console.log(res);
       handleGetReasonsWhyChooseUs();
     } catch (error) {
       setOpenLoadDecision({
@@ -166,7 +160,6 @@ function ReasonsWhyChooseUs() {
         });
       }
       handleGetReasonsWhyChooseUs();
-      console.log(res);
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -198,7 +191,6 @@ function ReasonsWhyChooseUs() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (formReasonsWhyChooseUs.id) {
                   handleUpdateReasonsWhyChooseUs();
                 } else {
@@ -300,7 +292,6 @@ function ReasonsWhyChooseUs() {
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormReasonsWhyChooseUs({
                                 ...formReasonsWhyChooseUs,
                                 photo: {
@@ -308,7 +299,6 @@ function ReasonsWhyChooseUs() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              // console.log(image);
                             }}
                             hidden
                           />
@@ -454,11 +444,6 @@ function ReasonsWhyChooseUs() {
                 </TableBody>
               </Table>
             </TableContainer>
-
-            {formReasonsWhyChooseUs.reasonTitle}
-            <br />
-            {formReasonsWhyChooseUs.description}
-            <br />
           </Box>
         </Paper>
       </div>

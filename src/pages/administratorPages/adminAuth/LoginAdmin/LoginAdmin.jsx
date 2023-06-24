@@ -61,8 +61,6 @@ function LoginAdmin() {
           password: formLoginAdmin.password,
         },
       });
-      console.log('Response POST Login Customer');
-      console.log(res);
       localStorage.setItem('access_token_admin', res.data.accessToken);
       dispatchGetProfileAccountCustomer(res.data.accessToken);
       if (res.status === 200) {
@@ -111,7 +109,6 @@ function LoginAdmin() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 handleLoginAdmin();
               }}
             >
@@ -192,20 +189,9 @@ function LoginAdmin() {
                     Lupa Password?
                   </Link>
                 </div>
-                <Button
-                  variant="contained"
-                  size="large"
-                  type="submit"
-                  // onClick={() => {
-                  //   handleLoginAdmin();
-                  // }}
-                  style={{ width: '100%', fontWeight: 'bold' }}
-                >
+                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                   Masuk
                 </Button>
-                {formLoginAdmin.administratorName}
-                <br />
-                {formLoginAdmin.password}
               </Box>
             </form>
           </Paper>

@@ -118,7 +118,6 @@ function SidebarAdmin(props) {
           )}
           <IconButton
             onClick={props.handleSidebar}
-            // edge="start"
             sx={{
               position: 'absolute',
               right: 0,
@@ -126,7 +125,6 @@ function SidebarAdmin(props) {
               [theme.breakpoints.up('md')]: {
                 display: 'none',
               },
-              // marginLeft: openSidebar ? 'none' : 6,
             }}
             className="color-primary"
           >
