@@ -87,10 +87,6 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                           ...state,
                           dateOrder: value,
                         });
-
-                        console.log('Tanggal: ' + value.$D);
-                        console.log('Bulan: ' + value.$M);
-                        console.log('Tahun: ' + value.$y);
                       }}
                       renderInput={(params) => <TextField {...params} required />}
                       slotProps={{
@@ -123,10 +119,6 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                           ...state,
                           dateOrder: dayjs(newDate),
                         });
-
-                        console.log('Jam: ' + value.$H);
-                        console.log('Menit: ' + value.$m);
-                        console.log('Detik: ' + value.$s);
                       }}
                       renderInput={(params) => <TextField {...params} required />}
                       slotProps={{
@@ -443,7 +435,7 @@ const InputItem = ({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log('click');
+
           setOpenAlert(false);
           if (stateValue.id) {
             handleUpdateLaundryItem();
@@ -540,8 +532,6 @@ const InputItem = ({
                   })}
                 </Select>
               </FormControl>
-
-              {stateValue.laundryType}
             </Grid>
           </Grid>
           <Grid container spacing={2}>
@@ -604,7 +594,6 @@ const InputItem = ({
                       type="file"
                       accept="image/*"
                       onChange={(e) => {
-                        console.log(e.target.files);
                         handleState({
                           ...stateValue,
                           photo: {
@@ -646,15 +635,6 @@ const InputItem = ({
           </div>
         </Box>
       </form>
-
-      {/* {stateValue.itemName}
-      <br />
-      {stateValue.quantity}
-      <br />
-      {stateValue.pricePerUnit}
-      <br />
-      {stateValue.notation}
-      <br /> */}
     </>
   );
 };
@@ -719,8 +699,7 @@ function FormOrderLaundry() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/jenislayanan`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       setListServiceType(res.data.data);
     } catch (error) {
       console.log(error);
@@ -733,8 +712,7 @@ function FormOrderLaundry() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/metodepembayaran`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       setListPaymentMethod(res.data.data);
     } catch (error) {
       console.log(error);
@@ -747,8 +725,7 @@ function FormOrderLaundry() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/jenislaundry`,
       });
-      console.log('Response GET Data Laundry Type');
-      console.log(res);
+
       setListLaundryType(res.data.data);
     } catch (error) {
       console.log(error);
@@ -764,8 +741,7 @@ function FormOrderLaundry() {
         },
         url: `${process.env.REACT_APP_API_KEY}/user/address`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       setListCustomerAddress(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -781,10 +757,7 @@ function FormOrderLaundry() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/pemesanan/${orderId || id || formOrder.id}`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
 
-      console.log('apakah keluar?', res.data.data.alamatJemput);
       setFormOrder({
         id: res.data.data.id,
         noOrder: res.data.data.nomorPesanan,
@@ -834,11 +807,9 @@ function FormOrderLaundry() {
           alamatAntar: formOrder.address.deliveryAddress,
         },
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       setFormOrder({ ...formOrder, id: res.data.data.id });
       handleGetDetailPesanan(res.data.data.id);
-      // handleGetLaundryItem();
       handleGetLaundryType();
 
       if (res.status === 201) {
@@ -848,7 +819,6 @@ function FormOrderLaundry() {
           statusType: 'success',
         });
       }
-      // setListCustomerAddress(res.data.data);
     } catch (error) {
       console.log(error);
       setOpenLoadDecision({
@@ -880,8 +850,7 @@ function FormOrderLaundry() {
           diskon: formOrder.discount,
         },
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       handleGetDetailPesanan(res.data.data.id);
 
       if (res.status === 200) {
@@ -912,8 +881,6 @@ function FormOrderLaundry() {
         url: `${process.env.REACT_APP_API_KEY}/barang/user/${formOrder.id || id}`,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       setListLaundryItem(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -944,8 +911,6 @@ function FormOrderLaundry() {
         data: formData,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       handleGetLaundryItem();
       setFormItem({
         id: null,
@@ -994,8 +959,6 @@ function FormOrderLaundry() {
         data: formData,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       handleGetLaundryItem();
       setFormItem({
         id: null,
@@ -1034,8 +997,6 @@ function FormOrderLaundry() {
         url: `${process.env.REACT_APP_API_KEY}/barang/user/${itemId}`,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       handleGetLaundryItem();
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -1078,20 +1039,15 @@ function FormOrderLaundry() {
             currentPage={{
               title: 'Form Pemesanan Laundry',
             }}
-            // params={id ? 'Edit Pesanan' : null}
           />
-          <LoadDecisions
-            setOpenLoad={setOpenLoadDecision}
-            openLoad={openLoadDecision}
-            // redirect={id ? null : `/AreaPelanggan/FormulirPemesananLaundry/${formOrder.id}`}
-          />
+          <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
 
           {/* Main Content */}
           <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
+
                 if (formOrder.id || id) {
                   handleUpdateOrder();
                 } else {

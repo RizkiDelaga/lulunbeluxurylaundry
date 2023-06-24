@@ -77,7 +77,6 @@ function AdminRouter() {
             <Route path="Pesanan/:noPesanan" element={<OrderDetails />} />
             <Route path="Pesanan/FormulirPemesananLaundry" element={<FormOrderLaundry />} />
             <Route path="Pesanan/FormulirPemesananLaundry/:id" element={<FormOrderLaundry />} />
-            {/* <Route path="Pesanan/EditPesanan" element={<HomePage />} /> */}
             <Route path="Pesanan/RatingDanReviewPelanggan" element={<CustomerRatingsAndReviews />} />
             <Route path="Pesanan/DaftarPesanan/:status" element={<OrderList />} />
 

@@ -15,7 +15,6 @@ import {
   TextField,
   useTheme,
 } from '@mui/material';
-// import InformationCard from '../../../components/Card/InformationCard/InformationCard';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -266,8 +265,7 @@ function OrderTable() {
           : changePage,
         dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
+
       setListOrder(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -287,8 +285,6 @@ function OrderTable() {
         },
         url: `${process.env.REACT_APP_API_KEY}/pemesanan/search/where?nomorPesanan=${searching.value}`,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
 
       setListOrder(res.data.data);
     } catch (error) {
@@ -642,7 +638,6 @@ function OrderTable() {
                         return (
                           <MenuItem
                             onClick={() => {
-                              // handleGetOrder();
                               handleGetOrder(index + 1, null, filterOrderStatus);
                               handleCloseSelectPage();
                             }}
@@ -682,7 +677,6 @@ function OrderTable() {
                         return (
                           <MenuItem
                             onClick={() => {
-                              // handleGetOrder();
                               handleGetOrder(1, item, filterOrderStatus);
                               handleCloseSelectDataPerPage();
                             }}
@@ -763,8 +757,7 @@ function OrderMenu() {
         },
         url: `${process.env.REACT_APP_API_KEY}/pemesanan/admin/statistic-data`,
       });
-      console.log('Response GET');
-      console.log(res);
+
       setOrderStats({
         needApproval: res.data.data.perluDisetujui,
         needsToBePickedUp: res.data.data.perluDijemput,

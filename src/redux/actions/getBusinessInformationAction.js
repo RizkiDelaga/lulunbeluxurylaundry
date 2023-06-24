@@ -19,8 +19,7 @@ export const getGeneralInformation = () => {
                 method: 'GET',
                 url: `${process.env.REACT_APP_API_KEY}/infoumum`
             }).then((res) => {
-                console.log("data.. ", res);
-                console.log("data.. ", res.data);
+                
                 sessionStorage.setItem('business_information', JSON.stringify(res.data.data[0]));
 
                 dispatch({
@@ -55,8 +54,6 @@ export const getReasonWhyChooseUs = () => {
                 method: 'GET',
                 url: `${process.env.REACT_APP_API_KEY}/alasan`
             }).then((res) => {
-                console.log("data.. ", res);
-                console.log("data.. ", res.data);
                 sessionStorage.setItem('reason_why_choose_us', JSON.stringify(res.data.data)||null);
 
                 dispatch({
@@ -90,8 +87,7 @@ export const getHowToOrder = () => {
                 method: 'GET',
                 url: `${process.env.REACT_APP_API_KEY}/carapesan`
             }).then((res) => {
-                console.log("data.. ", res);
-                console.log("data.. ", res.data);
+                
                 sessionStorage.setItem('how_to_order', JSON.stringify(res.data.data));
 
                 dispatch({
@@ -125,8 +121,7 @@ export const getTestimony = () => {
                 method: 'GET',
                 url: `${process.env.REACT_APP_API_KEY}/review`
             }).then((res) => {
-                console.log("data.. ", res);
-                console.log("data.. ", res.data);
+                
                 sessionStorage.setItem('testimony', JSON.stringify(res.data.data));
 
                 dispatch({
@@ -160,8 +155,7 @@ export const getFAQ = () => {
                 method: 'GET',
                 url: `${process.env.REACT_APP_API_KEY}/faq`
             }).then((res) => {
-                console.log("data.. ", res);
-                console.log("data.. ", res.data);
+                
                 sessionStorage.setItem('faq', JSON.stringify(res.data.data));
 
                 dispatch({
@@ -195,8 +189,7 @@ export const getGallery = () => {
                 method: 'GET',
                 url: `${process.env.REACT_APP_API_KEY}/galeri`
             }).then((res) => {
-                console.log("data.. ", res);
-                console.log("data.. ", res.data);
+                
                 sessionStorage.setItem('gallery', JSON.stringify(res.data.data) ||null);
 
                 dispatch({

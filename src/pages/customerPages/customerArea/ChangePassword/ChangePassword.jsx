@@ -57,8 +57,7 @@ function ChangePassword() {
           password: formChangePassword.newPassword,
         },
       });
-      console.log('Response PUT Change Password Customer');
-      console.log(res);
+
       if (res.status === 200) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -104,7 +103,7 @@ function ChangePassword() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('click');
+
               if (formChangePassword.newPassword === formChangePassword.confirmNewPassword) {
                 handleUpdatePassword();
               } else {
@@ -257,31 +256,12 @@ function ChangePassword() {
                   </FormControl>
                 </Grid>
               </Grid>
-              <Button
-                variant="contained"
-                size="large"
-                type="submit"
-                style={{ width: '100%', fontWeight: 'bold' }}
-                // onClick={() => {
-                //   if (formChangePassword.newPassword === formChangePassword.confirmNewPassword) {
-                //     handleUpdatePassword();
-                //   } else {
-                //     alert('Password tidak macth');
-                //   }
-                // }}
-              >
+              <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                 Ubah Password
               </Button>
-
-              {formChangePassword.oldPassword}
-              <br />
-              {formChangePassword.newPassword}
-              <br />
-              {formChangePassword.confirmNewPassword}
             </Box>
           </form>
         </Paper>
-        {/* </div> */}
       </Box>
     </>
   );

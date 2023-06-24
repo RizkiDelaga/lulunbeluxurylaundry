@@ -22,34 +22,8 @@ export const options = {
     legend: {
       position: 'top',
     },
-    // title: {
-    //   display: true,
-    //   text: 'Weekly financial statistics',
-    // },
   },
 };
-
-// const labels = ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Today'];
-
-// export const data = {
-//   labels,
-//   datasets: [
-//     {
-//       fill: true,
-//       label: 'Income',
-//       data: [598884, 819838, 674452, 454919, 925132, 759443, 767332],
-//       borderColor: 'rgb(31, 48, 92)',
-//       backgroundColor: 'rgb(31, 48, 92, 0.5)',
-//     },
-//     {
-//       fill: false,
-//       label: 'Expenses',
-//       data: [218828, 53563, 221413, 54946, 91714, 80128, 279408],
-//       borderColor: 'rgb(211, 47, 47)',
-//       backgroundColor: 'rgb(211, 47, 47, 0.5)',
-//     },
-//   ],
-// };
 
 function AreaChart({ dataset }) {
   const navigate = useNavigate();

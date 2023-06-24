@@ -53,7 +53,6 @@ function EditProfile() {
     },
     addressDetails: '',
     buildingPhoto: { img: null, fileName: null },
-    // makeItMainAddress: false,
     isMainAddress: false,
   });
   const [openLoadDecision, setOpenLoadDecision] = useState({
@@ -77,8 +76,6 @@ function EditProfile() {
         },
         url: `${process.env.REACT_APP_API_KEY}/user`,
       });
-      console.log('Response GET Data My Profile');
-      console.log(res);
 
       setFormEditProfile({
         customerName: res.data.data.nama,
@@ -116,8 +113,7 @@ function EditProfile() {
         url: `${process.env.REACT_APP_API_KEY}/user`,
         data: formData,
       });
-      console.log('Response GET Data My Profile');
-      console.log(res);
+
       handleGetMyProfile();
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -145,9 +141,7 @@ function EditProfile() {
         },
         url: `${process.env.REACT_APP_API_KEY}/user/address`,
       });
-      console.log('Response GET Data My Address');
-      console.log(res);
-      // setFormEditProfile(res.data.data);
+
       setListMyAddress(res.data.data);
       handleGetMyProfile();
     } catch (error) {
@@ -178,8 +172,7 @@ function EditProfile() {
         url: `${process.env.REACT_APP_API_KEY}/user/address`,
         data: formData,
       });
-      console.log('Response POST Data My Address');
-      console.log(res);
+
       setMainAddress({
         id: null,
         region: {
@@ -194,7 +187,6 @@ function EditProfile() {
         },
         addressDetails: '',
         buildingPhoto: { img: null, fileName: null },
-        // makeItMainAddress: false,
         isMainAddress: false,
       });
       setUrbanVillage();
@@ -239,8 +231,7 @@ function EditProfile() {
         url: `${process.env.REACT_APP_API_KEY}/user/address/${mainAddress.id}`,
         data: formData,
       });
-      console.log('Response PUT Data My Address');
-      console.log(res);
+
       setMainAddress({
         id: null,
         region: {
@@ -255,7 +246,6 @@ function EditProfile() {
         },
         addressDetails: '',
         buildingPhoto: { img: null, fileName: null },
-        // makeItMainAddress: false,
         isMainAddress: false,
       });
       setUrbanVillage();
@@ -288,8 +278,7 @@ function EditProfile() {
         },
         url: `${process.env.REACT_APP_API_KEY}/user/address/${id}`,
       });
-      console.log('Response DELETE Data My Address');
-      console.log(res);
+
       handleGetMyAddress();
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -336,7 +325,7 @@ function EditProfile() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('click');
+
               handleUpdateMyProfile();
             }}
           >
@@ -453,11 +442,6 @@ function EditProfile() {
                       value={formEditProfile.birthDate}
                       onChange={(value) => {
                         setFormEditProfile({ ...formEditProfile, birthDate: value });
-
-                        console.log(formEditProfile.birthDate);
-                        console.log('Tanggal: ' + value.$D);
-                        console.log('Bulan: ' + value.$M);
-                        console.log('Tahun: ' + value.$y);
                       }}
                       renderInput={(params) => <TextField {...params} />}
                       slotProps={{
@@ -507,7 +491,6 @@ function EditProfile() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => {
-                            console.log(e.target.files);
                             setFormEditProfile({
                               ...formEditProfile,
                               profilePicture: {
@@ -515,7 +498,6 @@ function EditProfile() {
                                 fileName: !e.target.files[0] ? null : e.target.files[0].name,
                               },
                             });
-                            // console.log(image);
                           }}
                           hidden
                         />
@@ -567,7 +549,7 @@ function EditProfile() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  console.log('click');
+
                   if (mainAddress.id) {
                     handleUpdateAddress();
                   } else {
@@ -581,7 +563,6 @@ function EditProfile() {
                       {mainAddress.id ? 'Update Alamat' : 'Tambah Alamat'}
                     </h4>
                   </div>
-                  {/* <div style={{ fontWeight: 'bold', width: '100%', textAlign: 'center' }}>Alamat Utama</div> */}
 
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={12} md={3} lg={3} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -634,8 +615,6 @@ function EditProfile() {
                                 : null}
                             </Select>
                           </FormControl>
-
-                          {mainAddress.region.subDistrict || null}
                         </Grid>
                         <Grid item xs={12} md={6}>
                           <FormControl disabled={urbanVillage ? false : true} fullWidth>
@@ -664,8 +643,6 @@ function EditProfile() {
                                 : null}
                             </Select>
                           </FormControl>
-
-                          {mainAddress.region.urbanVillage || null}
                         </Grid>
                         <Grid item xs={12} md={6}>
                           <TextField
@@ -744,8 +721,6 @@ function EditProfile() {
                               })}
                             </Select>
                           </FormControl>
-
-                          {mainAddress.buildingDetails.buildingType}
                         </Grid>
                         <Grid item xs={12} sm>
                           <TextField
@@ -833,7 +808,6 @@ function EditProfile() {
                               type="file"
                               accept="image/*"
                               onChange={(e) => {
-                                console.log(e.target.files);
                                 setMainAddress({
                                   ...mainAddress,
                                   buildingPhoto: {
@@ -841,7 +815,6 @@ function EditProfile() {
                                     fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                   },
                                 });
-                                // console.log(image);
                               }}
                               hidden
                             />
@@ -898,26 +871,13 @@ function EditProfile() {
                         checked={mainAddress.isMainAddress}
                         onChange={(e) => {
                           setMainAddress({ ...mainAddress, isMainAddress: e.target.checked });
-                          console.log(e.target.checked);
                         }}
                       />
                     </Grid>
                   </Grid>
 
                   <div style={{ display: 'flex', gap: 4, justifyContent: 'space-between' }}>
-                    <Button
-                      variant="contained"
-                      size="large"
-                      type="submit"
-                      sx={{ width: '100%', fontWeight: 'bold' }}
-                      // onClick={() => {
-                      //   if (mainAddress.id) {
-                      //     handleUpdateAddress();
-                      //   } else {
-                      //     handleCreateAddress();
-                      //   }
-                      // }}
-                    >
+                    <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                       {mainAddress.id ? 'Update Alamat' : 'Tambah Alamat'}
                     </Button>
                     {mainAddress.id ? (
@@ -940,7 +900,6 @@ function EditProfile() {
                             },
                             addressDetails: '',
                             buildingPhoto: { img: null, fileName: null },
-                            // makeItMainAddress: false,
                             isMainAddress: false,
                           });
                           setUrbanVillage();
@@ -950,32 +909,6 @@ function EditProfile() {
                       </Button>
                     ) : null}
                   </div>
-
-                  <div>
-                    {formEditProfile.customerName}
-                    <br />
-                    {formEditProfile.contact.phoneNumber + ' ' + formEditProfile.contact.email}
-                    <br />
-                    {mainAddress.region.subDistrict +
-                      ' ' +
-                      mainAddress.region.urbanVillage +
-                      ' ' +
-                      mainAddress.region.hamlet +
-                      ' ' +
-                      mainAddress.region.neighbourhood}
-                    <br />
-                    {mainAddress.buildingDetails.buildingType +
-                      ' ' +
-                      mainAddress.buildingDetails.buildingName_Or_Number}
-                    <br />
-                    {mainAddress.addressDetails}
-                    {/* {mainAddress.makeItMainAddress} */}
-                    {`${formEditProfile.birthDate.$D}
-              ${formEditProfile.birthDate.$M}
-              ${formEditProfile.birthDate.$y}`}
-                  </div>
-
-                  <br />
                 </Box>
               </form>
             </Paper>

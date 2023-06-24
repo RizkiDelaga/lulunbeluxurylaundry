@@ -455,13 +455,7 @@ function OperatingHoursAndHowToOrderSection({ generalInformation, listHowToOrder
 
 function EventSection({ listEvent }) {
   const [openEventDetail, setOpenEventDetail] = React.useState([]);
-  // let openEventDetail = [];
 
-  useEffect(() => {
-    // [1, 2, 3, 4, 5, 6, 7].map((eventItem, index) => setOpenEventDetail((stateA) => [...stateA, 'false']));
-    // listEvent.map((eventItem, index) => openEventDetail.push(false));
-    console.log(openEventDetail);
-  }, []);
   return (
     <>
       <Container>
@@ -529,7 +523,6 @@ function EventSection({ listEvent }) {
                         let newStatus = await [...openEventDetail];
 
                         newStatus[index] = !newStatus[index];
-                        console.log(newStatus);
                         setOpenEventDetail([...newStatus]);
                       }}
                       sx={{ width: '100%', zIndex: openEventDetail[index] ? 100 : 'none' }}
@@ -685,7 +678,6 @@ function ReasonSection({ listReason }) {
 function GallerySection({ listGallery }) {
   const theme = useTheme();
   const navigate = useNavigate();
-  // const [dataGallery, setDatagallery] = React.useState([]);
   const [openDescription, setOpenDescription] = React.useState(false);
 
   const [openPreviewGallery, setOpenPreviewGallery] = React.useState({
@@ -776,7 +768,6 @@ function GallerySection({ listGallery }) {
                     }}
                   >
                     Lihat Lebih Banyak
-                    {/* <NavigateNextIcon /> */}
                   </Box>
                 </Grid>
               );
@@ -812,13 +803,7 @@ function GallerySection({ listGallery }) {
                   <BigPlayButton position="center" />
                 </Player>
               ) : (
-                <img
-                  src={openPreviewGallery.data.media}
-                  width={'100%'}
-                  // height={'100%'}
-                  style={{ objectFit: 'contain' }}
-                  alt=""
-                />
+                <img src={openPreviewGallery.data.media} width={'100%'} style={{ objectFit: 'contain' }} alt="" />
               )
             ) : null}
           </DialogContent>
@@ -834,7 +819,6 @@ function GallerySection({ listGallery }) {
 }
 
 function TestimonySection({ listTestimony }) {
-  console.log(listTestimony, ': listTestimony');
   return (
     <>
       <Container>
@@ -873,7 +857,6 @@ function TestimonySection({ listTestimony }) {
         >
           {listTestimony.map((item, index) => {
             return (
-              // <>
               <SwiperSlide
                 style={{
                   height: 'auto',
@@ -965,7 +948,6 @@ function FAQSection({ listFAQ }) {
                 {listFAQ
                   .filter((filterItem, filterIndex) => {
                     let lengthArr = listFAQ.length;
-                    // console.log(currentWidth);
                     if (currentWidth < 900) {
                       return filterIndex <= lengthArr;
                     } else {
@@ -1191,10 +1173,7 @@ function HomePage() {
   const navigate = useNavigate();
   const [laundryType, setLaundryType] = React.useState([]);
   const [serviceType, setServiceType] = React.useState([]);
-  // const [howToOrder, setHowToOrder] = React.useState([]);
   const [event, setEvent] = React.useState([]);
-  // const [reason, setReason] = React.useState([]);
-  const [position, setPosition] = React.useState(window.pageYOffset);
 
   const dispatch = useDispatch();
   const { isLoading: loadingGetGeneralInformation, data: dataGetGeneralInformation } = useSelector(
@@ -1252,8 +1231,7 @@ function HomePage() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/jenislaundry`,
       });
-      console.log('Response GET Data Laundry Type');
-      console.log(res);
+
       setLaundryType(res.data.data);
     } catch (error) {
       console.log(error);
@@ -1266,8 +1244,7 @@ function HomePage() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/jenislayanan`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
+
       setServiceType(res.data.data);
     } catch (error) {
       console.log(error);
@@ -1280,8 +1257,7 @@ function HomePage() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/acara/search/active`,
       });
-      console.log('Response GET Data Event');
-      console.log(res);
+
       setEvent(res.data.data);
     } catch (error) {
       console.log(error);

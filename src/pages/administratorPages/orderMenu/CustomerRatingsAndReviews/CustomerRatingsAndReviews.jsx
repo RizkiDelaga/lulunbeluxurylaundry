@@ -133,8 +133,7 @@ function RatingReviewTable() {
           : changePage,
         dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
+
       setListReview(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -143,28 +142,6 @@ function RatingReviewTable() {
       console.log(error);
     }
   };
-
-  // Handle API Search Rating
-  // const handleSearchRating = async () => {
-  //   try {
-  //     const res = await axios({
-  //       method: 'GET',
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
-  //       },
-  //       url: `${process.env.REACT_APP_API_KEY}/pemesanan/search/where?nomorPesanan=${searching.value}`,
-  //     });
-  //     console.log('Response GET Data Finance');
-  //     console.log(res);
-
-  //     setListReview(res.data.data);
-  //   } catch (error) {
-  //     if (error.response.status === 404) {
-  //       setListReview([]);
-  //     }
-  //     console.log(error);
-  //   }
-  // };
 
   // Menu - Select Page
   const [selectPageAnchorEl, setSelectPageAnchorEl] = React.useState(null);
@@ -179,14 +156,6 @@ function RatingReviewTable() {
   const handleCloseSelectDataPerPage = () => {
     setSelectDataPerPageAnchorEl(null);
   };
-
-  // Menu - Searching
-  // const [searching, setSearching] = React.useState({ label: 'No Pemesanan', value: '', currentSearch: '' });
-  // const [searchAnchorEl, setSearchAnchorEl] = React.useState(null);
-  // const openSearch = Boolean(searchAnchorEl);
-  // const handleCloseSearch = () => {
-  //   setSearchAnchorEl(null);
-  // };
 
   const headCells = [
     {
@@ -231,109 +200,12 @@ function RatingReviewTable() {
           <IconButton
             onClick={() => {
               handleGetOrder();
-              // setSearching({ label: searching.label, value: '', currentSearch: '' });
             }}
           >
             <RefreshIcon color="primary" />
           </IconButton>
         </span>
-        {/* <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap-reverse',
-            justifyContent: 'center',
-            alignItems: 'center',
-            justifySelf: 'end',
-          }}
-        >
-          <Chip
-            label={`Search: ${searching.currentSearch}`}
-            onDelete={() => {
-              setSearching({ label: searching.label, value: '', currentSearch: '' });
-              handleGetOrder();
-            }}
-            sx={{ display: !searching.currentSearch ? 'none' : null }}
-          />
-          <Tooltip title="Search list">
-            <IconButton
-              onClick={(event) => {
-                setSearchAnchorEl(event.currentTarget);
-              }}
-            >
-              <SearchIcon color="primary" />
-            </IconButton>
-          </Tooltip>
-        </div> */}
       </Toolbar>
-      {/* Menu - Searching */}
-      {/* <Menu
-        anchorEl={searchAnchorEl}
-        open={openSearch}
-        onClose={handleCloseSearch}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <Box sx={{ py: 1, px: 2, display: 'flex', gap: 1 }}>
-          <Grid container spacing={1}>
-            <Grid
-              item
-              xs
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1,
-                [theme.breakpoints.up('sm')]: {
-                  flexDirection: 'row',
-                },
-              }}
-            >
-              <Select
-                value={searching.label}
-                size="small"
-                onChange={(e) => {
-                  setSearching({ ...searching, label: e.target.value });
-                }}
-                inputProps={{ 'aria-label': 'Without label' }}
-              >
-                <MenuItem value={'No Pemesanan'} selected>
-                  No Pemesanan
-                </MenuItem>
-              </Select>
-
-              <TextField
-                required
-                label="Kata Pencarian"
-                value={searching.value}
-                onChange={(e) => {
-                  setSearching({ ...searching, value: e.target.value });
-                }}
-                size="small"
-                autoComplete="off"
-                sx={{ width: '100%' }}
-              />
-            </Grid>
-            <Grid item xs="auto" sx={{ display: 'flex', alignItems: 'center' }}>
-              <Button
-                size="medium"
-                variant="contained"
-                onClick={() => {
-                  setSearching({ label: searching.label, value: '', currentSearch: searching.value });
-                  handleCloseSearch();
-                  handleSearchRating();
-                }}
-              >
-                Cari
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Menu> */}
 
       {/* Table Section */}
       <TableContainer sx={{ maxHeight: pageConfig.dataPerPage !== 10 ? 800 : 'none' }}>
@@ -471,7 +343,6 @@ function RatingReviewTable() {
                         return (
                           <MenuItem
                             onClick={() => {
-                              // handleGetOrder();
                               handleGetOrder(1, item);
                               handleCloseSelectDataPerPage();
                             }}

@@ -64,7 +64,6 @@ function EditAdministrators() {
         profilePicture: { img: null, fileName: res.data.data.profilePic },
         accountStatus: res.data.data.status,
       });
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -90,8 +89,6 @@ function EditAdministrators() {
         url: `${process.env.REACT_APP_API_KEY}/admin/${id}`,
         data: formData,
       });
-
-      console.log(res);
 
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -130,7 +127,6 @@ function EditAdministrators() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 handleEditAdmin();
               }}
             >
@@ -260,8 +256,6 @@ function EditAdministrators() {
                         })}
                       </Select>
                     </FormControl>
-
-                    {formEditAdministrator.role}
                   </Grid>
                 </Grid>
 
@@ -295,7 +289,6 @@ function EditAdministrators() {
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormEditAdministrator({
                                 ...formEditAdministrator,
                                 profilePicture: {
@@ -303,7 +296,6 @@ function EditAdministrators() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              console.log(formEditAdministrator.profilePicture.img);
                             }}
                             hidden
                           />
@@ -341,18 +333,6 @@ function EditAdministrators() {
                 </Button>
               </Box>
             </form>
-
-            {formEditAdministrator.administratorName}
-            <br />
-            {formEditAdministrator.contact.phoneNumber}
-            <br />
-            {formEditAdministrator.contact.email}
-            <br />
-            {formEditAdministrator.role}
-            <br />
-            {formEditAdministrator.password}
-            <br />
-            {formEditAdministrator.confirmPassword}
           </Box>
         </Paper>
       </div>

@@ -50,8 +50,6 @@ function ChangePasswordOnForgotPassword() {
           password: formChangePassword.newPassword,
         },
       });
-      console.log('Response POST Login Customer');
-      console.log(res);
 
       if (res.status === 201) {
         setOpenLoadDecision({
@@ -95,7 +93,7 @@ function ChangePasswordOnForgotPassword() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
+
                 if (formChangePassword.newPassword !== formChangePassword.confirmNewPassword) {
                   alert('Password tidak match!');
                 } else {

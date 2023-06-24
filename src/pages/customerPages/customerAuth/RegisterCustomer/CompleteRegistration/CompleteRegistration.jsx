@@ -65,8 +65,6 @@ function CompleteRegistration() {
           password: formCompleteRegisterCustomer.password,
         },
       });
-      console.log('Response POST Register Customer');
-      console.log(res);
 
       if (res.status === 201) {
         setOpenLoadDecision({
@@ -116,7 +114,7 @@ function CompleteRegistration() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
+
                 if (formCompleteRegisterCustomer.password === formCompleteRegisterCustomer.confirmPassword) {
                   handleCreateCustomer();
                 } else {
@@ -255,13 +253,6 @@ function CompleteRegistration() {
                 <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                   Registrasi
                 </Button>
-                {formCompleteRegisterCustomer.customerName}
-                <br />
-
-                <br />
-                {formCompleteRegisterCustomer.password}
-                <br />
-                {formCompleteRegisterCustomer.confirmPassword}
               </Box>
             </form>
           </Paper>

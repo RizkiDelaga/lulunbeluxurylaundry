@@ -131,7 +131,6 @@ function CustomerTable() {
   };
 
   React.useEffect(() => {
-    // document.title = 'Menu Pelanggan';
     handleGetOrder();
   }, []);
 
@@ -173,8 +172,6 @@ function CustomerTable() {
           : changePage,
         dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
       setListCustomer(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -196,8 +193,6 @@ function CustomerTable() {
           searching.label === 'Nama' ? '?nama=' + searching.value : '?noTelp=' + searching.value
         }`,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
 
       setListCustomer(res.data.data);
     } catch (error) {
@@ -310,7 +305,6 @@ function CustomerTable() {
                 setSearchAnchorEl(event.currentTarget);
               }}
             >
-              {/* <FilterListIcon color="primary" /> */}
               <SearchIcon color="primary" />
             </IconButton>
           </Tooltip>
@@ -353,9 +347,6 @@ function CustomerTable() {
                 displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
               >
-                {/* <MenuItem value="">
-                  <em>Pilih Label</em>
-                </MenuItem> */}
                 <MenuItem value={'Nama'}>Nama</MenuItem>
                 <MenuItem value={'No Telp'}>No Telp</MenuItem>
               </Select>

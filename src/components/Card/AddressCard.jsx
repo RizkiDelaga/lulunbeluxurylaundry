@@ -90,7 +90,6 @@ function AddressCard({ designType, data, setUpdateAddress, setUrbanVillage, hand
                   },
                   addressDetails: data.deskripsi,
                   buildingPhoto: { img: null, fileName: data.gambar },
-                  // makeItMainAddress: false,
                   isMainAddress: data.status === 'Priority' ? true : false,
                 });
                 setUrbanVillage(

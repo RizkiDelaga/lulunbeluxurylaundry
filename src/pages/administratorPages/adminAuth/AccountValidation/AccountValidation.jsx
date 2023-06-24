@@ -34,8 +34,6 @@ function AccountValidation() {
           otp: verificationCode,
         },
       });
-      console.log('Response POST Login Customer');
-      console.log(res);
 
       if (res.status === 201) {
         setOpenLoadDecision({
@@ -83,7 +81,6 @@ function AccountValidation() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (verificationCode) {
                   handleAccountValidation();
                 }
@@ -148,7 +145,6 @@ function AccountValidation() {
                 <Button variant="contained" size="large" type="submit" style={{ width: '100%', fontWeight: 'bold' }}>
                   Verifikasi
                 </Button>
-                {verificationCode}
               </Box>
             </form>
           </Paper>

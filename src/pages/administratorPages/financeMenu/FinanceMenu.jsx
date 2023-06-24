@@ -105,29 +105,6 @@ function FinanceStats({ dataset }) {
       : 'laporanTahunan'
   ].map((item) => item.Pengeluaran);
 
-  console.log(
-    'asdasd =',
-    JSON.stringify(
-      dataset[
-        dataset.reportType === 'Minggu'
-          ? 'laporanMingguan'
-          : dataset.reportType === 'Bulan'
-          ? 'laporanBulanan'
-          : 'laporanTahunan'
-      ]
-    )
-  );
-  console.log('asdasd =', sumIncome);
-  console.log(
-    'asdasd =',
-    dataset[
-      dataset.reportType === 'Minggu'
-        ? 'laporanMingguan'
-        : dataset.reportType === 'Bulan'
-        ? 'laporanBulanan'
-        : 'laporanTahunan'
-    ].map((item) => item.Pemasukan)
-  );
   const listMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const labels =
     dataset.reportType === 'Minggu'
@@ -197,7 +174,6 @@ function FinanceStats({ dataset }) {
                 }
               }}
               sx={{
-                // border: '1px solid #1F305C',
                 [theme.breakpoints.down('sm')]: {
                   height: '35px !important',
                 },
@@ -253,7 +229,6 @@ function FinanceStats({ dataset }) {
                 }
               }}
               sx={{
-                // border: '1px solid #1F305C',
                 [theme.breakpoints.down('sm')]: {
                   height: '35px !important',
                 },
@@ -457,8 +432,6 @@ function FinancialHistoryTable() {
           : changePage,
         dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
       setListFinance(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -478,8 +451,6 @@ function FinancialHistoryTable() {
         },
         url: `${process.env.REACT_APP_API_KEY}/keuangan/search/where?judul=${searching.value}`,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
 
       setListFinance(res.data.data);
     } catch (error) {
@@ -917,8 +888,6 @@ function FinanceMenu() {
         data: { tanggal: startDateReport },
       });
 
-      console.log('Response POST Data Finance Report');
-      console.log(res);
       setFinanceReport({ ...res.data.data, reportType: firstLoad ? 'Minggu' : reportType });
       if (res.status === 200) {
         setOpenLoadDecision({
@@ -990,12 +959,7 @@ function FinanceMenu() {
                     label="Pilih Tanggal Mulai"
                     value={dateReport}
                     onChange={(newValue) => {
-                      console.log(newValue);
                       setDateReport(newValue);
-
-                      console.log('Tanggal: ' + newValue.$D);
-                      console.log('Bulan: ' + newValue.$M);
-                      console.log('Tahun: ' + newValue.$y);
                     }}
                     renderInput={(params) => <TextField {...params} />}
                     sx={{
@@ -1013,12 +977,7 @@ function FinanceMenu() {
                     label="Pilih Bulan"
                     value={dateReport}
                     onChange={(newValue) => {
-                      console.log(newValue);
                       setDateReport(newValue);
-
-                      console.log('Tanggal: ' + newValue.$D);
-                      console.log('Bulan: ' + newValue.$M);
-                      console.log('Tahun: ' + newValue.$y);
                     }}
                     renderInput={(params) => <TextField {...params} />}
                     sx={{
@@ -1036,12 +995,7 @@ function FinanceMenu() {
                     label="Pilih Tahun"
                     value={dateReport}
                     onChange={(newValue) => {
-                      console.log(newValue);
                       setDateReport(newValue);
-
-                      console.log('Tanggal: ' + newValue.$D);
-                      console.log('Bulan: ' + newValue.$M);
-                      console.log('Tahun: ' + newValue.$y);
                     }}
                     renderInput={(params) => <TextField {...params} />}
                     sx={{
@@ -1069,7 +1023,6 @@ function FinanceMenu() {
               <IconButton
                 size="small"
                 onClick={async () => {
-                  // const refreshDate = await new Date();
                   setReportType('Minggu');
                   setDateReport(dayjs());
                   handleGetFinanceReport(true);

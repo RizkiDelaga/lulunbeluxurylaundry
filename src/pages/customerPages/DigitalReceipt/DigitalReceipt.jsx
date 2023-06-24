@@ -36,8 +36,6 @@ function DigitalReceipt() {
         url: `${process.env.REACT_APP_API_KEY}/pemesanan/nomor/${noPesanan}`,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       setDetailOrder({
         ...res.data.data,
         alamatJemput: JSON.parse(res.data.data.alamatJemput),
@@ -56,14 +54,9 @@ function DigitalReceipt() {
     try {
       const res = await axios({
         method: 'GET',
-        // headers: {
-        //   Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        // },
         url: `${process.env.REACT_APP_API_KEY}/review/pemesanan/${id}`,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       setRatingReview(res.data.data[0]);
     } catch (error) {
       if (error.response.status === 404) {
@@ -152,7 +145,6 @@ function DigitalReceipt() {
               </Grid>
             </div>
 
-            {/*  */}
             <div
               style={{
                 width: '100%',
@@ -166,7 +158,6 @@ function DigitalReceipt() {
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>Tabel</div>
             </div>
 
-            {/*  */}
             <div
               style={{
                 width: '100%',

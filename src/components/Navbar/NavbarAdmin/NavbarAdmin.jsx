@@ -270,8 +270,6 @@ function Navbar(props) {
         },
         url: `${process.env.REACT_APP_API_KEY}/notifikasi/all/admin?page=${next ? pageConfig.currentPage + 1 : 1}`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
       setUnreadNotif(res.data.otherData.unreadNotif);
       if (next) {
         setListNotification([...listNotification, ...res.data.data]);
@@ -282,6 +280,14 @@ function Navbar(props) {
       }
     } catch (error) {
       console.log(error);
+      console.log(error.response);
+      console.log(error.response.data.message);
+      console.log(error.response.status);
+      if (error.response.status === 401 && error.response.data.message === 'Token Expired') {
+        localStorage.removeItem('access_token_admin');
+        localStorage.removeItem('admin_profile_account');
+        handleCloseAccountMenu('/Admin');
+      }
     }
   };
 
@@ -294,8 +300,6 @@ function Navbar(props) {
         },
         url: `${process.env.REACT_APP_API_KEY}/notifikasi/admin/${id}`,
       });
-      console.log('Response GET Data Service Type');
-      console.log(res);
       setListNotification((prevListNotification) => {
         const updatedList = [...prevListNotification];
 
@@ -363,14 +367,7 @@ function Navbar(props) {
               }}
               className="color-primary"
             >
-              <Badge
-                color="primary"
-                badgeContent={
-                  unreadNotif
-                  // !listNotification ? null : listNotification.filter((item) => item.dibacaAdmin === false).length
-                }
-                max={999}
-              >
+              <Badge color="primary" badgeContent={unreadNotif} max={999}>
                 <NotificationsNoneOutlinedIcon />
               </Badge>
             </IconButton>

@@ -30,8 +30,6 @@ function RegisterAccount() {
           noTelp: phoneNumber,
         },
       });
-      console.log('Response POST Login Customer');
-      console.log(res);
 
       if (res.status === 201) {
         setOpenLoadDecision({
@@ -80,7 +78,6 @@ function RegisterAccount() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (phoneNumber) {
                   handleForgotPasswordRequest();
                 }
@@ -127,7 +124,6 @@ function RegisterAccount() {
                 <Button variant="contained" size="large" type="submit" style={{ width: '100%', fontWeight: 'bold' }}>
                   Validasi Nomer
                 </Button>
-                {phoneNumber}
               </Box>
             </form>
           </Paper>

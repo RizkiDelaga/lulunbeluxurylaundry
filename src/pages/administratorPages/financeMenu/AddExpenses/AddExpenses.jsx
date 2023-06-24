@@ -48,8 +48,6 @@ function AddExpenses() {
         url: `${process.env.REACT_APP_API_KEY}/keuangan`,
         data: formData,
       });
-      console.log('Response POST');
-      console.log(res);
       setFormAddExpenses({
         title: '',
         nominal: null,
@@ -92,7 +90,6 @@ function AddExpenses() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('click');
               handleCreateAddExpenses();
             }}
           >
@@ -194,10 +191,6 @@ function AddExpenses() {
                               ...formAddExpenses,
                               expenditureDate: value,
                             });
-
-                            console.log('Tanggal: ' + value.$D);
-                            console.log('Bulan: ' + value.$M);
-                            console.log('Tahun: ' + value.$y);
                           }}
                           renderInput={(params) => <TextField {...params} required />}
                           slotProps={{
@@ -230,10 +223,6 @@ function AddExpenses() {
                               ...formAddExpenses,
                               expenditureDate: dayjs(newDate),
                             });
-
-                            console.log('Jam: ' + value.$H);
-                            console.log('Menit: ' + value.$m);
-                            console.log('Detik: ' + value.$s);
                           }}
                           renderInput={(params) => <TextField {...params} required />}
                           slotProps={{
@@ -316,7 +305,6 @@ function AddExpenses() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => {
-                            console.log(e.target.files);
                             setFormAddExpenses({
                               ...formAddExpenses,
                               photoEvidence: {
@@ -324,7 +312,6 @@ function AddExpenses() {
                                 fileName: !e.target.files[0] ? null : e.target.files[0].name,
                               },
                             });
-                            // console.log(image);
                           }}
                           hidden
                         />
@@ -360,16 +347,6 @@ function AddExpenses() {
               <Button variant="contained" size="large" type="submit" style={{ width: '100%', fontWeight: 'bold' }}>
                 Input Pengeluaran
               </Button>
-
-              {formAddExpenses.title}
-              <br />
-              {formAddExpenses.nominal}
-              <br />
-              {formAddExpenses.notes}
-              <br />
-              {`${formAddExpenses.expenditureDate.$D} ${formAddExpenses.expenditureDate.$M} ${formAddExpenses.expenditureDate.$y}`}
-              <br />
-              {`${formAddExpenses.expenditureDate.$H} ${formAddExpenses.expenditureDate.$m}`}
             </Box>
           </form>
         </Paper>

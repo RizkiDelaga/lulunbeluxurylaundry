@@ -184,8 +184,6 @@ function AdminTable() {
         dataPerPage: maxDataPerPage ? maxDataPerPage : pageConfig.dataPerPage,
       });
 
-      console.log('Response GET Data Finance');
-      console.log(res);
       setListAdmin(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -207,8 +205,6 @@ function AdminTable() {
           searching.label === 'Nama' ? '?nama=' + searching.value : '?noTelp=' + searching.value
         }`,
       });
-      console.log('Response GET Data Finance');
-      console.log(res);
 
       setListAdmin(res.data.data);
     } catch (error) {
@@ -317,7 +313,6 @@ function AdminTable() {
                 setSearchAnchorEl(event.currentTarget);
               }}
             >
-              {/* <FilterListIcon color="primary" /> */}
               <SearchIcon color="primary" />
             </IconButton>
           </Tooltip>
@@ -623,8 +618,6 @@ function DashboardMenu() {
         },
         url: `${process.env.REACT_APP_API_KEY}/admin/statistic/data`,
       });
-      console.log('Response GET');
-      console.log(res);
       setBusinessStats({
         activeOrders: res.data.data.pesananAktif,
         ordersCompleted: res.data.data.pesananSelesai,
@@ -641,12 +634,6 @@ function DashboardMenu() {
   const handleGetFinanceReport = async () => {
     const dateToday = new Date();
     dateToday.setDate(dateToday.getDate() - 6);
-    console.log(
-      `${dateToday.getFullYear()}-${(dateToday.getMonth() + 1).toString().padStart(2, '0')}-${dateToday
-        .getDate()
-        .toString()
-        .padStart(2, '0')}T00:00:00.000Z`
-    );
 
     let date = dayjs(
       `${dateToday.getFullYear()}-${(dateToday.getMonth() + 1).toString().padStart(2, '0')}-${dateToday
@@ -665,8 +652,6 @@ function DashboardMenu() {
         data: { tanggal: date },
       });
 
-      console.log('Response POST Data Finance Report');
-      console.log(res);
       setFinanceReport({ ...res.data.data });
       setChartData({
         labels: res.data.data.laporanMingguan.map((item) => item.Tanggal),
@@ -685,8 +670,6 @@ function DashboardMenu() {
           },
         ],
       });
-
-      // setLoadingReport(!loadingReport);
     } catch (error) {
       if (error.response.status === 404) {
         setFinanceReport([]);

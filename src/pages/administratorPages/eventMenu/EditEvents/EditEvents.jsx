@@ -66,8 +66,6 @@ function EditEvents() {
         url: `${process.env.REACT_APP_API_KEY}/acara/${id}`,
       });
 
-      console.log('Response GET Data');
-      console.log(res);
       setFormEditEvents({
         id: res.data.data.id,
         eventName: res.data.data.nama,
@@ -76,7 +74,6 @@ function EditEvents() {
         description: res.data.data.deskripsi,
         poster: { img: null, fileName: res.data.data.gambar },
       });
-      console.log('Reward: ', res.data.data.reward);
 
       const newReward = await [...res.data.data.reward].map((item, index) => {
         return { id: index, rewardText: item };
@@ -116,8 +113,6 @@ function EditEvents() {
         url: `${process.env.REACT_APP_API_KEY}/acara/${id}`,
         data: formData,
       });
-      console.log('Response POST');
-      console.log(res);
       setFormEditEvents({
         id: null,
         eventName: '',
@@ -167,7 +162,6 @@ function EditEvents() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 handleUpdateEvents();
               }}
             >
@@ -230,10 +224,6 @@ function EditEvents() {
                                 ...formEditEvents,
                                 dateStart: value,
                               });
-
-                              console.log('Tanggal: ' + value.$D);
-                              console.log('Bulan: ' + value.$M);
-                              console.log('Tahun: ' + value.$y);
                             }}
                             renderInput={(params) => <TextField {...params} />}
                             slotProps={{
@@ -266,10 +256,6 @@ function EditEvents() {
                                 ...formEditEvents,
                                 dateStart: dayjs(newDate),
                               });
-
-                              console.log('Jam: ' + value.$H);
-                              console.log('Menit: ' + value.$m);
-                              console.log('Detik: ' + value.$s);
                             }}
                             renderInput={(params) => <TextField {...params} />}
                             slotProps={{
@@ -315,10 +301,6 @@ function EditEvents() {
                                 ...formEditEvents,
                                 dateEnd: value,
                               });
-
-                              console.log('Tanggal: ' + value.$D);
-                              console.log('Bulan: ' + value.$M);
-                              console.log('Tahun: ' + value.$y);
                             }}
                             renderInput={(params) => <TextField {...params} />}
                             slotProps={{
@@ -351,10 +333,6 @@ function EditEvents() {
                                 ...formEditEvents,
                                 dateEnd: dayjs(newDate),
                               });
-
-                              console.log('Jam: ' + value.$H);
-                              console.log('Menit: ' + value.$m);
-                              console.log('Detik: ' + value.$s);
                             }}
                             renderInput={(params) => <TextField {...params} />}
                             slotProps={{
@@ -449,9 +427,6 @@ function EditEvents() {
                           variant="outlined"
                           className="button-outlined-primary"
                           onClick={() => {
-                            console.log(reward);
-                            console.log(listReward);
-
                             if (reward.rewardText) {
                               if (reward.id) {
                                 listReward.splice(reward.currentIndex, 1);
@@ -474,10 +449,6 @@ function EditEvents() {
                             }
 
                             setReward({ id: null, rewardText: '', currentIndex: null });
-
-                            console.log('Is Null:');
-                            console.log(reward.id === null);
-                            console.log(listReward.length + 1);
                           }}
                           sx={{ width: 'fit-content' }}
                         >
@@ -537,11 +508,7 @@ function EditEvents() {
                                               variant="outlined"
                                               className={`button-outlined-primary`}
                                               onClick={() => {
-                                                console.log(item.id);
-
                                                 if (reward.id === item.id) {
-                                                  console.log(reward.id);
-
                                                   setReward({
                                                     id: null,
                                                     rewardText: '',
@@ -564,9 +531,7 @@ function EditEvents() {
                                               onClick={() => {
                                                 listReward.splice(index, 1);
                                                 setListReward((dataList) => [...dataList]);
-                                                console.log(reward.id);
-                                                console.log(item.id);
-                                                console.log(listReward);
+
                                                 if (reward.id === item.id) {
                                                   setReward({
                                                     id: null,
@@ -574,9 +539,6 @@ function EditEvents() {
                                                     currentIndex: null,
                                                   });
                                                 }
-                                                console.log(reward.id);
-                                                console.log(item.id);
-                                                console.log(listReward);
                                               }}
                                               sx={{ width: '100%' }}
                                             >
@@ -636,9 +598,6 @@ function EditEvents() {
                           variant="outlined"
                           className="button-outlined-primary"
                           onClick={() => {
-                            console.log(criteria);
-                            console.log(listCriteria);
-
                             if (criteria.criteriaText) {
                               if (criteria.id) {
                                 listCriteria.splice(criteria.currentIndex, 1);
@@ -661,10 +620,6 @@ function EditEvents() {
                             }
 
                             setCriteria({ id: null, criteriaText: '', currentIndex: null });
-
-                            console.log('Is Null:');
-                            console.log(criteria.id === null);
-                            console.log(listCriteria.length + 1);
                           }}
                           sx={{ width: 'fit-content' }}
                         >
@@ -724,11 +679,7 @@ function EditEvents() {
                                               variant="outlined"
                                               className={`button-outlined-primary`}
                                               onClick={() => {
-                                                console.log(item.id);
-
                                                 if (criteria.id === item.id) {
-                                                  console.log(criteria.id);
-
                                                   setCriteria({
                                                     id: null,
                                                     criteriaText: '',
@@ -751,9 +702,7 @@ function EditEvents() {
                                               onClick={() => {
                                                 listCriteria.splice(index, 1);
                                                 setListCriteria([...listCriteria]);
-                                                console.log(criteria.id);
-                                                console.log(item.id);
-                                                console.log(listCriteria);
+
                                                 if (criteria.id === item.id) {
                                                   setCriteria({
                                                     id: null,
@@ -761,9 +710,6 @@ function EditEvents() {
                                                     currentIndex: null,
                                                   });
                                                 }
-                                                console.log(criteria.id);
-                                                console.log(item.id);
-                                                console.log(listCriteria);
                                               }}
                                               sx={{ width: '100%' }}
                                             >
@@ -812,7 +758,6 @@ function EditEvents() {
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormEditEvents({
                                 ...formEditEvents,
                                 poster: {
@@ -820,7 +765,6 @@ function EditEvents() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              // console.log(image);
                             }}
                             hidden
                           />
@@ -855,32 +799,11 @@ function EditEvents() {
                   </Grid>
                 </Grid>
 
-                <Button
-                  variant="contained"
-                  size="large"
-                  type="submit"
-                  // onClick={() => {
-                  //   handleUpdateEvents();
-                  // }}
-                  sx={{ width: '100%', fontWeight: 'bold' }}
-                >
+                <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                   Edit Event
                 </Button>
               </div>
             </form>
-
-            {formEditEvents.eventName}
-            <br />
-            {formEditEvents.description}
-            <br />
-            <br />
-            {`${formEditEvents.dateStart.$D} ${formEditEvents.dateStart.$M} ${formEditEvents.dateStart.$y}`}
-            <br />
-            {`${formEditEvents.dateStart.$H} ${formEditEvents.dateStart.$m}`}
-            <br />
-            {`${formEditEvents.dateEnd.$D} ${formEditEvents.dateEnd.$M} ${formEditEvents.dateEnd.$y}`}
-            <br />
-            {`${formEditEvents.dateEnd.$H} ${formEditEvents.dateEnd.$m}`}
           </Box>
         </Paper>
       </div>

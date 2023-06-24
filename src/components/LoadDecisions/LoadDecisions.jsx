@@ -7,14 +7,6 @@ function LoadDecisions(props) {
   const [alertStatus, setAlertStatus] = React.useState(true);
 
   React.useEffect(() => {
-    // if (props.openLoad.isLoad) {
-    //   props.setOpenLoad({ ...props.openLoad, message: '', statusType: '' });
-    //   props.setOpenLoad({ isLoad: false, message: '', statusType: '' });
-    // }
-    // if (props.openLoad.redirect) {
-    //   props.setOpenLoad({ ...props.openLoad, isLoad: true });
-    // }
-
     if (props.openLoad.message) {
       setAlertStatus(true);
       setTimeout(
@@ -70,15 +62,3 @@ function LoadDecisions(props) {
 }
 
 export default LoadDecisions;
-
-// How To Use
-/* <LoadDecisions
-  setOpen={setoOpenLoadDecision}
-  open={openLoadDecision}
-  close={true}
-  alertProps={{
-    title: 'This is a success alert — check it out!',
-    statusType: 'success|error|warning|info',
-  }}
-  redirect={'/InformasiBisnis'}
-/>; */

@@ -66,8 +66,6 @@ function RegisterNewAdministrator() {
         data: formData,
       });
 
-      console.log(res);
-
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -105,7 +103,6 @@ function RegisterNewAdministrator() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 handleRegisterNewAdmin();
               }}
             >
@@ -235,8 +232,6 @@ function RegisterNewAdministrator() {
                         })}
                       </Select>
                     </FormControl>
-
-                    {formRegisterNewAdministrator.role}
                   </Grid>
                 </Grid>
 
@@ -270,7 +265,6 @@ function RegisterNewAdministrator() {
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormRegisterNewAdministrator({
                                 ...formRegisterNewAdministrator,
                                 profilePicture: {
@@ -278,7 +272,6 @@ function RegisterNewAdministrator() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              console.log(formRegisterNewAdministrator.profilePicture.img);
                             }}
                             hidden
                           />
@@ -318,18 +311,6 @@ function RegisterNewAdministrator() {
                 </Button>
               </Box>
             </form>
-
-            {formRegisterNewAdministrator.administratorName}
-            <br />
-            {formRegisterNewAdministrator.contact.phoneNumber}
-            <br />
-            {formRegisterNewAdministrator.contact.email}
-            <br />
-            {formRegisterNewAdministrator.role}
-            <br />
-            {formRegisterNewAdministrator.password}
-            <br />
-            {formRegisterNewAdministrator.confirmPassword}
           </Box>
         </Paper>
       </div>

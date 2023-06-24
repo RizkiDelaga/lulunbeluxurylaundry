@@ -89,8 +89,6 @@ function GeneralInformation() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/infoumum`,
       });
-      console.log('Response GET');
-      console.log(res);
       setFormGeneralInformation({
         logo: { img: null, fileName: res.data.data[0].logo },
         slogan: res.data.data[0].slogan,
@@ -126,8 +124,6 @@ function GeneralInformation() {
       });
       sessionStorage.setItem('business_information', JSON.stringify(res.data.data[0]));
     } catch (error) {
-      // if (error.response.status === 404) {
-      // }
       console.log(error);
     }
   };
@@ -183,12 +179,9 @@ function GeneralInformation() {
           statusType: 'success',
         });
       }
-      console.log('Response Update');
-      console.log(res);
       handleGetGeneralInformation();
     } catch (error) {
-      console.log('error', error);
-      console.log('error', error.response.data.message);
+      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -245,7 +238,6 @@ function GeneralInformation() {
                         type="file"
                         accept="image/*"
                         onChange={(e) => {
-                          console.log(e.target.files);
                           setFormGeneralInformation({
                             ...formGeneralInformation,
                             logo: {
@@ -253,7 +245,6 @@ function GeneralInformation() {
                               fileName: !e.target.files[0] ? null : e.target.files[0].name,
                             },
                           });
-                          console.log(formGeneralInformation.logo.img);
                         }}
                         hidden
                       />
@@ -597,10 +588,6 @@ function GeneralInformation() {
                                     setOpenTime: value,
                                   },
                                 });
-                                console.log(value);
-                                console.log('Jam: ' + value.$H);
-                                console.log('Menit: ' + value.$m);
-                                console.log('Detik: ' + value.$s);
                               }}
                               renderInput={(params) => <TextField {...params} />}
                               slotProps={{
@@ -629,10 +616,6 @@ function GeneralInformation() {
                                     setCloseTime: value,
                                   },
                                 });
-                                console.log(value);
-                                console.log('Jam: ' + value.$H);
-                                console.log('Menit: ' + value.$m);
-                                console.log('Detik: ' + value.$s);
                               }}
                               renderInput={(params) => <TextField {...params} />}
                               slotProps={{
@@ -663,33 +646,6 @@ function GeneralInformation() {
             >
               Simpan
             </Button>
-            {formGeneralInformation.slogan}
-            <br />
-            {formGeneralInformation.location.location + ' ' + formGeneralInformation.location.googleMapsEmbed}
-            <br />
-            {formGeneralInformation.contact.phoneNumber +
-              ' ' +
-              formGeneralInformation.contact.fax +
-              ' ' +
-              formGeneralInformation.contact.whatsApp +
-              ' ' +
-              formGeneralInformation.contact.telegram +
-              ' ' +
-              formGeneralInformation.contact.email}
-            <br />
-            {formGeneralInformation.socialMedia.instagram +
-              ' ' +
-              formGeneralInformation.socialMedia.facebook +
-              ' ' +
-              formGeneralInformation.socialMedia.twitter +
-              ' ' +
-              formGeneralInformation.socialMedia.youtube +
-              ' ' +
-              formGeneralInformation.socialMedia.tikTok}
-            <br />
-            {/* {operatingHours.monday.openingHour} */}
-            {console.log({ operatingHours })}
-            <br />
           </Box>
         </Paper>
       </div>
@@ -698,102 +654,3 @@ function GeneralInformation() {
 }
 
 export default GeneralInformation;
-
-// const OperationalHour = (props) => {
-//   return (
-//     <div className={`dash-card gap-16`}>
-//       <div style={{ fontWeight: 'bold' }}>Jam Operasional</div>
-
-//       {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((item) => {
-//         return (
-//           <Grid container spacing={2}>
-//             <Grid item xs={12} sm={12} md={1.3} lg={1} sx={{ display: 'flex', alignItems: 'center' }}>
-//               <span>{operatingHours[item].dayNameInIndonesia}</span>
-//             </Grid>
-//             <Grid
-//               item
-//               xs
-//               lg
-//               sx={{
-//                 display: 'flex',
-//                 [theme.breakpoints.down('md')]: {
-//                   paddingTop: '8px !important',
-//                 },
-//               }}
-//             >
-//               <Grid container spacing={2}>
-//                 <Grid item xs={6} sm>
-//                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-//                     {/* Input Time */}
-//                     <MobileTimePicker
-//                       label="Pilih Jam Buka"
-//                       value={pickOpeningHourMonday}
-//                       // value={
-//                       // `pickOpeningHour${dayName}`
-//                       // '0000-00-00 ' + operatingHours[item].openingHour + ':00'
-//                       // item.setTimeOpen
-//                       // dayjs('0000-00-00 ' + operatingHours[item].openingHour + ':00')
-//                       // operatingHours.monday.openingHour !== null
-//                       //   ? `0000-00-00 ` + operatingHours.monday.openingHour + `:00`
-//                       //   : '0000-00-00 00:00:00'
-//                       // }
-//                       onChange={(value) => {
-//                         // console.log(
-//                         //   `pickOpeningHour${
-//                         //     dayName.charAt(0).toUpperCase() + dayName.substr(1, dayName.length)
-//                         //   }`
-//                         // );
-//                         // let joinVariable = () => {
-//                         //   let asd ='setPickOpeningHour' +
-//                         //   dayName.charAt(0).toUpperCase() +
-//                         //   dayName.substr(1, dayName.length)
-//                         //   return asd
-//                         // };
-//                         setOperatingHours({
-//                           ...operatingHours,
-//                           item: {
-//                             ...operatingHours[item],
-//                             openingHour: value.$H + ':' + value.$m,
-//                           },
-//                         });
-//                         operatingHours[item].setOpenTime(value);
-//                         console.log(operatingHours[item].setOpenTime);
-//                         operatingHours[item].setOpenTime(value);
-//                         // pickOpeningHour${
-//                         //   dayName.charAt(0).toUpperCase() + dayName.substr(1, dayName.length)
-//                         // }
-
-//                         // setOperatingHours({
-//                         //   dayName: {
-//                         //     ...operatingHours[dayName],
-//                         //     openingHour: dayjs('0000-00-00 ' + value.$H + ':' + value.$m + ':00'),
-//                         //   },
-//                         // });
-
-//                         // console.log(joinVariable);
-//                         console.log(value);
-//                         console.log('Jam: ' + value.$H);
-//                         console.log('Menit: ' + value.$m);
-//                         console.log('Detik: ' + value.$s);
-//                       }}
-//                       renderInput={(params) => <TextField {...params} />}
-//                       slotProps={{
-//                         textField: {
-//                           // helperText: 'MM / DD / YYYY',
-//                         },
-//                       }}
-//                       sx={{ width: '100%' }}
-//                     />
-//                   </LocalizationProvider>
-//                 </Grid>
-//                 <Grid item xs={6} sm>
-//                   <TextField required label="Kuantitas" type="number" sx={{ width: '100%' }} />
-//                 </Grid>
-//               </Grid>
-//             </Grid>
-//           </Grid>
-//         );
-//       })}
-//     </div>
-//   );
-// };

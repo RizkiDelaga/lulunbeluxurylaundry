@@ -39,7 +39,6 @@ function ServiceType() {
     description: '',
     photo: { img: null, fileName: null },
   });
-  // const [nomor, setNomor] = useState(null);
 
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
@@ -58,8 +57,6 @@ function ServiceType() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/jenislayanan`,
       });
-      console.log('Response GET');
-      console.log(res);
       setListServiceType(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -94,8 +91,6 @@ function ServiceType() {
         url: `${process.env.REACT_APP_API_KEY}/jenislayanan`,
         data: formData,
       });
-      console.log('Response POST');
-      console.log(res);
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -169,8 +164,6 @@ function ServiceType() {
         description: '',
         photo: { img: null, fileName: null },
       });
-      console.log('Response DELETE');
-      console.log(res);
       handleGetServiceType();
     } catch (error) {
       setOpenLoadDecision({
@@ -200,7 +193,6 @@ function ServiceType() {
         });
       }
       handleGetServiceType();
-      console.log(res);
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -234,7 +226,6 @@ function ServiceType() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (
                   formServiceType.serviceDuration.days ||
                   formServiceType.serviceDuration.hours ||
@@ -428,7 +419,6 @@ function ServiceType() {
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormServiceType({
                                 ...formServiceType,
                                 photo: {
@@ -436,7 +426,6 @@ function ServiceType() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              // console.log(image);
                             }}
                             hidden
                           />
@@ -563,7 +552,6 @@ function ServiceType() {
                                     description: item.deskripsi,
                                     photo: { img: null, fileName: item.gambar },
                                   });
-                                  console.log(typeof parseInt(formServiceType.serviceDuration.jam));
                                 }
                               }}
                             >
@@ -600,17 +588,6 @@ function ServiceType() {
                 </TableBody>
               </Table>
             </TableContainer>
-
-            {formServiceType.serviceTypeName}
-            <br />
-            {formServiceType.serviceDuration.days +
-              ' ' +
-              formServiceType.serviceDuration.hours +
-              ' ' +
-              formServiceType.serviceDuration.minutes}
-            <br />
-            {formServiceType.description}
-            <br />
           </Box>
         </Paper>
       </div>

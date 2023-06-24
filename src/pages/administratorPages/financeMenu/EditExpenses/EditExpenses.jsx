@@ -42,8 +42,6 @@ function EditExpenses() {
         url: `${process.env.REACT_APP_API_KEY}/keuangan/${id}`,
       });
 
-      console.log('Response POST');
-      console.log(res);
       setFormEditExpenses({
         title: res.data.data.judul,
         nominal: res.data.data.nominal,
@@ -76,8 +74,6 @@ function EditExpenses() {
         data: formData,
       });
 
-      console.log('Response POST');
-      console.log(res);
       setFormEditExpenses({
         title: '',
         nominal: null,
@@ -120,7 +116,7 @@ function EditExpenses() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log('click');
+
               handleUpdateExpenses();
             }}
           >
@@ -222,10 +218,6 @@ function EditExpenses() {
                               ...formEditExpenses,
                               expenditureDate: value,
                             });
-
-                            console.log('Tanggal: ' + value.$D);
-                            console.log('Bulan: ' + value.$M);
-                            console.log('Tahun: ' + value.$y);
                           }}
                           renderInput={(params) => <TextField {...params} required />}
                           slotProps={{
@@ -258,10 +250,6 @@ function EditExpenses() {
                               ...formEditExpenses,
                               expenditureDate: dayjs(newDate),
                             });
-
-                            console.log('Jam: ' + value.$H);
-                            console.log('Menit: ' + value.$m);
-                            console.log('Detik: ' + value.$s);
                           }}
                           renderInput={(params) => <TextField {...params} required />}
                           slotProps={{
@@ -344,7 +332,6 @@ function EditExpenses() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => {
-                            console.log(e.target.files);
                             setFormEditExpenses({
                               ...formEditExpenses,
                               photoEvidence: {
@@ -352,7 +339,6 @@ function EditExpenses() {
                                 fileName: !e.target.files[0] ? null : e.target.files[0].name,
                               },
                             });
-                            // console.log(image);
                           }}
                           hidden
                         />
@@ -387,27 +373,9 @@ function EditExpenses() {
                 </Grid>
               </Grid>
 
-              <Button
-                variant="contained"
-                size="large"
-                type="submit"
-                // onClick={() => {
-                //   handleCreateEditExpenses();
-                // }}
-                style={{ width: '100%', fontWeight: 'bold' }}
-              >
+              <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
                 Edit Pengeluaran
               </Button>
-
-              {formEditExpenses.title}
-              <br />
-              {formEditExpenses.nominal}
-              <br />
-              {formEditExpenses.notes}
-              {`${formEditExpenses.expenditureDate.$D} ${formEditExpenses.expenditureDate.$M} ${formEditExpenses.expenditureDate.$y}`}
-              <br />
-              {`${formEditExpenses.expenditureDate.$H} ${formEditExpenses.expenditureDate.$m}`}
-              <br />
             </Box>
           </form>
         </Paper>

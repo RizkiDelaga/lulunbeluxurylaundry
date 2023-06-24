@@ -30,8 +30,6 @@ function ForgotPasswordRequest() {
           noTelp: phoneNumber,
         },
       });
-      console.log('Response POST Login Customer');
-      console.log(res);
 
       if (res.status === 201) {
         setOpenLoadDecision({
@@ -77,7 +75,6 @@ function ForgotPasswordRequest() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (phoneNumber) {
                   handleForgotPasswordRequest();
                 }
@@ -132,7 +129,6 @@ function ForgotPasswordRequest() {
                 <Button variant="contained" size="large" type="submit" style={{ width: '100%', fontWeight: 'bold' }}>
                   Kirim
                 </Button>
-                {phoneNumber}
               </Box>
             </form>
           </Paper>

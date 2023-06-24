@@ -58,8 +58,6 @@ function HowToOrder() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/carapesan`,
       });
-      console.log('Response GET');
-      console.log(res);
       setListHowToOrder(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -86,8 +84,6 @@ function HowToOrder() {
         url: `${process.env.REACT_APP_API_KEY}/carapesan`,
         data: formData,
       });
-      console.log('Response POST');
-      console.log(res);
 
       if (res.status === 201) {
         setOpenLoadDecision({
@@ -133,8 +129,6 @@ function HowToOrder() {
           statusType: 'success',
         });
       }
-      console.log('Response DELETE');
-      console.log(res);
       getApiHandler();
     } catch (error) {
       setOpenLoadDecision({
@@ -164,7 +158,6 @@ function HowToOrder() {
         });
       }
       getApiHandler();
-      console.log(res);
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -197,7 +190,6 @@ function HowToOrder() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (formHowToOrderViaOnline.id) {
                   handleUpdateHowToOrder(formHowToOrderViaOnline, 'Online');
                 } else {
@@ -308,7 +300,6 @@ function HowToOrder() {
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormHowToOrderViaOnline({
                                 ...formHowToOrderViaOnline,
 
@@ -317,7 +308,6 @@ function HowToOrder() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              // console.log(image);
                             }}
                             hidden
                           />
@@ -368,11 +358,6 @@ function HowToOrder() {
               deleteApiHandler={deleteApiHandler}
               statusType="Online"
             />
-
-            {formHowToOrderViaOnline.stepTitle}
-            <br />
-            {formHowToOrderViaOnline.description}
-            <br />
           </Box>
         </Paper>
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
@@ -384,7 +369,6 @@ function HowToOrder() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (formHowToOrderViaOutlet.id) {
                   handleUpdateHowToOrder(formHowToOrderViaOutlet, 'Outlet');
                 } else {
@@ -495,7 +479,6 @@ function HowToOrder() {
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
-                              console.log(e.target.files);
                               setFormHowToOrderViaOutlet({
                                 ...formHowToOrderViaOutlet,
                                 photo: {
@@ -503,7 +486,6 @@ function HowToOrder() {
                                   fileName: !e.target.files[0] ? null : e.target.files[0].name,
                                 },
                               });
-                              // console.log(image);
                             }}
                             hidden
                           />
@@ -554,11 +536,6 @@ function HowToOrder() {
               deleteApiHandler={deleteApiHandler}
               statusType="Outlet"
             />
-
-            {formHowToOrderViaOutlet.stepTitle}
-            <br />
-            {formHowToOrderViaOutlet.description}
-            <br />
           </Box>
         </Paper>
       </div>

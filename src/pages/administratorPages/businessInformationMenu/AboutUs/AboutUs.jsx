@@ -46,8 +46,6 @@ function AboutUs() {
         method: 'GET',
         url: `${process.env.REACT_APP_API_KEY}/about`,
       });
-      console.log('Response GET');
-      console.log(res);
       setListAboutUs(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -70,8 +68,6 @@ function AboutUs() {
           deskripsi: formAboutUs.explanationParagraph,
         },
       });
-      console.log('Response POST');
-      console.log(res);
       if (res.status === 201) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
@@ -119,8 +115,6 @@ function AboutUs() {
         id: null,
         explanationParagraph: '',
       });
-      console.log('Response DELETE');
-      console.log(res);
       handleGetAboutUs();
     } catch (error) {
       setOpenLoadDecision({
@@ -150,7 +144,6 @@ function AboutUs() {
         });
       }
       handleGetAboutUs();
-      console.log(res);
     } catch (error) {
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
@@ -183,7 +176,6 @@ function AboutUs() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log('click');
                 if (formAboutUs.id) {
                   handleUpdateAboutUs();
                 } else {
@@ -313,9 +305,6 @@ function AboutUs() {
                 </TableBody>
               </Table>
             </TableContainer>
-
-            {formAboutUs.explanationParagraph}
-            <br />
           </Box>
         </Paper>
       </div>

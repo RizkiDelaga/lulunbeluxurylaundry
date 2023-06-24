@@ -76,8 +76,7 @@ function Gallery() {
           ? pageConfig.currentPage + 1
           : changePage,
       });
-      console.log('Response GET');
-      console.log(res);
+
       setDatagallery(res.data.data);
     } catch (error) {
       if (error.response.status === 404) {
@@ -149,8 +148,6 @@ function Gallery() {
         </Grid>
 
         {/* Table Pagination */}
-        {/* pageConfig.metadata.totalPage */}
-        {/* setPageConfig({ ...pageConfig, currentPage: index + 1 }) */}
         {!pageConfig.metadata ? null : (
           <div
             style={{
