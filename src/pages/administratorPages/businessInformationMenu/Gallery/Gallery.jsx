@@ -353,10 +353,14 @@ function Gallery() {
                         </Button>
                       </Grid>
                       <Grid item xs="auto">
-                        {formGallery.file.img ? (
+                        {formGallery.file.img || formGallery.file.fileName ? (
                           <img
                             id="output"
-                            src={formGallery.file.img ? URL.createObjectURL(formGallery.file.img) : ''}
+                            src={
+                              formGallery.file.img
+                                ? URL.createObjectURL(formGallery.file.img)
+                                : formGallery.file.fileName
+                            }
                             width={70}
                             alt="Preview"
                           />

@@ -310,13 +310,13 @@ function EditProfile() {
                       </Button>
                     </Grid>
                     <Grid item xs="auto">
-                      {formEditProfile.profilePicture.img ? (
+                      {formEditProfile.profilePicture.img || formEditProfile.profilePicture.fileName ? (
                         <img
                           id="output"
                           src={
                             formEditProfile.profilePicture.img
                               ? URL.createObjectURL(formEditProfile.profilePicture.img)
-                              : ''
+                              : formEditProfile.profilePicture.fileName
                           }
                           width={70}
                           alt="Preview"

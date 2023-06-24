@@ -43,6 +43,7 @@ import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import { adjustTimePlus } from '../../../utils/timeUtils';
 
 const drawerWidth = 300;
 
@@ -213,13 +214,14 @@ const NotificationList = ({ loadingData, data, notificationStatus, handleUpdateR
                     >
                       <div style={{ fontWeight: 'bold' }}>{parseItem.header}</div>
                       <div style={{ fontSize: '14px' }}>{parseItem.deskripsi}</div>
-                      <div style={{ fontSize: '12px', textAlign: 'right' }}>{`${item.updatedAt.slice(
-                        8,
-                        10
-                      )}/${item.updatedAt.slice(5, 7)}/${item.updatedAt.slice(0, 4)} ${item.updatedAt.slice(
-                        11,
-                        16
-                      )}`}</div>
+                      <div style={{ fontSize: '12px', textAlign: 'right' }}>
+                        {` ${item.updatedAt.slice(8, 10)}/${item.updatedAt.slice(5, 7)}/${item.updatedAt.slice(
+                          0,
+                          4
+                        )} ${('0' + adjustTimePlus(parseInt(item.updatedAt.slice(11, 13)))).slice(
+                          -2
+                        )}:${item.updatedAt.slice(14, 16)}`}
+                      </div>
                     </div>
                     <div>
                       {!item.dibacaUser ? (
@@ -480,12 +482,7 @@ function NavbarCustomer(props) {
               variant="contained"
               onClick={() => {
                 if (localStorage.getItem('access_token')) {
-                  const profileAccount = JSON.parse(localStorage.getItem('my_profile_account'));
-                  if (!profileAccount.alamatUser) {
-                    alert('Harap input alamat terlebih dahulu!');
-                  } else {
-                    navigate('/AreaPelanggan/FormulirPemesananLaundry');
-                  }
+                  navigate('/AreaPelanggan/FormulirPemesananLaundry');
                 } else {
                   navigate('/Login');
                 }

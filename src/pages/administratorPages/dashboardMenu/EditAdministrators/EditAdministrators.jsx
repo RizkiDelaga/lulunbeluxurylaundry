@@ -310,13 +310,13 @@ function EditAdministrators() {
                         </Button>
                       </Grid>
                       <Grid item xs="auto">
-                        {formEditAdministrator.profilePicture.img ? (
+                        {formEditAdministrator.profilePicture.img || formEditAdministrator.profilePicture.fileName ? (
                           <img
                             id="output"
                             src={
                               formEditAdministrator.profilePicture.img
                                 ? URL.createObjectURL(formEditAdministrator.profilePicture.img)
-                                : ''
+                                : formEditAdministrator.profilePicture.fileName
                             }
                             width={70}
                             alt="Preview"

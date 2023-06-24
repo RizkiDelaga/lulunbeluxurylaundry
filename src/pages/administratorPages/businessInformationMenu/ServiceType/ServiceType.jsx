@@ -443,10 +443,14 @@ function ServiceType() {
                         </Button>
                       </Grid>
                       <Grid item xs="auto">
-                        {formServiceType.photo.img ? (
+                        {formServiceType.photo.img || formServiceType.photo.fileName ? (
                           <img
                             id="output"
-                            src={formServiceType.photo.img ? URL.createObjectURL(formServiceType.photo.img) : ''}
+                            src={
+                              formServiceType.photo.img
+                                ? URL.createObjectURL(formServiceType.photo.img)
+                                : formServiceType.photo.fileName
+                            }
                             width={70}
                             alt="Preview"
                           />

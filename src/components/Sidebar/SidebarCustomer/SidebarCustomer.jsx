@@ -189,12 +189,7 @@ function SidebarCustomer(props) {
           variant="contained"
           onClick={() => {
             if (localStorage.getItem('access_token')) {
-              const profileAccount = JSON.parse(localStorage.getItem('my_profile_account'));
-              if (!profileAccount.alamatUser) {
-                alert('Harap input alamat terlebih dahulu!');
-              } else {
-                navigate('/AreaPelanggan/FormulirPemesananLaundry');
-              }
+              navigate('/AreaPelanggan/FormulirPemesananLaundry');
             } else {
               navigate('/Login');
             }

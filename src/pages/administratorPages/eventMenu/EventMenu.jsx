@@ -20,6 +20,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import axios from 'axios';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { getComparator, stableSort } from '../../../utils/tableUtils';
+import { adjustTimePlus } from '../../../utils/timeUtils';
 
 function RowItem(props) {
   const navigate = useNavigate();
@@ -63,21 +64,25 @@ function RowItem(props) {
         </TableCell>
         <TableCell>#{props.item.id}</TableCell>
         <TableCell>
-          {/* {!props.item.gambar ? null : ( */}
           <img src={props.item.gambar} height={60} style={{ objectFit: 'contain' }} alt="" />
-          {/* )} */}
         </TableCell>
         <TableCell>{props.item.nama} </TableCell>
 
         <TableCell>
-          {`${dateStart.toISOString().slice(8, 10)}/${dateStart.toISOString().slice(5, 7)}/${dateStart
-            .toISOString()
-            .slice(0, 4)} ${dateStart.toISOString().slice(11, 16)}`}
+          {` ${props.item.tglMulai.slice(8, 10)}/${props.item.tglMulai.slice(5, 7)}/${props.item.tglMulai.slice(
+            0,
+            4
+          )} ${('0' + adjustTimePlus(parseInt(props.item.tglMulai.slice(11, 13)))).slice(
+            -2
+          )}:${props.item.tglMulai.slice(14, 16)}`}
         </TableCell>
         <TableCell>
-          {`${dateEnd.toISOString().slice(8, 10)}/${dateEnd.toISOString().slice(5, 7)}/${dateEnd
-            .toISOString()
-            .slice(0, 4)} ${dateEnd.toISOString().slice(11, 16)}`}
+          {` ${props.item.tglSelesai.slice(8, 10)}/${props.item.tglSelesai.slice(5, 7)}/${props.item.tglSelesai.slice(
+            0,
+            4
+          )} ${('0' + adjustTimePlus(parseInt(props.item.tglSelesai.slice(11, 13)))).slice(
+            -2
+          )}:${props.item.tglSelesai.slice(14, 16)}`}
         </TableCell>
 
         <TableCell>{props.item.status}</TableCell>

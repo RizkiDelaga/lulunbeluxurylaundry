@@ -438,7 +438,7 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
 
                           setState({
                             ...state,
-                            dateOrder: newDate,
+                            dateOrder: dayjs(newDate),
                           });
 
                           console.log(dayjs(value).toISOString());
@@ -988,10 +988,10 @@ const InputItem = ({ stateValue, handleState, listLaundryType, handleCreateLaund
                   </Button>
                 </Grid>
                 <Grid item xs="auto">
-                  {stateValue.photo.img ? (
+                  {stateValue.photo.img || stateValue.photo.fileName ? (
                     <img
                       id="output"
-                      src={stateValue.photo.img ? URL.createObjectURL(stateValue.photo.img) : ''}
+                      src={stateValue.photo.img ? URL.createObjectURL(stateValue.photo.img) : stateValue.photo.fileName}
                       width={70}
                       alt="Preview"
                     />
@@ -1153,16 +1153,6 @@ function FormOrderLaundry() {
       console.log('Response GET Data Service Type');
       console.log(res);
 
-      // let newDate = await dayjs(
-      //   `${res.data.data.tglMulai.slice(0, 4)}-${res.data.data.tglMulai.slice(5, 7)}-${res.data.data.tglMulai.slice(
-      //     8,
-      //     10
-      //   )}T${('0' + adjustTime(res.data.data.tglMulai.slice(11, 13))).slice(-2)}:${res.data.data.tglMulai.slice(
-      //     14,
-      //     16
-      //   )}:00.000Z`
-      // );
-
       console.log('apakah keluar?', res.data.data.alamatJemput);
       setFormOrder({
         id: res.data.data.id,
@@ -1208,11 +1198,6 @@ function FormOrderLaundry() {
           mPembayaran: formOrder.paymentMethod,
           statusPembayaran: 'Belum Bayar',
           tglMulai: formOrder.dateOrder,
-          // tglMulai: dayjs(
-          //   `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
-          //     formOrder.dateOrder.$H
-          //   }:${formOrder.dateOrder.$m}:00`
-          // ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
           alamatJemput: !useShuttleProgram ? null : formOrder.address.pickupAddress,
           alamatAntar: !useShuttleProgram ? null : formOrder.address.deliveryAddress,
           status: formOrder.address.pickupAddress ? 'Perlu Dijemput' : 'Perlu Dikerjakan',

@@ -35,14 +35,7 @@ function AddIncome() {
     formData.append('nominal', formAddIncome.nominal);
     formData.append('judul', formAddIncome.title);
     formData.append('catatan', formAddIncome.notes);
-    formData.append(
-      'tanggal',
-      dayjs(
-        `${formAddIncome.entryDate.$y}-${('0' + (formAddIncome.entryDate.$M + 1)).slice(-2)}-${
-          formAddIncome.entryDate.$D
-        } ${formAddIncome.entryDate.$H}:${formAddIncome.entryDate.$m}:00`
-      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
-    );
+    formData.append('tanggal', formAddIncome.entryDate);
     formData.append('gambar', formAddIncome.photoEvidence.img);
 
     try {
@@ -196,7 +189,7 @@ function AddIncome() {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileDatePicker
                           label="Pilih Tanggal"
-                          value={formAddIncome.entryDate}
+                          value={dayjs(formAddIncome.entryDate)}
                           onChange={(value) => {
                             setFormAddIncome({
                               ...formAddIncome,
@@ -227,11 +220,16 @@ function AddIncome() {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileTimePicker
                           label="Pilih Jam"
-                          value={formAddIncome.entryDate}
+                          value={dayjs(formAddIncome.entryDate)}
                           onChange={(value) => {
+                            let date = dayjs(value).toISOString();
+                            const newDate = `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8, 10)}T${date
+                              .slice(11, 13)
+                              .slice(-2)}:${date.slice(14, 16)}:00.000Z`;
+
                             setFormAddIncome({
                               ...formAddIncome,
-                              entryDate: value,
+                              entryDate: dayjs(newDate),
                             });
 
                             console.log('Jam: ' + value.$H);

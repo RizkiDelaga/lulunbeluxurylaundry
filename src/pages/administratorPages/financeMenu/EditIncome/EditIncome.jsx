@@ -42,22 +42,12 @@ function EditIncome() {
         url: `${process.env.REACT_APP_API_KEY}/keuangan/${id}`,
       });
 
-      let newDate = await dayjs(
-        `${res.data.data.tanggal.slice(0, 4)}-${res.data.data.tanggal.slice(5, 7)}-${res.data.data.tanggal.slice(
-          8,
-          10
-        )}T${('0' + adjustTime(res.data.data.tanggal.slice(11, 13))).slice(-2)}:${res.data.data.tanggal.slice(
-          14,
-          16
-        )}:00.000Z`
-      );
-
       console.log('Response POST');
       console.log(res);
       setFormEditIncome({
         title: res.data.data.judul,
         nominal: res.data.data.nominal,
-        entryDate: dayjs(newDate),
+        entryDate: dayjs(res.data.data.tanggal),
         notes: res.data.data.catatan,
         photoEvidence: { img: null, fileName: res.data.data.gambar },
       });
@@ -72,14 +62,7 @@ function EditIncome() {
     formData.append('nominal', formEditIncome.nominal);
     formData.append('judul', formEditIncome.title);
     formData.append('catatan', formEditIncome.notes);
-    formData.append(
-      'tanggal',
-      dayjs(
-        `${formEditIncome.entryDate.$y}-${('0' + (formEditIncome.entryDate.$M + 1)).slice(-2)}-${
-          formEditIncome.entryDate.$D
-        } ${formEditIncome.entryDate.$H}:${formEditIncome.entryDate.$m}:00`
-      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
-    );
+    formData.append('tanggal', formEditIncome.entryDate);
     formData.append('gambar', formEditIncome.photoEvidence.img);
 
     setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
@@ -233,7 +216,7 @@ function EditIncome() {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileDatePicker
                           label="Pilih Tanggal"
-                          value={formEditIncome.entryDate}
+                          value={dayjs(formEditIncome.entryDate)}
                           onChange={(value) => {
                             setFormEditIncome({
                               ...formEditIncome,
@@ -264,11 +247,16 @@ function EditIncome() {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileTimePicker
                           label="Pilih Jam"
-                          value={formEditIncome.entryDate}
+                          value={dayjs(formEditIncome.entryDate)}
                           onChange={(value) => {
+                            let date = dayjs(value).toISOString();
+                            const newDate = `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8, 10)}T${date
+                              .slice(11, 13)
+                              .slice(-2)}:${date.slice(14, 16)}:00.000Z`;
+
                             setFormEditIncome({
                               ...formEditIncome,
-                              entryDate: value,
+                              entryDate: dayjs(newDate),
                             });
 
                             console.log('Jam: ' + value.$H);
@@ -371,13 +359,13 @@ function EditIncome() {
                       </Button>
                     </Grid>
                     <Grid item xs="auto">
-                      {formEditIncome.photoEvidence.img ? (
+                      {formEditIncome.photoEvidence.img || formEditIncome.photoEvidence.fileName ? (
                         <img
                           id="output"
                           src={
                             formEditIncome.photoEvidence.img
                               ? URL.createObjectURL(formEditIncome.photoEvidence.img)
-                              : ''
+                              : formEditIncome.photoEvidence.fileName
                           }
                           width={70}
                           alt="Preview"

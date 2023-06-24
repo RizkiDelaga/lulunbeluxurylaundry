@@ -315,13 +315,13 @@ function ReasonsWhyChooseUs() {
                         </Button>
                       </Grid>
                       <Grid item xs="auto">
-                        {formReasonsWhyChooseUs.photo.img ? (
+                        {formReasonsWhyChooseUs.photo.img || formReasonsWhyChooseUs.photo.fileName ? (
                           <img
                             id="output"
                             src={
                               formReasonsWhyChooseUs.photo.img
                                 ? URL.createObjectURL(formReasonsWhyChooseUs.photo.img)
-                                : ''
+                                : formReasonsWhyChooseUs.photo.fileName
                             }
                             width={70}
                             alt="Preview"

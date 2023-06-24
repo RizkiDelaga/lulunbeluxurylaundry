@@ -46,16 +46,6 @@ function RowItem(props) {
   const navigate = useNavigate();
   const [openTableCell, setOpenTableCell] = React.useState(false);
 
-  const dateStart = new Date(props.item.tglMulai);
-  const dateEnd = new Date(props.item.tenggatWaktu);
-  // const lastUpdate = new Date(props.item.statusUpdatedAt);
-  let statusUpdatedAt = `${props.item.statusUpdatedAt.slice(0, 4)}-${props.item.statusUpdatedAt.slice(
-    5,
-    7
-  )}-${props.item.statusUpdatedAt.slice(8, 10)}T${(
-    '0' + adjustTimePlus(parseInt(props.item.statusUpdatedAt.slice(11, 13)))
-  ).slice(-2)}:${props.item.statusUpdatedAt.slice(14, 16)}:00.000Z`;
-
   const pickUpAddress = props.item.alamatJemput ? JSON.parse(props.item.alamatJemput) : null;
   const deliveryAddress = props.item.alamatAntar ? JSON.parse(props.item.alamatAntar) : null;
 
@@ -92,26 +82,32 @@ function RowItem(props) {
           </Box>
         </TableCell>
         <TableCell>
-          {`${dateStart.toISOString().slice(8, 10)}/${dateStart.toISOString().slice(5, 7)}/${dateStart
-            .toISOString()
-            .slice(0, 4)} ${dateStart.toISOString().slice(11, 16)}`}
-
+          {` ${props.item.tglMulai.slice(8, 10)}/${props.item.tglMulai.slice(5, 7)}/${props.item.tglMulai.slice(
+            0,
+            4
+          )} ${('0' + adjustTimePlus(parseInt(props.item.tglMulai.slice(11, 13)))).slice(
+            -2
+          )}:${props.item.tglMulai.slice(14, 16)}`}
           <div style={{ fontSize: '12px' }}>oleh {props.item.createdBy}</div>
         </TableCell>
         <TableCell>
-          {`${dateEnd.toISOString().slice(8, 10)}/${dateEnd.toISOString().slice(5, 7)}/${dateEnd
-            .toISOString()
-            .slice(0, 4)} ${dateEnd.toISOString().slice(11, 16)}`}
+          {` ${props.item.tenggatWaktu.slice(8, 10)}/${props.item.tenggatWaktu.slice(
+            5,
+            7
+          )}/${props.item.tenggatWaktu.slice(0, 4)} ${(
+            '0' + adjustTimePlus(parseInt(props.item.tenggatWaktu.slice(11, 13)))
+          ).slice(-2)}:${props.item.tenggatWaktu.slice(14, 16)}`}
         </TableCell>
         <TableCell>
           {props.item.status}
           <div style={{ fontSize: '12px' }}>
             pada
-            {` ${statusUpdatedAt.slice(8, 10)}/${statusUpdatedAt.slice(5, 7)}/${statusUpdatedAt.slice(
-              0,
-              4
-            )} ${statusUpdatedAt.slice(11, 16)}`}
-            {/* {props.item.updatedBy ? ` oleh ${props.item.updatedBy}` : null} */}
+            {` ${props.item.statusUpdatedAt.slice(8, 10)}/${props.item.statusUpdatedAt.slice(
+              5,
+              7
+            )}/${props.item.statusUpdatedAt.slice(0, 4)} ${(
+              '0' + adjustTimePlus(parseInt(props.item.statusUpdatedAt.slice(11, 13)))
+            ).slice(-2)}:${props.item.statusUpdatedAt.slice(14, 16)}`}
           </div>
         </TableCell>
 

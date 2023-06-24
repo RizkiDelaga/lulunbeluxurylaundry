@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getGeneralInformation } from '../../../redux/actions/getBusinessInformationAction';
 import RatingComponent from '../../../components/Ratings/RatingComponent';
+import { adjustTimePlus } from '../../../utils/timeUtils';
 
 function DigitalReceipt() {
   const theme = useTheme();
@@ -32,9 +33,6 @@ function DigitalReceipt() {
     try {
       const res = await axios({
         method: 'GET',
-        // headers: {
-        //   Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        // },
         url: `${process.env.REACT_APP_API_KEY}/pemesanan/nomor/${noPesanan}`,
       });
 
@@ -181,20 +179,25 @@ function DigitalReceipt() {
               <h5>Informasi Pesanan</h5>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <h6>Tanggal Pemesanan</h6>
-                <span style={{ textAlign: 'end' }}>{`${detailOrder.tglMulai.slice(8, 10)}/${detailOrder.tglMulai.slice(
-                  5,
-                  7
-                )}/${detailOrder.tglMulai.slice(0, 4)} ${detailOrder.tglMulai.slice(11, 16)}`}</span>
+                <span style={{ textAlign: 'end' }}>
+                  {` ${detailOrder.tglMulai.slice(8, 10)}/${detailOrder.tglMulai.slice(
+                    5,
+                    7
+                  )}/${detailOrder.tglMulai.slice(0, 4)} ${(
+                    '0' + adjustTimePlus(parseInt(detailOrder.tglMulai.slice(11, 13)))
+                  ).slice(-2)}:${detailOrder.tglMulai.slice(14, 16)}`}
+                </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <h6>Estimasi Selesai</h6>
-                <span style={{ textAlign: 'end' }}>{`${detailOrder.tenggatWaktu.slice(
-                  8,
-                  10
-                )}/${detailOrder.tenggatWaktu.slice(5, 7)}/${detailOrder.tenggatWaktu.slice(
-                  0,
-                  4
-                )} ${detailOrder.tenggatWaktu.slice(11, 16)}`}</span>
+                <span style={{ textAlign: 'end' }}>
+                  {` ${detailOrder.tenggatWaktu.slice(8, 10)}/${detailOrder.tenggatWaktu.slice(
+                    5,
+                    7
+                  )}/${detailOrder.tenggatWaktu.slice(0, 4)} ${(
+                    '0' + adjustTimePlus(parseInt(detailOrder.tenggatWaktu.slice(11, 13)))
+                  ).slice(-2)}:${detailOrder.tenggatWaktu.slice(14, 16)}`}
+                </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <h6>Total Pembayaran</h6>
@@ -243,10 +246,12 @@ function DigitalReceipt() {
               </div>
               <div style={{ fontSize: '12px', marginTop: '5px' }}>
                 Status diubah pada{' '}
-                {`${detailOrder.updatedAt.slice(8, 10)}/${detailOrder.updatedAt.slice(
+                {` ${detailOrder.statusUpdatedAt.slice(8, 10)}/${detailOrder.statusUpdatedAt.slice(
                   5,
                   7
-                )}/${detailOrder.updatedAt.slice(0, 4)} ${detailOrder.updatedAt.slice(11, 16)}`}
+                )}/${detailOrder.statusUpdatedAt.slice(0, 4)} ${(
+                  '0' + adjustTimePlus(parseInt(detailOrder.statusUpdatedAt.slice(11, 13)))
+                ).slice(-2)}:${detailOrder.statusUpdatedAt.slice(14, 16)}`}
               </div>
             </div>
 

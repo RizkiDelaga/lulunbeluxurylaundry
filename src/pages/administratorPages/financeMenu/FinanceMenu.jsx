@@ -58,6 +58,7 @@ import dayjs from 'dayjs';
 import { getComparator, stableSort } from '../../../utils/tableUtils';
 import LoadDecisions from '../../../components/LoadDecisions/LoadDecisions';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
+import { adjustTimePlus } from '../../../utils/timeUtils';
 
 function FinanceStats({ dataset }) {
   const theme = useTheme();
@@ -279,8 +280,6 @@ function RowItem(props) {
   const navigate = useNavigate();
   const [openTableCell, setOpenTableCell] = React.useState(false);
 
-  const date = new Date(props.item.tanggal);
-
   // Menu - Action
   const [actionAnchorEl, setActionAnchorEl] = React.useState(null);
   const openAction = Boolean(actionAnchorEl);
@@ -332,9 +331,9 @@ function RowItem(props) {
         </TableCell>
         <TableCell>{props.item.judul}</TableCell>
         <TableCell>
-          {`${date.toISOString().slice(8, 10)}/${date.toISOString().slice(5, 7)}/${date
-            .toISOString()
-            .slice(0, 4)} ${date.toISOString().slice(11, 16)}`}
+          {` ${props.item.tanggal.slice(8, 10)}/${props.item.tanggal.slice(5, 7)}/${props.item.tanggal.slice(0, 4)} ${(
+            '0' + adjustTimePlus(parseInt(props.item.tanggal.slice(11, 13)))
+          ).slice(-2)}:${props.item.tanggal.slice(14, 16)}`}
 
           <div style={{ fontSize: '12px' }}>{props.item.createdBy ? `oleh ${props.item.createdBy}` : null}</div>
         </TableCell>

@@ -39,12 +39,10 @@ import dayjs from 'dayjs';
 import { getProfileAccountAdmin } from '../../../redux/actions/getProfileAccount';
 import { getComparator, stableSort } from '../../../utils/tableUtils';
 import InformationCard from '../../../components/Card/InformationCard';
+import { adjustTimePlus } from '../../../utils/timeUtils';
 
 function RowItem(props) {
   const navigate = useNavigate();
-
-  const dateCreate = new Date(props.item.createdAt);
-  const dateUpdate = new Date(props.item.updatedAt);
 
   // Menu - Action
   const [actionAnchorEl, setActionAnchorEl] = React.useState(null);
@@ -73,17 +71,23 @@ function RowItem(props) {
         </TableCell>
 
         <TableCell>
-          {`${dateCreate.toISOString().slice(8, 10)}/${dateCreate.toISOString().slice(5, 7)}/${dateCreate
-            .toISOString()
-            .slice(0, 4)} ${dateCreate.toISOString().slice(11, 16)}`}
+          {` ${props.item.createdAt.slice(8, 10)}/${props.item.createdAt.slice(5, 7)}/${props.item.createdAt.slice(
+            0,
+            4
+          )} ${('0' + adjustTimePlus(parseInt(props.item.createdAt.slice(11, 13)))).slice(
+            -2
+          )}:${props.item.createdAt.slice(14, 16)}`}
 
           <div style={{ fontSize: '12px' }}>oleh {props.item.createdBy}</div>
         </TableCell>
 
         <TableCell>
-          {`${dateUpdate.toISOString().slice(8, 10)}/${dateUpdate.toISOString().slice(5, 7)}/${dateUpdate
-            .toISOString()
-            .slice(0, 4)} ${dateUpdate.toISOString().slice(11, 16)}`}
+          {` ${props.item.updatedAt.slice(8, 10)}/${props.item.updatedAt.slice(5, 7)}/${props.item.updatedAt.slice(
+            0,
+            4
+          )} ${('0' + adjustTimePlus(parseInt(props.item.updatedAt.slice(11, 13)))).slice(
+            -2
+          )}:${props.item.updatedAt.slice(14, 16)}`}
 
           <div style={{ fontSize: '12px' }}>{!props.item.updatedBy ? null : 'oleh ' + props.item.updatedBy}</div>
         </TableCell>
