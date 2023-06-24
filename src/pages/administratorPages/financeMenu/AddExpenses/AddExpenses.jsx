@@ -35,14 +35,7 @@ function AddExpenses() {
     formData.append('nominal', formAddExpenses.nominal);
     formData.append('judul', formAddExpenses.title);
     formData.append('catatan', formAddExpenses.notes);
-    formData.append(
-      'tanggal',
-      dayjs(
-        `${formAddExpenses.expenditureDate.$y}-${('0' + (formAddExpenses.expenditureDate.$M + 1)).slice(-2)}-${
-          formAddExpenses.expenditureDate.$D
-        } ${formAddExpenses.expenditureDate.$H}:${formAddExpenses.expenditureDate.$m}:00`
-      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
-    );
+    formData.append('tanggal', formAddExpenses.expenditureDate);
     formData.append('gambar', formAddExpenses.photoEvidence.img);
 
     try {
@@ -195,7 +188,7 @@ function AddExpenses() {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileDatePicker
                           label="Pilih Tanggal"
-                          value={formAddExpenses.expenditureDate}
+                          value={dayjs(formAddExpenses.expenditureDate)}
                           onChange={(value) => {
                             setFormAddExpenses({
                               ...formAddExpenses,
@@ -226,11 +219,16 @@ function AddExpenses() {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileTimePicker
                           label="Pilih Jam"
-                          value={formAddExpenses.expenditureDate}
+                          value={dayjs(formAddExpenses.expenditureDate)}
                           onChange={(value) => {
+                            let date = dayjs(value).toISOString();
+                            const newDate = `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8, 10)}T${date
+                              .slice(11, 13)
+                              .slice(-2)}:${date.slice(14, 16)}:00.000Z`;
+
                             setFormAddExpenses({
                               ...formAddExpenses,
-                              expenditureDate: value,
+                              expenditureDate: dayjs(newDate),
                             });
 
                             console.log('Jam: ' + value.$H);

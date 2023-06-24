@@ -324,13 +324,13 @@ function HowToOrder() {
                         </Button>
                       </Grid>
                       <Grid item xs="auto">
-                        {formHowToOrderViaOnline.photo.img ? (
+                        {formHowToOrderViaOnline.photo.img || formHowToOrderViaOnline.photo.fileName ? (
                           <img
                             id="output"
                             src={
                               formHowToOrderViaOnline.photo.img
                                 ? URL.createObjectURL(formHowToOrderViaOnline.photo.img)
-                                : ''
+                                : formHowToOrderViaOnline.photo.fileName
                             }
                             width={70}
                             alt="Preview"
@@ -510,13 +510,13 @@ function HowToOrder() {
                         </Button>
                       </Grid>
                       <Grid item xs="auto">
-                        {formHowToOrderViaOutlet.photo.img ? (
+                        {formHowToOrderViaOutlet.photo.img || formHowToOrderViaOutlet.photo.fileName ? (
                           <img
                             id="output"
                             src={
                               formHowToOrderViaOutlet.photo.img
                                 ? URL.createObjectURL(formHowToOrderViaOutlet.photo.img)
-                                : ''
+                                : formHowToOrderViaOutlet.photo.fileName
                             }
                             width={70}
                             alt="Preview"

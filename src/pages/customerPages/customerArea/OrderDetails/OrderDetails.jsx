@@ -17,7 +17,6 @@ function OrderDetails() {
   const [detailOrder, setDetailOrder] = useState();
   const [ratingReview, setRatingReview] = useState();
   const [listLaundryItem, setListLaundryItem] = React.useState([]);
-  const [statusUpdatedAt, setStatusUpdatedAt] = React.useState();
 
   React.useEffect(() => {
     document.title = 'Detail Pesanan';
@@ -46,14 +45,6 @@ function OrderDetails() {
       });
       handleGetLaundryItem(res.data.data.id);
       handleGetRatingReview(res.data.data.id);
-      setStatusUpdatedAt(
-        `${res.data.data.statusUpdatedAt.slice(0, 4)}-${res.data.data.statusUpdatedAt.slice(
-          5,
-          7
-        )}-${res.data.data.statusUpdatedAt.slice(8, 10)}T${(
-          '0' + adjustTimePlus(parseInt(res.data.data.statusUpdatedAt.slice(11, 13)))
-        ).slice(-2)}:${res.data.data.statusUpdatedAt.slice(14, 16)}:00.000Z`
-      );
     } catch (error) {
       if (error.response.status === 404) {
         setDetailOrder();
@@ -262,23 +253,25 @@ function OrderDetails() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <h6>Tanggal Pemesanan</h6>
-                      <span style={{ textAlign: 'end' }}>{`${detailOrder.tglMulai.slice(
-                        8,
-                        10
-                      )}/${detailOrder.tglMulai.slice(5, 7)}/${detailOrder.tglMulai.slice(
-                        0,
-                        4
-                      )} ${detailOrder.tglMulai.slice(11, 16)}`}</span>
+                      <span style={{ textAlign: 'end' }}>
+                        {` ${detailOrder.tglMulai.slice(8, 10)}/${detailOrder.tglMulai.slice(
+                          5,
+                          7
+                        )}/${detailOrder.tglMulai.slice(0, 4)} ${(
+                          '0' + adjustTimePlus(parseInt(detailOrder.tglMulai.slice(11, 13)))
+                        ).slice(-2)}:${detailOrder.tglMulai.slice(14, 16)}`}
+                      </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <h6>Estimasi Selesai</h6>
-                      <span style={{ textAlign: 'end' }}>{`${detailOrder.tenggatWaktu.slice(
-                        8,
-                        10
-                      )}/${detailOrder.tenggatWaktu.slice(5, 7)}/${detailOrder.tenggatWaktu.slice(
-                        0,
-                        4
-                      )} ${detailOrder.tenggatWaktu.slice(11, 16)}`}</span>
+                      <span style={{ textAlign: 'end' }}>
+                        {` ${detailOrder.tenggatWaktu.slice(8, 10)}/${detailOrder.tenggatWaktu.slice(
+                          5,
+                          7
+                        )}/${detailOrder.tenggatWaktu.slice(0, 4)} ${(
+                          '0' + adjustTimePlus(parseInt(detailOrder.tenggatWaktu.slice(11, 13)))
+                        ).slice(-2)}:${detailOrder.tenggatWaktu.slice(14, 16)}`}
+                      </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <h6>Total Pembayaran</h6>
@@ -350,10 +343,12 @@ function OrderDetails() {
                     </div>
                     <div style={{ fontSize: '12px', marginTop: '5px' }}>
                       Status diubah pada{' '}
-                      {`${statusUpdatedAt.slice(8, 10)}/${statusUpdatedAt.slice(5, 7)}/${statusUpdatedAt.slice(
-                        0,
-                        4
-                      )} ${statusUpdatedAt.slice(11, 16)}`}
+                      {` ${detailOrder.statusUpdatedAt.slice(8, 10)}/${detailOrder.statusUpdatedAt.slice(
+                        5,
+                        7
+                      )}/${detailOrder.statusUpdatedAt.slice(0, 4)} ${(
+                        '0' + adjustTimePlus(parseInt(detailOrder.statusUpdatedAt.slice(11, 13)))
+                      ).slice(-2)}:${detailOrder.statusUpdatedAt.slice(14, 16)}`}
                     </div>
                   </div>
                 )}

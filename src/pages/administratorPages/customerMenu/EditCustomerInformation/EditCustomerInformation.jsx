@@ -508,13 +508,14 @@ function EditCustomerInformation() {
                       </Button>
                     </Grid>
                     <Grid item xs="auto">
-                      {formEditCustomerInformation.profilePicture.img ? (
+                      {formEditCustomerInformation.profilePicture.img ||
+                      formEditCustomerInformation.profilePicture.fileName ? (
                         <img
                           id="output"
                           src={
                             formEditCustomerInformation.profilePicture.img
                               ? URL.createObjectURL(formEditCustomerInformation.profilePicture.img)
-                              : ''
+                              : formEditCustomerInformation.profilePicture.fileName
                           }
                           width={70}
                           alt="Preview"
@@ -837,11 +838,13 @@ function EditCustomerInformation() {
                           </Button>
                         </Grid>
                         <Grid item xs="auto">
-                          {mainAddress.buildingPhoto.img ? (
+                          {mainAddress.buildingPhoto.img || mainAddress.buildingPhoto.fileName ? (
                             <img
                               id="output"
                               src={
-                                mainAddress.buildingPhoto.img ? URL.createObjectURL(mainAddress.buildingPhoto.img) : ''
+                                mainAddress.buildingPhoto.img
+                                  ? URL.createObjectURL(mainAddress.buildingPhoto.img)
+                                  : mainAddress.buildingPhoto.fileName
                               }
                               width={70}
                               alt="Preview"

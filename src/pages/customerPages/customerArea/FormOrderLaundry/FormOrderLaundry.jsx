@@ -114,9 +114,14 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
                       label="Pilih Jam"
                       value={dayjs(state.dateOrder)}
                       onChange={(value) => {
+                        let date = dayjs(value).toISOString();
+                        const newDate = `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8, 10)}T${date
+                          .slice(11, 13)
+                          .slice(-2)}:${date.slice(14, 16)}:00.000Z`;
+
                         setState({
                           ...state,
-                          dateOrder: value,
+                          dateOrder: dayjs(newDate),
                         });
 
                         console.log('Jam: ' + value.$H);
@@ -613,10 +618,10 @@ const InputItem = ({
                   </Button>
                 </Grid>
                 <Grid item xs="auto">
-                  {stateValue.photo.img ? (
+                  {stateValue.photo.img || stateValue.photo.fileName ? (
                     <img
                       id="output"
-                      src={stateValue.photo.img ? URL.createObjectURL(stateValue.photo.img) : ''}
+                      src={stateValue.photo.img ? URL.createObjectURL(stateValue.photo.img) : stateValue.photo.fileName}
                       width={70}
                       alt="Preview"
                     />
@@ -770,6 +775,46 @@ function FormOrderLaundry() {
     }
   };
 
+  const handleGetDetailPesanan = async (orderId) => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: `${process.env.REACT_APP_API_KEY}/pemesanan/${orderId || id || formOrder.id}`,
+      });
+      console.log('Response GET Data Service Type');
+      console.log(res);
+
+      console.log('apakah keluar?', res.data.data.alamatJemput);
+      setFormOrder({
+        id: res.data.data.id,
+        noOrder: res.data.data.nomorPesanan,
+        dateOrder: dayjs(res.data.data.tglMulai),
+        serviceType: {
+          name: res.data.data.namaLayanan,
+          duration: res.data.data.jenisLayanan,
+        },
+        discount: res.data.data.diskon,
+        paymentMethod: res.data.data.mPembayaran,
+        userId: res.data.data.userId,
+        address: {
+          pickupAddress: res.data.data.alamatJemput,
+          deliveryAddress: res.data.data.alamatAntar,
+        },
+        status: res.data.data.status,
+      });
+
+      const profileCustomer = JSON.parse(localStorage.getItem('my_profile_account'));
+
+      if (res.data.data.userId !== profileCustomer.id) {
+        setOpenDialog({ status: true, type: 'handle user' });
+      } else {
+        setOpenDialog({ status: res.data.data.status !== 'Perlu Disetujui' ? true : false, type: 'handle status' });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleCreateOrder = async () => {
     setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
 
@@ -784,11 +829,7 @@ function FormOrderLaundry() {
           namaLayanan: formOrder.serviceType.name,
           jenisLayanan: formOrder.serviceType.duration,
           mPembayaran: formOrder.paymentMethod,
-          tglMulai: dayjs(
-            `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
-              formOrder.dateOrder.$H
-            }:${formOrder.dateOrder.$m}:00`
-          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+          tglMulai: formOrder.dateOrder,
           alamatJemput: formOrder.address.pickupAddress,
           alamatAntar: formOrder.address.deliveryAddress,
         },
@@ -818,56 +859,6 @@ function FormOrderLaundry() {
     }
   };
 
-  const handleGetDetailPesanan = async (orderId) => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        url: `${process.env.REACT_APP_API_KEY}/pemesanan/${orderId || id || formOrder.id}`,
-      });
-      console.log('Response GET Data Service Type');
-      console.log(res);
-
-      let newDate = await dayjs(
-        `${res.data.data.tglMulai.slice(0, 4)}-${res.data.data.tglMulai.slice(5, 7)}-${res.data.data.tglMulai.slice(
-          8,
-          10
-        )}T${('0' + adjustTime(res.data.data.tglMulai.slice(11, 13))).slice(-2)}:${res.data.data.tglMulai.slice(
-          14,
-          16
-        )}:00.000Z`
-      );
-
-      console.log('apakah keluar?', res.data.data.alamatJemput);
-      setFormOrder({
-        id: res.data.data.id,
-        noOrder: res.data.data.nomorPesanan,
-        dateOrder: dayjs(newDate),
-        serviceType: {
-          name: res.data.data.namaLayanan,
-          duration: res.data.data.jenisLayanan,
-        },
-        discount: res.data.data.diskon,
-        paymentMethod: res.data.data.mPembayaran,
-        userId: res.data.data.userId,
-        address: {
-          pickupAddress: res.data.data.alamatJemput,
-          deliveryAddress: res.data.data.alamatAntar,
-        },
-        status: res.data.data.status,
-      });
-
-      const profileCustomer = JSON.parse(localStorage.getItem('my_profile_account'));
-
-      if (res.data.data.userId !== profileCustomer.id) {
-        setOpenDialog({ status: true, type: 'handle user' });
-      } else {
-        setOpenDialog({ status: res.data.data.status !== 'Perlu Disetujui' ? true : false, type: 'handle status' });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleUpdateOrder = async () => {
     setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
 
@@ -882,11 +873,7 @@ function FormOrderLaundry() {
           namaLayanan: formOrder.serviceType.name,
           jenisLayanan: formOrder.serviceType.duration,
           mPembayaran: formOrder.paymentMethod,
-          tglMulai: dayjs(
-            `${formOrder.dateOrder.$y}-${('0' + (formOrder.dateOrder.$M + 1)).slice(-2)}-${formOrder.dateOrder.$D} ${
-              formOrder.dateOrder.$H
-            }:${formOrder.dateOrder.$m}:00`
-          ).format('YYYY-MM-DDTHH:mm:00.000[Z]'),
+          tglMulai: formOrder.dateOrder,
           alamatJemput: formOrder.address.pickupAddress,
           alamatAntar: formOrder.address.deliveryAddress,
           status: formOrder.status,

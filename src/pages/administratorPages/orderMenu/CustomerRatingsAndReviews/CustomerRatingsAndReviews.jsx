@@ -38,11 +38,10 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SearchIcon from '@mui/icons-material/Search';
 import { getComparator, stableSort } from '../../../../utils/tableUtils';
 import RatingComponent from '../../../../components/Ratings/RatingComponent';
+import { adjustTimePlus } from '../../../../utils/timeUtils';
 
 function RowItem(props) {
   const navigate = useNavigate();
-
-  const date = new Date(props.item.createdAt);
 
   return (
     <React.Fragment>
@@ -65,9 +64,12 @@ function RowItem(props) {
         <TableCell>
           <RatingComponent readOnly={true} ratingValue={props.item.rating} />
           pada
-          {` ${date.toISOString().slice(8, 10)}/${date.toISOString().slice(5, 7)}/${date
-            .toISOString()
-            .slice(0, 4)} ${date.toISOString().slice(11, 16)}`}
+          {` ${props.item.createdAt.slice(8, 10)}/${props.item.createdAt.slice(5, 7)}/${props.item.createdAt.slice(
+            0,
+            4
+          )} ${('0' + adjustTimePlus(parseInt(props.item.createdAt.slice(11, 13)))).slice(
+            -2
+          )}:${props.item.createdAt.slice(14, 16)}`}
         </TableCell>
         <TableCell>{props.item.review}</TableCell>
         <TableCell>

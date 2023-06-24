@@ -101,7 +101,7 @@ function GeneralInformation() {
         contact: {
           phoneNumber: res.data.data[0].noTelp,
           fax: res.data.data[0].fax,
-          whatsApp: '',
+          whatsApp: res.data.data[0].whatsapp,
           telegram: res.data.data[0].telegram,
           email: res.data.data[0].email,
         },
@@ -140,6 +140,7 @@ function GeneralInformation() {
     formData.append('koordinat', formGeneralInformation.location.googleMapsEmbed);
     formData.append('noTelp', formGeneralInformation.contact.phoneNumber);
     formData.append('telegram', formGeneralInformation.contact.telegram);
+    formData.append('whatsapp', formGeneralInformation.contact.whatsApp);
     formData.append('email', formGeneralInformation.contact.email);
     formData.append('fax', formGeneralInformation.contact.fax);
     formData.append('instagram', formGeneralInformation.socialMedia.instagram);
@@ -259,11 +260,13 @@ function GeneralInformation() {
                     </Button>
                   </Grid>
                   <Grid item xs="auto">
-                    {formGeneralInformation.logo.img ? (
+                    {formGeneralInformation.logo.img || formGeneralInformation.logo.fileName ? (
                       <img
                         id="output"
                         src={
-                          formGeneralInformation.logo.img ? URL.createObjectURL(formGeneralInformation.logo.img) : ''
+                          formGeneralInformation.logo.img
+                            ? URL.createObjectURL(formGeneralInformation.logo.img)
+                            : formGeneralInformation.logo.fileName
                         }
                         width={70}
                         alt="Preview"

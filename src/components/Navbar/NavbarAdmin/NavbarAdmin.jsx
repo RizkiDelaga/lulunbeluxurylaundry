@@ -33,6 +33,7 @@ import MuiToggleButton from '@mui/material/ToggleButton';
 import { getProfileAccountAdmin } from '../../../redux/actions/getProfileAccount';
 import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
+import { adjustTimePlus } from '../../../utils/timeUtils';
 
 const drawerWidth = 300;
 
@@ -202,13 +203,14 @@ const NotificationList = ({ loadingData, data, notificationStatus, handleUpdateR
                     >
                       <div style={{ fontWeight: 'bold' }}>{parseItem.header}</div>
                       <div style={{ fontSize: '14px' }}>{parseItem.deskripsi}</div>
-                      <div style={{ fontSize: '12px', textAlign: 'right' }}>{`${item.updatedAt.slice(
-                        8,
-                        10
-                      )}/${item.updatedAt.slice(5, 7)}/${item.updatedAt.slice(0, 4)} ${item.updatedAt.slice(
-                        11,
-                        16
-                      )}`}</div>
+                      <div style={{ fontSize: '12px', textAlign: 'right' }}>
+                        {` ${item.updatedAt.slice(8, 10)}/${item.updatedAt.slice(5, 7)}/${item.updatedAt.slice(
+                          0,
+                          4
+                        )} ${('0' + adjustTimePlus(parseInt(item.updatedAt.slice(11, 13)))).slice(
+                          -2
+                        )}:${item.updatedAt.slice(14, 16)}`}
+                      </div>
                     </div>
                     <div>
                       {!item.dibacaAdmin ? (

@@ -316,10 +316,14 @@ function LaundryType() {
                         </Button>
                       </Grid>
                       <Grid item xs="auto">
-                        {formLaundryType.photo.img ? (
+                        {formLaundryType.photo.img || formLaundryType.photo.fileName ? (
                           <img
                             id="output"
-                            src={formLaundryType.photo.img ? URL.createObjectURL(formLaundryType.photo.img) : ''}
+                            src={
+                              formLaundryType.photo.img
+                                ? URL.createObjectURL(formLaundryType.photo.img)
+                                : formLaundryType.photo.fileName
+                            }
                             width={70}
                             alt="Preview"
                           />

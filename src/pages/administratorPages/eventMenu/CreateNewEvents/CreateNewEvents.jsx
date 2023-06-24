@@ -58,23 +58,9 @@ function CreateNewEvents() {
     formData.append('nama', formCreateNewEvents.eventName);
     formData.append('gambar', formCreateNewEvents.poster.img);
     formData.append('deskripsi', formCreateNewEvents.description);
-    // formData.append('status ', '');
-    formData.append(
-      'tglMulai',
-      dayjs(
-        `${formCreateNewEvents.dateStart.$y}-${('0' + (formCreateNewEvents.dateStart.$M + 1)).slice(-2)}-${
-          formCreateNewEvents.dateStart.$D
-        } ${formCreateNewEvents.dateStart.$H}:${formCreateNewEvents.dateStart.$m}:00`
-      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
-    );
-    formData.append(
-      'tglSelesai',
-      dayjs(
-        `${formCreateNewEvents.dateEnd.$y}-${('0' + (formCreateNewEvents.dateEnd.$M + 1)).slice(-2)}-${
-          formCreateNewEvents.dateEnd.$D
-        } ${formCreateNewEvents.dateEnd.$H}:${formCreateNewEvents.dateEnd.$m}:00`
-      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
-    );
+    formData.append('tglMulai', formCreateNewEvents.dateStart);
+    formData.append('tglSelesai', formCreateNewEvents.dateEnd);
+
     listCriteria.forEach((element, index) => {
       formData.append(`kriteria[${index}]`, element.criteriaText);
     });
@@ -200,7 +186,7 @@ function CreateNewEvents() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <MobileDatePicker
                             label="Pilih Tanggal"
-                            value={formCreateNewEvents.dateStart}
+                            value={dayjs(formCreateNewEvents.dateStart)}
                             onChange={(value) => {
                               setFormCreateNewEvents({
                                 ...formCreateNewEvents,
@@ -231,11 +217,16 @@ function CreateNewEvents() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <MobileTimePicker
                             label="Pilih Jam"
-                            value={formCreateNewEvents.dateStart}
+                            value={dayjs(formCreateNewEvents.dateStart)}
                             onChange={(value) => {
+                              let date = dayjs(value).toISOString();
+                              const newDate = `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8, 10)}T${date
+                                .slice(11, 13)
+                                .slice(-2)}:${date.slice(14, 16)}:00.000Z`;
+
                               setFormCreateNewEvents({
                                 ...formCreateNewEvents,
-                                dateStart: value,
+                                dateStart: dayjs(newDate),
                               });
 
                               console.log('Jam: ' + value.$H);
@@ -280,7 +271,7 @@ function CreateNewEvents() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <MobileDatePicker
                             label="Pilih Tanggal"
-                            value={formCreateNewEvents.dateEnd}
+                            value={dayjs(formCreateNewEvents.dateEnd)}
                             onChange={(value) => {
                               setFormCreateNewEvents({
                                 ...formCreateNewEvents,
@@ -311,11 +302,16 @@ function CreateNewEvents() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <MobileTimePicker
                             label="Pilih Jam"
-                            value={formCreateNewEvents.dateEnd}
+                            value={dayjs(formCreateNewEvents.dateEnd)}
                             onChange={(value) => {
+                              let date = dayjs(value).toISOString();
+                              const newDate = `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8, 10)}T${date
+                                .slice(11, 13)
+                                .slice(-2)}:${date.slice(14, 16)}:00.000Z`;
+
                               setFormCreateNewEvents({
                                 ...formCreateNewEvents,
-                                dateEnd: value,
+                                dateEnd: dayjs(newDate),
                               });
 
                               console.log('Jam: ' + value.$H);

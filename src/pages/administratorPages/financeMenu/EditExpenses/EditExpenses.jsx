@@ -17,7 +17,7 @@ function EditExpenses() {
   const [formEditExpenses, setFormEditExpenses] = useState({
     title: '',
     nominal: null,
-    entryDate: dayjs(),
+    expenditureDate: dayjs(),
     notes: '',
     photoEvidence: { img: null, fileName: null },
   });
@@ -42,22 +42,12 @@ function EditExpenses() {
         url: `${process.env.REACT_APP_API_KEY}/keuangan/${id}`,
       });
 
-      let newDate = await dayjs(
-        `${res.data.data.tanggal.slice(0, 4)}-${res.data.data.tanggal.slice(5, 7)}-${res.data.data.tanggal.slice(
-          8,
-          10
-        )}T${('0' + adjustTime(res.data.data.tanggal.slice(11, 13))).slice(-2)}:${res.data.data.tanggal.slice(
-          14,
-          16
-        )}:00.000Z`
-      );
-
       console.log('Response POST');
       console.log(res);
       setFormEditExpenses({
         title: res.data.data.judul,
         nominal: res.data.data.nominal,
-        entryDate: dayjs(newDate),
+        expenditureDate: dayjs(res.data.data.tanggal),
         notes: res.data.data.catatan,
         photoEvidence: { img: null, fileName: res.data.data.gambar },
       });
@@ -72,14 +62,7 @@ function EditExpenses() {
     formData.append('nominal', formEditExpenses.nominal);
     formData.append('judul', formEditExpenses.title);
     formData.append('catatan', formEditExpenses.notes);
-    formData.append(
-      'tanggal',
-      dayjs(
-        `${formEditExpenses.entryDate.$y}-${('0' + (formEditExpenses.entryDate.$M + 1)).slice(-2)}-${
-          formEditExpenses.entryDate.$D
-        } ${formEditExpenses.entryDate.$H}:${formEditExpenses.entryDate.$m}:00`
-      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
-    );
+    formData.append('tanggal', formEditExpenses.expenditureDate);
     formData.append('gambar', formEditExpenses.photoEvidence.img);
 
     setOpenLoadDecision({ ...openLoadDecision, isLoad: true });
@@ -98,7 +81,7 @@ function EditExpenses() {
       setFormEditExpenses({
         title: '',
         nominal: null,
-        entryDate: dayjs(),
+        expenditureDate: dayjs(),
         notes: '',
         photoEvidence: { img: null, fileName: '' },
       });
@@ -233,11 +216,11 @@ function EditExpenses() {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileDatePicker
                           label="Pilih Tanggal"
-                          value={formEditExpenses.entryDate}
+                          value={dayjs(formEditExpenses.expenditureDate)}
                           onChange={(value) => {
                             setFormEditExpenses({
                               ...formEditExpenses,
-                              entryDate: value,
+                              expenditureDate: value,
                             });
 
                             console.log('Tanggal: ' + value.$D);
@@ -264,11 +247,16 @@ function EditExpenses() {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileTimePicker
                           label="Pilih Jam"
-                          value={formEditExpenses.entryDate}
+                          value={dayjs(formEditExpenses.expenditureDate)}
                           onChange={(value) => {
+                            let date = dayjs(value).toISOString();
+                            const newDate = `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8, 10)}T${date
+                              .slice(11, 13)
+                              .slice(-2)}:${date.slice(14, 16)}:00.000Z`;
+
                             setFormEditExpenses({
                               ...formEditExpenses,
-                              entryDate: value,
+                              expenditureDate: dayjs(newDate),
                             });
 
                             console.log('Jam: ' + value.$H);
@@ -280,9 +268,9 @@ function EditExpenses() {
                             textField: {
                               error: false,
                               helperText:
-                                ('0' + formEditExpenses.entryDate.$H).slice(-2) +
+                                ('0' + formEditExpenses.expenditureDate.$H).slice(-2) +
                                 ':' +
-                                ('0' + formEditExpenses.entryDate.$m).slice(-2),
+                                ('0' + formEditExpenses.expenditureDate.$m).slice(-2),
                             },
                           }}
                           sx={{ width: '100%' }}
@@ -371,13 +359,13 @@ function EditExpenses() {
                       </Button>
                     </Grid>
                     <Grid item xs="auto">
-                      {formEditExpenses.photoEvidence.img ? (
+                      {formEditExpenses.photoEvidence.img || formEditExpenses.photoEvidence.fileName ? (
                         <img
                           id="output"
                           src={
                             formEditExpenses.photoEvidence.img
                               ? URL.createObjectURL(formEditExpenses.photoEvidence.img)
-                              : ''
+                              : formEditExpenses.photoEvidence.fileName
                           }
                           width={70}
                           alt="Preview"
@@ -416,9 +404,9 @@ function EditExpenses() {
               {formEditExpenses.nominal}
               <br />
               {formEditExpenses.notes}
-              {`${formEditExpenses.entryDate.$D} ${formEditExpenses.entryDate.$M} ${formEditExpenses.entryDate.$y}`}
+              {`${formEditExpenses.expenditureDate.$D} ${formEditExpenses.expenditureDate.$M} ${formEditExpenses.expenditureDate.$y}`}
               <br />
-              {`${formEditExpenses.entryDate.$H} ${formEditExpenses.entryDate.$m}`}
+              {`${formEditExpenses.expenditureDate.$H} ${formEditExpenses.expenditureDate.$m}`}
               <br />
             </Box>
           </form>

@@ -66,32 +66,13 @@ function EditEvents() {
         url: `${process.env.REACT_APP_API_KEY}/acara/${id}`,
       });
 
-      let newDateStart = await dayjs(
-        `${res.data.data.tglMulai.slice(0, 4)}-${res.data.data.tglMulai.slice(5, 7)}-${res.data.data.tglMulai.slice(
-          8,
-          10
-        )}T${('0' + adjustTime(res.data.data.tglMulai.slice(11, 13))).slice(-2)}:${res.data.data.tglMulai.slice(
-          14,
-          16
-        )}:00.000Z`
-      );
-
-      let newDateEnd = await dayjs(
-        `${res.data.data.tglSelesai.slice(0, 4)}-${res.data.data.tglSelesai.slice(
-          5,
-          7
-        )}-${res.data.data.tglSelesai.slice(8, 10)}T${('0' + adjustTime(res.data.data.tglSelesai.slice(11, 13))).slice(
-          -2
-        )}:${res.data.data.tglSelesai.slice(14, 16)}:00.000Z`
-      );
-
       console.log('Response GET Data');
       console.log(res);
       setFormEditEvents({
         id: res.data.data.id,
         eventName: res.data.data.nama,
-        dateStart: dayjs(newDateStart),
-        dateEnd: dayjs(newDateEnd),
+        dateStart: dayjs(res.data.data.tglMulai),
+        dateEnd: dayjs(res.data.data.tglSelesai),
         description: res.data.data.deskripsi,
         poster: { img: null, fileName: res.data.data.gambar },
       });
@@ -110,27 +91,14 @@ function EditEvents() {
     }
   };
 
-  const handleCreateEvents = async () => {
+  const handleUpdateEvents = async () => {
     const formData = new FormData();
     formData.append('nama', formEditEvents.eventName);
     formData.append('gambar', formEditEvents.poster.img);
     formData.append('deskripsi', formEditEvents.description);
-    formData.append(
-      'tglMulai',
-      dayjs(
-        `${formEditEvents.dateStart.$y}-${('0' + (formEditEvents.dateStart.$M + 1)).slice(-2)}-${
-          formEditEvents.dateStart.$D
-        } ${formEditEvents.dateStart.$H}:${formEditEvents.dateStart.$m}:00`
-      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
-    );
-    formData.append(
-      'tglSelesai',
-      dayjs(
-        `${formEditEvents.dateEnd.$y}-${('0' + (formEditEvents.dateEnd.$M + 1)).slice(-2)}-${
-          formEditEvents.dateEnd.$D
-        } ${formEditEvents.dateEnd.$H}:${formEditEvents.dateEnd.$m}:00`
-      ).format('YYYY-MM-DDTHH:mm:00.000[Z]')
-    );
+    formData.append('tglMulai', formEditEvents.dateStart);
+    formData.append('tglSelesai', formEditEvents.dateEnd);
+
     listCriteria.forEach((element, index) => {
       formData.append(`kriteria[${index}]`, element.criteriaText || '');
     });
@@ -163,7 +131,7 @@ function EditEvents() {
       if (res.status === 200) {
         setOpenLoadDecision({
           ...openLoadDecision.isLoad,
-          message: 'Berhasil di Tambah!',
+          message: 'Event Berhasil di Edit!',
           statusType: 'success',
         });
       }
@@ -200,7 +168,7 @@ function EditEvents() {
               onSubmit={(e) => {
                 e.preventDefault();
                 console.log('click');
-                handleCreateEvents();
+                handleUpdateEvents();
               }}
             >
               <div className="gap-16">
@@ -256,7 +224,7 @@ function EditEvents() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <MobileDatePicker
                             label="Pilih Tanggal"
-                            value={formEditEvents.dateStart}
+                            value={dayjs(formEditEvents.dateStart)}
                             onChange={(value) => {
                               setFormEditEvents({
                                 ...formEditEvents,
@@ -287,11 +255,16 @@ function EditEvents() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <MobileTimePicker
                             label="Pilih Jam"
-                            value={formEditEvents.dateStart}
+                            value={dayjs(formEditEvents.dateStart)}
                             onChange={(value) => {
+                              let date = dayjs(value).toISOString();
+                              const newDate = `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8, 10)}T${date
+                                .slice(11, 13)
+                                .slice(-2)}:${date.slice(14, 16)}:00.000Z`;
+
                               setFormEditEvents({
                                 ...formEditEvents,
-                                dateStart: value,
+                                dateStart: dayjs(newDate),
                               });
 
                               console.log('Jam: ' + value.$H);
@@ -336,7 +309,7 @@ function EditEvents() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <MobileDatePicker
                             label="Pilih Tanggal"
-                            value={formEditEvents.dateEnd}
+                            value={dayjs(formEditEvents.dateEnd)}
                             onChange={(value) => {
                               setFormEditEvents({
                                 ...formEditEvents,
@@ -367,11 +340,16 @@ function EditEvents() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <MobileTimePicker
                             label="Pilih Jam"
-                            value={formEditEvents.dateEnd}
+                            value={dayjs(formEditEvents.dateEnd)}
                             onChange={(value) => {
+                              let date = dayjs(value).toISOString();
+                              const newDate = `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8, 10)}T${date
+                                .slice(11, 13)
+                                .slice(-2)}:${date.slice(14, 16)}:00.000Z`;
+
                               setFormEditEvents({
                                 ...formEditEvents,
-                                dateEnd: value,
+                                dateEnd: dayjs(newDate),
                               });
 
                               console.log('Jam: ' + value.$H);
@@ -849,10 +827,14 @@ function EditEvents() {
                         </Button>
                       </Grid>
                       <Grid item xs="auto">
-                        {formEditEvents.poster.img ? (
+                        {formEditEvents.poster.img || formEditEvents.poster.fileName ? (
                           <img
                             id="output"
-                            src={formEditEvents.poster.img ? URL.createObjectURL(formEditEvents.poster.img) : ''}
+                            src={
+                              formEditEvents.poster.img
+                                ? URL.createObjectURL(formEditEvents.poster.img)
+                                : formEditEvents.poster.fileName
+                            }
                             width={70}
                             alt="Preview"
                           />
@@ -878,7 +860,7 @@ function EditEvents() {
                   size="large"
                   type="submit"
                   // onClick={() => {
-                  //   handleCreateEvents();
+                  //   handleUpdateEvents();
                   // }}
                   sx={{ width: '100%', fontWeight: 'bold' }}
                 >

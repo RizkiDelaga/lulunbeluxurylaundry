@@ -513,13 +513,13 @@ function PaymentMethod() {
                         </Button>
                       </Grid>
                       <Grid item xs="auto">
-                        {formPaymentMethod.paymentLogo.img ? (
+                        {formPaymentMethod.paymentLogo.img || formPaymentMethod.paymentLogo.fileName ? (
                           <img
                             id="output"
                             src={
                               formPaymentMethod.paymentLogo.img
                                 ? URL.createObjectURL(formPaymentMethod.paymentLogo.img)
-                                : ''
+                                : formPaymentMethod.paymentLogo.fileName
                             }
                             width={70}
                             alt="Preview"

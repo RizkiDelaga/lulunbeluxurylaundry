@@ -2,6 +2,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Avatar,
   Box,
   Button,
   Container,
@@ -65,6 +66,7 @@ import {
   getTestimony,
 } from '../../../redux/actions/getBusinessInformationAction';
 import { BigPlayButton, LoadingSpinner, Player } from 'video-react';
+import { Telegram, WhatsApp } from '@mui/icons-material';
 
 function HeroSection({ generalInformation }) {
   const theme = useTheme();
@@ -173,12 +175,7 @@ function LaundryTypeSection({ listLaundryType }) {
                     variant="contained"
                     onClick={() => {
                       if (localStorage.getItem('access_token')) {
-                        const profileAccount = JSON.parse(localStorage.getItem('my_profile_account'));
-                        if (!profileAccount.alamatUser) {
-                          alert('Harap input alamat terlebih dahulu!');
-                        } else {
-                          navigate('/AreaPelanggan/FormulirPemesananLaundry');
-                        }
+                        navigate('/AreaPelanggan/FormulirPemesananLaundry');
                       } else {
                         navigate('/Login');
                       }
@@ -245,12 +242,7 @@ function ServiceTypeSection({ listServiceType }) {
                       variant="contained"
                       onClick={() => {
                         if (localStorage.getItem('access_token')) {
-                          const profileAccount = JSON.parse(localStorage.getItem('my_profile_account'));
-                          if (!profileAccount.alamatUser) {
-                            alert('Harap input alamat terlebih dahulu!');
-                          } else {
-                            navigate('/AreaPelanggan/FormulirPemesananLaundry');
-                          }
+                          navigate('/AreaPelanggan/FormulirPemesananLaundry');
                         } else {
                           navigate('/Login');
                         }
@@ -675,7 +667,7 @@ function ReasonSection({ listReason }) {
                       <img
                         src={reasonItem.gambar}
                         width="100%"
-                        style={{ maxHeight: '240px', objectFit: 'contain' }}
+                        style={{ maxHeight: '180px', objectFit: 'contain' }}
                         alt=""
                       />
                     ) : null}
@@ -842,6 +834,7 @@ function GallerySection({ listGallery }) {
 }
 
 function TestimonySection({ listTestimony }) {
+  console.log(listTestimony, ': listTestimony');
   return (
     <>
       <Container>
@@ -878,7 +871,7 @@ function TestimonySection({ listTestimony }) {
           }}
           modules={[Pagination]}
         >
-          {[1, 2, 3, 4, 21, 12, 12].map((item, index) => {
+          {listTestimony.map((item, index) => {
             return (
               // <>
               <SwiperSlide
@@ -912,26 +905,15 @@ function TestimonySection({ listTestimony }) {
                       gap: 16,
                     }}
                   >
-                    <h5>Ahmad Yusuf Pangestu</h5>
-                    <img
-                      src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
-                      width="100"
-                      height="100"
-                      style={{ borderRadius: '50%', objectFit: 'cover' }}
-                      alt=""
-                    />
+                    <h5>{item.User.nama}</h5>
+                    <Avatar src={item.User.profilePic} sx={{ width: 100, height: 100 }} />
 
-                    <RatingComponent readOnly={true} ratingValue={item} />
+                    <RatingComponent readOnly={true} ratingValue={item.rating} />
 
-                    <div className="small-text">
-                      {item}{' '}
-                      {item === 2
-                        ? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt doloremque nihil doloribus animi atque, perferendis cupiditate explicabo dolore nemo maxime vel impedit ex! Reprehenderit sapiente velit sit consequatur eligendi ipsa!'
-                        : null}
-                    </div>
+                    <div className="small-text">{item.review}</div>
 
                     <img
-                      src="https://katapopuler.com/wp-content/uploads/2020/11/dummy.png"
+                      src={item.gambar || DefaultImage}
                       width="120"
                       height="120"
                       style={{ objectFit: 'cover' }}
@@ -944,7 +926,7 @@ function TestimonySection({ listTestimony }) {
                       marginBottom: '16px',
                     }}
                   >
-                    25/04/2023
+                    {` ${item.createdAt.slice(8, 10)}/${item.createdAt.slice(5, 7)}/${item.createdAt.slice(0, 4)}`}
                   </div>
                 </div>
               </SwiperSlide>
@@ -1056,6 +1038,16 @@ function ContactAndLocationSection({ generalInformation }) {
                     <h6>(Fax)</h6>
                     <span>{generalInformation.fax}</span>
                   </div>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <WhatsApp sx={{ color: '#1F305C' }} />
+                    <h6>(WhatsApp)</h6>
+                    <span>{generalInformation.whatsapp}</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <Telegram sx={{ color: '#1F305C' }} />
+                    <h6>(Telegram)</h6>
+                    <span>{generalInformation.telegram}</span>
+                  </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                     <EmailIcon sx={{ color: '#1F305C' }} />
                     <h6>(Email)</h6>
@@ -1118,7 +1110,7 @@ function FooterSection({ generalInformation }) {
             <Link to={'/Galeri'} className={`${style['disable-link-style-white']}`}>
               <div>Galeri</div>
             </Link>
-            <Link to={'/'} className={`${style['disable-link-style-white']}`}>
+            <Link to={'/AreaPelanggan/FormulirPemesananLaundry'} className={`${style['disable-link-style-white']}`}>
               <div>Pemesanan Laundry</div>
             </Link>
             <Link to={'/TentangKami'} className={`${style['disable-link-style-white']}`}>
@@ -1138,6 +1130,16 @@ function FooterSection({ generalInformation }) {
                   <FaxIcon />
                   <h6>(Fax)</h6>
                   <span>{generalInformation.fax}</span>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                  <WhatsApp />
+                  <h6>(WhatsApp)</h6>
+                  <span>{generalInformation.whatsapp}</span>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                  <Telegram />
+                  <h6>(Telegram)</h6>
+                  <span>{generalInformation.telegram}</span>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                   <EmailIcon />
@@ -1318,19 +1320,6 @@ function HomePage() {
           <FooterSection generalInformation={dataGetGeneralInformation} />
         </span>
       ) : null}
-
-      <div
-        style={{
-          position: 'fixed',
-          right: '20px',
-          bottom: '50px',
-          // display: window.pageYOffset <= 500 ? 'none' : 'initial',
-        }}
-      >
-        Top
-        {/* {window.pageYOffset} */}
-        {position}
-      </div>
     </div>
   );
 }
