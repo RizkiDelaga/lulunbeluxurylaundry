@@ -40,10 +40,21 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
 import InformationCard from '../../../components/Card/InformationCard';
 import { adjustTimePlus } from '../../../utils/timeUtils';
+import dayjs from 'dayjs';
 
 function RowItem(props) {
   const navigate = useNavigate();
   const [openTableCell, setOpenTableCell] = React.useState(false);
+  const currentDate = new Date(dayjs());
+  const givenDate = new Date(
+    props.item.tenggatWaktu.slice(0, 4),
+    parseInt(props.item.tenggatWaktu.slice(5, 7)) - 1,
+    props.item.tenggatWaktu.slice(8, 10)
+  );
+  currentDate.setDate(currentDate.getDate() + 1);
+  // Set the time to 00:00:00 for both dates
+  givenDate.setHours(0, 0, 0, 0);
+  currentDate.setHours(0, 0, 0, 0);
 
   const pickUpAddress = props.item.alamatJemput ? JSON.parse(props.item.alamatJemput) : null;
   const deliveryAddress = props.item.alamatAntar ? JSON.parse(props.item.alamatAntar) : null;
@@ -89,7 +100,18 @@ function RowItem(props) {
           )}:${props.item.tglMulai.slice(14, 16)}`}
           <div style={{ fontSize: '12px' }}>oleh {props.item.createdBy}</div>
         </TableCell>
-        <TableCell>
+        <TableCell
+          sx={{
+            color:
+              givenDate.getFullYear() === currentDate.getFullYear() &&
+              givenDate.getMonth() === currentDate.getMonth() &&
+              givenDate.getDate() === currentDate.getDate() - 1
+                ? 'orange'
+                : currentDate.getTime() > givenDate.getTime()
+                ? 'red'
+                : 'black',
+          }}
+        >
           {` ${props.item.tenggatWaktu.slice(8, 10)}/${props.item.tenggatWaktu.slice(
             5,
             7
