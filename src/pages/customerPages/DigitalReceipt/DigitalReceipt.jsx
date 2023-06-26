@@ -38,7 +38,7 @@ function DigitalReceipt() {
 
       setDetailOrder({
         ...res.data.data,
-        alamatJemput: JSON.parse(res.data.data.alamatJemput),
+        alamatJemput: res.data.data.alamatJemput ? JSON.parse(res.data.data.alamatJemput) : null,
         alamatAntar: res.data.data.alamatAntar ? JSON.parse(res.data.data.alamatAntar) : null,
       });
       handleGetRatingReview(res.data.data.id);
@@ -110,7 +110,9 @@ function DigitalReceipt() {
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <h6>Alamat Penjemputan</h6>
-                  {!detailOrder.alamatJemput ? null : (
+                  {!detailOrder.alamatJemput ? (
+                    '-'
+                  ) : (
                     <>
                       <div style={{ marginTop: '5px' }}>
                         {detailOrder.alamatJemput.kecamatan ? `Kecamatan ${detailOrder.alamatJemput.kecamatan}` : null}
@@ -128,7 +130,9 @@ function DigitalReceipt() {
                 </Grid>
                 <Grid item xs={6}>
                   <h6>Alamat Pengantaran</h6>
-                  {!detailOrder.alamatAntar ? null : (
+                  {!detailOrder.alamatAntar ? (
+                    '-'
+                  ) : (
                     <>
                       <div style={{ marginTop: '5px' }}>
                         {detailOrder.alamatAntar.kecamatan ? `Kecamatan ${detailOrder.alamatAntar.kecamatan}` : null}
