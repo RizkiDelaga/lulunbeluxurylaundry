@@ -347,7 +347,7 @@ function AddIncome() {
               </Grid>
 
               <Button variant="contained" size="large" type="submit" sx={{ width: '100%', fontWeight: 'bold' }}>
-                Input Pemasukan
+                Tambah Pemasukan
               </Button>
             </Box>
           </form>

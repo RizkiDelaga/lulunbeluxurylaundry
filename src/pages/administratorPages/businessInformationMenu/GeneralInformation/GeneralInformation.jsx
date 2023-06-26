@@ -378,6 +378,7 @@ function GeneralInformation() {
                       required
                       type="number"
                       label="Nomer Telepon"
+                      placeholder="628xxxxxxxxxxx"
                       value={formGeneralInformation.contact.phoneNumber}
                       onChange={(e) => {
                         setFormGeneralInformation({
@@ -394,6 +395,7 @@ function GeneralInformation() {
                     <TextField
                       required
                       type="number"
+                      placeholder="628xxxxxxxxxxx"
                       label="Fax"
                       value={formGeneralInformation.contact.fax}
                       onChange={(e) => {
@@ -411,6 +413,7 @@ function GeneralInformation() {
                     <TextField
                       required
                       type="number"
+                      placeholder="628xxxxxxxxxxx"
                       label="WhatsApp"
                       value={formGeneralInformation.contact.whatsApp}
                       onChange={(e) => {
@@ -429,6 +432,7 @@ function GeneralInformation() {
                       required
                       type="number"
                       label="Telegram"
+                      placeholder="628xxxxxxxxxxx"
                       value={formGeneralInformation.contact.telegram}
                       onChange={(e) => {
                         setFormGeneralInformation({

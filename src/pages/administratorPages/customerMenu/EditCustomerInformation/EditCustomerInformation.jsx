@@ -62,7 +62,7 @@ function EditCustomerInformation() {
   });
 
   React.useEffect(() => {
-    document.title = 'Edit Profil Pelanggan';
+    document.title = 'Edit Informasi Pelanggan';
     handleGetCustomerProfile();
     handleGetCustomerAddress();
   }, []);
@@ -300,7 +300,7 @@ function EditCustomerInformation() {
         <PageStructureAndDirectButton
           defaultMenu="Area Pelanggan"
           currentPage={{
-            title: 'Edit Profil Pelanggan',
+            title: 'Edit Informasi Pelanggan',
           }}
         />
         <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
@@ -372,6 +372,7 @@ function EditCustomerInformation() {
                         required
                         type="number"
                         label="Nomer Telepon"
+                        placeholder="628xxxxxxxxxxx"
                         value={formEditCustomerInformation.contact.phoneNumber}
                         disabled="true"
                         onChange={(e) => {

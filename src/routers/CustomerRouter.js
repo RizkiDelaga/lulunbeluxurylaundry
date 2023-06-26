@@ -17,6 +17,7 @@ import ForgotPasswordRequest from '../pages/customerPages/customerAuth/forgotPas
 import ChangePasswordOnForgotPassword from '../pages/customerPages/customerAuth/forgotPassword/ChangePasswordOnForgotPassword/ChangePasswordOnForgotPassword';
 import AccountValidation from '../pages/customerPages/customerAuth/AccountValidation/AccountValidation';
 import FormOrderLaundry from '../pages/customerPages/customerArea/FormOrderLaundry/FormOrderLaundry';
+import HowToPay from '../pages/customerPages/HowToPay/HowToPay';
 
 function CustomerRouter() {
 
@@ -48,6 +49,7 @@ function CustomerRouter() {
             <Route path="Galeri" element={<Gallery />} />
             <Route path="TentangKami" element={<AboutUs />} />
             <Route path="StrukPemesanan/:noPesanan" element={<DigitalReceipt />} />
+            <Route path="MetodePembayaran" element={<HowToPay />} />
           </Route>
 
           <Route element={<HandleLoginSuccessfully />}>

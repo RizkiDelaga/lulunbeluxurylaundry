@@ -181,6 +181,7 @@ function EditProfile() {
                         required
                         type="number"
                         label="Nomer Telepon"
+                        placeholder="628xxxxxxxxxxx"
                         value={formEditProfile.contact.phoneNumber}
                         onChange={(e) => {
                           setFormEditProfile({

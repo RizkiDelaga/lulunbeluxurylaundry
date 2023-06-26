@@ -185,6 +185,7 @@ function EditAdministrators() {
                           required
                           type="number"
                           label="Nomer Telepon"
+                          placeholder="628xxxxxxxxxxx"
                           value={formEditAdministrator.contact.phoneNumber}
                           onChange={(e) => {
                             setFormEditAdministrator({

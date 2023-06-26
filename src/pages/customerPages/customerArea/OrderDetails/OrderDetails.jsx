@@ -284,7 +284,7 @@ function OrderDetails() {
                     >
                       <span style={{ cursor: 'pointer', fontSize: '14px' }}>
                         <Link
-                          to={`/CaraPembayaran`}
+                          to={`/MetodePembayaran`}
                           className="disable-link-style"
                           target="_blank"
                           rel="noopener noreferrer"
