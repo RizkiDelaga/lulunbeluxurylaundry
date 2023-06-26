@@ -45,6 +45,22 @@ function RowItem(props) {
     }
   };
 
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      const res = await axios({
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/acara/${eventId}`,
+      });
+
+      props.setLoadEvent(props.loadEvent + 1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Menu - Action
   const [actionAnchorEl, setActionAnchorEl] = React.useState(null);
   const openAction = Boolean(actionAnchorEl);
@@ -124,6 +140,14 @@ function RowItem(props) {
             }}
           >
             {props.item.status === 'Nonaktif' ? 'Aktifkan Event' : 'Nonaktifkan Event'}
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleDeleteEvent(props.item.id);
+              handleCloseAction();
+            }}
+          >
+            Hapus Event
           </MenuItem>
         </Menu>
       </TableRow>

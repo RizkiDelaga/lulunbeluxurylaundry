@@ -262,6 +262,22 @@ function RowItem(props) {
     setActionAnchorEl(null);
   };
 
+  const handleDeleteFinance = async (financeId) => {
+    try {
+      const res = await axios({
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token_admin')}`,
+        },
+        url: `${process.env.REACT_APP_API_KEY}/keuangan/${financeId}`,
+      });
+
+      props.setLoadFinance(props.loadFinance + 1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <React.Fragment>
       <TableRow hover>
@@ -320,6 +336,7 @@ function RowItem(props) {
             onClick={(event) => {
               setActionAnchorEl(event.currentTarget);
             }}
+            disabled={props.item.tipe !== 'Pemasukan' && props.item.tipe !== 'Pengeluaran' ? true : false}
           >
             <MoreVertIcon color="primary" />
           </IconButton>
@@ -353,6 +370,15 @@ function RowItem(props) {
               ? 'Pemasukan'
               : 'Transaksi Pemesanan'}
           </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleDeleteFinance(props.item.id);
+              handleCloseAction();
+            }}
+          >
+            Hapus{' '}
+            {props.item.tipe === 'Pengeluaran' ? 'Pengeluaran' : props.item.tipe === 'Pemasukan' ? 'Pemasukan' : null}
+          </MenuItem>
         </Menu>
       </TableRow>
 
@@ -379,7 +405,7 @@ function RowItem(props) {
   );
 }
 
-function FinancialHistoryTable() {
+function FinancialHistoryTable({ loadFinance, setLoadFinance }) {
   const theme = useTheme();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('');
@@ -392,7 +418,7 @@ function FinancialHistoryTable() {
 
   React.useEffect(() => {
     handleGetFinance();
-  }, []);
+  }, [loadFinance]);
 
   const [listFinance, setListFinance] = React.useState([]);
   const [pageConfig, setPageConfig] = React.useState({
@@ -677,7 +703,7 @@ function FinancialHistoryTable() {
           {/* Table Content */}
           <TableBody>
             {stableSort(listFinance, getComparator(order, orderBy)).map((item, index) => {
-              return <RowItem key={item.id} item={item} />;
+              return <RowItem key={item.id} item={item} loadFinance={loadFinance} setLoadFinance={setLoadFinance} />;
             })}
           </TableBody>
         </Table>
@@ -844,6 +870,7 @@ function FinanceMenu() {
     message: '',
     statusType: '',
   });
+  const [loadFinance, setLoadFinance] = useState(0);
 
   React.useEffect(() => {
     document.title = 'Menu Keuangan';
@@ -1038,7 +1065,7 @@ function FinanceMenu() {
         </Paper>
 
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-          <FinancialHistoryTable />
+          <FinancialHistoryTable loadFinance={loadFinance} setLoadFinance={setLoadFinance} />
         </Paper>
       </div>
     </>
