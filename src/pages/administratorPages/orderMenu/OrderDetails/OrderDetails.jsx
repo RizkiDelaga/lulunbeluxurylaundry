@@ -336,7 +336,11 @@ function OrderDetails() {
                   </Button>
 
                   {!detailOrder ? null : (
-                    <a href={`https://wa.me/${detailOrder.User.noTelp}`} target="_blank" rel="noreferrer">
+                    <a
+                      href={`https://wa.me/${detailOrder.User.noTelp}?text=*Struk Elektronik Transaksi Lulu 'N Be Luxury laundry*%0A%0ANo Pesanan: ${noPesanan}%0AStruk Online:%0Ahttps://lulunbeluxurylaundry.vercel.app/StrukPemesanan/${noPesanan}%0A%0ATerima Kasih`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       <Button variant="outlined" size="large" sx={{ width: 'fit-content', fontWeight: 'bold' }}>
                         <SendIcon />
                       </Button>
