@@ -345,7 +345,7 @@ function AddExpenses() {
               </Grid>
 
               <Button variant="contained" size="large" type="submit" style={{ width: '100%', fontWeight: 'bold' }}>
-                Input Pengeluaran
+                Tambah Pengeluaran
               </Button>
             </Box>
           </form>

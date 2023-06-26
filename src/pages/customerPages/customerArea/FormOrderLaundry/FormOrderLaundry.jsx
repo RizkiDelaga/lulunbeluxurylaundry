@@ -241,7 +241,12 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
               </FormControl>
               <div style={{ display: 'flex', justifyContent: 'left', paddingTop: '4px' }}>
                 <span style={{ cursor: 'pointer', fontSize: '14px' }}>
-                  <Link to={`/CaraPembayaran`} className="disable-link-style" target="_blank" rel="noopener noreferrer">
+                  <Link
+                    to={`/MetodePembayaran`}
+                    className="disable-link-style"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Cara Pembayaran?
                   </Link>
                 </span>

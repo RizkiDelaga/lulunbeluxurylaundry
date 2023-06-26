@@ -147,6 +147,7 @@ function LoginCustomer() {
                       required
                       type="number"
                       label="Nomer Telepon"
+                      placeholder="628xxxxxxxxxxx"
                       value={formLoginCustomer.noTelp}
                       onChange={(e) => {
                         setFormLoginCustomer({ ...formLoginCustomer, noTelp: e.target.value });

@@ -4,6 +4,7 @@ import { Box, Button, Grid, Paper, TextField, useTheme } from '@mui/material';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
 import axios from 'axios';
 import LoadDecisions from '../../../../../components/LoadDecisions/LoadDecisions';
+import { Link } from 'react-router-dom';
 
 function RegisterAccount() {
   const theme = useTheme();
@@ -60,6 +61,7 @@ function RegisterAccount() {
         <Box
           sx={{
             display: 'flex',
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
@@ -127,6 +129,14 @@ function RegisterAccount() {
               </Box>
             </form>
           </Paper>
+          <br />
+
+          <div>
+            Sudah memiliki akun?{' '}
+            <Link to={'/Login'} className="disable-link-style" style={{ color: '#1F305C' }}>
+              LOGIN
+            </Link>
+          </div>
         </Box>
       </Box>
     </>

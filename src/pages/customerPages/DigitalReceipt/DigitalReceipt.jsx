@@ -145,7 +145,7 @@ function DigitalReceipt() {
               </Grid>
             </div>
 
-            <div
+            {/* <div
               style={{
                 width: '100%',
                 display: 'flex',
@@ -156,7 +156,7 @@ function DigitalReceipt() {
             >
               <h5>Informasi Daftar Barang</h5>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>Tabel</div>
-            </div>
+            </div> */}
 
             <div
               style={{

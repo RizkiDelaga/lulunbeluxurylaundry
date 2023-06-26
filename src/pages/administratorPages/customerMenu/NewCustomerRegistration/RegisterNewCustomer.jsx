@@ -189,6 +189,7 @@ function RegisterNewCustomer() {
                         required
                         type="number"
                         label="Nomer Telepon"
+                        placeholder="628xxxxxxxxxxx"
                         value={formRegisterNewCustomer.contact.phoneNumber}
                         onChange={(e) => {
                           setFormRegisterNewCustomer({

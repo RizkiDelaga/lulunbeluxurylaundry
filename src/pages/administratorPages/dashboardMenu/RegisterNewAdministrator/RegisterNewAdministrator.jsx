@@ -161,6 +161,7 @@ function RegisterNewAdministrator() {
                           required
                           type="number"
                           label="Nomer Telepon"
+                          placeholder="628xxxxxxxxxxx"
                           value={formRegisterNewAdministrator.contact.phoneNumber}
                           onChange={(e) => {
                             setFormRegisterNewAdministrator({

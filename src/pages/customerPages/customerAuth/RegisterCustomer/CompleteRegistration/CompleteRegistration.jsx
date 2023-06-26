@@ -256,15 +256,6 @@ function CompleteRegistration() {
               </Box>
             </form>
           </Paper>
-
-          <br />
-
-          <div>
-            Sudah memiliki akun?{' '}
-            <Link to={'/Login'} className="disable-link-style" style={{ color: '#1F305C' }}>
-              LOGIN
-            </Link>
-          </div>
         </Box>
       </Box>
     </>
