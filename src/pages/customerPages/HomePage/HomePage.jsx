@@ -895,13 +895,7 @@ function TestimonySection({ listTestimony }) {
 
                     <div className="small-text">{item.review}</div>
 
-                    <img
-                      src={item.gambar || DefaultImage}
-                      width="120"
-                      height="120"
-                      style={{ objectFit: 'cover' }}
-                      alt=""
-                    />
+                    <img src={item.gambar || null} width="120" height="120" style={{ objectFit: 'cover' }} alt="" />
                   </div>
                   <div
                     className="small-text"

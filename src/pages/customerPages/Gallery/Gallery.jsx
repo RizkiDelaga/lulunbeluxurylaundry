@@ -167,7 +167,7 @@ function Gallery() {
             >
               <ChevronLeftIcon />
             </Button>
-            {Array.from(Array(13)).map((item, index) => {
+            {Array.from(Array(pageConfig.metadata.totalPage)).map((item, index) => {
               return (
                 <Button
                   variant={pageConfig.currentPage === index + 1 ? 'contained' : 'outlined'}

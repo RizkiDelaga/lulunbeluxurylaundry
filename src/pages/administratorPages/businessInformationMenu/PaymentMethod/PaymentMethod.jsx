@@ -377,9 +377,7 @@ function PaymentMethod() {
                                           <span>{index + 1}</span>
                                         </TableCell>
                                         <TableCell>
-                                          <span>
-                                            {item.instructionText || formPaymentMethod.instructions[index]} {item.id}
-                                          </span>
+                                          <span>{item.instructionText || formPaymentMethod.instructions[index]}</span>
                                         </TableCell>
                                         <TableCell>
                                           <Box

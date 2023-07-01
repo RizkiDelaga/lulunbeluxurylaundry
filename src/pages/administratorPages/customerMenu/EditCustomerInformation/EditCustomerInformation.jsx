@@ -298,7 +298,7 @@ function EditCustomerInformation() {
     <>
       <div className="gap-24" style={{ marginBottom: '24px' }}>
         <PageStructureAndDirectButton
-          defaultMenu="Area Pelanggan"
+          defaultMenu="Pelanggan"
           currentPage={{
             title: 'Edit Informasi Pelanggan',
           }}

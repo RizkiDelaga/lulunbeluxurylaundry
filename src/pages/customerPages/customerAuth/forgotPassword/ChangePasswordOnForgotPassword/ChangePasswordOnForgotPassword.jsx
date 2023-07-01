@@ -149,6 +149,7 @@ function ChangePasswordOnForgotPassword() {
                         label="Password Baru"
                         id="new-password"
                         type={showPassword.newPassword ? 'text' : 'password'}
+                        placeholder="Minimal 8 karakter (Satu huruf besar, satu huruf kecil dan satu angka)"
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
@@ -221,10 +222,6 @@ function ChangePasswordOnForgotPassword() {
                 <Button variant="contained" size="large" type="submit" style={{ width: '100%', fontWeight: 'bold' }}>
                   Ubah Password
                 </Button>
-
-                {formChangePassword.newPassword}
-                <br />
-                {formChangePassword.confirmNewPassword}
               </Box>
             </form>
           </Paper>
