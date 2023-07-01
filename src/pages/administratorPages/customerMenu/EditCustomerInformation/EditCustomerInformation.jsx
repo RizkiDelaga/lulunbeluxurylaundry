@@ -503,7 +503,7 @@ function EditCustomerInformation() {
                         />
                       ) : null}
                     </Grid>
-                    <Grid item xs>
+                    <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
                       {formEditCustomerInformation.profilePicture.fileName ? (
                         <Chip
                           label={formEditCustomerInformation.profilePicture.fileName}
@@ -516,6 +516,7 @@ function EditCustomerInformation() {
                           sx={{ maxWidth: '250px' }}
                         />
                       ) : null}
+                      <span style={{ fontSize: '12px' }}>*Max size file 5MB</span>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -822,7 +823,7 @@ function EditCustomerInformation() {
                             />
                           ) : null}
                         </Grid>
-                        <Grid item xs>
+                        <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
                           {mainAddress.buildingPhoto.fileName ? (
                             <Chip
                               label={mainAddress.buildingPhoto.fileName}
@@ -835,6 +836,7 @@ function EditCustomerInformation() {
                               sx={{ maxWidth: '250px' }}
                             />
                           ) : null}
+                          <span style={{ fontSize: '12px' }}>*Max size file 5MB</span>
                         </Grid>
                       </Grid>
                     </Grid>

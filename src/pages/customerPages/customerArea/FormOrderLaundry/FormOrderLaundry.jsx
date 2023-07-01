@@ -621,7 +621,7 @@ const InputItem = ({
                     />
                   ) : null}
                 </Grid>
-                <Grid item xs>
+                <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
                   {stateValue.photo.fileName ? (
                     <Chip
                       label={stateValue.photo.fileName}
@@ -629,6 +629,7 @@ const InputItem = ({
                       sx={{ maxWidth: '250px' }}
                     />
                   ) : null}
+                  <span style={{ fontSize: '12px' }}>*Max size file 5MB</span>
                 </Grid>
               </Grid>
             </Grid>

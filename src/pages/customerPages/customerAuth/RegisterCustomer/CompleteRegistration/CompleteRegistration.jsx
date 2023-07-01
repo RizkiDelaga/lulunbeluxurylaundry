@@ -184,6 +184,7 @@ function CompleteRegistration() {
                         label="Password"
                         id="input-password"
                         type={showPassword.password ? 'text' : 'password'}
+                        placeholder="Minimal 8 karakter (Satu huruf besar, satu huruf kecil dan satu angka)"
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
@@ -197,6 +198,9 @@ function CompleteRegistration() {
                             </IconButton>
                           </InputAdornment>
                         }
+                        inputProps={{
+                          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$', // Minimal delapan karakter (Setidaknya satu huruf besar, satu huruf kecil dan satu angka)
+                        }}
                       />
                     </FormControl>
                   </Grid>

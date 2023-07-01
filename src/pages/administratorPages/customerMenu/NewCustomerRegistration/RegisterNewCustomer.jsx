@@ -317,7 +317,7 @@ function RegisterNewCustomer() {
                         />
                       ) : null}
                     </Grid>
-                    <Grid item xs>
+                    <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
                       {formRegisterNewCustomer.profilePicture.fileName ? (
                         <Chip
                           label={formRegisterNewCustomer.profilePicture.fileName}
@@ -327,6 +327,7 @@ function RegisterNewCustomer() {
                           sx={{ maxWidth: '250px' }}
                         />
                       ) : null}
+                      <span style={{ fontSize: '12px' }}>*Max size file 5MB</span>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -599,7 +600,7 @@ function RegisterNewCustomer() {
                         />
                       ) : null}
                     </Grid>
-                    <Grid item xs>
+                    <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
                       {mainAddress.buildingPhoto.fileName ? (
                         <Chip
                           label={mainAddress.buildingPhoto.fileName}
@@ -612,6 +613,7 @@ function RegisterNewCustomer() {
                           sx={{ maxWidth: '250px' }}
                         />
                       ) : null}
+                      <span style={{ fontSize: '12px' }}>*Max size file 5MB</span>
                     </Grid>
                   </Grid>
                 </Grid>

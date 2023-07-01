@@ -211,7 +211,12 @@ function OrderDetails() {
                   <h4 style={{ marginTop: '8px', marginBottom: '8px' }}>Informasi Barang</h4>
                 </div>
                 {listLaundryItem.length !== 0 && detailOrder ? (
-                  <LaundryItemTable listLaundryItem={listLaundryItem} discount={detailOrder.diskon} readOnly={true} />
+                  <LaundryItemTable
+                    listLaundryItem={listLaundryItem}
+                    discount={detailOrder.diskon}
+                    readOnly={true}
+                    detailPrice={true}
+                  />
                 ) : null}
               </Box>
             </Paper>

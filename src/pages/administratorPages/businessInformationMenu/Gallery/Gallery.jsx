@@ -356,7 +356,7 @@ function Gallery() {
                           />
                         ) : null}
                       </Grid>
-                      <Grid item xs>
+                      <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
                         {formGallery.file.fileName ? (
                           <Chip
                             label={formGallery.file.fileName}
@@ -364,6 +364,7 @@ function Gallery() {
                             sx={{ maxWidth: '250px' }}
                           />
                         ) : null}
+                        <span style={{ fontSize: '12px' }}>*Max size file Image=5MB / Video=15MB</span>
                       </Grid>
                     </Grid>
                   </Grid>
