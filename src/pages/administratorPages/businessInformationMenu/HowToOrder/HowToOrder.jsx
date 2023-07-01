@@ -327,7 +327,7 @@ function HowToOrder() {
                           />
                         ) : null}
                       </Grid>
-                      <Grid item xs>
+                      <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
                         {formHowToOrderViaOnline.photo.fileName ? (
                           <Chip
                             label={formHowToOrderViaOnline.photo.fileName}
@@ -340,6 +340,7 @@ function HowToOrder() {
                             sx={{ maxWidth: '250px' }}
                           />
                         ) : null}
+                        <span style={{ fontSize: '12px' }}>*Max size file 5MB</span>
                       </Grid>
                     </Grid>
                   </Grid>
@@ -505,7 +506,7 @@ function HowToOrder() {
                           />
                         ) : null}
                       </Grid>
-                      <Grid item xs>
+                      <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
                         {formHowToOrderViaOutlet.photo.fileName ? (
                           <Chip
                             label={formHowToOrderViaOutlet.photo.fileName}
@@ -518,6 +519,7 @@ function HowToOrder() {
                             sx={{ maxWidth: '250px' }}
                           />
                         ) : null}
+                        <span style={{ fontSize: '12px' }}>*Max size file 5MB</span>
                       </Grid>
                     </Grid>
                   </Grid>

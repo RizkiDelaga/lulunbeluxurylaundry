@@ -739,7 +739,7 @@ function CreateNewEvents() {
                           />
                         ) : null}
                       </Grid>
-                      <Grid item xs>
+                      <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
                         {formCreateNewEvents.poster.fileName ? (
                           <Chip
                             label={formCreateNewEvents.poster.fileName}
@@ -749,6 +749,7 @@ function CreateNewEvents() {
                             sx={{ maxWidth: '250px' }}
                           />
                         ) : null}
+                        <span style={{ fontSize: '12px' }}>*Max size file 5MB</span>
                       </Grid>
                     </Grid>
                   </Grid>

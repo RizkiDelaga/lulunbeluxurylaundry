@@ -318,7 +318,7 @@ function ReasonsWhyChooseUs() {
                           />
                         ) : null}
                       </Grid>
-                      <Grid item xs>
+                      <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
                         {formReasonsWhyChooseUs.photo.fileName ? (
                           <Chip
                             label={formReasonsWhyChooseUs.photo.fileName}
@@ -331,6 +331,7 @@ function ReasonsWhyChooseUs() {
                             sx={{ maxWidth: '250px' }}
                           />
                         ) : null}
+                        <span style={{ fontSize: '12px' }}>*Max size file 5MB</span>
                       </Grid>
                     </Grid>
                   </Grid>

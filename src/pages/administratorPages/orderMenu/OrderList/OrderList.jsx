@@ -111,6 +111,9 @@ function RowItem(props) {
 
         <TableCell>
           <IconButton
+            disabled={
+              props.item.status === 'Selesai' || props.item.status === 'Dibatalkan' || props.item.status === 'Ditolak'
+            }
             size="small"
             onClick={(event) => {
               setActionAnchorEl(event.currentTarget);
