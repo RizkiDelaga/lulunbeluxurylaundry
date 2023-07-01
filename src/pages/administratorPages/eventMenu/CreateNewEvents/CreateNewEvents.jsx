@@ -451,9 +451,7 @@ function CreateNewEvents() {
                                       <span>{index + 1}</span>
                                     </TableCell>
                                     <TableCell>
-                                      <span>
-                                        {item.rewardText || formCreateNewEvents.instructions[index]} {item.id}
-                                      </span>
+                                      <span>{item.rewardText || formCreateNewEvents.instructions[index]}</span>
                                     </TableCell>
                                     <TableCell>
                                       <Box
@@ -620,9 +618,7 @@ function CreateNewEvents() {
                                       <span>{index + 1}</span>
                                     </TableCell>
                                     <TableCell>
-                                      <span>
-                                        {item.criteriaText || formCreateNewEvents.instructions[index]} {item.id}
-                                      </span>
+                                      <span>{item.criteriaText || formCreateNewEvents.instructions[index]}</span>
                                     </TableCell>
                                     <TableCell>
                                       <Box

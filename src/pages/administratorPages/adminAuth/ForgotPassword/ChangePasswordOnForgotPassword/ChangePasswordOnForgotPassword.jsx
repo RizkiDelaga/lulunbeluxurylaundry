@@ -144,6 +144,7 @@ function ChangePasswordOnForgotPassword() {
                         required
                         label="Password Baru"
                         id="new-password"
+                        placeholder="Minimal 8 karakter (Satu huruf besar, satu huruf kecil dan satu angka)"
                         type={showPassword.newPassword ? 'text' : 'password'}
                         endAdornment={
                           <InputAdornment position="end">

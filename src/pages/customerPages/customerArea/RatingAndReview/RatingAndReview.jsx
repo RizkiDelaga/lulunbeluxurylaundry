@@ -12,7 +12,7 @@ function RatingAndReview() {
   const navigate = useNavigate();
   let { idPesanan, noPesanan } = useParams();
   const [rating, setRating] = useState();
-  const [review, setReview] = useState();
+  const [review, setReview] = useState('');
   const [photo, setPhoto] = useState({ img: null, fileName: null });
   const [openLoadDecision, setOpenLoadDecision] = useState({
     isLoad: false,
@@ -28,7 +28,7 @@ function RatingAndReview() {
     const formData = new FormData();
     formData.append('pemesananId', idPesanan);
     formData.append('rating', rating);
-    formData.append('review', review);
+    formData.append('review', review || '');
     formData.append('gambar', photo.img);
 
     setOpenLoadDecision({ ...openLoadDecision, isLoad: true });

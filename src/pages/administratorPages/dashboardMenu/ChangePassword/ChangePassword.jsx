@@ -83,7 +83,7 @@ function ChangePassword() {
             title: 'Ubah Password',
           }}
         />
-        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} />
+        <LoadDecisions setOpenLoad={setOpenLoadDecision} openLoad={openLoadDecision} redirect={'/Dashboard'} />
 
         {/* Main Content */}
         <Paper elevation={3} sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
