@@ -210,7 +210,7 @@ function ServiceTypeSection({ listServiceType }) {
                 <Grid container sx={{ p: 2, height: '100%', display: 'flex', gap: '20px 0px' }}>
                   <Grid item xs="auto" sm="auto" md="auto" lg="auto" sx={{ display: 'flex', justifyContent: 'center' }}>
                     <img
-                      src={item.gamber || DefaultImage}
+                      src={item.gambar || DefaultImage}
                       width={100}
                       height={100}
                       style={{
