@@ -273,9 +273,7 @@ function RowItem(props) {
       });
 
       props.setLoadFinance(props.loadFinance + 1);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -463,7 +461,6 @@ function FinancialHistoryTable({ loadFinance, setLoadFinance }) {
       if (error.response.status === 404) {
         setListFinance([]);
       }
-      console.log(error);
     }
   };
 
@@ -483,7 +480,6 @@ function FinancialHistoryTable({ loadFinance, setLoadFinance }) {
       if (error.response.status === 404) {
         setListFinance([]);
       }
-      console.log(error);
     }
   };
 
@@ -925,7 +921,6 @@ function FinanceMenu() {
       if (error.response.status === 404) {
         setFinanceReport([]);
       }
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
       });

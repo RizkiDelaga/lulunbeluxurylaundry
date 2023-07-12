@@ -293,7 +293,6 @@ function OrderTable() {
       if (error.response.status === 404) {
         setListOrder([]);
       }
-      console.log(error);
     }
   };
 
@@ -313,7 +312,6 @@ function OrderTable() {
       if (error.response.status === 404) {
         setListOrder([]);
       }
-      console.log(error);
     }
   };
 
@@ -791,9 +789,7 @@ function OrderMenu() {
         averageRating: res.data.data.averageRating,
         totalReviews: res.data.data.totalReview,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

@@ -101,8 +101,6 @@ function CreateNewEvents() {
         message: error.response.data.message,
         statusType: 'error',
       });
-
-      console.log(error);
     }
   };
 

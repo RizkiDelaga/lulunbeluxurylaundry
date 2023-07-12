@@ -189,7 +189,6 @@ function AdminTable() {
       if (error.response.status === 404) {
         setListAdmin([]);
       }
-      console.log(error);
     }
   };
 
@@ -211,7 +210,6 @@ function AdminTable() {
       if (error.response.status === 404) {
         setListAdmin([]);
       }
-      console.log(error);
     }
   };
 
@@ -626,9 +624,7 @@ function DashboardMenu() {
         averageRating: res.data.data.averageRating,
         totalReviews: res.data.data.totalReview,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleGetFinanceReport = async () => {
@@ -674,7 +670,6 @@ function DashboardMenu() {
       if (error.response.status === 404) {
         setFinanceReport([]);
       }
-      console.log(error);
     }
   };
 

@@ -40,9 +40,7 @@ function RowItem(props) {
       });
 
       props.setLoadEvent(props.loadEvent + 1);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleDeleteEvent = async (eventId) => {
@@ -56,9 +54,7 @@ function RowItem(props) {
       });
 
       props.setLoadEvent(props.loadEvent + 1);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   // Menu - Action
@@ -224,7 +220,6 @@ function EventTable({ statusType, loadEvent, setLoadEvent }) {
       if (error.response.status === 404) {
         setListEvent([]);
       }
-      console.log(error);
     }
   };
 

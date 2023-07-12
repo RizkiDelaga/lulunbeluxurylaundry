@@ -241,7 +241,6 @@ const OrderInformationForm = ({ state, setState, listServiceType, listPaymentMet
       if (error.response.status === 404) {
         setListCustomer([]);
       }
-      console.log(error);
     }
   };
 
@@ -1049,9 +1048,7 @@ function FormOrderLaundry() {
       });
 
       setListServiceType(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleGetPaymentMethod = async () => {
@@ -1062,9 +1059,7 @@ function FormOrderLaundry() {
       });
 
       setListPaymentMethod(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleGetLaundryType = async () => {
@@ -1075,9 +1070,7 @@ function FormOrderLaundry() {
       });
 
       setListLaundryType(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleGetCustomerAddress = async (userId) => {
@@ -1091,9 +1084,7 @@ function FormOrderLaundry() {
       });
 
       setListCustomerAddress(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleGetDetailPesanan = async (orderId) => {
@@ -1125,9 +1116,7 @@ function FormOrderLaundry() {
       handleGetCustomerAddress(res.data.data.userId);
 
       setUseShuttleProgram(res.data.data.alamatJemput || res.data.data.alamatAntar ? true : false);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleCreateOrder = async () => {
@@ -1166,7 +1155,6 @@ function FormOrderLaundry() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -1209,7 +1197,6 @@ function FormOrderLaundry() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -1234,7 +1221,6 @@ function FormOrderLaundry() {
       if (error.response.status === 404) {
         setListLaundryItem([]);
       }
-      console.log(error);
     }
   };
 
@@ -1277,7 +1263,6 @@ function FormOrderLaundry() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -1325,7 +1310,6 @@ function FormOrderLaundry() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -1354,7 +1338,6 @@ function FormOrderLaundry() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,

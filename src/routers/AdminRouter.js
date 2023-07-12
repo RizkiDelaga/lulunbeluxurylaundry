@@ -42,7 +42,7 @@ function AdminRouter() {
 
   const HandleLoginSuccessfully = () => {
     if (localStorage.getItem("access_token_admin")) {
-        return <Navigate to={-1} replace />
+        return <Navigate to={"/Dashboard"} replace />
     }
     return <Outlet />;
   }

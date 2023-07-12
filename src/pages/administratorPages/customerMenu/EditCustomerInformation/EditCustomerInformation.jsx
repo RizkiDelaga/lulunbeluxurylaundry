@@ -86,9 +86,7 @@ function EditCustomerInformation() {
         birthDate: res.data.data.tglLahir ? dayjs(res.data.data.tglLahir) : dayjs,
         profilePicture: { img: null, fileName: res.data.data.profilePic },
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleUpdateCustomerProfile = async () => {
@@ -123,7 +121,6 @@ function EditCustomerInformation() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -144,9 +141,7 @@ function EditCustomerInformation() {
 
       setListCustomerAddress(res.data.data);
       handleGetCustomerProfile();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleCreateAddress = async () => {
@@ -198,7 +193,6 @@ function EditCustomerInformation() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -256,7 +250,6 @@ function EditCustomerInformation() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -285,7 +278,6 @@ function EditCustomerInformation() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,

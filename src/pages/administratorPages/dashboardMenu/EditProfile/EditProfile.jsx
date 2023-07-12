@@ -65,9 +65,7 @@ function EditProfile() {
         status: res.data.data.status,
       });
       localStorage.setItem('admin_profile_account', JSON.stringify(res.data.data));
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleUpdateMyProfile = async () => {
@@ -103,7 +101,6 @@ function EditProfile() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 

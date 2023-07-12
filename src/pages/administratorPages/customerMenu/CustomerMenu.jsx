@@ -177,7 +177,6 @@ function CustomerTable() {
       if (error.response.status === 404) {
         setListCustomer([]);
       }
-      console.log(error);
     }
   };
 
@@ -199,7 +198,6 @@ function CustomerTable() {
       if (error.response.status === 404) {
         setListCustomer([]);
       }
-      console.log(error);
     }
   };
 

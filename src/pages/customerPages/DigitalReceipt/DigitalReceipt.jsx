@@ -46,7 +46,6 @@ function DigitalReceipt() {
       if (error.response.status === 404) {
         setDetailOrder();
       }
-      console.log(error);
     }
   };
 
@@ -62,7 +61,6 @@ function DigitalReceipt() {
       if (error.response.status === 404) {
         setRatingReview();
       }
-      console.log(error);
     }
   };
 

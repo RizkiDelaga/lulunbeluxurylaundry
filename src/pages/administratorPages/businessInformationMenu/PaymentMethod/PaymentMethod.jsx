@@ -57,7 +57,6 @@ function PaymentMethod() {
       if (error.response.status === 404) {
         setListPaymentMethod([]);
       }
-      console.log(error);
     }
   };
 
@@ -101,7 +100,6 @@ function PaymentMethod() {
         message: error.response.data.message || 'error manual',
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 
@@ -145,7 +143,6 @@ function PaymentMethod() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 
@@ -173,7 +170,6 @@ function PaymentMethod() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 

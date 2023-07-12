@@ -83,9 +83,7 @@ function EditEvents() {
         return { id: index, criteriaText: item };
       });
       setListCriteria(newCriteria);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleUpdateEvents = async () => {
@@ -136,8 +134,6 @@ function EditEvents() {
         message: error.response.data.message,
         statusType: 'error',
       });
-
-      console.log(error);
     }
   };
 

@@ -82,7 +82,6 @@ function Gallery() {
       if (error.response.status === 404) {
         setDatagallery([]);
       }
-      console.log(error);
     }
   };
 

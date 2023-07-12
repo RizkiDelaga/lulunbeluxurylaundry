@@ -123,9 +123,7 @@ function GeneralInformation() {
         }));
       });
       sessionStorage.setItem('business_information', JSON.stringify(res.data.data[0]));
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleUpdateGeneralInformation = async () => {
@@ -181,7 +179,6 @@ function GeneralInformation() {
       }
       handleGetGeneralInformation();
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,

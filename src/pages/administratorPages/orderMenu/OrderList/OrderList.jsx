@@ -273,7 +273,6 @@ function OrderTable({ filterBy }) {
       if (error.response.status === 404) {
         setListOrder([]);
       }
-      console.log(error);
     }
   };
 
@@ -293,7 +292,6 @@ function OrderTable({ filterBy }) {
       if (error.response.status === 404) {
         setListOrder([]);
       }
-      console.log(error);
     }
   };
 
