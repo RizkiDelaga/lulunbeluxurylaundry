@@ -51,7 +51,6 @@ function AboutUs() {
       if (error.response.status === 404) {
         setListAboutUs([]);
       }
-      console.log(error);
     }
   };
 
@@ -86,8 +85,6 @@ function AboutUs() {
         message: error.response.data.message,
         statusType: 'error',
       });
-
-      console.log(error);
     }
   };
 
@@ -122,7 +119,6 @@ function AboutUs() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 
@@ -150,7 +146,6 @@ function AboutUs() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 

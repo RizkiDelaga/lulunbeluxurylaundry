@@ -64,9 +64,7 @@ function EditAdministrators() {
         profilePicture: { img: null, fileName: res.data.data.profilePic },
         accountStatus: res.data.data.status,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleEditAdmin = async () => {
@@ -98,7 +96,6 @@ function EditAdministrators() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,

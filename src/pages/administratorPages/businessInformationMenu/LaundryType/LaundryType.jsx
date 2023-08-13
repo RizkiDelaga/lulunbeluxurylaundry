@@ -55,7 +55,6 @@ function LaundryType() {
       if (error.response.status === 404) {
         setListLaundryType([]);
       }
-      console.log(error);
     }
   };
 
@@ -95,8 +94,6 @@ function LaundryType() {
         message: error.response.data.message,
         statusType: 'error',
       });
-
-      console.log(error);
     }
   };
 
@@ -136,7 +133,6 @@ function LaundryType() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 
@@ -164,7 +160,6 @@ function LaundryType() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 

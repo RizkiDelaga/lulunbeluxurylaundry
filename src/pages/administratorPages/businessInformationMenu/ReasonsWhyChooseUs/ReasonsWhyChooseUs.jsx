@@ -59,7 +59,6 @@ function ReasonsWhyChooseUs() {
       if (error.response.status === 404) {
         setListReasonsWhyChooseUs([]);
       }
-      console.log(error);
     }
   };
 
@@ -98,8 +97,6 @@ function ReasonsWhyChooseUs() {
         message: error.response.data.message,
         statusType: 'error',
       });
-
-      console.log(error);
     }
   };
 
@@ -138,7 +135,6 @@ function ReasonsWhyChooseUs() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 
@@ -166,7 +162,6 @@ function ReasonsWhyChooseUs() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 

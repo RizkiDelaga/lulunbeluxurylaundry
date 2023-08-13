@@ -707,9 +707,7 @@ function FormOrderLaundry() {
       });
 
       setListServiceType(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleGetPaymentMethod = async () => {
@@ -720,9 +718,7 @@ function FormOrderLaundry() {
       });
 
       setListPaymentMethod(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleGetLaundryType = async () => {
@@ -733,9 +729,7 @@ function FormOrderLaundry() {
       });
 
       setListLaundryType(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleGetCustomerAddress = async () => {
@@ -753,7 +747,6 @@ function FormOrderLaundry() {
       if (error.response.status === 404) {
         setOpenDialog({ status: true, type: 'handle address' });
       }
-      console.log(error);
     }
   };
 
@@ -789,9 +782,7 @@ function FormOrderLaundry() {
       } else {
         setOpenDialog({ status: res.data.data.status !== 'Perlu Disetujui' ? true : false, type: 'handle status' });
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleCreateOrder = async () => {
@@ -826,7 +817,6 @@ function FormOrderLaundry() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -867,7 +857,6 @@ function FormOrderLaundry() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -892,7 +881,6 @@ function FormOrderLaundry() {
       if (error.response.status === 404) {
         setListLaundryItem([]);
       }
-      console.log(error);
     }
   };
 
@@ -935,7 +923,6 @@ function FormOrderLaundry() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -983,7 +970,6 @@ function FormOrderLaundry() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -1012,7 +998,6 @@ function FormOrderLaundry() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,

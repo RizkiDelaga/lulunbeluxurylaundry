@@ -63,7 +63,6 @@ function HowToOrder() {
       if (error.response.status === 404) {
         setListHowToOrder([]);
       }
-      console.log(error);
     }
   };
 
@@ -99,8 +98,6 @@ function HowToOrder() {
         message: error.response.data.message,
         statusType: 'error',
       });
-
-      console.log(error);
     }
   };
 
@@ -136,7 +133,6 @@ function HowToOrder() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 
@@ -164,7 +160,6 @@ function HowToOrder() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 

@@ -290,9 +290,7 @@ function NavbarCustomer(props) {
         setListNotification(res.data.data);
         setPageConfig({ currentPage: pageConfig.currentPage, metadata: res.data.metadata });
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleUpdateReadNotification = async (id) => {
@@ -313,9 +311,7 @@ function NavbarCustomer(props) {
         };
         return updatedList;
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const dispatchGetProfileAccountCustomer = async () => {
@@ -506,13 +502,7 @@ function NavbarCustomer(props) {
                   }}
                   className="color-primary"
                 >
-                  <Badge
-                    color="primary"
-                    badgeContent={
-                      unreadNotif
-                    }
-                    max={999}
-                  >
+                  <Badge color="primary" badgeContent={unreadNotif} max={999}>
                     <NotificationsNoneOutlinedIcon />
                   </Badge>
                 </IconButton>

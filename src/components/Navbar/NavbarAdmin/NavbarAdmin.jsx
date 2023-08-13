@@ -279,10 +279,6 @@ function Navbar(props) {
         setPageConfig({ currentPage: pageConfig.currentPage, metadata: res.data.metadata });
       }
     } catch (error) {
-      console.log(error);
-      console.log(error.response);
-      console.log(error.response.data.message);
-      console.log(error.response.status);
       if (error.response.status === 401 && error.response.data.message === 'Token Expired') {
         localStorage.removeItem('access_token_admin');
         localStorage.removeItem('admin_profile_account');
@@ -309,9 +305,7 @@ function Navbar(props) {
         };
         return updatedList;
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   // Open Notification Menu

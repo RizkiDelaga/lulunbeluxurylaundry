@@ -277,7 +277,6 @@ function OrderTable({ orderStatusType, myOrderStats }) {
       if (error.response.status === 404) {
         setListFinance([]);
       }
-      console.log(error);
     }
   };
 
@@ -677,9 +676,7 @@ function CustomerArea() {
         cancelled: res.data.data.cancelled,
         declined: res.data.data.declined,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

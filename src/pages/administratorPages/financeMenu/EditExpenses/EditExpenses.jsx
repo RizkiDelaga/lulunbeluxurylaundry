@@ -49,9 +49,7 @@ function EditExpenses() {
         notes: res.data.data.catatan,
         photoEvidence: { img: null, fileName: res.data.data.gambar },
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleUpdateExpenses = async () => {
@@ -94,8 +92,6 @@ function EditExpenses() {
         message: error.response.data.message,
         statusType: 'error',
       });
-
-      console.log(error);
     }
   };
 

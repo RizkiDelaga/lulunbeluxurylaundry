@@ -87,9 +87,7 @@ function EditProfile() {
         profilePicture: { img: null, fileName: res.data.data.profilePic },
       });
       localStorage.setItem('my_profile_account', JSON.stringify(res.data.data));
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleUpdateMyProfile = async () => {
@@ -123,7 +121,6 @@ function EditProfile() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -144,9 +141,7 @@ function EditProfile() {
 
       setListMyAddress(res.data.data);
       handleGetMyProfile();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleCreateAddress = async () => {
@@ -199,7 +194,6 @@ function EditProfile() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -258,7 +252,6 @@ function EditProfile() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,
@@ -288,7 +281,6 @@ function EditProfile() {
         });
       }
     } catch (error) {
-      console.log(error);
       setOpenLoadDecision({
         ...openLoadDecision.isLoad,
         message: error.response.data.message,

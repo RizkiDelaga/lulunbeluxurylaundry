@@ -62,7 +62,6 @@ function ServiceType() {
       if (error.response.status === 404) {
         setListServiceType([]);
       }
-      console.log(error);
     }
   };
 
@@ -116,8 +115,6 @@ function ServiceType() {
         message: error.response.data.message,
         statusType: 'error',
       });
-
-      console.log(error);
     }
   };
 
@@ -171,7 +168,6 @@ function ServiceType() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 
@@ -199,7 +195,6 @@ function ServiceType() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 

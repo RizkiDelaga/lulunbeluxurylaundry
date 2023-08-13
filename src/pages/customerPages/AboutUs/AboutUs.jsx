@@ -32,9 +32,7 @@ function AboutUs() {
       });
 
       setAboutUs(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

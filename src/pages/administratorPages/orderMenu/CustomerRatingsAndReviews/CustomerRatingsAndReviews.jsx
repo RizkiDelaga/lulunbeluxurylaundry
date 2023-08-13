@@ -139,7 +139,6 @@ function RatingReviewTable() {
       if (error.response.status === 404) {
         setListReview([]);
       }
-      console.log(error);
     }
   };
 

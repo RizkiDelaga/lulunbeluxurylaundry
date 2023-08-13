@@ -1227,9 +1227,7 @@ function HomePage() {
       });
 
       setLaundryType(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleGetServiceType = async () => {
@@ -1240,9 +1238,7 @@ function HomePage() {
       });
 
       setServiceType(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleGetEvent = async () => {
@@ -1253,9 +1249,7 @@ function HomePage() {
       });
 
       setEvent(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

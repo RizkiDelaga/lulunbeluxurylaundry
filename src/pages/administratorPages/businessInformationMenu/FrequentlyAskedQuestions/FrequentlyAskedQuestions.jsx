@@ -54,7 +54,6 @@ function FrequentlyAskedQuestions() {
       if (error.response.status === 404) {
         setListFaq([]);
       }
-      console.log(error);
     }
   };
 
@@ -91,8 +90,6 @@ function FrequentlyAskedQuestions() {
         message: error.response.data.message,
         statusType: 'error',
       });
-
-      console.log(error);
     }
   };
 
@@ -129,7 +126,6 @@ function FrequentlyAskedQuestions() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 
@@ -162,7 +158,6 @@ function FrequentlyAskedQuestions() {
         message: error.response.data.message,
         statusType: 'error',
       });
-      console.log(error);
     }
   };
 

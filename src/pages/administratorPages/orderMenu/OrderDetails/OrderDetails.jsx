@@ -44,7 +44,6 @@ function OrderDetails() {
       if (error.response.status === 404) {
         setDetailOrder();
       }
-      console.log(error);
     }
   };
 
@@ -63,7 +62,6 @@ function OrderDetails() {
       if (error.response.status === 404) {
         setListLaundryItem([]);
       }
-      console.log(error);
     }
   };
 
@@ -82,7 +80,6 @@ function OrderDetails() {
       if (error.response.status === 404) {
         setRatingReview();
       }
-      console.log(error);
     }
   };
 
@@ -104,9 +101,7 @@ function OrderDetails() {
       if (statusValue === 'Diterima') {
         handleUpdateOrderStatus(detailOrder.id, 'Perlu Dijemput');
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleUpdatePaymentStatus = async (orderId, statusValue) => {
@@ -121,9 +116,7 @@ function OrderDetails() {
       });
 
       handleGetDetailOrder();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   // Menu - Order Status
